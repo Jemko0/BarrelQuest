@@ -1,16 +1,13 @@
 
-#include "Kismet/KismetSystemLibrary.h"
 #include "Temperature/TemperatureManager.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 ATemperatureManager::ATemperatureManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
-// Called when the game starts or when spawned
 void ATemperatureManager::BeginPlay()
 {
 	Super::BeginPlay();
@@ -41,7 +38,6 @@ void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
     tilesToProcess.Empty();
     FindNeighborsIterative(ucenter, temp);
 
-    //debug shti
     if (drawDebug)
     {
         TArray<FVector> keys;
@@ -49,8 +45,40 @@ void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
 
         for (int i = 0; i < keys.Num(); i++)
         {
-            UKismetSystemLibrary::DrawDebugBox(GetWorld(), keys[i], FVector(100, 100, 400), FLinearColor::Blue, FRotator(0), 0.033f, 1.0f);
+            FVector tileCenter = keys[i];
+            float tileTemp = temperatureMap[tileCenter];
+
+            FLinearColor debugColor = GetTemperatureColor(tileTemp);
+
+            UKismetSystemLibrary::DrawDebugBox(
+                GetWorld(),
+                tileCenter,
+                FVector(100, 100, 200),
+                debugColor,
+                FRotator(0),
+                0.033f,
+                2.0f
+            );
+
+            FVector textLocation = tileCenter + FVector(0, 0, 250);
+            FString tempText = FString::Printf(TEXT("%.1f°"), tileTemp);
+
+            UKismetSystemLibrary::DrawDebugString(
+                GetWorld(),
+                textLocation,
+                tempText,
+                nullptr,
+                debugColor,
+                0.3f
+            );
+
+            if (drawHeatFlow)
+            {
+                DrawHeatFlowArrows(tileCenter, tileTemp);
+            }
         }
+
+        DrawHeatSources();
     }
 }
 
@@ -58,11 +86,10 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
 {
     SnapVectorToGrid(startCenter, FVector(200, 200, 400));
 
-    TMap<FVector, float> tileTemperatures;
-    tileTemperatures.Add(startCenter, invokerTemp);
-    tilesToProcess.Add(startCenter);
+    float heatTransferRate = 0.02f;
 
-    FVector initialCenter = startCenter;
+    temperatureMap.FindOrAdd(startCenter) = invokerTemp;
+
     TArray<FVector> neighborOffsets =
     {
         FVector(200, 0, 0),
@@ -71,50 +98,80 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
         FVector(0, -200, 0)
     };
 
-    int iterations = 0;
-    while (tilesToProcess.Num() > 0 && iterations < MAX_NEIGHBOR_ITERATIONS)
+    TMap<FVector, float> temperatureChanges;
+
+    TArray<FVector> heatedTiles;
+    temperatureMap.GenerateKeyArray(heatedTiles);
+
+    for (const FVector& currentTile : heatedTiles)
     {
-        FVector currentTile = tilesToProcess[0];
-        tilesToProcess.RemoveAt(0);
-
-        if (visitedTiles.Contains(currentTile))
-        {
-            continue;
-        }
-
-        visitedTiles.Add(currentTile);
-
-        float currentTemp = tileTemperatures[currentTile];
-        temperatureMap.Add(currentTile, currentTemp);
+        float currentTemp = temperatureMap[currentTile];
 
         for (const FVector& offset : neighborOffsets)
         {
             FVector neighborTile = currentTile + offset;
 
-            if (!visitedTiles.Contains(neighborTile))
+            float neighborTemp = temperatureMap.Contains(neighborTile) ?
+                temperatureMap[neighborTile] : ambientTemperature;
+
+            float tempDifference = currentTemp - neighborTemp;
+
+            if (FMath::Abs(tempDifference) > 0.1f)
             {
                 FWallCheckResult wallResult = CheckForWall(currentTile, offset);
 
-                float transferredTemp = currentTemp;
+                float transferEfficiency = 1.0f;
 
                 if (wallResult.hit)
                 {
+                    transferEfficiency = (1.0f - wallResult.insulation);
 
-                    transferredTemp = currentTemp * (1.0f - wallResult.insulation);
-
-                    // If insulation is too high (e.g., >= 1.0), don't transfer at all
                     if (wallResult.insulation >= 1.0f)
                     {
                         continue;
                     }
                 }
 
-                tileTemperatures.Add(neighborTile, transferredTemp);
-                tilesToProcess.Add(neighborTile);
+                float heatTransfer = tempDifference * heatTransferRate * transferEfficiency;
+
+                if (!temperatureChanges.Contains(neighborTile))
+                {
+                    temperatureChanges.Add(neighborTile, 0.0f);
+                }
+                temperatureChanges[neighborTile] += heatTransfer;
             }
         }
+    }
 
-        iterations++;
+    for (auto& change : temperatureChanges)
+    {
+        FVector tile = change.Key;
+        float tempChange = change.Value;
+
+        float currentTemp = temperatureMap.Contains(tile) ?
+            temperatureMap[tile] : ambientTemperature;
+
+        float newTemp = currentTemp + tempChange;
+        temperatureMap.FindOrAdd(tile) = newTemp;
+
+        if (FMath::Abs(newTemp - ambientTemperature) < 0.5f)
+        {
+            temperatureMap.Remove(tile);
+        }
+    }
+
+    TArray<FVector> tilesToRemove;
+    for (auto& tile : temperatureMap)
+    {
+        if (tile.Key != startCenter && FMath::Abs(tile.Value - ambientTemperature) < 0.5f)
+        {
+            tilesToRemove.Add(tile.Key);
+        }
+    }
+
+    for (const FVector& tile : tilesToRemove)
+    {
+        temperatureMap.Remove(tile);
     }
 }
 
@@ -122,34 +179,54 @@ FWallCheckResult ATemperatureManager::CheckForWall(FVector center, FVector direc
 {
     SnapVectorToGrid(center, FVector(200, 200, 400));
 
-    // Set trace height to middle of voxel (Z = 200 for 400 height voxel)
-    FVector traceStart = FVector(center.X, center.Y, 200.0f);
-
+    FVector traceStart = FVector(center.X, center.Y, center.Z + 200);
     FCollisionQueryParams TraceParams;
     TraceParams.bTraceComplex = true;
     TraceParams.bReturnPhysicalMaterial = false;
     TraceParams.AddIgnoredActor(this);
 
-    // Trace just one unit (201 units) into the specified direction
-    FVector traceEnd = traceStart + direction.GetSafeNormal() * 201.0f;
-
+    FVector traceEnd = traceStart + direction;
     FHitResult hitResult;
     bool bHit = GetWorld()->LineTraceSingleByChannel(
         hitResult,
         traceStart,
         traceEnd,
-        ECollisionChannel::ECC_GameTraceChannel8,
+        wallTraceChannel,
         TraceParams
     );
 
     AActor* hitActor = hitResult.GetActor();
     float insulation = 0.0f;
 
-    if (hitActor)
+    if (hitActor && hitActor->Implements<UTemperatureInterface>())
     {
         insulation = ITemperatureInterface::Execute_GetInsulationLevel(hitActor);
     }
-
+    
+    // Debug drawing
+    if (drawDebug && drawWallTraces)
+    {
+        FLinearColor traceColor;
+        float traceDuration = 0.033f; // One frame
+        
+        if (bHit)
+        {
+            // Draw insulation text at hit point
+            if (insulation > 0.0f)
+            {
+                FString insulationText = FString::Printf(TEXT("%.2f"), insulation);
+                UKismetSystemLibrary::DrawDebugString(
+                    GetWorld(),
+                    hitResult.Location + FVector(0, 0, 20),
+                    insulationText,
+                    nullptr,
+                    traceColor,
+                    traceDuration
+                );
+            }
+        }
+    }
+    
     return FWallCheckResult(bHit, insulation);
 }
 
@@ -178,4 +255,147 @@ void ATemperatureManager::UnregisterInvoker(UTemperatureInvoker* invoker)
 void ATemperatureManager::SetOutsideTemperature(float outsideTemperature)
 {
     ambientTemperature = outsideTemperature;
+}
+
+FLinearColor ATemperatureManager::GetTemperatureColor(float temperature)
+{
+    float coldTemp = -20.0f;
+    float coolTemp = 32.0f;
+    float neutralTemp = 70.0f;
+    float warmTemp = 100.0f;
+    float hotTemp = 200.0f;
+
+    FLinearColor color;
+
+    if (temperature <= coldTemp)
+    {
+        color = FLinearColor(0.0f, 0.2f, 1.0f, 0.7f);
+    }
+    else if (temperature <= coolTemp)
+    {
+        float alpha = (temperature - coldTemp) / (coolTemp - coldTemp);
+        color = FLinearColor::LerpUsingHSV(
+            FLinearColor(0.0f, 0.2f, 1.0f, 0.7f),
+            FLinearColor(0.0f, 1.0f, 1.0f, 0.7f),
+            alpha
+        );
+    }
+    else if (temperature <= neutralTemp)
+    {
+        float alpha = (temperature - coolTemp) / (neutralTemp - coolTemp);
+        color = FLinearColor::LerpUsingHSV(
+            FLinearColor(0.0f, 1.0f, 1.0f, 0.7f),
+            FLinearColor(0.8f, 0.8f, 0.8f, 0.7f),
+            alpha
+        );
+    }
+    else if (temperature <= warmTemp)
+    {
+        float alpha = (temperature - neutralTemp) / (warmTemp - neutralTemp);
+        color = FLinearColor::LerpUsingHSV(
+            FLinearColor(0.8f, 0.8f, 0.8f, 0.7f),
+            FLinearColor(1.0f, 1.0f, 0.0f, 0.7f),
+            alpha
+        );
+    }
+    else if (temperature <= hotTemp)
+    {
+        float alpha = (temperature - warmTemp) / (hotTemp - warmTemp);
+        color = FLinearColor::LerpUsingHSV(
+            FLinearColor(1.0f, 1.0f, 0.0f, 0.7f),
+            FLinearColor(1.0f, 0.0f, 0.0f, 0.7f), 
+            alpha
+        );
+    }
+    else
+    {
+        color = FLinearColor(1.0f, 0.2f, 0.0f, 0.8f);
+    }
+
+    return color;
+}
+
+void ATemperatureManager::DrawHeatFlowArrows(FVector tileCenter, float tileTemp)
+{
+    TArray<FVector> neighborOffsets =
+    {
+        FVector(200, 0, 0),
+        FVector(-200, 0, 0),
+        FVector(0, 200, 0),
+        FVector(0, -200, 0)
+    };
+
+    for (const FVector& offset : neighborOffsets)
+    {
+        FVector neighborPos = tileCenter + offset;
+
+        if (temperatureMap.Contains(neighborPos))
+        {
+            float neighborTemp = temperatureMap[neighborPos];
+            float tempDiff = tileTemp - neighborTemp;
+
+            // Only draw arrow if there's significant temperature difference
+            if (FMath::Abs(tempDiff) > 1.0f)
+            {
+                FVector arrowStart = tileCenter + (offset * 0.3f); // Start 30% toward neighbor
+                FVector arrowEnd = tileCenter + (offset * 0.7f);   // End 70% toward neighbor
+
+                // Arrow color intensity based on temperature difference
+                float intensity = FMath::Clamp(FMath::Abs(tempDiff) / 20.0f, 0.2f, 1.0f);
+                FLinearColor arrowColor = tempDiff > 0 ?
+                    FLinearColor(1.0f, 0.5f, 0.0f, intensity) : // Orange for heat flow
+                    FLinearColor(0.0f, 0.5f, 1.0f, intensity);  // Blue for cold flow
+
+                UKismetSystemLibrary::DrawDebugArrow(
+                    GetWorld(),
+                    arrowStart,
+                    arrowEnd,
+                    10.0f, // Arrow head size
+                    arrowColor,
+                    0.033f,
+                    1.0f
+                );
+            }
+        }
+    }
+}
+
+void ATemperatureManager::DrawHeatSources()
+{
+    TArray<UTemperatureInvoker*> invokers;
+    registeredInvokers.GenerateKeyArray(invokers);
+
+    for (const UTemperatureInvoker* invoker : invokers)
+    {
+        if (!invoker) continue;
+
+        FVector sourceLocation = invoker->GetOwner()->GetActorLocation();
+        float sourceTemp = invoker->targetTemperature;
+
+        // Draw a larger, pulsing indicator for heat sources
+        float pulseScale = 1.0f + (0.05f * FMath::Sin(GetWorld()->GetTimeSeconds() * 3.0f));
+        FLinearColor sourceColor = GetTemperatureColor(sourceTemp);
+        sourceColor.A = 0.9f; // More opaque for sources
+
+        UKismetSystemLibrary::DrawDebugBox(
+            GetWorld(),
+            sourceLocation,
+            FVector(150, 150, 300) * pulseScale,
+            sourceColor,
+            FRotator(0),
+            0.033f,
+            3.0f // Thicker outline
+        );
+
+        // Draw source temperature text
+        FString sourceText = FString::Printf(TEXT("SOURCE\n%.1f°"), sourceTemp);
+        UKismetSystemLibrary::DrawDebugString(
+            GetWorld(),
+            sourceLocation + FVector(0, 0, 400),
+            sourceText,
+            nullptr,
+            FLinearColor::White,
+            0.033f
+        );
+    }
 }

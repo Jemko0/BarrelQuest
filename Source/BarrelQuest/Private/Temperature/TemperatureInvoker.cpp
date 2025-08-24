@@ -1,7 +1,7 @@
 
+#include "Temperature/TemperatureInvoker.h"
 #include "Kismet/GameplayStatics.h"
 #include "Temperature/TemperatureManager.h"
-#include "Temperature/TemperatureInvoker.h"
 
 // Sets default values for this component's properties
 UTemperatureInvoker::UTemperatureInvoker()

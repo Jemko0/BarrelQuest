@@ -55,7 +55,14 @@ public:
 	void RegisterInvoker(UTemperatureInvoker* invoker);
 	void UnregisterInvoker(UTemperatureInvoker* invoker);
 
+	UFUNCTION(BlueprintCallable)
 	void SetOutsideTemperature(float outsideTemperature);
+
+	FLinearColor GetTemperatureColor(float temperature);
+
+	void DrawHeatFlowArrows(FVector tileCenter, float tileTemp);
+
+	void DrawHeatSources();
 
 	float ambientTemperature = 20.0f;
 
@@ -74,7 +81,19 @@ public:
 	bool drawDebug = true;
 
 	UPROPERTY(EditAnywhere)
-	int MAX_NEIGHBOR_ITERATIONS = 32;
+	float globalHeatTransferRate = 0.01f;
+
+	UPROPERTY(EditAnywhere)
+	bool drawHeatFlow = false;
+
+	UPROPERTY(EditAnywhere)
+	bool drawWallTraces = false;
+
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<ECollisionChannel> wallTraceChannel = ECC_GameTraceChannel13;
+
+	UPROPERTY(EditAnywhere)
+	int MAX_NEIGHBOR_ITERATIONS = 64;
 
 	int ITERATIONS = 0;
 };
