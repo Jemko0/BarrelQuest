@@ -46,53 +46,71 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateInvokers();
+
+	UFUNCTION(BlueprintCallable)
 	void UpdateTemperatures(FVector ucenter, float temp);
+
+	UFUNCTION(BlueprintCallable)
 	void FindNeighborsIterative(FVector startCenter, float invokerTemp);
+
+	UFUNCTION(BlueprintCallable)
 	FWallCheckResult CheckForWall(FVector center, FVector direction);
 
 	void SnapVectorToGrid(FVector &v, FVector grid);
 
+	UFUNCTION(BlueprintCallable)
 	void RegisterInvoker(UTemperatureInvoker* invoker);
+
+	UFUNCTION(BlueprintCallable)
 	void UnregisterInvoker(UTemperatureInvoker* invoker);
 
 	UFUNCTION(BlueprintCallable)
 	void SetOutsideTemperature(float outsideTemperature);
 
+	UFUNCTION(BlueprintCallable)
+	float GetInterpTemperature(FVector position);
+
+	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
 	FLinearColor GetTemperatureColor(float temperature);
 
+	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
 	void DrawHeatFlowArrows(FVector tileCenter, float tileTemp);
 
+	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
 	void DrawHeatSources();
 
+	UPROPERTY(BlueprintReadOnly)
 	float ambientTemperature = 20.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temp")
 	TMap<FVector, float> temperatureMap;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temp")
 	TArray<FVector> tilesToProcess;
 
 	TSet<FVector> visitedTiles;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Invokers")
 	TMap<UTemperatureInvoker*, bool> registeredInvokers;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Debug")
 	bool drawDebug = true;
 
 	UPROPERTY(EditAnywhere)
 	float globalHeatTransferRate = 0.01f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Debug")
 	bool drawHeatFlow = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Debug")
 	bool drawWallTraces = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Properties")
 	TEnumAsByte<ECollisionChannel> wallTraceChannel = ECC_GameTraceChannel13;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Properties")
 	int MAX_NEIGHBOR_ITERATIONS = 64;
 
 	int ITERATIONS = 0;

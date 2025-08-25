@@ -40,7 +40,14 @@ void UTemperatureInvoker::BeginPlay()
 void UTemperatureInvoker::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
+void UTemperatureInvoker::SetTargetTemperature(float temperature)
+{
+    targetTemperature = temperature;
+}
+
+float UTemperatureInvoker::GetTargetTemperature()
+{
+    return targetTemperature;
+}

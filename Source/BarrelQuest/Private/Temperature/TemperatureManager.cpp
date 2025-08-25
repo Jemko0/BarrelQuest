@@ -13,11 +13,8 @@ void ATemperatureManager::BeginPlay()
 	Super::BeginPlay();
 }
 
-// Called every frame
-void ATemperatureManager::Tick(float DeltaTime)
+void ATemperatureManager::UpdateInvokers()
 {
-    Super::Tick(DeltaTime);
-
     TArray<UTemperatureInvoker*> out;
     registeredInvokers.GenerateKeyArray(out);
 
@@ -30,6 +27,13 @@ void ATemperatureManager::Tick(float DeltaTime)
 
         UpdateTemperatures(invoker->GetOwner()->GetActorLocation(), invoker->targetTemperature);
     }
+}
+
+// Called every frame
+void ATemperatureManager::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    UpdateInvokers();
 }
 
 void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
@@ -86,7 +90,7 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
 {
     SnapVectorToGrid(startCenter, FVector(200, 200, 400));
 
-    float heatTransferRate = 0.02f;
+    float heatTransferRate = globalHeatTransferRate;
 
     temperatureMap.FindOrAdd(startCenter) = invokerTemp;
 
@@ -103,6 +107,7 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
     TArray<FVector> heatedTiles;
     temperatureMap.GenerateKeyArray(heatedTiles);
 
+    // Process each heated tile and its neighbors
     for (const FVector& currentTile : heatedTiles)
     {
         float currentTemp = temperatureMap[currentTile];
@@ -114,8 +119,9 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
             float neighborTemp = temperatureMap.Contains(neighborTile) ?
                 temperatureMap[neighborTile] : ambientTemperature;
 
-            float tempDifference = currentTemp - neighborTemp;
+            float tempDifference = neighborTemp - currentTemp;
 
+            // Only transfer heat if there's a meaningful temperature difference
             if (FMath::Abs(tempDifference) > 0.1f)
             {
                 FWallCheckResult wallResult = CheckForWall(currentTile, offset);
@@ -126,23 +132,35 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
                 {
                     transferEfficiency = (1.0f - wallResult.insulation);
 
+                    // Skip if fully insulated
                     if (wallResult.insulation >= 1.0f)
                     {
                         continue;
                     }
                 }
 
+                // Calculate heat transfer (positive means heat flows TO current tile)
                 float heatTransfer = tempDifference * heatTransferRate * transferEfficiency;
+
+                // Initialize temperature change tracking for both tiles
+                if (!temperatureChanges.Contains(currentTile))
+                {
+                    temperatureChanges.Add(currentTile, 0.0f);
+                }
 
                 if (!temperatureChanges.Contains(neighborTile))
                 {
                     temperatureChanges.Add(neighborTile, 0.0f);
                 }
-                temperatureChanges[neighborTile] += heatTransfer;
+
+                // Apply heat transfer (energy conservation)
+                temperatureChanges[currentTile] += heatTransfer;
+                temperatureChanges[neighborTile] -= heatTransfer;
             }
         }
     }
 
+    // Apply all temperature changes
     for (auto& change : temperatureChanges)
     {
         FVector tile = change.Key;
@@ -152,14 +170,20 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
             temperatureMap[tile] : ambientTemperature;
 
         float newTemp = currentTemp + tempChange;
-        temperatureMap.FindOrAdd(tile) = newTemp;
 
-        if (FMath::Abs(newTemp - ambientTemperature) < 0.5f)
+        // Only add to map if temperature is significantly different from ambient
+        if (FMath::Abs(newTemp - ambientTemperature) > 0.05f)
         {
+            temperatureMap.FindOrAdd(tile) = newTemp;
+        }
+        else
+        {
+            // Remove tiles that are essentially at ambient temperature
             temperatureMap.Remove(tile);
         }
     }
 
+    // Clean up tiles that are very close to ambient temperature (except the start center)
     TArray<FVector> tilesToRemove;
     for (auto& tile : temperatureMap)
     {
@@ -257,6 +281,74 @@ void ATemperatureManager::SetOutsideTemperature(float outsideTemperature)
     ambientTemperature = outsideTemperature;
 }
 
+float ATemperatureManager::GetInterpTemperature(FVector position)
+{
+    // Grid size based on your system (200x200 horizontal, 400 vertical)
+    FVector gridSize(200, 200, 400);
+
+    // Find the closest grid position (snapped position)
+    FVector snappedPos = position;
+    SnapVectorToGrid(snappedPos, gridSize);
+
+    // If we have an exact match, return that temperature
+    if (temperatureMap.Contains(snappedPos))
+    {
+        return temperatureMap[snappedPos];
+    }
+
+    // Calculate the offset from the snapped position
+    FVector offset = position - snappedPos;
+
+    // If the offset is very small, we're essentially on a grid node
+    if (offset.Size() < 1.0f)
+    {
+        return ambientTemperature;
+    }
+
+    // Find the 4 surrounding horizontal grid points for bilinear interpolation
+    // We'll interpolate on the XY plane at the snapped Z level
+    FVector corners[4];
+    corners[0] = snappedPos; // Base corner
+
+    // Determine which direction we're offset in
+    float xSign = FMath::Sign(offset.X);
+    float ySign = FMath::Sign(offset.Y);
+
+    corners[1] = snappedPos + FVector(xSign * gridSize.X, 0, 0);
+    corners[2] = snappedPos + FVector(0, ySign * gridSize.Y, 0); 
+    corners[3] = snappedPos + FVector(xSign * gridSize.X, ySign * gridSize.Y, 0);
+
+    // Get temperatures at each corner (use ambient if not found)
+    float temps[4];
+    for (int32 i = 0; i < 4; i++)
+    {
+        temps[i] = temperatureMap.Contains(corners[i]) ?
+            temperatureMap[corners[i]] : ambientTemperature;
+    }
+
+    // Calculate interpolation weights (0.0 to 1.0)
+    float xWeight = FMath::Abs(offset.X) / gridSize.X;
+    float yWeight = FMath::Abs(offset.Y) / gridSize.Y;
+
+    // Clamp weights to [0,1] range
+    xWeight = FMath::Clamp(xWeight, 0.0f, 1.0f);
+    yWeight = FMath::Clamp(yWeight, 0.0f, 1.0f);
+
+    // Bilinear interpolation
+    // First interpolate along X axis
+    float temp1 = FMath::Lerp(temps[0], temps[1], xWeight); // Bottom edge
+    float temp2 = FMath::Lerp(temps[2], temps[3], xWeight); // Top edge
+
+    float finalTemp = FMath::Lerp(temp1, temp2, yWeight);
+
+    if (FMath::Abs(finalTemp - ambientTemperature) < 0.01f)
+    {
+        return ambientTemperature;
+    }
+
+    return finalTemp;
+}
+
 FLinearColor ATemperatureManager::GetTemperatureColor(float temperature)
 {
     float coldTemp = -20.0f;
@@ -312,6 +404,7 @@ FLinearColor ATemperatureManager::GetTemperatureColor(float temperature)
         color = FLinearColor(1.0f, 0.2f, 0.0f, 0.8f);
     }
 
+    color.A = 1.0f;
     return color;
 }
 
@@ -333,6 +426,7 @@ void ATemperatureManager::DrawHeatFlowArrows(FVector tileCenter, float tileTemp)
         {
             float neighborTemp = temperatureMap[neighborPos];
             float tempDiff = tileTemp - neighborTemp;
+
 
             // Only draw arrow if there's significant temperature difference
             if (FMath::Abs(tempDiff) > 1.0f)
