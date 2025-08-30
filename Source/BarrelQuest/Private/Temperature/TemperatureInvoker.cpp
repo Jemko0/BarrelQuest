@@ -51,3 +51,13 @@ float UTemperatureInvoker::GetTargetTemperature()
 {
     return targetTemperature;
 }
+
+void UTemperatureInvoker::SetEmitState(bool newState)
+{
+    emit = newState;
+}
+
+bool UTemperatureInvoker::GetEmitState()
+{
+    return emit;
+}

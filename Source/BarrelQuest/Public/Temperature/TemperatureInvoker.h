@@ -5,7 +5,7 @@
 #include "TemperatureInvoker.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BARRELQUEST_API UTemperatureInvoker : public UActorComponent
 {
 	GENERATED_BODY()
@@ -28,7 +28,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetTargetTemperature();
 
+	UFUNCTION(BlueprintCallable)
+	void SetEmitState(bool newState);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetEmitState();
+
 	UPROPERTY(EditAnywhere)
 	float targetTemperature;
-		
+
+	UPROPERTY(EditAnywhere)
+	bool emit = true;
 };

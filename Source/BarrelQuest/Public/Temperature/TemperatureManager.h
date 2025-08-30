@@ -73,24 +73,21 @@ public:
 	float GetInterpTemperature(FVector position);
 
 	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
-	FLinearColor GetTemperatureColor(float temperature);
-
-	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
 	void DrawHeatFlowArrows(FVector tileCenter, float tileTemp);
+
 
 	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
 	void DrawHeatSources();
 
+	UFUNCTION(BlueprintCallable, meta = (Category = "Debug"))
+	FLinearColor GetTemperatureColor(float temperature);
+
 	UPROPERTY(BlueprintReadOnly)
 	float ambientTemperature = 20.0f;
 
+
 	UPROPERTY(EditAnywhere, Category = "Temp")
 	TMap<FVector, float> temperatureMap;
-
-	UPROPERTY(EditAnywhere, Category = "Temp")
-	TArray<FVector> tilesToProcess;
-
-	TSet<FVector> visitedTiles;
 
 	UPROPERTY(EditAnywhere, Category = "Invokers")
 	TMap<UTemperatureInvoker*, bool> registeredInvokers;
@@ -113,5 +110,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 	int MAX_NEIGHBOR_ITERATIONS = 64;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool UseUpdateTimer = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float UpdateTimerInterval = 1.0f / 20.0f;
+
+private:
+
+	TArray<FVector> tilesToProcess;
+	TSet<FVector> visitedTiles;
+	FTimerHandle UpdateTimerHandle;
 	int ITERATIONS = 0;
 };

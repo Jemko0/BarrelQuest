@@ -11,6 +11,11 @@ ATemperatureManager::ATemperatureManager()
 void ATemperatureManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+    if (UseUpdateTimer)
+    {
+        GetWorld()->GetTimerManager().SetTimer(UpdateTimerHandle, this, &ATemperatureManager::UpdateInvokers, UpdateTimerInterval, true, 0.0f);
+    }
 }
 
 void ATemperatureManager::UpdateInvokers()
@@ -25,6 +30,11 @@ void ATemperatureManager::UpdateInvokers()
             continue;
         }
 
+        if (!invoker->emit)
+        {
+            continue;
+        }
+        
         UpdateTemperatures(invoker->GetOwner()->GetActorLocation(), invoker->targetTemperature);
     }
 }
@@ -33,7 +43,11 @@ void ATemperatureManager::UpdateInvokers()
 void ATemperatureManager::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    UpdateInvokers();
+
+    if (!UseUpdateTimer)
+    {
+        UpdateInvokers();
+    }
 }
 
 void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
@@ -65,7 +79,7 @@ void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
             );
 
             FVector textLocation = tileCenter + FVector(0, 0, 250);
-            FString tempText = FString::Printf(TEXT("%.1f°"), tileTemp);
+            FString tempText = FString::Printf(TEXT("%.1fï¿½"), tileTemp);
 
             UKismetSystemLibrary::DrawDebugString(
                 GetWorld(),
@@ -108,6 +122,7 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
     temperatureMap.GenerateKeyArray(heatedTiles);
 
     // Process each heated tile and its neighbors
+
     for (const FVector& currentTile : heatedTiles)
     {
         float currentTemp = temperatureMap[currentTile];
@@ -120,43 +135,42 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
                 temperatureMap[neighborTile] : ambientTemperature;
 
             float tempDifference = neighborTemp - currentTemp;
-
             // Only transfer heat if there's a meaningful temperature difference
-            if (FMath::Abs(tempDifference) > 0.1f)
+            if (FMath::Abs(tempDifference) < 0.1f)
             {
-                FWallCheckResult wallResult = CheckForWall(currentTile, offset);
-
-                float transferEfficiency = 1.0f;
-
-                if (wallResult.hit)
-                {
-                    transferEfficiency = (1.0f - wallResult.insulation);
-
-                    // Skip if fully insulated
-                    if (wallResult.insulation >= 1.0f)
-                    {
-                        continue;
-                    }
-                }
-
-                // Calculate heat transfer (positive means heat flows TO current tile)
-                float heatTransfer = tempDifference * heatTransferRate * transferEfficiency;
-
-                // Initialize temperature change tracking for both tiles
-                if (!temperatureChanges.Contains(currentTile))
-                {
-                    temperatureChanges.Add(currentTile, 0.0f);
-                }
-
-                if (!temperatureChanges.Contains(neighborTile))
-                {
-                    temperatureChanges.Add(neighborTile, 0.0f);
-                }
-
-                // Apply heat transfer (energy conservation)
-                temperatureChanges[currentTile] += heatTransfer;
-                temperatureChanges[neighborTile] -= heatTransfer;
+                continue;
             }
+
+            FWallCheckResult wallResult = CheckForWall(currentTile, offset);
+
+            float transferEfficiency = 1.0f;
+            if (wallResult.hit)
+            {
+                transferEfficiency = (1.0f - wallResult.insulation);
+                // Skip if fully insulated
+                if (wallResult.insulation >= 1.0f)
+                {
+                    continue;
+                }
+            }
+            
+            // Calculate heat transfer (positive means heat flows TO current tile)
+            float heatTransfer = tempDifference * heatTransferRate * transferEfficiency;
+            // Initialize temperature change tracking for both tiles
+
+            if (!temperatureChanges.Contains(currentTile))
+            {
+                temperatureChanges.Add(currentTile, 0.0f);
+            }
+
+            if (!temperatureChanges.Contains(neighborTile))
+            {
+                temperatureChanges.Add(neighborTile, 0.0f);
+            }
+
+            // Apply heat transfer (energy conservation)
+            temperatureChanges[currentTile] += heatTransfer;
+            temperatureChanges[neighborTile] -= heatTransfer;
         }
     }
 
@@ -170,7 +184,6 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
             temperatureMap[tile] : ambientTemperature;
 
         float newTemp = currentTemp + tempChange;
-
         // Only add to map if temperature is significantly different from ambient
         if (FMath::Abs(newTemp - ambientTemperature) > 0.05f)
         {
@@ -482,7 +495,7 @@ void ATemperatureManager::DrawHeatSources()
         );
 
         // Draw source temperature text
-        FString sourceText = FString::Printf(TEXT("SOURCE\n%.1f°"), sourceTemp);
+        FString sourceText = FString::Printf(TEXT("SOURCE\n%.1fï¿½"), sourceTemp);
         UKismetSystemLibrary::DrawDebugString(
             GetWorld(),
             sourceLocation + FVector(0, 0, 400),
