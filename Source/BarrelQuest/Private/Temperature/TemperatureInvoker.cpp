@@ -35,6 +35,27 @@ void UTemperatureInvoker::BeginPlay()
     }
 }
 
+void UTemperatureInvoker::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
+    if (GetWorld()->GetNetMode() == NM_Client)
+    {
+        return;
+    }
+
+    TArray<AActor*> foundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATemperatureManager::StaticClass(), foundActors);
+
+    if (foundActors.Num() > 0)
+    {
+        ATemperatureManager* manager = Cast<ATemperatureManager>(foundActors[0]);
+        if (manager)
+        {
+            manager->UnregisterInvoker(this);
+        }
+    }
+}
+
 
 // Called every frame
 void UTemperatureInvoker::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

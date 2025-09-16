@@ -32,6 +32,7 @@ void ATemperatureManager::UpdateInvokers()
 
         if (!invoker->emit)
         {
+            UpdateTemperatures(invoker->GetOwner()->GetActorLocation(), ambientTemperature);
             continue;
         }
         
@@ -106,6 +107,7 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
 
     float heatTransferRate = globalHeatTransferRate;
 
+    // Set the heat source temperature
     temperatureMap.FindOrAdd(startCenter) = invokerTemp;
 
     TArray<FVector> neighborOffsets =
@@ -118,11 +120,11 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
 
     TMap<FVector, float> temperatureChanges;
 
+    // Get current heated tiles
     TArray<FVector> heatedTiles;
     temperatureMap.GenerateKeyArray(heatedTiles);
 
     // Process each heated tile and its neighbors
-
     for (const FVector& currentTile : heatedTiles)
     {
         float currentTemp = temperatureMap[currentTile];
@@ -135,6 +137,7 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
                 temperatureMap[neighborTile] : ambientTemperature;
 
             float tempDifference = neighborTemp - currentTemp;
+
             // Only transfer heat if there's a meaningful temperature difference
             if (FMath::Abs(tempDifference) < 0.1f)
             {
@@ -147,16 +150,13 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
             if (wallResult.hit)
             {
                 transferEfficiency = (1.0f - wallResult.insulation);
-                // Skip if fully insulated
                 if (wallResult.insulation >= 1.0f)
                 {
                     continue;
                 }
             }
-            
-            // Calculate heat transfer (positive means heat flows TO current tile)
+
             float heatTransfer = tempDifference * heatTransferRate * transferEfficiency;
-            // Initialize temperature change tracking for both tiles
 
             if (!temperatureChanges.Contains(currentTile))
             {
@@ -168,13 +168,12 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
                 temperatureChanges.Add(neighborTile, 0.0f);
             }
 
-            // Apply heat transfer (energy conservation)
             temperatureChanges[currentTile] += heatTransfer;
             temperatureChanges[neighborTile] -= heatTransfer;
         }
     }
 
-    // Apply all temperature changes
+    // Apply temperature changes
     for (auto& change : temperatureChanges)
     {
         FVector tile = change.Key;
@@ -184,8 +183,9 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
             temperatureMap[tile] : ambientTemperature;
 
         float newTemp = currentTemp + tempChange;
+
         // Only add to map if temperature is significantly different from ambient
-        if (FMath::Abs(newTemp - ambientTemperature) > 0.05f)
+        if (FMath::Abs(newTemp - ambientTemperature) > 0.1f)
         {
             temperatureMap.FindOrAdd(tile) = newTemp;
         }
@@ -196,19 +196,142 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
         }
     }
 
-    // Clean up tiles that are very close to ambient temperature (except the start center)
-    TArray<FVector> tilesToRemove;
-    for (auto& tile : temperatureMap)
+    // Get all active invoker positions for source tile protection
+    TArray<FVector> invokerPositions;
+    TArray<UTemperatureInvoker*> activeInvokers;
+    registeredInvokers.GenerateKeyArray(activeInvokers);
+
+    for (const UTemperatureInvoker* invoker : activeInvokers)
     {
-        if (tile.Key != startCenter && FMath::Abs(tile.Value - ambientTemperature) < 0.5f)
+        if (invoker && invoker->emit)
         {
-            tilesToRemove.Add(tile.Key);
+            FVector invokerPos = invoker->GetOwner()->GetActorLocation();
+            SnapVectorToGrid(invokerPos, FVector(200, 200, 400));
+            invokerPositions.Add(invokerPos);
         }
     }
 
+    // IMPROVED CLEANUP: More aggressive removal of tiles close to ambient
+    TArray<FVector> tilesToRemove;
+    temperatureMap.GenerateKeyArray(heatedTiles); // Refresh the list after changes
+
+    for (const FVector& tile : heatedTiles)
+    {
+        float tileTemp = temperatureMap[tile];
+
+        // Never remove active heat source tiles
+        bool isSourceTile = false;
+        for (const FVector& invokerPos : invokerPositions)
+        {
+            if (tile == invokerPos)
+            {
+                isSourceTile = true;
+                break;
+            }
+        }
+
+        if (isSourceTile)
+        {
+            continue;
+        }
+
+        // Remove tiles that are very close to ambient temperature
+        // Use a more aggressive threshold than the original 0.5f
+        if (FMath::Abs(tileTemp - ambientTemperature) < 1.0f)
+        {
+            tilesToRemove.Add(tile);
+        }
+    }
+
+    // Remove tiles marked for removal
     for (const FVector& tile : tilesToRemove)
     {
         temperatureMap.Remove(tile);
+    }
+
+    // PERIODIC AGGRESSIVE CLEANUP to prevent gradual accumulation
+    static float lastAggressiveCleanup = 0.0f;
+    float currentTime = GetWorld()->GetTimeSeconds();
+
+    if (currentTime - lastAggressiveCleanup > 2.0f) // Every 2 seconds
+    {
+        lastAggressiveCleanup = currentTime;
+
+        TArray<FVector> allTiles;
+        temperatureMap.GenerateKeyArray(allTiles);
+
+        int32 removedCount = 0;
+
+        for (const FVector& tile : allTiles)
+        {
+            float tileTemp = temperatureMap[tile];
+
+            // Never remove active heat source tiles
+            bool isSourceTile = false;
+            for (const FVector& invokerPos : invokerPositions)
+            {
+                if (tile == invokerPos)
+                {
+                    isSourceTile = true;
+                    break;
+                }
+            }
+
+            if (!isSourceTile)
+            {
+                // More aggressive cleanup - remove tiles closer to ambient
+                if (FMath::Abs(tileTemp - ambientTemperature) < 2.0f)
+                {
+                    temperatureMap.Remove(tile);
+                    removedCount++;
+                }
+            }
+        }
+
+        // Log performance info if we're removing a lot of tiles
+        if (removedCount > 0)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Aggressive cleanup: removed %d tiles. Total tiles: %d"),
+                removedCount, temperatureMap.Num());
+        }
+
+        // EMERGENCY CLEANUP: If we still have too many tiles, remove more aggressively
+        if (temperatureMap.Num() > (2 << 15)) // Adjust this threshold as needed
+        {
+            UE_LOG(LogTemp, Error, TEXT("Emergency cleanup triggered! Tile count: %d"), temperatureMap.Num());
+
+            temperatureMap.GenerateKeyArray(allTiles);
+            int32 emergencyRemovedCount = 0;
+
+            for (const FVector& tile : allTiles)
+            {
+                float tileTemp = temperatureMap[tile];
+
+                // Never remove active heat source tiles
+                bool isSourceTile = false;
+                for (const FVector& invokerPos : invokerPositions)
+                {
+                    if (tile == invokerPos)
+                    {
+                        isSourceTile = true;
+                        break;
+                    }
+                }
+
+                if (!isSourceTile)
+                {
+                    // Very aggressive emergency cleanup
+                    if (FMath::Abs(tileTemp - ambientTemperature) < 5.0f)
+                    {
+                        temperatureMap.Remove(tile);
+                        emergencyRemovedCount++;
+                    }
+                }
+            }
+
+            UE_LOG(LogTemp, Error, TEXT("Emergency cleanup removed %d tiles. New total: %d"),
+                emergencyRemovedCount, temperatureMap.Num());
+        }
     }
 }
 
@@ -478,21 +601,6 @@ void ATemperatureManager::DrawHeatSources()
 
         FVector sourceLocation = invoker->GetOwner()->GetActorLocation();
         float sourceTemp = invoker->targetTemperature;
-
-        // Draw a larger, pulsing indicator for heat sources
-        float pulseScale = 1.0f + (0.05f * FMath::Sin(GetWorld()->GetTimeSeconds() * 3.0f));
-        FLinearColor sourceColor = GetTemperatureColor(sourceTemp);
-        sourceColor.A = 0.9f; // More opaque for sources
-
-        UKismetSystemLibrary::DrawDebugBox(
-            GetWorld(),
-            sourceLocation,
-            FVector(150, 150, 300) * pulseScale,
-            sourceColor,
-            FRotator(0),
-            0.033f,
-            3.0f // Thicker outline
-        );
 
         // Draw source temperature text
         FString sourceText = FString::Printf(TEXT("SOURCE\n%.1f�"), sourceTemp);
