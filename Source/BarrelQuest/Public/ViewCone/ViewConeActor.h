@@ -1,0 +1,138 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "Async/AsyncWork.h"
+#include "ProceduralMeshComponent.h"
+#include "ViewConeActor.generated.h"
+
+// Structure to hold the result data for a single trace.
+USTRUCT(BlueprintType)
+struct FVisionTraceResult
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector HitLocation;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bHit;
+
+	UPROPERTY(BlueprintReadOnly)
+	float Distance;
+
+	// The index of the trace to maintain order during async processing.
+	int32 TraceIndex;
+
+	FVisionTraceResult()
+		: HitLocation(FVector::ZeroVector)
+		, bHit(false)
+		, Distance(0.0f)
+		, TraceIndex(-1)
+	{
+	}
+};
+
+// Async task for performing a batch of line traces on a worker thread.
+class FVisionConeTraceTask : public FNonAbandonableTask
+{
+	friend class FAutoDeleteAsyncTask<FVisionConeTraceTask>;
+
+public:
+	FVisionConeTraceTask(
+		const TArray<FVector>& InTraceDirections,
+		const FVector& InStartLocation,
+		float InMaxDistance,
+		const FCollisionQueryParams& InQueryParams,
+		UWorld* InWorld,
+		int32 InStartTraceIndex = 0
+	)
+		: TraceDirections(InTraceDirections)
+		, StartLocation(InStartLocation)
+		, MaxDistance(InMaxDistance)
+		, QueryParams(InQueryParams)
+		, World(InWorld)
+		, StartTraceIndex(InStartTraceIndex)
+	{
+	}
+
+	// Required by FNonAbandonableTask for profiling.
+	FORCEINLINE TStatId GetStatId() const
+	{
+		RETURN_QUICK_DECLARE_CYCLE_STAT(FVisionConeTraceTask, STATGROUP_ThreadPoolAsyncTasks);
+	}
+
+	// Main work function that runs on the worker thread.
+	void DoWork();
+
+	// Accessor for the results of the trace task.
+	const TArray<FVisionTraceResult>& GetResults() const { return Results; }
+
+protected:
+	TArray<FVector> TraceDirections;
+	FVector StartLocation;
+	float MaxDistance;
+	FCollisionQueryParams QueryParams;
+	UWorld* World;
+	int32 StartTraceIndex;
+	TArray<FVisionTraceResult> Results;
+};
+
+/**
+ * An actor that generates a procedural mesh representing a cone of vision.
+ * It uses asynchronous line traces to detect obstacles and builds the mesh based on hit results.
+ */
+UCLASS()
+class AViewConeActor : public AActor
+{
+	GENERATED_BODY()
+
+public:
+	AViewConeActor();
+
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	virtual void BeginPlay() override;
+
+	//~ Begin Configuration Properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "1", ClampMax = "256", ToolTip = "Number of traces to process per asynchronous task."))
+	int32 TracesPerThread = 64;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "100.0", ClampMax = "10000.0", ToolTip = "The maximum distance of the vision cone."))
+	float VisionRange = 1500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "5.0", ClampMax = "180.0", ToolTip = "The total horizontal angle of the vision cone in degrees."))
+	float VisionAngle = 90.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "0.1", ClampMax = "10.0", ToolTip = "The angular separation in degrees between each trace. Smaller values mean more traces and a denser mesh."))
+	float AngleStep = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "If enabled, draws debug lines and spheres for each trace."))
+	bool bDebugDraw = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "The material to apply to the generated vision mesh."))
+	UMaterialInterface* VisionMaterial = nullptr;
+	//~ End Configuration Properties
+
+	// The procedural mesh component that will render the vision cone.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vision Cone")
+	UProceduralMeshComponent* VisionMesh;
+
+private:
+	// Core functions for generating the vision cone
+	void StartVisionTrace();
+	void GenerateTraceDirs(TArray<FVector>& OutDirections);
+	void CheckTasksComplete();
+	void ProcessResults();
+	void CreateVisionMesh();
+
+	// Utility function to clean up active async tasks.
+	void ClearActiveTasks();
+
+	// Async task management
+	TArray<FAsyncTask<FVisionConeTraceTask>*> ActiveTasks;
+	TArray<FVisionTraceResult> CombinedResults;
+	int32 TotalTraces = 0;
+	bool bTasksRunning = false;
+};

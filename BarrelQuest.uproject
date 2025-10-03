@@ -91,10 +91,6 @@
 			"Enabled": false
 		},
 		{
-			"Name": "CustomMeshComponent",
-			"Enabled": false
-		},
-		{
 			"Name": "AndroidMoviePlayer",
 			"Enabled": false
 		},
