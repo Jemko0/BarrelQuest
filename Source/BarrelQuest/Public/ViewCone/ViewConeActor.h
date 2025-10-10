@@ -44,6 +44,7 @@ public:
 		const FVector& InStartLocation,
 		float InMaxDistance,
 		const FCollisionQueryParams& InQueryParams,
+		const ECollisionChannel TraceChannel,
 		UWorld* InWorld,
 		int32 InStartTraceIndex = 0
 	)
@@ -51,6 +52,7 @@ public:
 		, StartLocation(InStartLocation)
 		, MaxDistance(InMaxDistance)
 		, QueryParams(InQueryParams)
+		, Channel(TraceChannel)
 		, World(InWorld)
 		, StartTraceIndex(InStartTraceIndex)
 	{
@@ -73,6 +75,7 @@ protected:
 	FVector StartLocation;
 	float MaxDistance;
 	FCollisionQueryParams QueryParams;
+	ECollisionChannel Channel;
 	UWorld* World;
 	int32 StartTraceIndex;
 	TArray<FVisionTraceResult> Results;
@@ -95,17 +98,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	//~ Begin Configuration Properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "1", ClampMax = "256", ToolTip = "Number of traces to process per asynchronous task."))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "Number of traces to process per asynchronous task."))
 	int32 TracesPerThread = 64;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "100.0", ClampMax = "10000.0", ToolTip = "The maximum distance of the vision cone."))
-	float VisionRange = 1500.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "The maximum distance of the vision cone."))
+	float VisionRange = 5000.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "5.0", ClampMax = "180.0", ToolTip = "The total horizontal angle of the vision cone in degrees."))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "The total horizontal angle of the vision cone in degrees."))
 	float VisionAngle = 90.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ClampMin = "0.1", ClampMax = "10.0", ToolTip = "The angular separation in degrees between each trace. Smaller values mean more traces and a denser mesh."))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "The angular separation in degrees between each trace. Smaller values mean more traces and a denser mesh."))
 	float AngleStep = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "If enabled, draws debug lines and spheres for each trace."))
@@ -119,6 +121,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vision Cone")
 	UProceduralMeshComponent* VisionMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone")
+	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
+
 private:
 	// Core functions for generating the vision cone
 	void StartVisionTrace();
@@ -127,10 +132,8 @@ private:
 	void ProcessResults();
 	void CreateVisionMesh();
 
-	// Utility function to clean up active async tasks.
 	void ClearActiveTasks();
 
-	// Async task management
 	TArray<FAsyncTask<FVisionConeTraceTask>*> ActiveTasks;
 	TArray<FVisionTraceResult> CombinedResults;
 	int32 TotalTraces = 0;

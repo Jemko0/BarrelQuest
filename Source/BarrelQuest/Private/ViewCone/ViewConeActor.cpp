@@ -23,7 +23,7 @@ void FVisionConeTraceTask::DoWork()
 			HitResult,
 			StartLocation,
 			EndLocation,
-			ECC_Visibility,
+			Channel,
 			QueryParams
 		);
 
@@ -60,6 +60,14 @@ AViewConeActor::AViewConeActor()
 void AViewConeActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	VisionMesh->bUseAsyncCooking = true;
+	VisionMesh->SetCastShadow(false);
+	VisionMesh->SetRenderInMainPass(false);
+	VisionMesh->bRenderInDepthPass = false;
+	VisionMesh->SetRenderCustomDepth(true);
+	VisionMesh->SetCustomDepthStencilValue(255);
+	VisionMesh->SetCustomDepthStencilWriteMask(ERendererStencilMask::ERSM_255);
 }
 
 void AViewConeActor::Tick(float DeltaTime)
@@ -95,7 +103,6 @@ void AViewConeActor::StartVisionTrace()
 	QueryParams.bTraceComplex = false;
 	const FVector StartLocation = GetActorLocation();
 
-	// Divide the traces among multiple asynchronous tasks.
 	const int32 NumTasks = FMath::CeilToInt((float)TotalTraces / (float)TracesPerThread);
 	for (int32 i = 0; i < NumTasks; ++i)
 	{
@@ -114,6 +121,7 @@ void AViewConeActor::StartVisionTrace()
 			StartLocation,
 			VisionRange,
 			QueryParams,
+			TraceChannel,
 			GetWorld(),
 			StartIndex // Pass the starting index to keep results ordered.
 		);
