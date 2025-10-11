@@ -45,8 +45,8 @@ AViewConeActor::AViewConeActor()
 	VisionMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("VisionMesh"));
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
-	VisionMesh->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true));
-
+	//VisionMesh->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true));
+	VisionMesh->SetupAttachment(RootComponent);
 	VisionMesh->bUseAsyncCooking = true;
 	VisionMesh->SetCastShadow(false);
 
