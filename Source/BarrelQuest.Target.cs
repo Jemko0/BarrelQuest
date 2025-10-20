@@ -11,5 +11,7 @@ public class BarrelQuestTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
 		ExtraModuleNames.AddRange( new string[] { "BarrelQuest" } );
+		DefaultWarningLevel = WarningLevel.Warning;
+		bWarningsAsErrors = false;
 	}
 }

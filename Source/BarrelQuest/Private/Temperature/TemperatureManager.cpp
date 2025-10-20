@@ -363,30 +363,6 @@ FWallCheckResult ATemperatureManager::CheckForWall(FVector center, FVector direc
         insulation = ITemperatureInterface::Execute_GetInsulationLevel(hitActor);
     }
     
-    // Debug drawing
-    if (drawDebug && drawWallTraces)
-    {
-        FLinearColor traceColor;
-        float traceDuration = 0.033f; // One frame
-        
-        if (bHit)
-        {
-            // Draw insulation text at hit point
-            if (insulation > 0.0f)
-            {
-                FString insulationText = FString::Printf(TEXT("%.2f"), insulation);
-                UKismetSystemLibrary::DrawDebugString(
-                    GetWorld(),
-                    hitResult.Location + FVector(0, 0, 20),
-                    insulationText,
-                    nullptr,
-                    traceColor,
-                    traceDuration
-                );
-            }
-        }
-    }
-    
     return FWallCheckResult(bHit, insulation);
 }
 
