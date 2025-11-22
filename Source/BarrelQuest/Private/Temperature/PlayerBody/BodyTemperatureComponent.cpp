@@ -33,23 +33,18 @@ void UBodyTemperatureComponent::InitBodyTemperature()
 	BodyTemp = BaseBodyTemp;	
 }
 
-void UBodyTemperatureComponent::LogVars()
+void UBodyTemperatureComponent::LogVars(float deltaTime)
 {
 	UE_LOG(LogBarrelQuest, Log, TEXT("BodyTemp: %f"), BodyTemp);
 	UE_LOG(LogBarrelQuest, Log, TEXT("OutsideTemp: %f"), OutsideTemperature);
-	UE_LOG(LogBarrelQuest, Log, TEXT("InternalHeat: %f"), InternalHeatProduction);
+	UE_LOG(LogBarrelQuest, Log, TEXT("InternalHeat: %f"), InternalHeatProduction * deltaTime);
 	UE_LOG(LogBarrelQuest, Log, TEXT("ClothingInsul: %f"), ClothingInsulation);
-	UE_LOG(LogBarrelQuest, Log, TEXT("HeatLossFac: %f"), GetHeatRetentionMultiplier(ClothingInsulation));
+	UE_LOG(LogBarrelQuest, Log, TEXT("HeatLossMultiplier: %f"), GetHeatLossMultiplier(ClothingInsulation));
 }
 
 void UBodyTemperatureComponent::RaiseHeatProduction(float heatDelta)
 {
 	InternalHeatProduction += heatDelta;
-}
-
-float UBodyTemperatureComponent::GetHeatRetentionMultiplier(float insulation)
-{
-	return BaseInternalHeatLossFactor / (1.0f + insulation * ClothingInsulationInfluence);
 }
 
 void UBodyTemperatureComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -60,15 +55,22 @@ void UBodyTemperatureComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 void UBodyTemperatureComponent::UpdateBodyTemperature(float delta)
 {
-	BodyTemp = UKismetMathLibrary::FInterpTo(BodyTemp, OutsideTemperature, delta, OutsideInfluence);
-	
 	const float insulation = UpdateClothingInsulation();
-	const float heatProduction = (InternalHeatProduction * GetHeatRetentionMultiplier(insulation)) * delta;
+	
+	float driftRate = OutsideInfluence / (1.0f + insulation * ClothingInsulationInfluence);
+	BodyTemp = UKismetMathLibrary::FInterpTo(BodyTemp, OutsideTemperature, delta, driftRate);
+	
+	float heatProduction = InternalHeatProduction * delta;
 	
 	BodyTemp += heatProduction;
 	InternalHeatProduction -= heatProduction;
-	
-	LogVars();
+    
+	LogVars(delta);
+}
+
+float UBodyTemperatureComponent::GetHeatLossMultiplier(float insulation)
+{
+	return BaseHeatLossFactor / (1.0f + insulation * ClothingInsulationInfluence);
 }
 
 float UBodyTemperatureComponent::UpdateClothingInsulation()

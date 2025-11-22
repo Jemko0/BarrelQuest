@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateBodyTemperature(float delta);
 	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetHeatLossMultiplier(float insulation);
+
 	UFUNCTION(BlueprintCallable)
 	float UpdateClothingInsulation();
 	
@@ -35,13 +38,10 @@ public:
 	void InitBodyTemperature();
 	
 	UFUNCTION(BlueprintCallable)
-	void LogVars();
+	void LogVars(float deltaTime);
 	
 	UFUNCTION(BlueprintCallable)
 	void RaiseHeatProduction(float heatDelta);
-	
-	UFUNCTION(BlueprintCallable)
-	float GetHeatRetentionMultiplier(float insulation);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
 	float BodyTemp = 0.0f;
@@ -53,7 +53,7 @@ public:
 	float ClothingInsulation = 0.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
-	float BaseInternalHeatLossFactor = 8.0f;
+	float BaseHeatLossFactor = 8.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
 	float SafeBodyTempRange = 2.0f;
