@@ -1,7 +1,7 @@
 
 
-#include "Kismet/KismetStringLibrary.h"
 #include "BarrelUtilityFunctionLibrary.h"
+#include "Kismet/KismetStringLibrary.h"
 
 FLinearColor UBarrelUtilityFunctionLibrary::HexStringToLinearColor(FString hexString)
 {
