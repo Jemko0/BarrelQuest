@@ -1,0 +1,56 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class NiagaraSystemScalabilityOverride
+---Niagara System Scalability Override
+---
+--- Properties
+---Controls whether we override the distance culling settings.
+---@field bOverrideDistanceSettings boolean
+---Controls whether we override the instance count culling settings.
+---@field bOverrideInstanceCountSettings boolean
+---Controls whether we override the per system instance count culling settings.
+---@field bOverridePerSystemInstanceCountSettings boolean
+---Controls whether we override the visibility culling settings.
+---@field bOverrideVisibilitySettings boolean
+---Controls whether we override the global budget scaling settings.
+---@field bOverrideGlobalBudgetScalingSettings boolean
+---Controls whether we override the cull proxy settings.
+---@field bOverrideCullProxySettings boolean
+---The platforms on which these settings are active (unless overridden).
+---@field Platforms NiagaraPlatformSet
+---Controls whether distance culling is enabled.
+---@field bCullByDistance boolean
+---Controls whether we should cull systems based on how many instances with the same Effect Type are active.
+---@field bCullMaxInstanceCount boolean
+---Controls whether we should cull systems based on how many instances of the system are active.
+---@field bCullPerSystemMaxInstanceCount boolean
+---Effects of this type are culled beyond this distance.
+---@field MaxDistance number
+---Deprecated visibility culling property. Moved into FNiagaraSystemVisibilityCullingSettings.
+---@field bCullByMaxTimeWithoutRender boolean
+---Effects of this type will be culled when total active instances using this same EffectType exceeds this number.
+---If the effect type has a significance handler, instances are sorted by their significance and only the N most significant will be kept. The rest are culled.
+---If it does not have a significance handler, instance count culling will be applied at spawn time only. New FX that would exceed the counts are not spawned/activated.
+---@field MaxInstances integer
+---Effects of this type will be culled when total active instances of the same NiagaraSystem exceeds this number.
+---If the effect type has a significance handler, instances are sorted by their significance and only the N most significant will be kept. The rest are culled.
+---If it does not have a significance handler, instance count culling will be applied at spawn time only. New FX that would exceed the counts are not spawned/activated.
+---@field MaxSystemInstances integer
+---Depreceated visibiltiy culling property. Moved into FNiagaraSystemVisibilityCullingSettings.
+---@field MaxTimeWithoutRender number
+---Controls what, if any, proxy will be used in place of culled systems.
+---@field CullProxyMode ENiagaraCullProxyMode
+---Limit on the number of proxies that can be used at once per system.
+---While much cheaper than full FX instances, proxies still incur some cost so must have a limit.
+---When significance information is available using a significance handler, the most significance proxies will be kept up to this limit.
+---@field MaxSystemProxies integer
+---Settings controlling how systems are culled by visibility.
+---@field VisibilityCulling NiagaraSystemVisibilityCullingSettings
+---Settings related to scaling down FX based on the current budget usage.
+---@field BudgetScaling NiagaraGlobalBudgetScaling
+local NiagaraSystemScalabilityOverride = {}
+return NiagaraSystemScalabilityOverride

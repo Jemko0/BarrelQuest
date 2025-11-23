@@ -1,0 +1,44 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class NavAvoidanceMask
+---Nav Avoidance Mask
+---
+--- Properties
+---@field bGroup0 boolean
+---@field bGroup1 boolean
+---@field bGroup2 boolean
+---@field bGroup3 boolean
+---@field bGroup4 boolean
+---@field bGroup5 boolean
+---@field bGroup6 boolean
+---@field bGroup7 boolean
+---@field bGroup8 boolean
+---@field bGroup9 boolean
+---@field bGroup10 boolean
+---@field bGroup11 boolean
+---@field bGroup12 boolean
+---@field bGroup13 boolean
+---@field bGroup14 boolean
+---@field bGroup15 boolean
+---@field bGroup16 boolean
+---@field bGroup17 boolean
+---@field bGroup18 boolean
+---@field bGroup19 boolean
+---@field bGroup20 boolean
+---@field bGroup21 boolean
+---@field bGroup22 boolean
+---@field bGroup23 boolean
+---@field bGroup24 boolean
+---@field bGroup25 boolean
+---@field bGroup26 boolean
+---@field bGroup27 boolean
+---@field bGroup28 boolean
+---@field bGroup29 boolean
+---@field bGroup30 boolean
+---@field bGroup31 boolean
+local NavAvoidanceMask = {}
+return NavAvoidanceMask

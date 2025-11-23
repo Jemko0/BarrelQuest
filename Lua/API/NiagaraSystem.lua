@@ -1,0 +1,157 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class NiagaraSystem : FXSystemAsset
+---A Niagara System contains multiple Niagara Emitters to create various effects.
+---Niagara Systems can be placed in the world, unlike Emitters, and expose User Parameters to configure an effect at runtime.
+---
+--- Properties
+---Internal: The thumbnail image.
+---@field ThumbnailImage Texture2D
+---Deprecated library exposure bool. Use the LibraryVisibility enum instead. FNiagaraEditorUtilities has accessor functions that takes deprecation into account
+---@field bExposeToLibrary boolean
+---If this system is exposed to the library, or should be explicitly hidden.
+---@field LibraryVisibility ENiagaraScriptLibraryVisibility
+---Deprecated template asset bool. Use the TemplateSpecification enum instead.
+---@field bIsTemplateAsset boolean
+---If this system is a regular system, a template or a behavior example.
+---@field TemplateSpecification ENiagaraScriptTemplateSpecification
+---@field TemplateAssetDescription string
+---Category of this system.
+---@field Category string
+---@field AssetTags NiagaraAssetTagDefinitionReference[]
+---@field ScratchPadScripts NiagaraScript[]
+---@field EditorOnlyAddedParameters NiagaraParameterStore
+---@field UpdateContext NiagaraSystemUpdateContext
+---When enable constant values are baked into the scripts while editing the system, this will increase iteration times but improve performance.
+---@field bBakeOutRapidIteration boolean
+---When enabled constant values are baked into scripts to improve performance.
+---@field bBakeOutRapidIterationOnCook boolean
+---Toggles whether or not emitters within this system will try and compress their particle attributes.
+---      In some cases, this precision change can lead to perceivable differences, but memory costs and or performance (especially true for GPU emitters) can improve.
+---@field bCompressAttributes boolean
+---When enabled we trim particle attributes while editing the system.
+---@field bTrimAttributes boolean
+---If true Particle attributes will be removed from the DataSet if they are unnecessary (are never read by ParameterMap)
+---@field bTrimAttributesOnCook boolean
+---If true ParticleReads will not absolutely prevent attribute trimming - User must ensure that the appropriate attributes are preserved on the source emitter!
+---@field bIgnoreParticleReadsForAttributeTrim boolean
+---When enable debug switches are disabled while editing the system.
+---@field bDisableDebugSwitches boolean
+---When enabled debug switches are disabled when compiling the system.
+---@field bDisableDebugSwitchesOnCook boolean
+---Subscriptions to definitions of parameters.
+---@field ParameterDefinitionsSubscriptions ParameterDefinitionsSubscription[]
+---If true then position type values will be rebased on system activation to fit into a float precision vector. This needs to be turned off when using a custom data interface or renderer that does not support the rebasing.
+---@field bSupportLargeWorldCoordinates boolean
+---Various optional overrides for component properties when spawning a system
+---@field bOverrideCastShadow boolean
+---@field bOverrideReceivesDecals boolean
+---@field bOverrideRenderCustomDepth boolean
+---@field bOverrideCustomDepthStencilValue boolean
+---@field bOverrideCustomDepthStencilWriteMask boolean
+---@field bOverrideTranslucencySortPriority boolean
+---@field bOverrideTranslucencySortDistanceOffset boolean
+---When enabled this is the default value set on the component.
+---Controls whether the primitive component should cast a shadow or not.
+---@field bCastShadow boolean
+---When enabled this is the default value set on the component.
+---Whether the primitive receives decals.
+---@field bReceivesDecals boolean
+---When enabled this is the default value set on the component.
+---This primitive has bRenderCustomDepth enabled.
+---@field bRenderCustomDepth boolean
+---When enabled this is the default value set on the component.
+---Mask used for stencil buffer writes.
+---@field CustomDepthStencilWriteMask ERendererStencilMask
+---When enabled this is the default value set on the component.
+---Optionally write this 0-255 value to the stencil buffer in CustomDepth pass (Requires project setting or r.CustomDepth == 3)
+---@field CustomDepthStencilValue integer
+---When enabled this is the default value set on the component.
+---Adjusts the translucent object sorting priority, see PrimitiveComponent description for more details.
+---@field TranslucencySortPriority integer
+---When enabled this is the default value set on the component.
+---Modifies the sort distance for translucent objects, see PrimitiveComponent description for more details.
+---@field TranslucencySortDistanceOffset number
+---@field bDumpDebugSystemInfo boolean
+---@field bDumpDebugEmitterInfo boolean
+---When enabled, we follow the settings on the UNiagaraComponent for tick order. When this option is disabled, we ignore any dependencies from data interfaces or other variables and instead fire off the simulation as early in the frame as possible. This greatly
+---      reduces overhead and allows the game thread to run faster, but comes at a tradeoff if the dependencies might leave gaps or other visual artifacts.
+---@field bRequireCurrentFrameData boolean
+---@field bOverrideScalabilitySettings boolean
+---Whether or not fixed bounds are enabled.
+---@field bFixedBounds boolean
+---An effect types defines settings shared between systems, for example scalability and validation rules.
+---Things like environment fx usually have a different effect type than gameplay relevant fx such as weapon impacts.
+---This way whole classes of effects can be adjusted at once.
+---@field EffectType NiagaraEffectType
+---Controls whether we should override the Effect Type value for bAllowCullingForLocalPlayers.
+---@field bOverrideAllowCullingForLocalPlayers boolean
+---The override value for bAllowCullingForLocalPlayers from the Effect Type.
+---@field bAllowCullingForLocalPlayersOverride boolean
+---@field SystemScalabilityOverrides NiagaraSystemScalabilityOverrides
+---@field Platforms NiagaraPlatformSet
+---Handles to the emitter this System will simulate.
+---@field EmitterHandles NiagaraEmitterHandle[]
+---@field ParameterCollectionOverrides NiagaraParameterCollectionInstance[]
+---@field ScalabilityOverrides NiagaraSystemScalabilityOverride[]
+---The script which defines the System parameters, and which generates the bindings from System
+---              parameter to emitter parameter.
+---@field SystemSpawnScript NiagaraScript
+---The script which defines the System parameters, and which generates the bindings from System
+---      parameter to emitter parameter.
+---@field SystemUpdateScript NiagaraScript
+---/ Post compile generated data used for initializing System Instances during runtime.
+---@field SystemCompiledData NiagaraSystemCompiledData
+---Variables exposed to the outside work for tweaking
+---@field ExposedParameters NiagaraUserRedirectionParameterStore
+---Data used by the editor to maintain UI state etc..
+---@field EditorData NiagaraEditorDataBase
+---Wrapper for editor only parameters.
+---@field EditorParameters NiagaraEditorParametersAdapterBase
+---The fixed bounding box value for the whole system. When placed in the level and the bounding box is not visible to the camera, the effect is culled from rendering.
+---@field FixedBounds Box
+---@field bUseInitialStreamingBounds boolean
+---Initial streaming bounds are only included when the streaming system asks for the inital bounds,
+---it is the union of the currently calculated generated bounds and these bounds.
+---Any future updates to the bounds in the streamer will use the component bounds only and not these bounds.
+---Setting initial streaming bounds can help in situations where textures do not stream in correctly as the
+---heuristic to updating the bounds inside the streaming system does not update them at all, or frequently enough.
+---This is generally an issue with dynamic bounds, if your system has fixed bounds it is unlikely you will need to use this.
+---@field InitialStreamingBounds Box
+---@field bNeedsGPUContextInitForDataInterfaces boolean
+---When disabled we will generate a RandomSeed per instance on reset which is not deterministic.
+---When enabled we will always use the RandomSeed from the system plus the components RandomSeedOffset, this allows for determinism but variance between components.
+---@field bDeterminism boolean
+---@field bFixedTickDelta boolean
+---Seed used for system script random number generator.
+---@field RandomSeed integer
+---Warm up time in seconds. Used to calculate WarmupTickCount. Rounds down to the nearest multiple of WarmupTickDelta.
+---@field WarmupTime number
+---Number of ticks to process for warmup. You can set by this or by time via WarmupTime.
+---@field WarmupTickCount integer
+---Delta time to use for warmup ticks.
+---@field WarmupTickDelta number
+---If activated, the system ticks with a fixed delta time instead of the varying game thread delta time. This leads to much more stable simulations.
+---When the fixed tick delta is smaller than the game thread tick time the simulation is substepping by executing multiple ticks per frame.
+---Note that activating this feature forces the system to tick on the game thread instead of an async task in parallel.
+---The max number of substeps per frame can be set via fx.Niagara.SystemSimulation.MaxTickSubsteps
+---@field FixedTickDeltaTime number
+---Settings used inside the baker
+---@field BakerSettings NiagaraBakerSettings
+---Generated data baker settings, will be null until we have generated at least once.
+---@field BakerGeneratedSettings NiagaraBakerSettings
+---When enabled if all emitters don't require script execution and the system script is empty / constant we can invoke a faster CPU path.
+---@field bAllowSystemStateFastPath boolean
+---@field bSystemStateFastPathEnabled boolean
+---Messages associated with the System asset.
+---@field MessageKeyToMessageMap table<Guid, NiagaraMessageDataBase>
+---@field MessageStore NiagaraMessageStore
+---@field SystemStateDataStruct InstancedStruct
+local NiagaraSystem = {}
+
+--- Methods
+return NiagaraSystem

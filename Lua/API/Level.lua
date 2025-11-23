@@ -1,0 +1,93 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class Level
+---A Level is a collection of Actors (lights, volumes, mesh instances etc.).
+---Multiple Levels can be loaded and unloaded into the World to create a streaming experience.
+---@see https://docs.unrealengine.com/latest/INT/Engine/Levels
+---@see UActor
+---
+--- Properties
+---Use external actors, new actor spawned in this level will be external and existing external actors will be loaded on load.
+---@field bUseExternalActors boolean
+---The World that has this level in its Levels array.
+---This is not the same as GetOuter(), because GetOuter() for a streaming level is a vestigial world that is not used.
+---It should not be accessed during BeginDestroy(), just like any other UObject references, since GC may occur in any order.
+---@field OwningWorld World
+---BSP UModel.
+---@field Model Model
+---BSP Model components used for rendering.
+---@field ModelComponents ModelComponent[]
+---@field ActorCluster LevelActorContainer
+---Reference to the blueprint for level scripting
+---@field LevelScriptBlueprint LevelScriptBlueprint
+---The Guid list of all materials and meshes Guid used in the last texture streaming build. Used to know if the streaming data needs rebuild. Only used for the persistent level.
+---@field TextureStreamingResourceGuids Guid[]
+---Num of components missing valid texture streaming data. Updated in map check.
+---@field NumTextureStreamingUnbuiltComponents integer
+---Num of resources that have changed since the last texture streaming build. Updated in map check.
+---@field NumTextureStreamingDirtyResources integer
+---The level scripting actor, created by instantiating the class from LevelScriptBlueprint.  This handles all level scripting
+---@field LevelScriptActor LevelScriptActor
+---Start and end of the navigation list for this level, used for quickly fixing up
+---when streaming this level in/out. @TODO DEPRECATED - DELETE
+---@field NavListStart NavigationObjectBase
+---@field NavListEnd NavigationObjectBase
+---Navigation related data that can be stored per level
+---@field NavDataChunks NavigationDataChunk[]
+---Total number of KB used for lightmap textures in the level.
+---@field LightmapTotalSize number
+---Total number of KB used for shadowmap textures in the level.
+---@field ShadowmapTotalSize number
+---threes of triangle vertices - AABB filtering friendly. Stored if there's a runtime need to rebuild navigation that accepts BSPs
+---    as well - it's a lot easier this way than retrieve this data at runtime
+---@field StaticNavigableGeometry Vector[]
+---The Guid of each streamable texture refered by FStreamingTextureBuildInfo::TextureLevelIndex
+---@field StreamingTextureGuids Guid[]
+---The name of each streamable texture referred by FStreamingTextureBuildInfo::TextureLevelIndex
+---@field StreamingTextures string[]
+---Packed quality level and feature level used when building texture streaming data. This is used by runtime to determine if built data can be used or not.
+---@field PackedTextureStreamingQualityLevelFeatureLevel integer
+---Identifies map build data specific to this level, eg lighting volume samples.
+---@field LevelBuildDataId Guid
+---Registry for data from the map build.  This is stored in a separate package from the level to speed up saving / autosaving.
+---ReleaseRenderingResources must be called before changing what is referenced, to update the rendering thread state.
+---@field MapBuildData MapBuildDataRegistry
+---Level offset at time when lighting was built
+---@field LightBuildLevelOffset IntVector
+---Whether the level is a lighting scenario.  Lighting is built separately for each lighting scenario level with all other scenario levels hidden.
+---Only one lighting scenario level should be visible at a time for correct rendering, and lightmaps from that level will be used on the rest of the world.
+---Note: When a lighting scenario level is present, lightmaps for all streaming levels are placed in the scenario's _BuildData package.
+---             This means that lightmaps for those streaming levels will not be streamed with them.
+---@field bIsLightingScenario boolean
+---Whether a level transform rotation was applied since the texture streaming builds. Invalidates the precomputed streaming bounds.
+---@field bTextureStreamingRotationChanged boolean
+---Whether the level has finished registering all static components in the streaming manager.
+---Once a level static components are registered, all new components need to go through the dynamic path.
+---This flag is used to direct the registration to the right path with a low perf impact.
+---@field bStaticComponentsRegisteredInStreamingManager boolean
+---Whether the level is currently visible/ associated with the world.
+---If false, may not yet be fully removed from the world.
+---@field bIsVisible boolean
+---Whether this level is locked; that is, its actors are read-only
+---    Used by WorldBrowser to lock a level when corresponding ULevelStreaming does not exist
+---@field bLocked boolean
+---Whether the level is partitioned or not.
+---@field bIsPartitioned boolean
+---Level simplification settings for each LOD
+---@field LevelSimplification LevelSimplificationDetails
+---The level color used for visualization. (Show -> Advanced -> Level Coloration)
+---Used only in world composition mode
+---@field LevelColor LinearColor
+---@field bPromptWhenAddingToLevelBeforeCheckout boolean
+---@field bPromptWhenAddingToLevelOutsideBounds boolean
+---@field ActorPackagingScheme EActorPackagingScheme
+---Array of user data stored with the asset
+---@field AssetUserData AssetUserData[]
+local Level = {}
+
+--- Methods
+return Level

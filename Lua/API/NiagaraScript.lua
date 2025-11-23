@@ -1,0 +1,67 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class NiagaraScript : NiagaraScriptBase
+---Scripts are function graphs that define the runtime execution for a Niagara system (similar to a Blueprint).
+---There are three types of scripts:
+---1) Module: can be added as a standalone part to the emitter stack and encapsulates a single behavior, for example "Add Velocity"
+---2) Dynamic input: has a single output value and can be added to any input in the stack to compute such a value, for example "Random Vector"
+---3) Function: usually reserved for helper functions; can only be called from within modules or dynamic inputs
+---
+--- Properties
+---A set of rules to apply when this script is used in the stack. To create your own rules, write a custom class that extends UNiagaraValidationRule.
+---@field ValidationRules NiagaraValidationRule[]
+---how this script is to be used. cannot be private due to use of GET_MEMBER_NAME_CHECKED
+---@field Usage ENiagaraScriptUsage
+---Contains all of the top-level values that are iterated on in the UI. These are usually "Module" variables in the graph. They don't necessarily have to be in the order that they are expected in the uniform table.
+---@field RapidIterationParameters NiagaraParameterStore
+---@field RapidIterationParametersCookedEditorCache NiagaraParameterStore
+---This is used as a transient value to open a specific version in the graph editor
+---@field VersionToOpenInEditor Guid
+---Which instance of the usage in the graph to use.  This is now deprecated and is handled by UsageId.
+---@field UsageIndex integer
+---Use property in struct returned from GetScriptData() instead
+---@field ModuleUsageBitmask integer
+---Use property in struct returned from GetScriptData() instead
+---@field Category string
+---Use property in struct returned from GetScriptData() instead
+---@field ProvidedDependencies string[]
+---Use property in struct returned from GetScriptData() instead
+---@field RequiredDependencies NiagaraModuleDependency[]
+---Use property in struct returned from GetScriptData() instead
+---@field bDeprecated boolean
+---Use property in struct returned from GetScriptData() instead
+---@field DeprecationMessage string
+---Use property in struct returned from GetScriptData() instead
+---@field DeprecationRecommendation NiagaraScript
+---Use property in struct returned from GetScriptData() instead
+---@field ConversionUtility Class
+---Use property in struct returned from GetScriptData() instead
+---@field bExperimental boolean
+---Use property in struct returned from GetScriptData() instead
+---@field ExperimentalMessage string
+---Use property in struct returned from GetScriptData() instead
+---@field NoteMessage string
+---Deprecated, use LibraryVisibility instead.
+---@field bExposeToLibrary boolean
+---Use property in struct returned from GetScriptData() instead
+---@field LibraryVisibility ENiagaraScriptLibraryVisibility
+---Use property in struct returned from GetScriptData() instead
+---@field NumericOutputTypeSelectionMode ENiagaraNumericOutputTypeSelectionMode
+---Use property in struct returned from GetScriptData() instead
+---@field Description string
+---Use property in struct returned from GetScriptData() instead
+---@field Keywords string
+---Deprecated, use LibraryVisibility instead.
+---@field CollapsedViewFormat string
+---Deprecated, use LibraryVisibility instead.
+---@field ScriptMetaData table<string, string>
+---'Source' data/graphs for this script
+---@field Source NiagaraScriptSourceBase
+local NiagaraScript = {}
+
+--- Methods
+return NiagaraScript

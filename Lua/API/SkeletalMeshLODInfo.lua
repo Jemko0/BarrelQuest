@@ -1,0 +1,69 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class SkeletalMeshLODInfo
+---Struct containing information for a particular LOD level, such as materials and info for when to use it.
+---
+--- Properties
+---ScreenSize to display this LOD.
+---The screen size is based around the projected diameter of the bounding
+---sphere of the model. i.e. 0.5 means half the screen's maximum dimension.
+---@field ScreenSize PerPlatformFloat
+---Used to avoid 'flickering' when on LOD boundary. Only taken into account when moving from complex->simple.
+---@field LODHysteresis number
+---Mapping table from this LOD's materials to the USkeletalMesh materials array.
+---section index is the key
+---remapped material index is the value, can be INDEX_NONE for no remapping
+---@field LODMaterialMap integer[]
+---Per-section control over whether to enable shadow casting.
+---@field bEnableShadowCasting boolean[]
+---This has been removed in editor. We could re-apply this in import time or by mesh reduction utilities
+---@field RemovedBones string[]
+---build settings to apply when building render data.
+---@field BuildSettings SkeletalMeshBuildSettings
+---Reduction settings to apply when building render data.
+---@field ReductionSettings SkeletalMeshOptimizationSettings
+---Bones which should be removed from the skeleton for the LOD level
+---@field BonesToRemove BoneReference[]
+---Bones which should be prioritized for the quality, this will be weighted toward keeping source data. Use WeightOfPrioritization to control the value.
+---@field BonesToPrioritize BoneReference[]
+---Sections which should be prioritized for the quality, this will be weighted toward keeping source data. Use WeightOfPrioritization to control the value.
+---@field SectionsToPrioritize SectionReference[]
+---How much to consideration to give BonesToPrioritize and SectionsToPrioritize.  The weight is an additional vertex simplification penalty where 0 means nothing.
+---@field WeightOfPrioritization number
+---Pose which should be used to reskin vertex influences for which the bones will be removed in this LOD level, uses ref-pose by default
+---@field BakePose AnimSequence
+---This is used when you are sharing the LOD settings, but you'd like to override the BasePose. This precedes prior to BakePose
+---@field BakePoseOverride AnimSequence
+---The filename of the file tha was used to import this LOD if it was not auto generated.
+---@field SourceImportFilename string
+---How this LOD uses the skin cache feature. Auto will defer to the default project global option. If Support Ray Tracing is enabled on the mesh, will imply Enabled
+---@field SkinCacheUsage ESkinCacheUsage
+---The Morph target position error tolerance in microns. Larger values result in better compression and lower memory footprint, but also lower quality.
+---@field MorphTargetPositionErrorTolerance number
+---Store the custom import morph target source file. The key of the map is the morph target name and the value is the source file path.
+---@field ImportedMorphTargetSourceFilename table<string, MorphTargetImportedSourceFileInfo>
+---Whether to disable morph targets for this LOD.
+---@field bHasBeenSimplified boolean
+---@field bHasPerLODVertexColors boolean
+---Keeps this LODs data on the CPU so it can be used for things such as sampling in FX.
+---@field bAllowCPUAccess boolean
+---Whether to force cache/cook half edge data that provides vertex connectivity information across material sections, which
+---may be useful for other systems like Mesh Deformer. Please note that Half Edge buffers are always built if the Skeletal Mesh Asset
+---has Default Mesh Deformer assigned, and the LOD has AllowMeshDeformer enabled,
+---@field bBuildHalfEdgeBuffers boolean
+---Whether a Mesh Deformer applied to the mesh asset or Skinned Mesh Component should be used on this LOD or not
+---@field bAllowMeshDeformer boolean
+---List of vertex attributes to include for rendering and what type they should be
+---@field VertexAttributes SkeletalMeshVertexAttributeInfo[]
+---Mesh supports uniformly distributed sampling in constant time.
+---Memory cost is 8 bytes per triangle.
+---Example usage is uniform spawning of particles.
+---@field bSupportUniformlyDistributedSampling boolean
+---* This boolean specify if the LOD was imported with the base mesh or not.
+---@field bImportWithBaseMesh boolean
+local SkeletalMeshLODInfo = {}
+return SkeletalMeshLODInfo

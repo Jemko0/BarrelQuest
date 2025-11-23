@@ -1,0 +1,96 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class ConstraintInstance
+---Container for a physics representation of an object.
+---
+--- Properties
+---Name of bone that this joint is associated with.
+---@field JointName string
+---Name of first bone (body) that this constraint is connecting.
+---This will be the 'child' bone in a PhysicsAsset.
+---@field ConstraintBone1 string
+---Name of second bone (body) that this constraint is connecting.
+---This will be the 'parent' bone in a PhysicsAset.
+---@field ConstraintBone2 string
+---Location of constraint in Body1 reference frame (usually the "child" body for skeletal meshes).
+---@field Pos1 Vector
+---Primary (twist) axis in Body1 reference frame.
+---@field PriAxis1 Vector
+---Secondary axis in Body1 reference frame. Orthogonal to PriAxis1.
+---@field SecAxis1 Vector
+---Location of constraint in Body2 reference frame (usually the "parent" body for skeletal meshes).
+---@field Pos2 Vector
+---Primary (twist) axis in Body2 reference frame.
+---@field PriAxis2 Vector
+---Secondary axis in Body2 reference frame. Orthogonal to PriAxis2.
+---@field SecAxis2 Vector
+---Specifies the angular offset between the two frames of reference. By default limit goes from (-Angle, +Angle)
+---This allows you to bias the limit for swing1 swing2 and twist.
+---@field AngularRotationOffset Rotator
+---If true, linear limits scale using the absolute min of the 3d scale of the owning component
+---@field bScaleLinearLimits boolean
+---Constraint Data (properties easily swapped at runtime based on different constraint profiles)
+---@field ProfileInstance ConstraintProfileProperties
+---@field bDisableCollision boolean
+---@field bEnableProjection boolean
+---@field ProjectionLinearTolerance number
+---@field ProjectionAngularTolerance number
+---@field LinearXMotion integer
+---@field LinearYMotion integer
+---@field LinearZMotion integer
+---@field LinearLimitSize number
+---@field bLinearLimitSoft boolean
+---@field LinearLimitStiffness number
+---@field LinearLimitDamping number
+---@field bLinearBreakable boolean
+---@field LinearBreakThreshold number
+---@field AngularSwing1Motion integer
+---@field AngularTwistMotion integer
+---@field AngularSwing2Motion integer
+---@field bSwingLimitSoft boolean
+---@field bTwistLimitSoft boolean
+---@field Swing1LimitAngle number
+---@field TwistLimitAngle number
+---@field Swing2LimitAngle number
+---@field SwingLimitStiffness number
+---@field SwingLimitDamping number
+---@field TwistLimitStiffness number
+---@field TwistLimitDamping number
+---@field bAngularBreakable boolean
+---@field AngularBreakThreshold number
+---@field bLinearXPositionDrive boolean
+---@field bLinearXVelocityDrive boolean
+---@field bLinearYPositionDrive boolean
+---@field bLinearYVelocityDrive boolean
+---@field bLinearZPositionDrive boolean
+---@field bLinearZVelocityDrive boolean
+---@field bLinearPositionDrive boolean
+---@field bLinearVelocityDrive boolean
+---@field LinearPositionTarget Vector
+---@field LinearVelocityTarget Vector
+---@field LinearDriveSpring number
+---@field LinearDriveDamping number
+---@field LinearDriveForceLimit number
+---@field bSwingPositionDrive boolean
+---@field bSwingVelocityDrive boolean
+---@field bTwistPositionDrive boolean
+---@field bTwistVelocityDrive boolean
+---@field bAngularSlerpDrive boolean
+---@field bAngularOrientationDrive boolean
+---@field bEnableSwingDrive boolean
+---@field bEnableTwistDrive boolean
+---@field bAngularVelocityDrive boolean
+---@field AngularPositionTarget Quat
+---@field AngularDriveMode integer
+---@field AngularOrientationTarget Rotator
+---@field AngularVelocityTarget Vector
+---Revolutions per second
+---@field AngularDriveSpring number
+---@field AngularDriveDamping number
+---@field AngularDriveForceLimit number
+local ConstraintInstance = {}
+return ConstraintInstance

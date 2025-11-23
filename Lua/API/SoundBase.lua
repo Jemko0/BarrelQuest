@@ -1,0 +1,73 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class SoundBase
+---The base class for a playable sound object
+---
+--- Properties
+---Sound class this sound belongs to
+---@field SoundClassObject SoundClass
+---When "au.3dVisualize.Attenuation" has been specified, draw this sound's attenuation shape when the sound is audible. For debugging purposes only.
+---@field bDebug boolean
+---Whether or not to override the sound concurrency object with local concurrency settings.
+---@field bOverrideConcurrency boolean
+---Whether or not to only send this audio's output to a bus. If true, will not be this sound won't be audible except through bus sends.
+---@field bOutputToBusOnly boolean
+---Whether or not to enable sending this audio's output to buses.
+---@field bEnableBusSends boolean
+---If enabled, sound will route to the Master Submix by default or to the Base Submix if defined. If disabled, sound will route ONLY to the Submix Sends and/or Bus Sends
+---@field bEnableBaseSubmix boolean
+---Whether or not to enable Submix Sends other than the Base Submix.
+---@field bEnableSubmixSends boolean
+---Whether or not this sound has a delay node
+---@field bHasDelayNode boolean
+---Whether or not this sound has a concatenator node. If it does, we have to allow the sound to persist even though it may not have generate audible audio in a given audio thread frame.
+---@field bHasConcatenatorNode boolean
+---@field bHasVirtualizeWhenSilent boolean
+---Bypass volume weighting priority upon evaluating whether sound should remain active when max channel count is met (See platform Audio Settings).
+---@field bBypassVolumeScaleForPriority boolean
+---Virtualization behavior, determining if a sound may revive and how it continues playing when culled or evicted (limited to looping sounds).
+---@field VirtualizationMode EVirtualizationMode
+---@field MaxConcurrentResolutionRule integer
+---If Override Concurrency is false, the sound concurrency settings to use for this sound.
+---@field SoundConcurrencySettings SoundConcurrency
+---Set of concurrency settings to observe (if override is set to false).  Sound must pass all concurrency settings to play.
+---@field ConcurrencySet table<SoundConcurrency, boolean>
+---If Override Concurrency is true, concurrency settings to use.
+---@field ConcurrencyOverrides SoundConcurrencySettings
+---Maximum number of times this sound can be played concurrently.
+---@field MaxConcurrentPlayCount integer
+---Duration of sound in seconds.
+---@field Duration number
+---The MaxDistance property is calculated statically on load or at asset edit time, but is not reliable at runtime.
+---the GetMaxDistance function should be used to determine the applied max distance based on runtime behavior.
+---@field MaxDistance number
+---Total number of samples (in the thousands). Useful as a metric to analyze the relative size of a given sound asset in content browser.
+---@field TotalSamples number
+---Used to determine whether sound can play or remain active if channel limit is met, where higher value is higher priority
+---(see platform's Audio Settings 'Max Channels' property). Unless bypassed, value is weighted with the final volume of the
+---sound to produce final runtime priority value.
+---@field Priority number
+---Attenuation settings package for the sound
+---@field AttenuationSettings SoundAttenuation
+---Submix to route sound output to. If unset, falls back to referenced SoundClass submix.
+---If SoundClass submix is unset, sends to the 'Master Submix' as set in the 'Audio' category of Project Settings'.
+---@field SoundSubmixObject SoundSubmixBase
+---Array of submix sends to which a prescribed amount (see 'Send Level') of this sound is sent.
+---@field SoundSubmixSends SoundSubmixSendInfo[]
+---The source effect chain to use for this sound.
+---@field SourceEffectChain SoundEffectSourcePresetChain
+---This sound will send its audio output to this list of buses if there are bus instances playing after source effects are processed.
+---@field BusSends SoundSourceBusSendInfo[]
+---This sound will send its audio output to this list of buses if there are bus instances playing before source effects are processed.
+---@field PreEffectBusSends SoundSourceBusSendInfo[]
+---Array of user data stored with the asset
+---@field AssetUserData AssetUserData[]
+---@field AudioPropertiesSheet AudioPropertiesSheetAssetBase
+local SoundBase = {}
+
+--- Methods
+return SoundBase

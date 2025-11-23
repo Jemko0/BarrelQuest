@@ -1,3 +1,6 @@
-local m = getModule()
+local Vector = require("bqAPI.vector")
 
-print("Test from module: " .. m.name)
+local v = Vector(0, 0, 5000)
+local ply = getLocalPlayer()
+
+ply.LaunchCharacter(v, false, true)

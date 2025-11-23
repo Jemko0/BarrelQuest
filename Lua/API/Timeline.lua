@@ -1,0 +1,48 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class Timeline
+---Timeline
+---
+--- Properties
+---Specified how the timeline determines its own length (e.g. specified length, last keyframe)
+---@field LengthMode integer
+---Whether timeline should loop when it reaches the end, or stop
+---@field bLooping boolean
+---If playback should move the current position backwards instead of forwards
+---@field bReversePlayback boolean
+---@field bPlaying boolean
+---If the first bit is set to 1 (PlayingStateTracker & 0x01 == 1), then we are playing
+---The rest of the bits in the uint8 are reserved for keeping track of the "dirty" state,
+---being incremented when our state is modified. This ensures that the value is replicated
+---if it changes multiple times in one frame, such as calling "Play From Start" in the resulting
+---"Finished" delegate.
+---You should modify this value using the "ChangeMarkPlayingState" function.
+---@field PlayingStateTracker integer
+---How long the timeline is, will stop or loop at the end
+---@field Length number
+---How fast we should play through the timeline
+---@field PlayRate number
+---Current position in the timeline
+---@field Position number
+---Array of events that are fired at various times during the timeline
+---@field Events TimelineEventEntry[]
+---Array of vector interpolations performed during the timeline
+---@field InterpVectors TimelineVectorTrack[]
+---Array of float interpolations performed during the timeline
+---@field InterpFloats TimelineFloatTrack[]
+---Array of linear color interpolations performed during the timeline
+---@field InterpLinearColors TimelineLinearColorTrack[]
+---Called whenever this timeline is playing and updates - done after all delegates are executed and variables updated
+---@field TimelinePostUpdateFunc function
+---Called whenever this timeline is finished. Is not called if 'stop' is used to terminate timeline early
+---@field TimelineFinishedFunc function
+---Optional. If set, Timeline will also set float/vector properties on this object using the PropertyName set in the tracks.
+---@field PropertySetObject any
+---Optional. If set, Timeline will also set ETimelineDirection property on PropertySetObject using the name.
+---@field DirectionPropertyName string
+local Timeline = {}
+return Timeline

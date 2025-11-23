@@ -1,0 +1,52 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class PhysicsConstraintTemplate
+---Physics Constraint Template
+---
+--- Properties
+---@field DefaultInstance ConstraintInstance
+---Handles to the constraint profiles applicable to this constraint
+---@field ProfileHandles PhysicsConstraintProfileHandle[]
+---@field JointName string
+---@field ConstraintBone1 string
+---@field ConstraintBone2 string
+---@field Pos1 Vector
+---@field PriAxis1 Vector
+---@field SecAxis1 Vector
+---@field Pos2 Vector
+---@field PriAxis2 Vector
+---@field SecAxis2 Vector
+---@field bEnableProjection boolean
+---@field ProjectionLinearTolerance number
+---@field ProjectionAngularTolerance number
+---@field LinearXMotion integer
+---@field LinearYMotion integer
+---@field LinearZMotion integer
+---@field LinearLimitSize number
+---@field bLinearLimitSoft boolean
+---@field LinearLimitStiffness number
+---@field LinearLimitDamping number
+---@field bLinearBreakable boolean
+---@field LinearBreakThreshold number
+---@field AngularSwing1Motion integer
+---@field AngularSwing2Motion integer
+---@field AngularTwistMotion integer
+---@field bSwingLimitSoft boolean
+---@field bTwistLimitSoft boolean
+---@field Swing1LimitAngle number
+---@field Swing2LimitAngle number
+---@field TwistLimitAngle number
+---@field SwingLimitStiffness number
+---@field SwingLimitDamping number
+---@field TwistLimitStiffness number
+---@field TwistLimitDamping number
+---@field bAngularBreakable boolean
+---@field AngularBreakThreshold number
+local PhysicsConstraintTemplate = {}
+
+--- Methods
+return PhysicsConstraintTemplate

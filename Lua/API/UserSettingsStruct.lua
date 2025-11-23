@@ -1,0 +1,17 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class UserSettingsStruct
+---User Settings Struct
+---
+--- Properties
+---@field EffectsQuality_2_52ADE12B4D0BBDE38ADE12A659B2E654 integer
+---@field FoliageQuality_4_492BD3E54BDCB10A13F838AC07733FD8 integer
+---@field Volume_15_276EE4AF4B7D45D6DDB9538968F6A8EA UserSettingsVolumeStruct
+---@field ViewCone_18_74649BE74815277F8D1175A233970A27 UserSettingsViewConeStruct
+---@field LogVerbosityLevel_21_17B4DC834C071F4BFC621C81195FC04E integer
+local UserSettingsStruct = {}
+return UserSettingsStruct

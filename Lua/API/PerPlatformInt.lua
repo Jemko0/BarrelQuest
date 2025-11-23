@@ -1,0 +1,14 @@
+---@meta
+
+--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.
+--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
+--- Access these using bracket notation: object["Apply Damage"]
+
+---@class PerPlatformInt
+---FPerPlatformInt - int32 property with per-platform overrides
+---
+--- Properties
+---@field Default integer
+---@field PerPlatform table<string, integer>
+local PerPlatformInt = {}
+return PerPlatformInt
