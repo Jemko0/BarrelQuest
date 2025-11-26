@@ -11,4 +11,14 @@
 --- Properties
 ---@field NumOfSecondsSinceMidnight number
 local SoundTimecodeOffset = {}
+
+--- Constructor
+---@return SoundTimecodeOffset
+---@param NumOfSecondsSinceMidnight number
+function SoundTimecodeOffset.new(NumOfSecondsSinceMidnight)
+    local self = {}
+    self.NumOfSecondsSinceMidnight = NumOfSecondsSinceMidnight
+    return self
+end
+
 return SoundTimecodeOffset

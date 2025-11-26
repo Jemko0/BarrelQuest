@@ -23,4 +23,26 @@
 ---If this is true, queueing the sound will also call a Resume Clock command
 ---@field bResumeClockOnQueued boolean
 local QuartzQuantizationBoundary = {}
+
+--- Constructor
+---@return QuartzQuantizationBoundary
+---@param Quantization EQuartzCommandQuantization
+---@param Multiplier number
+---@param CountingReferencePoint EQuarztQuantizationReference
+---@param bFireOnClockStart boolean
+---@param bCancelCommandIfClockIsNotRunning boolean
+---@param bResetClockOnQueued boolean
+---@param bResumeClockOnQueued boolean
+function QuartzQuantizationBoundary.new(Quantization, Multiplier, CountingReferencePoint, bFireOnClockStart, bCancelCommandIfClockIsNotRunning, bResetClockOnQueued, bResumeClockOnQueued)
+    local self = {}
+    self.Quantization = Quantization
+    self.Multiplier = Multiplier
+    self.CountingReferencePoint = CountingReferencePoint
+    self.bFireOnClockStart = bFireOnClockStart
+    self.bCancelCommandIfClockIsNotRunning = bCancelCommandIfClockIsNotRunning
+    self.bResetClockOnQueued = bResetClockOnQueued
+    self.bResumeClockOnQueued = bResumeClockOnQueued
+    return self
+end
+
 return QuartzQuantizationBoundary

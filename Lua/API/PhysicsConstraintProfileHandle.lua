@@ -12,4 +12,16 @@
 ---@field ProfileProperties ConstraintProfileProperties
 ---@field ProfileName string
 local PhysicsConstraintProfileHandle = {}
+
+--- Constructor
+---@return PhysicsConstraintProfileHandle
+---@param ProfileProperties ConstraintProfileProperties
+---@param ProfileName string
+function PhysicsConstraintProfileHandle.new(ProfileProperties, ProfileName)
+    local self = {}
+    self.ProfileProperties = ProfileProperties
+    self.ProfileName = ProfileName
+    return self
+end
+
 return PhysicsConstraintProfileHandle

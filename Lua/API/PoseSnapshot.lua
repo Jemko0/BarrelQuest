@@ -20,4 +20,22 @@
 ---Whether the pose is valid
 ---@field bIsValid boolean
 local PoseSnapshot = {}
+
+--- Constructor
+---@return PoseSnapshot
+---@param LocalTransforms Transform[]
+---@param BoneNames string[]
+---@param SkeletalMeshName string
+---@param SnapshotName string
+---@param bIsValid boolean
+function PoseSnapshot.new(LocalTransforms, BoneNames, SkeletalMeshName, SnapshotName, bIsValid)
+    local self = {}
+    self.LocalTransforms = LocalTransforms
+    self.BoneNames = BoneNames
+    self.SkeletalMeshName = SkeletalMeshName
+    self.SnapshotName = SnapshotName
+    self.bIsValid = bIsValid
+    return self
+end
+
 return PoseSnapshot

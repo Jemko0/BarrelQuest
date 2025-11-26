@@ -144,4 +144,122 @@
 ---If true, it will update mass when scale change *
 ---@field bUpdateMassWhenScaleChanges boolean
 local BodyInstance = {}
+
+--- Constructor
+---@return BodyInstance
+---@param PositionSolverIterationCount integer
+---@param VelocitySolverIterationCount integer
+---@param ProjectionSolverIterationCount integer
+---@param ObjectType integer
+---@param CollisionEnabled integer
+---@param SleepFamily ESleepFamily
+---@param DOFMode integer
+---@param bUseCCD boolean
+---@param bUseMACD boolean
+---@param bIgnoreAnalyticCollisions boolean
+---@param bNotifyRigidBodyCollision boolean
+---@param bSmoothEdgeCollisions boolean
+---@param bLockTranslation boolean
+---@param bLockRotation boolean
+---@param bLockXTranslation boolean
+---@param bLockYTranslation boolean
+---@param bLockZTranslation boolean
+---@param bLockXRotation boolean
+---@param bLockYRotation boolean
+---@param bLockZRotation boolean
+---@param bOverrideMaxAngularVelocity boolean
+---@param bOverrideMaxDepenetrationVelocity boolean
+---@param bOverrideWalkableSlopeOnInstance boolean
+---@param bInterpolateWhenSubStepping boolean
+---@param bInertiaConditioning boolean
+---@param bOneWayInteraction boolean
+---@param bOverrideSolverAsyncDeltaTime boolean
+---@param SolverAsyncDeltaTime number
+---@param CollisionProfileName string
+---@param ResponseToChannels CollisionResponseContainer
+---@param CollisionResponses CollisionResponse
+---@param MaxDepenetrationVelocity number
+---@param MassInKgOverride number
+---@param LinearDamping number
+---@param AngularDamping number
+---@param CustomDOFPlaneNormal Vector
+---@param COMNudge Vector
+---@param MassScale number
+---@param GravityGroupIndex integer
+---@param InertiaTensorScale Vector
+---@param WalkableSlopeOverride WalkableSlopeOverride
+---@param PhysMaterialOverride PhysicalMaterial
+---@param MaxAngularVelocity number
+---@param CustomSleepThresholdMultiplier number
+---@param StabilizationThresholdMultiplier number
+---@param PhysicsBlendWeight number
+---@param bSimulatePhysics boolean
+---@param bOverrideMass boolean
+---@param bEnableGravity boolean
+---@param bUpdateKinematicFromSimulation boolean
+---@param bGyroscopicTorqueEnabled boolean
+---@param bAutoWeld boolean
+---@param bStartAwake boolean
+---@param bGenerateWakeEvents boolean
+---@param bUpdateMassWhenScaleChanges boolean
+function BodyInstance.new(PositionSolverIterationCount, VelocitySolverIterationCount, ProjectionSolverIterationCount, ObjectType, CollisionEnabled, SleepFamily, DOFMode, bUseCCD, bUseMACD, bIgnoreAnalyticCollisions, bNotifyRigidBodyCollision, bSmoothEdgeCollisions, bLockTranslation, bLockRotation, bLockXTranslation, bLockYTranslation, bLockZTranslation, bLockXRotation, bLockYRotation, bLockZRotation, bOverrideMaxAngularVelocity, bOverrideMaxDepenetrationVelocity, bOverrideWalkableSlopeOnInstance, bInterpolateWhenSubStepping, bInertiaConditioning, bOneWayInteraction, bOverrideSolverAsyncDeltaTime, SolverAsyncDeltaTime, CollisionProfileName, ResponseToChannels, CollisionResponses, MaxDepenetrationVelocity, MassInKgOverride, LinearDamping, AngularDamping, CustomDOFPlaneNormal, COMNudge, MassScale, GravityGroupIndex, InertiaTensorScale, WalkableSlopeOverride, PhysMaterialOverride, MaxAngularVelocity, CustomSleepThresholdMultiplier, StabilizationThresholdMultiplier, PhysicsBlendWeight, bSimulatePhysics, bOverrideMass, bEnableGravity, bUpdateKinematicFromSimulation, bGyroscopicTorqueEnabled, bAutoWeld, bStartAwake, bGenerateWakeEvents, bUpdateMassWhenScaleChanges)
+    local self = {}
+    self.PositionSolverIterationCount = PositionSolverIterationCount
+    self.VelocitySolverIterationCount = VelocitySolverIterationCount
+    self.ProjectionSolverIterationCount = ProjectionSolverIterationCount
+    self.ObjectType = ObjectType
+    self.CollisionEnabled = CollisionEnabled
+    self.SleepFamily = SleepFamily
+    self.DOFMode = DOFMode
+    self.bUseCCD = bUseCCD
+    self.bUseMACD = bUseMACD
+    self.bIgnoreAnalyticCollisions = bIgnoreAnalyticCollisions
+    self.bNotifyRigidBodyCollision = bNotifyRigidBodyCollision
+    self.bSmoothEdgeCollisions = bSmoothEdgeCollisions
+    self.bLockTranslation = bLockTranslation
+    self.bLockRotation = bLockRotation
+    self.bLockXTranslation = bLockXTranslation
+    self.bLockYTranslation = bLockYTranslation
+    self.bLockZTranslation = bLockZTranslation
+    self.bLockXRotation = bLockXRotation
+    self.bLockYRotation = bLockYRotation
+    self.bLockZRotation = bLockZRotation
+    self.bOverrideMaxAngularVelocity = bOverrideMaxAngularVelocity
+    self.bOverrideMaxDepenetrationVelocity = bOverrideMaxDepenetrationVelocity
+    self.bOverrideWalkableSlopeOnInstance = bOverrideWalkableSlopeOnInstance
+    self.bInterpolateWhenSubStepping = bInterpolateWhenSubStepping
+    self.bInertiaConditioning = bInertiaConditioning
+    self.bOneWayInteraction = bOneWayInteraction
+    self.bOverrideSolverAsyncDeltaTime = bOverrideSolverAsyncDeltaTime
+    self.SolverAsyncDeltaTime = SolverAsyncDeltaTime
+    self.CollisionProfileName = CollisionProfileName
+    self.ResponseToChannels = ResponseToChannels
+    self.CollisionResponses = CollisionResponses
+    self.MaxDepenetrationVelocity = MaxDepenetrationVelocity
+    self.MassInKgOverride = MassInKgOverride
+    self.LinearDamping = LinearDamping
+    self.AngularDamping = AngularDamping
+    self.CustomDOFPlaneNormal = CustomDOFPlaneNormal
+    self.COMNudge = COMNudge
+    self.MassScale = MassScale
+    self.GravityGroupIndex = GravityGroupIndex
+    self.InertiaTensorScale = InertiaTensorScale
+    self.WalkableSlopeOverride = WalkableSlopeOverride
+    self.PhysMaterialOverride = PhysMaterialOverride
+    self.MaxAngularVelocity = MaxAngularVelocity
+    self.CustomSleepThresholdMultiplier = CustomSleepThresholdMultiplier
+    self.StabilizationThresholdMultiplier = StabilizationThresholdMultiplier
+    self.PhysicsBlendWeight = PhysicsBlendWeight
+    self.bSimulatePhysics = bSimulatePhysics
+    self.bOverrideMass = bOverrideMass
+    self.bEnableGravity = bEnableGravity
+    self.bUpdateKinematicFromSimulation = bUpdateKinematicFromSimulation
+    self.bGyroscopicTorqueEnabled = bGyroscopicTorqueEnabled
+    self.bAutoWeld = bAutoWeld
+    self.bStartAwake = bStartAwake
+    self.bGenerateWakeEvents = bGenerateWakeEvents
+    self.bUpdateMassWhenScaleChanges = bUpdateMassWhenScaleChanges
+    return self
+end
+
 return BodyInstance

@@ -12,4 +12,16 @@
 ---@field Default integer
 ---@field PerQuality table<integer, integer>
 local PerQualityLevelInt = {}
+
+--- Constructor
+---@return PerQualityLevelInt
+---@param Default integer
+---@param PerQuality table<integer, integer>
+function PerQualityLevelInt.new(Default, PerQuality)
+    local self = {}
+    self.Default = Default
+    self.PerQuality = PerQuality
+    return self
+end
+
 return PerQualityLevelInt

@@ -14,4 +14,16 @@
 ---References to the graphs associated with the required functions for this interface
 ---@field Graphs EdGraph[]
 local BPInterfaceDescription = {}
+
+--- Constructor
+---@return BPInterfaceDescription
+---@param Interface Class
+---@param Graphs EdGraph[]
+function BPInterfaceDescription.new(Interface, Graphs)
+    local self = {}
+    self.Interface = Interface
+    self.Graphs = Graphs
+    return self
+end
+
 return BPInterfaceDescription

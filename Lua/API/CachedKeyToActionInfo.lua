@@ -12,4 +12,14 @@
 ---Which PlayerInput object this has been built for
 ---@field PlayerInput any
 local CachedKeyToActionInfo = {}
+
+--- Constructor
+---@return CachedKeyToActionInfo
+---@param PlayerInput any
+function CachedKeyToActionInfo.new(PlayerInput)
+    local self = {}
+    self.PlayerInput = PlayerInput
+    return self
+end
+
 return CachedKeyToActionInfo

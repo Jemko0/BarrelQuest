@@ -14,4 +14,18 @@
 ---@field Y integer
 ---@field Z integer
 local IntVector = {}
+
+--- Constructor
+---@return IntVector
+---@param X integer
+---@param Y integer
+---@param Z integer
+function IntVector.new(X, Y, Z)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    self.Z = Z
+    return self
+end
+
 return IntVector

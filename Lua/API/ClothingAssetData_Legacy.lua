@@ -14,4 +14,20 @@
 ---@field bClothPropertiesChanged boolean
 ---@field PhysicsProperties ClothPhysicsProperties_Legacy
 local ClothingAssetData_Legacy = {}
+
+--- Constructor
+---@return ClothingAssetData_Legacy
+---@param AssetName string
+---@param ApexFileName string
+---@param bClothPropertiesChanged boolean
+---@param PhysicsProperties ClothPhysicsProperties_Legacy
+function ClothingAssetData_Legacy.new(AssetName, ApexFileName, bClothPropertiesChanged, PhysicsProperties)
+    local self = {}
+    self.AssetName = AssetName
+    self.ApexFileName = ApexFileName
+    self.bClothPropertiesChanged = bClothPropertiesChanged
+    self.PhysicsProperties = PhysicsProperties
+    return self
+end
+
 return ClothingAssetData_Legacy

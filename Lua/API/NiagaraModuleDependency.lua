@@ -26,4 +26,24 @@
 ---Detailed description of the dependency
 ---@field Description string
 local NiagaraModuleDependency = {}
+
+--- Constructor
+---@return NiagaraModuleDependency
+---@param Id string
+---@param Type ENiagaraModuleDependencyType
+---@param ScriptConstraint ENiagaraModuleDependencyScriptConstraint
+---@param RequiredVersion string
+---@param OnlyEvaluateInScriptUsage integer
+---@param Description string
+function NiagaraModuleDependency.new(Id, Type, ScriptConstraint, RequiredVersion, OnlyEvaluateInScriptUsage, Description)
+    local self = {}
+    self.Id = Id
+    self.Type = Type
+    self.ScriptConstraint = ScriptConstraint
+    self.RequiredVersion = RequiredVersion
+    self.OnlyEvaluateInScriptUsage = OnlyEvaluateInScriptUsage
+    self.Description = Description
+    return self
+end
+
 return NiagaraModuleDependency

@@ -12,4 +12,14 @@
 ---The actual mesh element index this ID represents.  Read-only.
 ---@field IDValue integer
 local TriangleID = {}
+
+--- Constructor
+---@return TriangleID
+---@param IDValue integer
+function TriangleID.new(IDValue)
+    local self = {}
+    self.IDValue = IDValue
+    return self
+end
+
 return TriangleID

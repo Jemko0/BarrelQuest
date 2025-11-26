@@ -20,4 +20,28 @@
 ---@field MaterialLayers MaterialLayersFunctionsRuntimeData
 ---@field bHasMaterialLayers boolean
 local StaticParameterSet = {}
+
+--- Constructor
+---@return StaticParameterSet
+---@param EditorOnly StaticParameterSetEditorOnlyData
+---@param MaterialLayersParameters StaticMaterialLayersParameter[]
+---@param StaticSwitchParameters StaticSwitchParameter[]
+---@param StaticComponentMaskParameters StaticComponentMaskParameter[]
+---@param TerrainLayerWeightParameters StaticTerrainLayerWeightParameter[]
+---@param StaticSwitchParameters StaticSwitchParameter[]
+---@param MaterialLayers MaterialLayersFunctionsRuntimeData
+---@param bHasMaterialLayers boolean
+function StaticParameterSet.new(EditorOnly, MaterialLayersParameters, StaticSwitchParameters, StaticComponentMaskParameters, TerrainLayerWeightParameters, StaticSwitchParameters, MaterialLayers, bHasMaterialLayers)
+    local self = {}
+    self.EditorOnly = EditorOnly
+    self.MaterialLayersParameters = MaterialLayersParameters
+    self.StaticSwitchParameters = StaticSwitchParameters
+    self.StaticComponentMaskParameters = StaticComponentMaskParameters
+    self.TerrainLayerWeightParameters = TerrainLayerWeightParameters
+    self.StaticSwitchParameters = StaticSwitchParameters
+    self.MaterialLayers = MaterialLayers
+    self.bHasMaterialLayers = bHasMaterialLayers
+    return self
+end
+
 return StaticParameterSet

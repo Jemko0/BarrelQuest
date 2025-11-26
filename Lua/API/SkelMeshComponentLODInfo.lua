@@ -12,4 +12,14 @@
 ---Material corresponds to section. To show/hide each section, use this.
 ---@field HiddenMaterials boolean[]
 local SkelMeshComponentLODInfo = {}
+
+--- Constructor
+---@return SkelMeshComponentLODInfo
+---@param HiddenMaterials boolean[]
+function SkelMeshComponentLODInfo.new(HiddenMaterials)
+    local self = {}
+    self.HiddenMaterials = HiddenMaterials
+    return self
+end
+
 return SkelMeshComponentLODInfo

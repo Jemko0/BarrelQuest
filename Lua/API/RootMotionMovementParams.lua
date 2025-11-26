@@ -13,4 +13,18 @@
 ---@field BlendWeight number
 ---@field RootMotionTransform Transform
 local RootMotionMovementParams = {}
+
+--- Constructor
+---@return RootMotionMovementParams
+---@param bHasRootMotion boolean
+---@param BlendWeight number
+---@param RootMotionTransform Transform
+function RootMotionMovementParams.new(bHasRootMotion, BlendWeight, RootMotionTransform)
+    local self = {}
+    self.bHasRootMotion = bHasRootMotion
+    self.BlendWeight = BlendWeight
+    self.RootMotionTransform = RootMotionTransform
+    return self
+end
+
 return RootMotionMovementParams

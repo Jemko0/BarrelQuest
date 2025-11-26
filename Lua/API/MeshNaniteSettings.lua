@@ -63,4 +63,62 @@
 ---Nanite Assembly data set up by the import
 ---@field NaniteAssemblyData NaniteAssemblyData
 local MeshNaniteSettings = {}
+
+--- Constructor
+---@return MeshNaniteSettings
+---@param bEnabled boolean
+---@param bPreserveArea boolean
+---@param bExplicitTangents boolean
+---@param bLerpUVs boolean
+---@param bSeparable boolean
+---@param bVoxelNDF boolean
+---@param bVoxelOpacity boolean
+---@param PositionPrecision integer
+---@param NormalPrecision integer
+---@param TangentPrecision integer
+---@param BoneWeightPrecision integer
+---@param TargetMinimumResidencyInKB integer
+---@param KeepPercentTriangles number
+---@param TrimRelativeError number
+---@param GenerateFallback ENaniteGenerateFallback
+---@param FallbackTarget ENaniteFallbackTarget
+---@param FallbackPercentTriangles number
+---@param FallbackRelativeError number
+---@param MaxEdgeLengthFactor number
+---@param NumRays integer
+---@param VoxelLevel integer
+---@param RayBackUp number
+---@param DisplacementUVChannel integer
+---@param DisplacementMaps MeshDisplacementMap[]
+---@param NaniteAssemblyData NaniteAssemblyData
+function MeshNaniteSettings.new(bEnabled, bPreserveArea, bExplicitTangents, bLerpUVs, bSeparable, bVoxelNDF, bVoxelOpacity, PositionPrecision, NormalPrecision, TangentPrecision, BoneWeightPrecision, TargetMinimumResidencyInKB, KeepPercentTriangles, TrimRelativeError, GenerateFallback, FallbackTarget, FallbackPercentTriangles, FallbackRelativeError, MaxEdgeLengthFactor, NumRays, VoxelLevel, RayBackUp, DisplacementUVChannel, DisplacementMaps, NaniteAssemblyData)
+    local self = {}
+    self.bEnabled = bEnabled
+    self.bPreserveArea = bPreserveArea
+    self.bExplicitTangents = bExplicitTangents
+    self.bLerpUVs = bLerpUVs
+    self.bSeparable = bSeparable
+    self.bVoxelNDF = bVoxelNDF
+    self.bVoxelOpacity = bVoxelOpacity
+    self.PositionPrecision = PositionPrecision
+    self.NormalPrecision = NormalPrecision
+    self.TangentPrecision = TangentPrecision
+    self.BoneWeightPrecision = BoneWeightPrecision
+    self.TargetMinimumResidencyInKB = TargetMinimumResidencyInKB
+    self.KeepPercentTriangles = KeepPercentTriangles
+    self.TrimRelativeError = TrimRelativeError
+    self.GenerateFallback = GenerateFallback
+    self.FallbackTarget = FallbackTarget
+    self.FallbackPercentTriangles = FallbackPercentTriangles
+    self.FallbackRelativeError = FallbackRelativeError
+    self.MaxEdgeLengthFactor = MaxEdgeLengthFactor
+    self.NumRays = NumRays
+    self.VoxelLevel = VoxelLevel
+    self.RayBackUp = RayBackUp
+    self.DisplacementUVChannel = DisplacementUVChannel
+    self.DisplacementMaps = DisplacementMaps
+    self.NaniteAssemblyData = NaniteAssemblyData
+    return self
+end
+
 return MeshNaniteSettings

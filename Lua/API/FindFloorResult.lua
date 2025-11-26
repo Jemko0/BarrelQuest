@@ -23,4 +23,24 @@
 ---Hit result of the test that found a floor. Includes more specific data about the point of impact and surface normal at that point.
 ---@field HitResult HitResult
 local FindFloorResult = {}
+
+--- Constructor
+---@return FindFloorResult
+---@param bBlockingHit boolean
+---@param bWalkableFloor boolean
+---@param bLineTrace boolean
+---@param FloorDist number
+---@param LineDist number
+---@param HitResult HitResult
+function FindFloorResult.new(bBlockingHit, bWalkableFloor, bLineTrace, FloorDist, LineDist, HitResult)
+    local self = {}
+    self.bBlockingHit = bBlockingHit
+    self.bWalkableFloor = bWalkableFloor
+    self.bLineTrace = bLineTrace
+    self.FloorDist = FloorDist
+    self.LineDist = LineDist
+    self.HitResult = HitResult
+    return self
+end
+
 return FindFloorResult

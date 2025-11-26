@@ -30,4 +30,30 @@
 ---@field Actor Actor
 ---@field Material MaterialInterface
 local ParticleSysParam = {}
+
+--- Constructor
+---@return ParticleSysParam
+---@param Name string
+---@param ParamType integer
+---@param Scalar number
+---@param Scalar_Low number
+---@param Vector Vector
+---@param Vector_Low Vector
+---@param Color Color
+---@param Actor Actor
+---@param Material MaterialInterface
+function ParticleSysParam.new(Name, ParamType, Scalar, Scalar_Low, Vector, Vector_Low, Color, Actor, Material)
+    local self = {}
+    self.Name = Name
+    self.ParamType = ParamType
+    self.Scalar = Scalar
+    self.Scalar_Low = Scalar_Low
+    self.Vector = Vector
+    self.Vector_Low = Vector_Low
+    self.Color = Color
+    self.Actor = Actor
+    self.Material = Material
+    return self
+end
+
 return ParticleSysParam

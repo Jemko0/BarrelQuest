@@ -16,4 +16,18 @@
 ---@note : TransformCurves are used to edit additive animation in editor.
 ---@field TransformCurves TransformCurve[]
 local RawCurveTracks = {}
+
+--- Constructor
+---@return RawCurveTracks
+---@param FloatCurves FloatCurve[]
+---@param VectorCurves VectorCurve[]
+---@param TransformCurves TransformCurve[]
+function RawCurveTracks.new(FloatCurves, VectorCurves, TransformCurves)
+    local self = {}
+    self.FloatCurves = FloatCurves
+    self.VectorCurves = VectorCurves
+    self.TransformCurves = TransformCurves
+    return self
+end
+
 return RawCurveTracks

@@ -11,4 +11,14 @@
 --- Properties
 ---@field AttachedObjects PreviewAttachedObjectPair[]
 local PreviewAssetAttachContainer = {}
+
+--- Constructor
+---@return PreviewAssetAttachContainer
+---@param AttachedObjects PreviewAttachedObjectPair[]
+function PreviewAssetAttachContainer.new(AttachedObjects)
+    local self = {}
+    self.AttachedObjects = AttachedObjects
+    return self
+end
+
 return PreviewAssetAttachContainer

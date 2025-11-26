@@ -26,4 +26,28 @@
 ---Rotation: relative to MovementBase if HasRelativeRotation() is true, absolute otherwise.
 ---@field Rotation Rotator
 local BasedMovementInfo = {}
+
+--- Constructor
+---@return BasedMovementInfo
+---@param BaseID any
+---@param bServerHasBaseComponent boolean
+---@param bRelativeRotation boolean
+---@param bServerHasVelocity boolean
+---@param BoneName string
+---@param MovementBase PrimitiveComponent
+---@param Location Vector_NetQuantize100
+---@param Rotation Rotator
+function BasedMovementInfo.new(BaseID, bServerHasBaseComponent, bRelativeRotation, bServerHasVelocity, BoneName, MovementBase, Location, Rotation)
+    local self = {}
+    self.BaseID = BaseID
+    self.bServerHasBaseComponent = bServerHasBaseComponent
+    self.bRelativeRotation = bRelativeRotation
+    self.bServerHasVelocity = bServerHasVelocity
+    self.BoneName = BoneName
+    self.MovementBase = MovementBase
+    self.Location = Location
+    self.Rotation = Rotation
+    return self
+end
+
 return BasedMovementInfo

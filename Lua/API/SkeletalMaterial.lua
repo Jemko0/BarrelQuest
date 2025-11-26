@@ -20,4 +20,26 @@
 ---@field UVChannelData MeshUVChannelInfo
 ---@field OverlayMaterialInterface MaterialInterface
 local SkeletalMaterial = {}
+
+--- Constructor
+---@return SkeletalMaterial
+---@param MaterialInterface MaterialInterface
+---@param MaterialSlotName string
+---@param bEnableShadowCasting boolean
+---@param bRecomputeTangent boolean
+---@param ImportedMaterialSlotName string
+---@param UVChannelData MeshUVChannelInfo
+---@param OverlayMaterialInterface MaterialInterface
+function SkeletalMaterial.new(MaterialInterface, MaterialSlotName, bEnableShadowCasting, bRecomputeTangent, ImportedMaterialSlotName, UVChannelData, OverlayMaterialInterface)
+    local self = {}
+    self.MaterialInterface = MaterialInterface
+    self.MaterialSlotName = MaterialSlotName
+    self.bEnableShadowCasting = bEnableShadowCasting
+    self.bRecomputeTangent = bRecomputeTangent
+    self.ImportedMaterialSlotName = ImportedMaterialSlotName
+    self.UVChannelData = UVChannelData
+    self.OverlayMaterialInterface = OverlayMaterialInterface
+    return self
+end
+
 return SkeletalMaterial

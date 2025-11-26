@@ -30,4 +30,32 @@
 ---If true, this Pawn is capable of flying.
 ---@field bCanFly boolean
 local NavAgentProperties = {}
+
+--- Constructor
+---@return NavAgentProperties
+---@param AgentRadius number
+---@param AgentHeight number
+---@param AgentStepHeight number
+---@param NavWalkingSearchHeightScale number
+---@param PreferredNavData SoftClassPath
+---@param bCanCrouch boolean
+---@param bCanJump boolean
+---@param bCanWalk boolean
+---@param bCanSwim boolean
+---@param bCanFly boolean
+function NavAgentProperties.new(AgentRadius, AgentHeight, AgentStepHeight, NavWalkingSearchHeightScale, PreferredNavData, bCanCrouch, bCanJump, bCanWalk, bCanSwim, bCanFly)
+    local self = {}
+    self.AgentRadius = AgentRadius
+    self.AgentHeight = AgentHeight
+    self.AgentStepHeight = AgentStepHeight
+    self.NavWalkingSearchHeightScale = NavWalkingSearchHeightScale
+    self.PreferredNavData = PreferredNavData
+    self.bCanCrouch = bCanCrouch
+    self.bCanJump = bCanJump
+    self.bCanWalk = bCanWalk
+    self.bCanSwim = bCanSwim
+    self.bCanFly = bCanFly
+    return self
+end
+
 return NavAgentProperties

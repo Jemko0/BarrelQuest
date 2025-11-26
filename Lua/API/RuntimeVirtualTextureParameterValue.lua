@@ -13,4 +13,18 @@
 ---@field ParameterValue RuntimeVirtualTexture
 ---@field ExpressionGUID Guid
 local RuntimeVirtualTextureParameterValue = {}
+
+--- Constructor
+---@return RuntimeVirtualTextureParameterValue
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue RuntimeVirtualTexture
+---@param ExpressionGUID Guid
+function RuntimeVirtualTextureParameterValue.new(ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return RuntimeVirtualTextureParameterValue

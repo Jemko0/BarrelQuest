@@ -19,4 +19,24 @@
 ---@field SystemSimsToDestroy NiagaraSystem[]
 ---@field SystemSimsToRecache NiagaraSystem[]
 local NiagaraSystemUpdateContext = {}
+
+--- Constructor
+---@return NiagaraSystemUpdateContext
+---@param ComponentsToReset NiagaraComponent[]
+---@param ComponentsToReInit NiagaraComponent[]
+---@param ComponentsToNotifySimDestroy NiagaraComponent[]
+---@param ComponentsToDestroyInstance NiagaraComponent[]
+---@param SystemSimsToDestroy NiagaraSystem[]
+---@param SystemSimsToRecache NiagaraSystem[]
+function NiagaraSystemUpdateContext.new(ComponentsToReset, ComponentsToReInit, ComponentsToNotifySimDestroy, ComponentsToDestroyInstance, SystemSimsToDestroy, SystemSimsToRecache)
+    local self = {}
+    self.ComponentsToReset = ComponentsToReset
+    self.ComponentsToReInit = ComponentsToReInit
+    self.ComponentsToNotifySimDestroy = ComponentsToNotifySimDestroy
+    self.ComponentsToDestroyInstance = ComponentsToDestroyInstance
+    self.SystemSimsToDestroy = SystemSimsToDestroy
+    self.SystemSimsToRecache = SystemSimsToRecache
+    return self
+end
+
 return NiagaraSystemUpdateContext

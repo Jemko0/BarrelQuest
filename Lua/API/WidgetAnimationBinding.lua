@@ -15,4 +15,22 @@
 ---@field bIsRootWidget boolean
 ---@field DynamicBinding MovieSceneDynamicBinding
 local WidgetAnimationBinding = {}
+
+--- Constructor
+---@return WidgetAnimationBinding
+---@param WidgetName string
+---@param SlotWidgetName string
+---@param AnimationGuid Guid
+---@param bIsRootWidget boolean
+---@param DynamicBinding MovieSceneDynamicBinding
+function WidgetAnimationBinding.new(WidgetName, SlotWidgetName, AnimationGuid, bIsRootWidget, DynamicBinding)
+    local self = {}
+    self.WidgetName = WidgetName
+    self.SlotWidgetName = SlotWidgetName
+    self.AnimationGuid = AnimationGuid
+    self.bIsRootWidget = bIsRootWidget
+    self.DynamicBinding = DynamicBinding
+    return self
+end
+
 return WidgetAnimationBinding

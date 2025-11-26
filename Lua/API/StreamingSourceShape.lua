@@ -24,4 +24,26 @@
 ---Streaming source shape rotation (local to streaming source).
 ---@field Rotation Rotator
 local StreamingSourceShape = {}
+
+--- Constructor
+---@return StreamingSourceShape
+---@param bUseGridLoadingRange boolean
+---@param LoadingRangeScale number
+---@param Radius number
+---@param bIsSector boolean
+---@param SectorAngle number
+---@param Location Vector
+---@param Rotation Rotator
+function StreamingSourceShape.new(bUseGridLoadingRange, LoadingRangeScale, Radius, bIsSector, SectorAngle, Location, Rotation)
+    local self = {}
+    self.bUseGridLoadingRange = bUseGridLoadingRange
+    self.LoadingRangeScale = LoadingRangeScale
+    self.Radius = Radius
+    self.bIsSector = bIsSector
+    self.SectorAngle = SectorAngle
+    self.Location = Location
+    self.Rotation = Rotation
+    return self
+end
+
 return StreamingSourceShape

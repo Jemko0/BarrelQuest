@@ -34,4 +34,32 @@
 ---The custom send curve to use for distance-based send level. (0.0-1.0 on the curve's X-axis maps to Min/Max Send Distance)
 ---@field CustomSendLevelCurve RuntimeFloatCurve
 local SoundSubmixSendInfo = {}
+
+--- Constructor
+---@return SoundSubmixSendInfo
+---@param SendStage ESubmixSendStage
+---@param SendLevelControlMethod ESendLevelControlMethod
+---@param SoundSubmix SoundSubmixBase
+---@param SendLevel number
+---@param DisableManualSendClamp boolean
+---@param MinSendLevel number
+---@param MaxSendLevel number
+---@param MinSendDistance number
+---@param MaxSendDistance number
+---@param CustomSendLevelCurve RuntimeFloatCurve
+function SoundSubmixSendInfo.new(SendStage, SendLevelControlMethod, SoundSubmix, SendLevel, DisableManualSendClamp, MinSendLevel, MaxSendLevel, MinSendDistance, MaxSendDistance, CustomSendLevelCurve)
+    local self = {}
+    self.SendStage = SendStage
+    self.SendLevelControlMethod = SendLevelControlMethod
+    self.SoundSubmix = SoundSubmix
+    self.SendLevel = SendLevel
+    self.DisableManualSendClamp = DisableManualSendClamp
+    self.MinSendLevel = MinSendLevel
+    self.MaxSendLevel = MaxSendLevel
+    self.MinSendDistance = MinSendDistance
+    self.MaxSendDistance = MaxSendDistance
+    self.CustomSendLevelCurve = CustomSendLevelCurve
+    return self
+end
+
 return SoundSubmixSendInfo

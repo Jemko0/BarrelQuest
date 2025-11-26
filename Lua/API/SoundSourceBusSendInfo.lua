@@ -32,4 +32,30 @@
 ---The custom send curve to use for distance-based send level. (0.0-1.0 on the curve's X-axis maps to Min/Max Send Distance)
 ---@field CustomSendLevelCurve RuntimeFloatCurve
 local SoundSourceBusSendInfo = {}
+
+--- Constructor
+---@return SoundSourceBusSendInfo
+---@param SourceBusSendLevelControlMethod ESourceBusSendLevelControlMethod
+---@param SoundSourceBus SoundSourceBus
+---@param AudioBus AudioBus
+---@param SendLevel number
+---@param MinSendLevel number
+---@param MaxSendLevel number
+---@param MinSendDistance number
+---@param MaxSendDistance number
+---@param CustomSendLevelCurve RuntimeFloatCurve
+function SoundSourceBusSendInfo.new(SourceBusSendLevelControlMethod, SoundSourceBus, AudioBus, SendLevel, MinSendLevel, MaxSendLevel, MinSendDistance, MaxSendDistance, CustomSendLevelCurve)
+    local self = {}
+    self.SourceBusSendLevelControlMethod = SourceBusSendLevelControlMethod
+    self.SoundSourceBus = SoundSourceBus
+    self.AudioBus = AudioBus
+    self.SendLevel = SendLevel
+    self.MinSendLevel = MinSendLevel
+    self.MaxSendLevel = MaxSendLevel
+    self.MinSendDistance = MinSendDistance
+    self.MaxSendDistance = MaxSendDistance
+    self.CustomSendLevelCurve = CustomSendLevelCurve
+    return self
+end
+
 return SoundSourceBusSendInfo

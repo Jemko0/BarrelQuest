@@ -15,4 +15,20 @@
 ---@field ZPlane Plane
 ---@field WPlane Plane
 local Matrix = {}
+
+--- Constructor
+---@return Matrix
+---@param XPlane Plane
+---@param YPlane Plane
+---@param ZPlane Plane
+---@param WPlane Plane
+function Matrix.new(XPlane, YPlane, ZPlane, WPlane)
+    local self = {}
+    self.XPlane = XPlane
+    self.YPlane = YPlane
+    self.ZPlane = ZPlane
+    self.WPlane = WPlane
+    return self
+end
+
 return Matrix

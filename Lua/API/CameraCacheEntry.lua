@@ -15,4 +15,16 @@
 ---Camera POV to cache.
 ---@field POV MinimalViewInfo
 local CameraCacheEntry = {}
+
+--- Constructor
+---@return CameraCacheEntry
+---@param TimeStamp number
+---@param POV MinimalViewInfo
+function CameraCacheEntry.new(TimeStamp, POV)
+    local self = {}
+    self.TimeStamp = TimeStamp
+    self.POV = POV
+    return self
+end
+
 return CameraCacheEntry

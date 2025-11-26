@@ -54,4 +54,50 @@
 ---Settings related to scaling down FX based on the current budget usage.
 ---@field BudgetScaling NiagaraGlobalBudgetScaling
 local NiagaraSystemScalabilityOverride = {}
+
+--- Constructor
+---@return NiagaraSystemScalabilityOverride
+---@param bOverrideDistanceSettings boolean
+---@param bOverrideInstanceCountSettings boolean
+---@param bOverridePerSystemInstanceCountSettings boolean
+---@param bOverrideVisibilitySettings boolean
+---@param bOverrideGlobalBudgetScalingSettings boolean
+---@param bOverrideCullProxySettings boolean
+---@param Platforms NiagaraPlatformSet
+---@param bCullByDistance boolean
+---@param bCullMaxInstanceCount boolean
+---@param bCullPerSystemMaxInstanceCount boolean
+---@param MaxDistance number
+---@param bCullByMaxTimeWithoutRender boolean
+---@param MaxInstances integer
+---@param MaxSystemInstances integer
+---@param MaxTimeWithoutRender number
+---@param CullProxyMode ENiagaraCullProxyMode
+---@param MaxSystemProxies integer
+---@param VisibilityCulling NiagaraSystemVisibilityCullingSettings
+---@param BudgetScaling NiagaraGlobalBudgetScaling
+function NiagaraSystemScalabilityOverride.new(bOverrideDistanceSettings, bOverrideInstanceCountSettings, bOverridePerSystemInstanceCountSettings, bOverrideVisibilitySettings, bOverrideGlobalBudgetScalingSettings, bOverrideCullProxySettings, Platforms, bCullByDistance, bCullMaxInstanceCount, bCullPerSystemMaxInstanceCount, MaxDistance, bCullByMaxTimeWithoutRender, MaxInstances, MaxSystemInstances, MaxTimeWithoutRender, CullProxyMode, MaxSystemProxies, VisibilityCulling, BudgetScaling)
+    local self = {}
+    self.bOverrideDistanceSettings = bOverrideDistanceSettings
+    self.bOverrideInstanceCountSettings = bOverrideInstanceCountSettings
+    self.bOverridePerSystemInstanceCountSettings = bOverridePerSystemInstanceCountSettings
+    self.bOverrideVisibilitySettings = bOverrideVisibilitySettings
+    self.bOverrideGlobalBudgetScalingSettings = bOverrideGlobalBudgetScalingSettings
+    self.bOverrideCullProxySettings = bOverrideCullProxySettings
+    self.Platforms = Platforms
+    self.bCullByDistance = bCullByDistance
+    self.bCullMaxInstanceCount = bCullMaxInstanceCount
+    self.bCullPerSystemMaxInstanceCount = bCullPerSystemMaxInstanceCount
+    self.MaxDistance = MaxDistance
+    self.bCullByMaxTimeWithoutRender = bCullByMaxTimeWithoutRender
+    self.MaxInstances = MaxInstances
+    self.MaxSystemInstances = MaxSystemInstances
+    self.MaxTimeWithoutRender = MaxTimeWithoutRender
+    self.CullProxyMode = CullProxyMode
+    self.MaxSystemProxies = MaxSystemProxies
+    self.VisibilityCulling = VisibilityCulling
+    self.BudgetScaling = BudgetScaling
+    return self
+end
+
 return NiagaraSystemScalabilityOverride

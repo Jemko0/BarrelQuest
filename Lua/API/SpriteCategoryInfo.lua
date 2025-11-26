@@ -16,4 +16,18 @@
 ---Localized description of the sprite category
 ---@field Description string
 local SpriteCategoryInfo = {}
+
+--- Constructor
+---@return SpriteCategoryInfo
+---@param Category string
+---@param DisplayName string
+---@param Description string
+function SpriteCategoryInfo.new(Category, DisplayName, Description)
+    local self = {}
+    self.Category = Category
+    self.DisplayName = DisplayName
+    self.Description = Description
+    return self
+end
+
 return SpriteCategoryInfo

@@ -14,4 +14,16 @@
 ---Physical animation parameters used to drive animation
 ---@field PhysicalAnimationData PhysicalAnimationData
 local PhysicalAnimationProfile = {}
+
+--- Constructor
+---@return PhysicalAnimationProfile
+---@param ProfileName string
+---@param PhysicalAnimationData PhysicalAnimationData
+function PhysicalAnimationProfile.new(ProfileName, PhysicalAnimationData)
+    local self = {}
+    self.ProfileName = ProfileName
+    self.PhysicalAnimationData = PhysicalAnimationData
+    return self
+end
+
 return PhysicalAnimationProfile

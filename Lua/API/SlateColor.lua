@@ -14,4 +14,16 @@
 ---The rule for which color to pick.
 ---@field ColorUseRule ESlateColorStylingMode
 local SlateColor = {}
+
+--- Constructor
+---@return SlateColor
+---@param SpecifiedColor LinearColor
+---@param ColorUseRule ESlateColorStylingMode
+function SlateColor.new(SpecifiedColor, ColorUseRule)
+    local self = {}
+    self.SpecifiedColor = SpecifiedColor
+    self.ColorUseRule = ColorUseRule
+    return self
+end
+
 return SlateColor

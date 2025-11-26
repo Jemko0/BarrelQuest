@@ -28,4 +28,32 @@
 ---Optional new default value stored as string
 ---@field DefaultValue string
 local BPVariableDescription = {}
+
+--- Constructor
+---@return BPVariableDescription
+---@param VarName string
+---@param VarGuid Guid
+---@param VarType EdGraphPinType
+---@param FriendlyName string
+---@param Category string
+---@param PropertyFlags integer
+---@param RepNotifyFunc string
+---@param ReplicationCondition integer
+---@param MetaDataArray BPVariableMetaDataEntry[]
+---@param DefaultValue string
+function BPVariableDescription.new(VarName, VarGuid, VarType, FriendlyName, Category, PropertyFlags, RepNotifyFunc, ReplicationCondition, MetaDataArray, DefaultValue)
+    local self = {}
+    self.VarName = VarName
+    self.VarGuid = VarGuid
+    self.VarType = VarType
+    self.FriendlyName = FriendlyName
+    self.Category = Category
+    self.PropertyFlags = PropertyFlags
+    self.RepNotifyFunc = RepNotifyFunc
+    self.ReplicationCondition = ReplicationCondition
+    self.MetaDataArray = MetaDataArray
+    self.DefaultValue = DefaultValue
+    return self
+end
+
 return BPVariableDescription

@@ -13,4 +13,18 @@
 ---@field SrcOffset integer
 ---@field DestOffset integer
 local NiagaraBoundParameter = {}
+
+--- Constructor
+---@return NiagaraBoundParameter
+---@param Parameter NiagaraVariableBase
+---@param SrcOffset integer
+---@param DestOffset integer
+function NiagaraBoundParameter.new(Parameter, SrcOffset, DestOffset)
+    local self = {}
+    self.Parameter = Parameter
+    self.SrcOffset = SrcOffset
+    self.DestOffset = DestOffset
+    return self
+end
+
 return NiagaraBoundParameter

@@ -12,4 +12,16 @@
 ---@field Default boolean
 ---@field PerPlatform table<string, boolean>
 local PerPlatformBool = {}
+
+--- Constructor
+---@return PerPlatformBool
+---@param Default boolean
+---@param PerPlatform table<string, boolean>
+function PerPlatformBool.new(Default, PerPlatform)
+    local self = {}
+    self.Default = Default
+    self.PerPlatform = PerPlatform
+    return self
+end
+
 return PerPlatformBool

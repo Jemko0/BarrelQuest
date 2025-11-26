@@ -11,4 +11,14 @@
 --- Properties
 ---@field Overrides NiagaraSystemScalabilityOverride[]
 local NiagaraSystemScalabilityOverrides = {}
+
+--- Constructor
+---@return NiagaraSystemScalabilityOverrides
+---@param Overrides NiagaraSystemScalabilityOverride[]
+function NiagaraSystemScalabilityOverrides.new(Overrides)
+    local self = {}
+    self.Overrides = Overrides
+    return self
+end
+
 return NiagaraSystemScalabilityOverrides

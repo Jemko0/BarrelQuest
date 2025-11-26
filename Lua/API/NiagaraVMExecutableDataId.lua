@@ -33,4 +33,36 @@
 ---The version of the script that was compiled. If empty then just the latest version.
 ---@field ScriptVersionID Guid
 local NiagaraVMExecutableDataId = {}
+
+--- Constructor
+---@return NiagaraVMExecutableDataId
+---@param CompilerVersionID Guid
+---@param InterpolatedSpawnMode ENiagaraInterpolatedSpawnMode
+---@param ScriptUsageTypeID Guid
+---@param ScriptUsageType ENiagaraScriptUsage
+---@param AdditionalDefines string[]
+---@param AdditionalVariables NiagaraVariableBase[]
+---@param bDisableDebugSwitches boolean
+---@param bRequiresPersistentIDs boolean
+---@param bUsesRapidIterationParams boolean
+---@param BaseScriptCompileHash NiagaraCompileHash
+---@param ReferencedCompileHashes NiagaraCompileHash[]
+---@param ScriptVersionID Guid
+function NiagaraVMExecutableDataId.new(CompilerVersionID, InterpolatedSpawnMode, ScriptUsageTypeID, ScriptUsageType, AdditionalDefines, AdditionalVariables, bDisableDebugSwitches, bRequiresPersistentIDs, bUsesRapidIterationParams, BaseScriptCompileHash, ReferencedCompileHashes, ScriptVersionID)
+    local self = {}
+    self.CompilerVersionID = CompilerVersionID
+    self.InterpolatedSpawnMode = InterpolatedSpawnMode
+    self.ScriptUsageTypeID = ScriptUsageTypeID
+    self.ScriptUsageType = ScriptUsageType
+    self.AdditionalDefines = AdditionalDefines
+    self.AdditionalVariables = AdditionalVariables
+    self.bDisableDebugSwitches = bDisableDebugSwitches
+    self.bRequiresPersistentIDs = bRequiresPersistentIDs
+    self.bUsesRapidIterationParams = bUsesRapidIterationParams
+    self.BaseScriptCompileHash = BaseScriptCompileHash
+    self.ReferencedCompileHashes = ReferencedCompileHashes
+    self.ScriptVersionID = ScriptVersionID
+    return self
+end
+
 return NiagaraVMExecutableDataId

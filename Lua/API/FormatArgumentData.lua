@@ -18,4 +18,26 @@
 ---@field ArgumentValueDouble number
 ---@field ArgumentValueGender ETextGender
 local FormatArgumentData = {}
+
+--- Constructor
+---@return FormatArgumentData
+---@param ArgumentName string
+---@param ArgumentValueType integer
+---@param ArgumentValue string
+---@param ArgumentValueInt integer
+---@param ArgumentValueFloat number
+---@param ArgumentValueDouble number
+---@param ArgumentValueGender ETextGender
+function FormatArgumentData.new(ArgumentName, ArgumentValueType, ArgumentValue, ArgumentValueInt, ArgumentValueFloat, ArgumentValueDouble, ArgumentValueGender)
+    local self = {}
+    self.ArgumentName = ArgumentName
+    self.ArgumentValueType = ArgumentValueType
+    self.ArgumentValue = ArgumentValue
+    self.ArgumentValueInt = ArgumentValueInt
+    self.ArgumentValueFloat = ArgumentValueFloat
+    self.ArgumentValueDouble = ArgumentValueDouble
+    self.ArgumentValueGender = ArgumentValueGender
+    return self
+end
+
 return FormatArgumentData

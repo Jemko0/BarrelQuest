@@ -14,4 +14,14 @@
 ---Note that the geometry collection asset needs to opt-in for the material modifer to be able to use it
 ---@field DamageThresholdMultiplier number
 local PhysicalMaterialDamageModifier = {}
+
+--- Constructor
+---@return PhysicalMaterialDamageModifier
+---@param DamageThresholdMultiplier number
+function PhysicalMaterialDamageModifier.new(DamageThresholdMultiplier)
+    local self = {}
+    self.DamageThresholdMultiplier = DamageThresholdMultiplier
+    return self
+end
+
 return PhysicalMaterialDamageModifier

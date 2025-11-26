@@ -17,4 +17,18 @@
 ---3D scale (always applied in local space) as a vector.
 ---@field Scale3D Vector
 local Transform = {}
+
+--- Constructor
+---@return Transform
+---@param Rotation Quat
+---@param Translation Vector
+---@param Scale3D Vector
+function Transform.new(Rotation, Translation, Scale3D)
+    local self = {}
+    self.Rotation = Rotation
+    self.Translation = Translation
+    self.Scale3D = Scale3D
+    return self
+end
+
 return Transform

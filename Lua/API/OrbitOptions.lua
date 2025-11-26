@@ -16,4 +16,18 @@
 ---Whether to use emitter time during data retrieval.
 ---@field bUseEmitterTime boolean
 local OrbitOptions = {}
+
+--- Constructor
+---@return OrbitOptions
+---@param bProcessDuringSpawn boolean
+---@param bProcessDuringUpdate boolean
+---@param bUseEmitterTime boolean
+function OrbitOptions.new(bProcessDuringSpawn, bProcessDuringUpdate, bUseEmitterTime)
+    local self = {}
+    self.bProcessDuringSpawn = bProcessDuringSpawn
+    self.bProcessDuringUpdate = bProcessDuringUpdate
+    self.bUseEmitterTime = bUseEmitterTime
+    return self
+end
+
 return OrbitOptions

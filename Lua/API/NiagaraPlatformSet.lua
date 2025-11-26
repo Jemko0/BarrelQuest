@@ -16,4 +16,18 @@
 ---Mask defining which effects qualities this set matches.
 ---@field QualityLevelMask integer
 local NiagaraPlatformSet = {}
+
+--- Constructor
+---@return NiagaraPlatformSet
+---@param DeviceProfileStates NiagaraDeviceProfileStateEntry[]
+---@param CVarConditions NiagaraPlatformSetCVarCondition[]
+---@param QualityLevelMask integer
+function NiagaraPlatformSet.new(DeviceProfileStates, CVarConditions, QualityLevelMask)
+    local self = {}
+    self.DeviceProfileStates = DeviceProfileStates
+    self.CVarConditions = CVarConditions
+    self.QualityLevelMask = QualityLevelMask
+    return self
+end
+
 return NiagaraPlatformSet

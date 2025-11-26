@@ -31,4 +31,30 @@
 ---Fraction of samples taken that must be occluded in order to reach full occlusion.
 ---@field FullyOccludedSamplesFraction number
 local LightmassPrimitiveSettings = {}
+
+--- Constructor
+---@return LightmassPrimitiveSettings
+---@param bUseTwoSidedLighting boolean
+---@param bShadowIndirectOnly boolean
+---@param bUseEmissiveForStaticLighting boolean
+---@param bUseVertexNormalForHemisphereGather boolean
+---@param EmissiveLightFalloffExponent number
+---@param EmissiveLightExplicitInfluenceRadius number
+---@param EmissiveBoost number
+---@param DiffuseBoost number
+---@param FullyOccludedSamplesFraction number
+function LightmassPrimitiveSettings.new(bUseTwoSidedLighting, bShadowIndirectOnly, bUseEmissiveForStaticLighting, bUseVertexNormalForHemisphereGather, EmissiveLightFalloffExponent, EmissiveLightExplicitInfluenceRadius, EmissiveBoost, DiffuseBoost, FullyOccludedSamplesFraction)
+    local self = {}
+    self.bUseTwoSidedLighting = bUseTwoSidedLighting
+    self.bShadowIndirectOnly = bShadowIndirectOnly
+    self.bUseEmissiveForStaticLighting = bUseEmissiveForStaticLighting
+    self.bUseVertexNormalForHemisphereGather = bUseVertexNormalForHemisphereGather
+    self.EmissiveLightFalloffExponent = EmissiveLightFalloffExponent
+    self.EmissiveLightExplicitInfluenceRadius = EmissiveLightExplicitInfluenceRadius
+    self.EmissiveBoost = EmissiveBoost
+    self.DiffuseBoost = DiffuseBoost
+    self.FullyOccludedSamplesFraction = FullyOccludedSamplesFraction
+    return self
+end
+
 return LightmassPrimitiveSettings

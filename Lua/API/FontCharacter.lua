@@ -16,4 +16,24 @@
 ---@field TextureIndex integer
 ---@field VerticalOffset integer
 local FontCharacter = {}
+
+--- Constructor
+---@return FontCharacter
+---@param StartU integer
+---@param StartV integer
+---@param USize integer
+---@param VSize integer
+---@param TextureIndex integer
+---@param VerticalOffset integer
+function FontCharacter.new(StartU, StartV, USize, VSize, TextureIndex, VerticalOffset)
+    local self = {}
+    self.StartU = StartU
+    self.StartV = StartV
+    self.USize = USize
+    self.VSize = VSize
+    self.TextureIndex = TextureIndex
+    self.VerticalOffset = VerticalOffset
+    return self
+end
+
 return FontCharacter

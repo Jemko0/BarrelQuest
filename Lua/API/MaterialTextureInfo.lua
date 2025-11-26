@@ -21,4 +21,22 @@
 ---This must be transient as it depends on which shader map was used for the build.
 ---@field TextureIndex integer
 local MaterialTextureInfo = {}
+
+--- Constructor
+---@return MaterialTextureInfo
+---@param SamplingScale number
+---@param UVChannelIndex integer
+---@param TextureName string
+---@param TextureReference SoftObjectPath
+---@param TextureIndex integer
+function MaterialTextureInfo.new(SamplingScale, UVChannelIndex, TextureName, TextureReference, TextureIndex)
+    local self = {}
+    self.SamplingScale = SamplingScale
+    self.UVChannelIndex = UVChannelIndex
+    self.TextureName = TextureName
+    self.TextureReference = TextureReference
+    self.TextureIndex = TextureIndex
+    return self
+end
+
 return MaterialTextureInfo

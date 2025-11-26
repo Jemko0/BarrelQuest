@@ -15,4 +15,18 @@
 ---@field Y number
 ---@field Z number
 local Vector_NetQuantizeNormal = {}
+
+--- Constructor
+---@return Vector_NetQuantizeNormal
+---@param X number
+---@param Y number
+---@param Z number
+function Vector_NetQuantizeNormal.new(X, Y, Z)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    self.Z = Z
+    return self
+end
+
 return Vector_NetQuantizeNormal

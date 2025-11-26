@@ -14,4 +14,18 @@
 ---@field TriggerTime number
 ---@field NotifyEventType integer
 local BranchingPointMarker = {}
+
+--- Constructor
+---@return BranchingPointMarker
+---@param NotifyIndex integer
+---@param TriggerTime number
+---@param NotifyEventType integer
+function BranchingPointMarker.new(NotifyIndex, TriggerTime, NotifyEventType)
+    local self = {}
+    self.NotifyIndex = NotifyIndex
+    self.TriggerTime = TriggerTime
+    self.NotifyEventType = NotifyEventType
+    return self
+end
+
 return BranchingPointMarker

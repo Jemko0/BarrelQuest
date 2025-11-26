@@ -14,4 +14,18 @@
 ---@field Guid Guid
 ---@field Content Widget
 local NamedSlotBinding = {}
+
+--- Constructor
+---@return NamedSlotBinding
+---@param Name string
+---@param Guid Guid
+---@param Content Widget
+function NamedSlotBinding.new(Name, Guid, Content)
+    local self = {}
+    self.Name = Name
+    self.Guid = Guid
+    self.Content = Content
+    return self
+end
+
 return NamedSlotBinding

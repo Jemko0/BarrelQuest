@@ -18,4 +18,28 @@
 ---@field ResolvedDataInterface NiagaraDataInterface
 ---@field UserPtrIdx integer
 local NiagaraScriptResolvedDataInterfaceInfo = {}
+
+--- Constructor
+---@return NiagaraScriptResolvedDataInterfaceInfo
+---@param Name string
+---@param CompileName string
+---@param ResolvedSourceEmitterName string
+---@param ResolvedVariable NiagaraVariableBase
+---@param ParameterStoreVariable NiagaraVariableBase
+---@param bIsInternal boolean
+---@param ResolvedDataInterface NiagaraDataInterface
+---@param UserPtrIdx integer
+function NiagaraScriptResolvedDataInterfaceInfo.new(Name, CompileName, ResolvedSourceEmitterName, ResolvedVariable, ParameterStoreVariable, bIsInternal, ResolvedDataInterface, UserPtrIdx)
+    local self = {}
+    self.Name = Name
+    self.CompileName = CompileName
+    self.ResolvedSourceEmitterName = ResolvedSourceEmitterName
+    self.ResolvedVariable = ResolvedVariable
+    self.ParameterStoreVariable = ParameterStoreVariable
+    self.bIsInternal = bIsInternal
+    self.ResolvedDataInterface = ResolvedDataInterface
+    self.UserPtrIdx = UserPtrIdx
+    return self
+end
+
 return NiagaraScriptResolvedDataInterfaceInfo

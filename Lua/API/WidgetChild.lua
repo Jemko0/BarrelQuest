@@ -13,4 +13,16 @@
 ---@field WidgetName string
 ---@field WidgetPtr any
 local WidgetChild = {}
+
+--- Constructor
+---@return WidgetChild
+---@param WidgetName string
+---@param WidgetPtr any
+function WidgetChild.new(WidgetName, WidgetPtr)
+    local self = {}
+    self.WidgetName = WidgetName
+    self.WidgetPtr = WidgetPtr
+    return self
+end
+
 return WidgetChild

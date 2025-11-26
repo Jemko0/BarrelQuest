@@ -33,4 +33,32 @@
 ---Time taken to fade out if voice is evicted or culled due to another voice in the group starting.
 ---@field VoiceStealReleaseTime number
 local SoundConcurrencySettings = {}
+
+--- Constructor
+---@return SoundConcurrencySettings
+---@param MaxCount integer
+---@param bLimitToOwner boolean
+---@param bVolumeScaleCanRelease boolean
+---@param ResolutionRule integer
+---@param RetriggerTime number
+---@param VolumeScale number
+---@param VolumeScaleMode EConcurrencyVolumeScaleMode
+---@param VolumeScaleAttackTime number
+---@param VolumeScaleReleaseTime number
+---@param VoiceStealReleaseTime number
+function SoundConcurrencySettings.new(MaxCount, bLimitToOwner, bVolumeScaleCanRelease, ResolutionRule, RetriggerTime, VolumeScale, VolumeScaleMode, VolumeScaleAttackTime, VolumeScaleReleaseTime, VoiceStealReleaseTime)
+    local self = {}
+    self.MaxCount = MaxCount
+    self.bLimitToOwner = bLimitToOwner
+    self.bVolumeScaleCanRelease = bVolumeScaleCanRelease
+    self.ResolutionRule = ResolutionRule
+    self.RetriggerTime = RetriggerTime
+    self.VolumeScale = VolumeScale
+    self.VolumeScaleMode = VolumeScaleMode
+    self.VolumeScaleAttackTime = VolumeScaleAttackTime
+    self.VolumeScaleReleaseTime = VolumeScaleReleaseTime
+    self.VoiceStealReleaseTime = VoiceStealReleaseTime
+    return self
+end
+
 return SoundConcurrencySettings

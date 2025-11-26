@@ -14,4 +14,16 @@
 ---Holds the maximum anchors, right + bottom.
 ---@field Maximum Vector2D
 local Anchors = {}
+
+--- Constructor
+---@return Anchors
+---@param Minimum Vector2D
+---@param Maximum Vector2D
+function Anchors.new(Minimum, Maximum)
+    local self = {}
+    self.Minimum = Minimum
+    self.Maximum = Maximum
+    return self
+end
+
 return Anchors

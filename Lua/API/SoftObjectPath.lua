@@ -15,4 +15,16 @@
 ---Optional FString for subobject within an asset
 ---@field SubPathString any
 local SoftObjectPath = {}
+
+--- Constructor
+---@return SoftObjectPath
+---@param AssetPath TopLevelAssetPath
+---@param SubPathString any
+function SoftObjectPath.new(AssetPath, SubPathString)
+    local self = {}
+    self.AssetPath = AssetPath
+    self.SubPathString = SubPathString
+    return self
+end
+
 return SoftObjectPath

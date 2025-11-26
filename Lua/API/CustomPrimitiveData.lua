@@ -11,4 +11,14 @@
 --- Properties
 ---@field Data number[]
 local CustomPrimitiveData = {}
+
+--- Constructor
+---@return CustomPrimitiveData
+---@param Data number[]
+function CustomPrimitiveData.new(Data)
+    local self = {}
+    self.Data = Data
+    return self
+end
+
 return CustomPrimitiveData

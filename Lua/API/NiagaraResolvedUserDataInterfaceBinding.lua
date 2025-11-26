@@ -12,4 +12,16 @@
 ---@field UserParameterStoreDataInterfaceIndex integer
 ---@field ScriptParameterStoreDataInterfaceIndex integer
 local NiagaraResolvedUserDataInterfaceBinding = {}
+
+--- Constructor
+---@return NiagaraResolvedUserDataInterfaceBinding
+---@param UserParameterStoreDataInterfaceIndex integer
+---@param ScriptParameterStoreDataInterfaceIndex integer
+function NiagaraResolvedUserDataInterfaceBinding.new(UserParameterStoreDataInterfaceIndex, ScriptParameterStoreDataInterfaceIndex)
+    local self = {}
+    self.UserParameterStoreDataInterfaceIndex = UserParameterStoreDataInterfaceIndex
+    self.ScriptParameterStoreDataInterfaceIndex = ScriptParameterStoreDataInterfaceIndex
+    return self
+end
+
 return NiagaraResolvedUserDataInterfaceBinding

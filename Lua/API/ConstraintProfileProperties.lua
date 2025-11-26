@@ -74,4 +74,64 @@
 ---Whether linear plasticity has a operation mode [free]
 ---@field LinearPlasticityType integer
 local ConstraintProfileProperties = {}
+
+--- Constructor
+---@return ConstraintProfileProperties
+---@param ProjectionLinearTolerance number
+---@param ProjectionAngularTolerance number
+---@param ProjectionLinearAlpha number
+---@param ProjectionAngularAlpha number
+---@param ShockPropagationAlpha number
+---@param LinearBreakThreshold number
+---@param LinearPlasticityThreshold number
+---@param AngularBreakThreshold number
+---@param AngularPlasticityThreshold number
+---@param ContactTransferScale number
+---@param LinearLimit LinearConstraint
+---@param ConeLimit ConeConstraint
+---@param TwistLimit TwistConstraint
+---@param bDisableCollision boolean
+---@param bParentDominates boolean
+---@param bEnableShockPropagation boolean
+---@param bEnableProjection boolean
+---@param bEnableMassConditioning boolean
+---@param bUseLinearJointSolver boolean
+---@param bAngularBreakable boolean
+---@param bAngularPlasticity boolean
+---@param bLinearBreakable boolean
+---@param bLinearPlasticity boolean
+---@param LinearDrive LinearDriveConstraint
+---@param AngularDrive AngularDriveConstraint
+---@param LinearPlasticityType integer
+function ConstraintProfileProperties.new(ProjectionLinearTolerance, ProjectionAngularTolerance, ProjectionLinearAlpha, ProjectionAngularAlpha, ShockPropagationAlpha, LinearBreakThreshold, LinearPlasticityThreshold, AngularBreakThreshold, AngularPlasticityThreshold, ContactTransferScale, LinearLimit, ConeLimit, TwistLimit, bDisableCollision, bParentDominates, bEnableShockPropagation, bEnableProjection, bEnableMassConditioning, bUseLinearJointSolver, bAngularBreakable, bAngularPlasticity, bLinearBreakable, bLinearPlasticity, LinearDrive, AngularDrive, LinearPlasticityType)
+    local self = {}
+    self.ProjectionLinearTolerance = ProjectionLinearTolerance
+    self.ProjectionAngularTolerance = ProjectionAngularTolerance
+    self.ProjectionLinearAlpha = ProjectionLinearAlpha
+    self.ProjectionAngularAlpha = ProjectionAngularAlpha
+    self.ShockPropagationAlpha = ShockPropagationAlpha
+    self.LinearBreakThreshold = LinearBreakThreshold
+    self.LinearPlasticityThreshold = LinearPlasticityThreshold
+    self.AngularBreakThreshold = AngularBreakThreshold
+    self.AngularPlasticityThreshold = AngularPlasticityThreshold
+    self.ContactTransferScale = ContactTransferScale
+    self.LinearLimit = LinearLimit
+    self.ConeLimit = ConeLimit
+    self.TwistLimit = TwistLimit
+    self.bDisableCollision = bDisableCollision
+    self.bParentDominates = bParentDominates
+    self.bEnableShockPropagation = bEnableShockPropagation
+    self.bEnableProjection = bEnableProjection
+    self.bEnableMassConditioning = bEnableMassConditioning
+    self.bUseLinearJointSolver = bUseLinearJointSolver
+    self.bAngularBreakable = bAngularBreakable
+    self.bAngularPlasticity = bAngularPlasticity
+    self.bLinearBreakable = bLinearBreakable
+    self.bLinearPlasticity = bLinearPlasticity
+    self.LinearDrive = LinearDrive
+    self.AngularDrive = AngularDrive
+    self.LinearPlasticityType = LinearPlasticityType
+    return self
+end
+
 return ConstraintProfileProperties

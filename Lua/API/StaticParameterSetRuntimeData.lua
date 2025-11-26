@@ -15,4 +15,18 @@
 ---@field MaterialLayers MaterialLayersFunctionsRuntimeData
 ---@field bHasMaterialLayers boolean
 local StaticParameterSetRuntimeData = {}
+
+--- Constructor
+---@return StaticParameterSetRuntimeData
+---@param StaticSwitchParameters StaticSwitchParameter[]
+---@param MaterialLayers MaterialLayersFunctionsRuntimeData
+---@param bHasMaterialLayers boolean
+function StaticParameterSetRuntimeData.new(StaticSwitchParameters, MaterialLayers, bHasMaterialLayers)
+    local self = {}
+    self.StaticSwitchParameters = StaticSwitchParameters
+    self.MaterialLayers = MaterialLayers
+    self.bHasMaterialLayers = bHasMaterialLayers
+    return self
+end
+
 return StaticParameterSetRuntimeData

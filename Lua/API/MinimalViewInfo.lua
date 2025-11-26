@@ -61,4 +61,62 @@
 ---By convention, X is the left edge, Y is the right edge, Z is the top edge, and W is the bottom edge. Stacks with uniform CropFraction.
 ---@field AsymmetricCropFraction Vector4f
 local MinimalViewInfo = {}
+
+--- Constructor
+---@return MinimalViewInfo
+---@param Location Vector
+---@param Rotation Rotator
+---@param FOV number
+---@param DesiredFOV number
+---@param FirstPersonFOV number
+---@param FirstPersonScale number
+---@param OrthoWidth number
+---@param bAutoCalculateOrthoPlanes boolean
+---@param AutoPlaneShift number
+---@param bUpdateOrthoPlanes boolean
+---@param bUseCameraHeightAsViewTarget boolean
+---@param OrthoNearClipPlane number
+---@param OrthoFarClipPlane number
+---@param PerspectiveNearClipPlane number
+---@param AspectRatio number
+---@param bConstrainAspectRatio boolean
+---@param bUseFirstPersonParameters boolean
+---@param bUseFieldOfViewForLOD boolean
+---@param ProjectionMode integer
+---@param PostProcessBlendWeight number
+---@param PostProcessSettings PostProcessSettings
+---@param OffCenterProjectionOffset Vector2D
+---@param OverscanResolutionFraction number
+---@param CropFraction number
+---@param AsymmetricCropFraction Vector4f
+function MinimalViewInfo.new(Location, Rotation, FOV, DesiredFOV, FirstPersonFOV, FirstPersonScale, OrthoWidth, bAutoCalculateOrthoPlanes, AutoPlaneShift, bUpdateOrthoPlanes, bUseCameraHeightAsViewTarget, OrthoNearClipPlane, OrthoFarClipPlane, PerspectiveNearClipPlane, AspectRatio, bConstrainAspectRatio, bUseFirstPersonParameters, bUseFieldOfViewForLOD, ProjectionMode, PostProcessBlendWeight, PostProcessSettings, OffCenterProjectionOffset, OverscanResolutionFraction, CropFraction, AsymmetricCropFraction)
+    local self = {}
+    self.Location = Location
+    self.Rotation = Rotation
+    self.FOV = FOV
+    self.DesiredFOV = DesiredFOV
+    self.FirstPersonFOV = FirstPersonFOV
+    self.FirstPersonScale = FirstPersonScale
+    self.OrthoWidth = OrthoWidth
+    self.bAutoCalculateOrthoPlanes = bAutoCalculateOrthoPlanes
+    self.AutoPlaneShift = AutoPlaneShift
+    self.bUpdateOrthoPlanes = bUpdateOrthoPlanes
+    self.bUseCameraHeightAsViewTarget = bUseCameraHeightAsViewTarget
+    self.OrthoNearClipPlane = OrthoNearClipPlane
+    self.OrthoFarClipPlane = OrthoFarClipPlane
+    self.PerspectiveNearClipPlane = PerspectiveNearClipPlane
+    self.AspectRatio = AspectRatio
+    self.bConstrainAspectRatio = bConstrainAspectRatio
+    self.bUseFirstPersonParameters = bUseFirstPersonParameters
+    self.bUseFieldOfViewForLOD = bUseFieldOfViewForLOD
+    self.ProjectionMode = ProjectionMode
+    self.PostProcessBlendWeight = PostProcessBlendWeight
+    self.PostProcessSettings = PostProcessSettings
+    self.OffCenterProjectionOffset = OffCenterProjectionOffset
+    self.OverscanResolutionFraction = OverscanResolutionFraction
+    self.CropFraction = CropFraction
+    self.AsymmetricCropFraction = AsymmetricCropFraction
+    return self
+end
+
 return MinimalViewInfo

@@ -13,4 +13,16 @@
 ---@field X integer
 ---@field Y integer
 local IntPoint = {}
+
+--- Constructor
+---@return IntPoint
+---@param X integer
+---@param Y integer
+function IntPoint.new(X, Y)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    return self
+end
+
 return IntPoint

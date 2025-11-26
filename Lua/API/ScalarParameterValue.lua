@@ -15,4 +15,22 @@
 ---@field ParameterValue number
 ---@field ExpressionGUID Guid
 local ScalarParameterValue = {}
+
+--- Constructor
+---@return ScalarParameterValue
+---@param ParameterName string
+---@param AtlasData ScalarParameterAtlasInstanceData
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue number
+---@param ExpressionGUID Guid
+function ScalarParameterValue.new(ParameterName, AtlasData, ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterName = ParameterName
+    self.AtlasData = AtlasData
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return ScalarParameterValue

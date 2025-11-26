@@ -14,4 +14,16 @@
 ---Axis the bone is mirrored across.
 ---@field BoneFlipAxis integer
 local BoneMirrorInfo = {}
+
+--- Constructor
+---@return BoneMirrorInfo
+---@param SourceIndex integer
+---@param BoneFlipAxis integer
+function BoneMirrorInfo.new(SourceIndex, BoneFlipAxis)
+    local self = {}
+    self.SourceIndex = SourceIndex
+    self.BoneFlipAxis = BoneFlipAxis
+    return self
+end
+
 return BoneMirrorInfo

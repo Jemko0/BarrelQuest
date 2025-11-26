@@ -13,4 +13,18 @@
 ---@field ResolvedVariable NiagaraVariableBase
 ---@field Object Object
 local NiagaraResolvedUObjectInfo = {}
+
+--- Constructor
+---@return NiagaraResolvedUObjectInfo
+---@param ReadVariableName string
+---@param ResolvedVariable NiagaraVariableBase
+---@param Object Object
+function NiagaraResolvedUObjectInfo.new(ReadVariableName, ResolvedVariable, Object)
+    local self = {}
+    self.ReadVariableName = ReadVariableName
+    self.ResolvedVariable = ResolvedVariable
+    self.Object = Object
+    return self
+end
+
 return NiagaraResolvedUObjectInfo

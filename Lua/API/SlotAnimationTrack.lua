@@ -13,4 +13,16 @@
 ---@field SlotName string
 ---@field AnimTrack AnimTrack
 local SlotAnimationTrack = {}
+
+--- Constructor
+---@return SlotAnimationTrack
+---@param SlotName string
+---@param AnimTrack AnimTrack
+function SlotAnimationTrack.new(SlotName, AnimTrack)
+    local self = {}
+    self.SlotName = SlotName
+    self.AnimTrack = AnimTrack
+    return self
+end
+
 return SlotAnimationTrack

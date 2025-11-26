@@ -24,4 +24,32 @@
 ---@field MaskB integer
 ---@field MaskA integer
 local VectorMaterialInput = {}
+
+--- Constructor
+---@return VectorMaterialInput
+---@param UseConstant boolean
+---@param Constant Vector3f
+---@param Expression MaterialExpression
+---@param OutputIndex integer
+---@param InputName string
+---@param Mask integer
+---@param MaskR integer
+---@param MaskG integer
+---@param MaskB integer
+---@param MaskA integer
+function VectorMaterialInput.new(UseConstant, Constant, Expression, OutputIndex, InputName, Mask, MaskR, MaskG, MaskB, MaskA)
+    local self = {}
+    self.UseConstant = UseConstant
+    self.Constant = Constant
+    self.Expression = Expression
+    self.OutputIndex = OutputIndex
+    self.InputName = InputName
+    self.Mask = Mask
+    self.MaskR = MaskR
+    self.MaskG = MaskG
+    self.MaskB = MaskB
+    self.MaskA = MaskA
+    return self
+end
+
 return VectorMaterialInput

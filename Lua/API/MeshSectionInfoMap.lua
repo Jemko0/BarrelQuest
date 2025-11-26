@@ -12,4 +12,14 @@
 ---Maps an LOD+Section to the material it should render with.
 ---@field Map table<integer, MeshSectionInfo>
 local MeshSectionInfoMap = {}
+
+--- Constructor
+---@return MeshSectionInfoMap
+---@param Map table<integer, MeshSectionInfo>
+function MeshSectionInfoMap.new(Map)
+    local self = {}
+    self.Map = Map
+    return self
+end
+
 return MeshSectionInfoMap

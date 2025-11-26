@@ -12,4 +12,14 @@
 ---List of bundles defined
 ---@field Bundles AssetBundleEntry[]
 local AssetBundleData = {}
+
+--- Constructor
+---@return AssetBundleData
+---@param Bundles AssetBundleEntry[]
+function AssetBundleData.new(Bundles)
+    local self = {}
+    self.Bundles = Bundles
+    return self
+end
+
 return AssetBundleData

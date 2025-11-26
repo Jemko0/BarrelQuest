@@ -15,4 +15,20 @@
 ---@field Z number
 ---@field W number
 local Quat = {}
+
+--- Constructor
+---@return Quat
+---@param X number
+---@param Y number
+---@param Z number
+---@param W number
+function Quat.new(X, Y, Z, W)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    self.Z = Z
+    self.W = W
+    return self
+end
+
 return Quat

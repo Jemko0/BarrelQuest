@@ -18,4 +18,20 @@
 ---Object to execute the function on.
 ---@field CallbackTarget Object
 local LatentActionInfo = {}
+
+--- Constructor
+---@return LatentActionInfo
+---@param Linkage integer
+---@param UUID integer
+---@param ExecutionFunction string
+---@param CallbackTarget Object
+function LatentActionInfo.new(Linkage, UUID, ExecutionFunction, CallbackTarget)
+    local self = {}
+    self.Linkage = Linkage
+    self.UUID = UUID
+    self.ExecutionFunction = ExecutionFunction
+    self.CallbackTarget = CallbackTarget
+    return self
+end
+
 return LatentActionInfo

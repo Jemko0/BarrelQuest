@@ -20,4 +20,18 @@
 ---      0.5 we are half way between the two
 ---@field PositionBetweenMarkers number
 local MarkerSyncAnimPosition = {}
+
+--- Constructor
+---@return MarkerSyncAnimPosition
+---@param PreviousMarkerName string
+---@param NextMarkerName string
+---@param PositionBetweenMarkers number
+function MarkerSyncAnimPosition.new(PreviousMarkerName, NextMarkerName, PositionBetweenMarkers)
+    local self = {}
+    self.PreviousMarkerName = PreviousMarkerName
+    self.NextMarkerName = NextMarkerName
+    self.PositionBetweenMarkers = PositionBetweenMarkers
+    return self
+end
+
 return MarkerSyncAnimPosition

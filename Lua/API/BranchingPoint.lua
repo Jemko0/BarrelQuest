@@ -33,4 +33,36 @@
 ---in either length or rate; the element will correctly place itself in relation to the sequence
 ---@field LinkedSequence AnimSequenceBase
 local BranchingPoint = {}
+
+--- Constructor
+---@return BranchingPoint
+---@param EventName string
+---@param DisplayTime number
+---@param TriggerTimeOffset number
+---@param LinkedMontage AnimMontage
+---@param SlotIndex integer
+---@param SegmentIndex integer
+---@param LinkMethod integer
+---@param CachedLinkMethod integer
+---@param SegmentBeginTime number
+---@param SegmentLength number
+---@param LinkValue number
+---@param LinkedSequence AnimSequenceBase
+function BranchingPoint.new(EventName, DisplayTime, TriggerTimeOffset, LinkedMontage, SlotIndex, SegmentIndex, LinkMethod, CachedLinkMethod, SegmentBeginTime, SegmentLength, LinkValue, LinkedSequence)
+    local self = {}
+    self.EventName = EventName
+    self.DisplayTime = DisplayTime
+    self.TriggerTimeOffset = TriggerTimeOffset
+    self.LinkedMontage = LinkedMontage
+    self.SlotIndex = SlotIndex
+    self.SegmentIndex = SegmentIndex
+    self.LinkMethod = LinkMethod
+    self.CachedLinkMethod = CachedLinkMethod
+    self.SegmentBeginTime = SegmentBeginTime
+    self.SegmentLength = SegmentLength
+    self.LinkValue = LinkValue
+    self.LinkedSequence = LinkedSequence
+    return self
+end
+
 return BranchingPoint

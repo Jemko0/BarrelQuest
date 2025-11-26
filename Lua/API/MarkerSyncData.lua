@@ -12,4 +12,14 @@
 ---Authored Sync markers
 ---@field AuthoredSyncMarkers AnimSyncMarker[]
 local MarkerSyncData = {}
+
+--- Constructor
+---@return MarkerSyncData
+---@param AuthoredSyncMarkers AnimSyncMarker[]
+function MarkerSyncData.new(AuthoredSyncMarkers)
+    local self = {}
+    self.AuthoredSyncMarkers = AuthoredSyncMarkers
+    return self
+end
+
 return MarkerSyncData

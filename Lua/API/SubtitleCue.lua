@@ -14,4 +14,16 @@
 ---The time at which the subtitle is to be displayed, in seconds relative to the beginning of the line.
 ---@field Time number
 local SubtitleCue = {}
+
+--- Constructor
+---@return SubtitleCue
+---@param Text string
+---@param Time number
+function SubtitleCue.new(Text, Time)
+    local self = {}
+    self.Text = Text
+    self.Time = Time
+    return self
+end
+
 return SubtitleCue

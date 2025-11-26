@@ -25,4 +25,28 @@
 ---Whether to bake grass into landscape static mesh texture
 ---@field bBakeGrassToLandscape boolean
 local LevelSimplificationDetails = {}
+
+--- Constructor
+---@return LevelSimplificationDetails
+---@param bCreatePackagePerAsset boolean
+---@param DetailsPercentage number
+---@param StaticMeshMaterialSettings MaterialProxySettings
+---@param bOverrideLandscapeExportLOD boolean
+---@param LandscapeExportLOD integer
+---@param LandscapeMaterialSettings MaterialProxySettings
+---@param bBakeFoliageToLandscape boolean
+---@param bBakeGrassToLandscape boolean
+function LevelSimplificationDetails.new(bCreatePackagePerAsset, DetailsPercentage, StaticMeshMaterialSettings, bOverrideLandscapeExportLOD, LandscapeExportLOD, LandscapeMaterialSettings, bBakeFoliageToLandscape, bBakeGrassToLandscape)
+    local self = {}
+    self.bCreatePackagePerAsset = bCreatePackagePerAsset
+    self.DetailsPercentage = DetailsPercentage
+    self.StaticMeshMaterialSettings = StaticMeshMaterialSettings
+    self.bOverrideLandscapeExportLOD = bOverrideLandscapeExportLOD
+    self.LandscapeExportLOD = LandscapeExportLOD
+    self.LandscapeMaterialSettings = LandscapeMaterialSettings
+    self.bBakeFoliageToLandscape = bBakeFoliageToLandscape
+    self.bBakeGrassToLandscape = bBakeGrassToLandscape
+    return self
+end
+
 return LevelSimplificationDetails

@@ -20,4 +20,22 @@
 ---If true, this Pawn is capable of flying.
 ---@field bCanFly boolean
 local MovementProperties = {}
+
+--- Constructor
+---@return MovementProperties
+---@param bCanCrouch boolean
+---@param bCanJump boolean
+---@param bCanWalk boolean
+---@param bCanSwim boolean
+---@param bCanFly boolean
+function MovementProperties.new(bCanCrouch, bCanJump, bCanWalk, bCanSwim, bCanFly)
+    local self = {}
+    self.bCanCrouch = bCanCrouch
+    self.bCanJump = bCanJump
+    self.bCanWalk = bCanWalk
+    self.bCanSwim = bCanSwim
+    self.bCanFly = bCanFly
+    return self
+end
+
 return MovementProperties

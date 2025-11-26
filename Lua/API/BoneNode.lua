@@ -16,4 +16,18 @@
 ---Retargeting Mode for Translation Component.
 ---@field TranslationRetargetingMode integer
 local BoneNode = {}
+
+--- Constructor
+---@return BoneNode
+---@param Name string
+---@param ParentIndex integer
+---@param TranslationRetargetingMode integer
+function BoneNode.new(Name, ParentIndex, TranslationRetargetingMode)
+    local self = {}
+    self.Name = Name
+    self.ParentIndex = ParentIndex
+    self.TranslationRetargetingMode = TranslationRetargetingMode
+    return self
+end
+
 return BoneNode

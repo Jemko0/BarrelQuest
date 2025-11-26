@@ -13,4 +13,18 @@
 ---@field TargetBoneName string
 ---@field VirtualBoneName string
 local VirtualBone = {}
+
+--- Constructor
+---@return VirtualBone
+---@param SourceBoneName string
+---@param TargetBoneName string
+---@param VirtualBoneName string
+function VirtualBone.new(SourceBoneName, TargetBoneName, VirtualBoneName)
+    local self = {}
+    self.SourceBoneName = SourceBoneName
+    self.TargetBoneName = TargetBoneName
+    self.VirtualBoneName = VirtualBoneName
+    return self
+end
+
 return VirtualBone

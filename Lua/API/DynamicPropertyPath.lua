@@ -14,4 +14,16 @@
 ---Cached function for function-terminated paths
 ---@field CachedFunction Function
 local DynamicPropertyPath = {}
+
+--- Constructor
+---@return DynamicPropertyPath
+---@param Segments PropertyPathSegment[]
+---@param CachedFunction Function
+function DynamicPropertyPath.new(Segments, CachedFunction)
+    local self = {}
+    self.Segments = Segments
+    self.CachedFunction = CachedFunction
+    return self
+end
+
 return DynamicPropertyPath

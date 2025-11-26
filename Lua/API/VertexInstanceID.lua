@@ -12,4 +12,14 @@
 ---The actual mesh element index this ID represents.  Read-only.
 ---@field IDValue integer
 local VertexInstanceID = {}
+
+--- Constructor
+---@return VertexInstanceID
+---@param IDValue integer
+function VertexInstanceID.new(IDValue)
+    local self = {}
+    self.IDValue = IDValue
+    return self
+end
+
 return VertexInstanceID

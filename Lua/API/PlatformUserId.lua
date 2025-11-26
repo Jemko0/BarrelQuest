@@ -14,4 +14,14 @@
 --- Properties
 ---@field InternalId integer
 local PlatformUserId = {}
+
+--- Constructor
+---@return PlatformUserId
+---@param InternalId integer
+function PlatformUserId.new(InternalId)
+    local self = {}
+    self.InternalId = InternalId
+    return self
+end
+
 return PlatformUserId

@@ -21,4 +21,24 @@
 ---A bias to reduce foliage over occlusion in Lumen GI. 0: no adjustment, 1: full strength.
 ---@field FoliageOverOcclusionBias number
 local MeshRayTracingProxySettings = {}
+
+--- Constructor
+---@return MeshRayTracingProxySettings
+---@param bEnabled boolean
+---@param FallbackTarget ENaniteFallbackTarget
+---@param FallbackPercentTriangles number
+---@param FallbackRelativeError number
+---@param LOD1PercentTriangles number
+---@param FoliageOverOcclusionBias number
+function MeshRayTracingProxySettings.new(bEnabled, FallbackTarget, FallbackPercentTriangles, FallbackRelativeError, LOD1PercentTriangles, FoliageOverOcclusionBias)
+    local self = {}
+    self.bEnabled = bEnabled
+    self.FallbackTarget = FallbackTarget
+    self.FallbackPercentTriangles = FallbackPercentTriangles
+    self.FallbackRelativeError = FallbackRelativeError
+    self.LOD1PercentTriangles = LOD1PercentTriangles
+    self.FoliageOverOcclusionBias = FoliageOverOcclusionBias
+    return self
+end
+
 return MeshRayTracingProxySettings

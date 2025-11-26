@@ -14,4 +14,16 @@
 ---The pin's unique ID. Updated at Set and Save time.
 ---@field PinId Guid
 local EdGraphPinReference = {}
+
+--- Constructor
+---@return EdGraphPinReference
+---@param OwningNode any
+---@param PinId Guid
+function EdGraphPinReference.new(OwningNode, PinId)
+    local self = {}
+    self.OwningNode = OwningNode
+    self.PinId = PinId
+    return self
+end
+
 return EdGraphPinReference

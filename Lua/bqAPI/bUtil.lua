@@ -61,36 +61,3 @@ function exploreTbl(tbl, exploreList)
         end
     end
 end
-
-function normalizePath(path)
-    path = path:gsub("\\", "/")
-
-    -- Remove "/folder/../"
-    repeat
-        local before = path
-        path = path:gsub("/[^/]+/%.%./", "/")
-        if path == before then break end
-    until false
-
-    return path
-end
-
-function addPackage(dir)
-    dir = normalizePath(dir)
-
-    -- Ensure trailing slash
-    if dir:sub(-1) ~= "/" then
-        dir = dir .. "/"
-    end
-
-    local p1 = dir .. "?.lua"
-    local p2 = dir .. "?/init.lua"
-
-    if not package.path:find(p1, 1, true) then
-        package.path = package.path .. ";" .. p1
-    end
-
-    if not package.path:find(p2, 1, true) then
-        package.path = package.path .. ";" .. p2
-    end
-end

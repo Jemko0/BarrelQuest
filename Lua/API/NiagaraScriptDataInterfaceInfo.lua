@@ -19,4 +19,28 @@
 ---@field RegisteredParameterMapWrite string
 ---@field SourceEmitterName string
 local NiagaraScriptDataInterfaceInfo = {}
+
+--- Constructor
+---@return NiagaraScriptDataInterfaceInfo
+---@param DataInterface NiagaraDataInterface
+---@param Name string
+---@param CompileName string
+---@param UserPtrIdx integer
+---@param Type NiagaraTypeDefinition
+---@param RegisteredParameterMapRead string
+---@param RegisteredParameterMapWrite string
+---@param SourceEmitterName string
+function NiagaraScriptDataInterfaceInfo.new(DataInterface, Name, CompileName, UserPtrIdx, Type, RegisteredParameterMapRead, RegisteredParameterMapWrite, SourceEmitterName)
+    local self = {}
+    self.DataInterface = DataInterface
+    self.Name = Name
+    self.CompileName = CompileName
+    self.UserPtrIdx = UserPtrIdx
+    self.Type = Type
+    self.RegisteredParameterMapRead = RegisteredParameterMapRead
+    self.RegisteredParameterMapWrite = RegisteredParameterMapWrite
+    self.SourceEmitterName = SourceEmitterName
+    return self
+end
+
 return NiagaraScriptDataInterfaceInfo

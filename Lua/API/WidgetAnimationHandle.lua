@@ -16,4 +16,18 @@
 ---The animation state serial.
 ---@field StateSerial integer
 local WidgetAnimationHandle = {}
+
+--- Constructor
+---@return WidgetAnimationHandle
+---@param WeakUserWidget any
+---@param StateIndex integer
+---@param StateSerial integer
+function WidgetAnimationHandle.new(WeakUserWidget, StateIndex, StateSerial)
+    local self = {}
+    self.WeakUserWidget = WeakUserWidget
+    self.StateIndex = StateIndex
+    self.StateSerial = StateSerial
+    return self
+end
+
 return WidgetAnimationHandle

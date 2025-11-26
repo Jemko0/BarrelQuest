@@ -46,4 +46,44 @@
 ---Optional. If set, Timeline will also set ETimelineDirection property on PropertySetObject using the name.
 ---@field DirectionPropertyName string
 local Timeline = {}
+
+--- Constructor
+---@return Timeline
+---@param LengthMode integer
+---@param bLooping boolean
+---@param bReversePlayback boolean
+---@param bPlaying boolean
+---@param PlayingStateTracker integer
+---@param Length number
+---@param PlayRate number
+---@param Position number
+---@param Events TimelineEventEntry[]
+---@param InterpVectors TimelineVectorTrack[]
+---@param InterpFloats TimelineFloatTrack[]
+---@param InterpLinearColors TimelineLinearColorTrack[]
+---@param TimelinePostUpdateFunc function
+---@param TimelineFinishedFunc function
+---@param PropertySetObject any
+---@param DirectionPropertyName string
+function Timeline.new(LengthMode, bLooping, bReversePlayback, bPlaying, PlayingStateTracker, Length, PlayRate, Position, Events, InterpVectors, InterpFloats, InterpLinearColors, TimelinePostUpdateFunc, TimelineFinishedFunc, PropertySetObject, DirectionPropertyName)
+    local self = {}
+    self.LengthMode = LengthMode
+    self.bLooping = bLooping
+    self.bReversePlayback = bReversePlayback
+    self.bPlaying = bPlaying
+    self.PlayingStateTracker = PlayingStateTracker
+    self.Length = Length
+    self.PlayRate = PlayRate
+    self.Position = Position
+    self.Events = Events
+    self.InterpVectors = InterpVectors
+    self.InterpFloats = InterpFloats
+    self.InterpLinearColors = InterpLinearColors
+    self.TimelinePostUpdateFunc = TimelinePostUpdateFunc
+    self.TimelineFinishedFunc = TimelineFinishedFunc
+    self.PropertySetObject = PropertySetObject
+    self.DirectionPropertyName = DirectionPropertyName
+    return self
+end
+
 return Timeline

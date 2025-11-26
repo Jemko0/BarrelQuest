@@ -19,4 +19,30 @@
 ---@field TimecodeRate FrameRate
 ---@field bTimecodeIsDropFrame boolean
 local SoundWaveTimecodeInfo = {}
+
+--- Constructor
+---@return SoundWaveTimecodeInfo
+---@param NumSamplesSinceMidnight integer
+---@param NumSamplesPerSecond integer
+---@param Description string
+---@param OriginatorTime string
+---@param OriginatorDate string
+---@param OriginatorDescription string
+---@param OriginatorReference string
+---@param TimecodeRate FrameRate
+---@param bTimecodeIsDropFrame boolean
+function SoundWaveTimecodeInfo.new(NumSamplesSinceMidnight, NumSamplesPerSecond, Description, OriginatorTime, OriginatorDate, OriginatorDescription, OriginatorReference, TimecodeRate, bTimecodeIsDropFrame)
+    local self = {}
+    self.NumSamplesSinceMidnight = NumSamplesSinceMidnight
+    self.NumSamplesPerSecond = NumSamplesPerSecond
+    self.Description = Description
+    self.OriginatorTime = OriginatorTime
+    self.OriginatorDate = OriginatorDate
+    self.OriginatorDescription = OriginatorDescription
+    self.OriginatorReference = OriginatorReference
+    self.TimecodeRate = TimecodeRate
+    self.bTimecodeIsDropFrame = bTimecodeIsDropFrame
+    return self
+end
+
 return SoundWaveTimecodeInfo

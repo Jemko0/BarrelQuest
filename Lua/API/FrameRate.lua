@@ -15,4 +15,16 @@
 ---The denominator of the framerate represented as a number of frames per second (e.g. 1 for 60 fps)
 ---@field Denominator integer
 local FrameRate = {}
+
+--- Constructor
+---@return FrameRate
+---@param Numerator integer
+---@param Denominator integer
+function FrameRate.new(Numerator, Denominator)
+    local self = {}
+    self.Numerator = Numerator
+    self.Denominator = Denominator
+    return self
+end
+
 return FrameRate

@@ -21,4 +21,24 @@
 ---Whether or not this track has its curve's view synchronized with the other curve views.
 ---@field bIsCurveViewSynchronized boolean
 local TTVectorTrack = {}
+
+--- Constructor
+---@return TTVectorTrack
+---@param CurveVector CurveVector
+---@param PropertyName string
+---@param TrackName string
+---@param bIsExternalCurve boolean
+---@param bIsExpanded boolean
+---@param bIsCurveViewSynchronized boolean
+function TTVectorTrack.new(CurveVector, PropertyName, TrackName, bIsExternalCurve, bIsExpanded, bIsCurveViewSynchronized)
+    local self = {}
+    self.CurveVector = CurveVector
+    self.PropertyName = PropertyName
+    self.TrackName = TrackName
+    self.bIsExternalCurve = bIsExternalCurve
+    self.bIsExpanded = bIsExpanded
+    self.bIsCurveViewSynchronized = bIsCurveViewSynchronized
+    return self
+end
+
 return TTVectorTrack

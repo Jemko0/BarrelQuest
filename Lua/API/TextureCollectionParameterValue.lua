@@ -13,4 +13,18 @@
 ---@field ParameterValue TextureCollection
 ---@field ExpressionGUID Guid
 local TextureCollectionParameterValue = {}
+
+--- Constructor
+---@return TextureCollectionParameterValue
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue TextureCollection
+---@param ExpressionGUID Guid
+function TextureCollectionParameterValue.new(ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return TextureCollectionParameterValue

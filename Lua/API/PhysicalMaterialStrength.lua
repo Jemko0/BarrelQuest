@@ -19,4 +19,18 @@
 ---This amount of shear force per area the material can withstand before it fractures
 ---@field ShearStrength number
 local PhysicalMaterialStrength = {}
+
+--- Constructor
+---@return PhysicalMaterialStrength
+---@param TensileStrength number
+---@param CompressionStrength number
+---@param ShearStrength number
+function PhysicalMaterialStrength.new(TensileStrength, CompressionStrength, ShearStrength)
+    local self = {}
+    self.TensileStrength = TensileStrength
+    self.CompressionStrength = CompressionStrength
+    self.ShearStrength = ShearStrength
+    return self
+end
+
 return PhysicalMaterialStrength

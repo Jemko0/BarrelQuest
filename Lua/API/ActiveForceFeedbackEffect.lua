@@ -13,4 +13,16 @@
 ---Array of device properties that have been activated by this force feedback effect
 ---@field ActiveDeviceProperties table<InputDevicePropertyHandle, boolean>
 local ActiveForceFeedbackEffect = {}
+
+--- Constructor
+---@return ActiveForceFeedbackEffect
+---@param ForceFeedbackEffect ForceFeedbackEffect
+---@param ActiveDeviceProperties table<InputDevicePropertyHandle, boolean>
+function ActiveForceFeedbackEffect.new(ForceFeedbackEffect, ActiveDeviceProperties)
+    local self = {}
+    self.ForceFeedbackEffect = ForceFeedbackEffect
+    self.ActiveDeviceProperties = ActiveDeviceProperties
+    return self
+end
+
 return ActiveForceFeedbackEffect

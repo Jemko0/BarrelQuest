@@ -10,4 +10,12 @@
 ---
 --- Properties
 local SharedImageConstRefBlueprint = {}
+
+--- Constructor
+---@return SharedImageConstRefBlueprint
+function SharedImageConstRefBlueprint.new()
+    local self = {}
+    return self
+end
+
 return SharedImageConstRefBlueprint

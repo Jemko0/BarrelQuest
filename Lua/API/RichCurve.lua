@@ -20,4 +20,22 @@
 ---Map of which key handles go to which indices.
 ---@field KeyHandlesToIndices KeyHandleMap
 local RichCurve = {}
+
+--- Constructor
+---@return RichCurve
+---@param Keys RichCurveKey[]
+---@param DefaultValue number
+---@param PreInfinityExtrap integer
+---@param PostInfinityExtrap integer
+---@param KeyHandlesToIndices KeyHandleMap
+function RichCurve.new(Keys, DefaultValue, PreInfinityExtrap, PostInfinityExtrap, KeyHandlesToIndices)
+    local self = {}
+    self.Keys = Keys
+    self.DefaultValue = DefaultValue
+    self.PreInfinityExtrap = PreInfinityExtrap
+    self.PostInfinityExtrap = PostInfinityExtrap
+    self.KeyHandlesToIndices = KeyHandlesToIndices
+    return self
+end
+
 return RichCurve

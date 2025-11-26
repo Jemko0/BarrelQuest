@@ -15,4 +15,20 @@
 ---@field B number
 ---@field A number
 local LinearColor = {}
+
+--- Constructor
+---@return LinearColor
+---@param R number
+---@param G number
+---@param B number
+---@param A number
+function LinearColor.new(R, G, B, A)
+    local self = {}
+    self.R = R
+    self.G = G
+    self.B = B
+    self.A = A
+    return self
+end
+
 return LinearColor

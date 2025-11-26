@@ -67,4 +67,52 @@
 ---Name of the _my_ bone which took part in hit event (in case of two skeletal meshes colliding).
 ---@field MyBoneName string
 local HitResult = {}
+
+--- Constructor
+---@return HitResult
+---@param FaceIndex integer
+---@param Time number
+---@param Distance number
+---@param Location Vector_NetQuantize
+---@param ImpactPoint Vector_NetQuantize
+---@param Normal Vector_NetQuantizeNormal
+---@param ImpactNormal Vector_NetQuantizeNormal
+---@param TraceStart Vector_NetQuantize
+---@param TraceEnd Vector_NetQuantize
+---@param PenetrationDepth number
+---@param MyItem integer
+---@param Item integer
+---@param ElementIndex integer
+---@param bBlockingHit boolean
+---@param bStartPenetrating boolean
+---@param PhysMaterial any
+---@param HitObjectHandle ActorInstanceHandle
+---@param Component any
+---@param BoneName string
+---@param MyBoneName string
+function HitResult.new(FaceIndex, Time, Distance, Location, ImpactPoint, Normal, ImpactNormal, TraceStart, TraceEnd, PenetrationDepth, MyItem, Item, ElementIndex, bBlockingHit, bStartPenetrating, PhysMaterial, HitObjectHandle, Component, BoneName, MyBoneName)
+    local self = {}
+    self.FaceIndex = FaceIndex
+    self.Time = Time
+    self.Distance = Distance
+    self.Location = Location
+    self.ImpactPoint = ImpactPoint
+    self.Normal = Normal
+    self.ImpactNormal = ImpactNormal
+    self.TraceStart = TraceStart
+    self.TraceEnd = TraceEnd
+    self.PenetrationDepth = PenetrationDepth
+    self.MyItem = MyItem
+    self.Item = Item
+    self.ElementIndex = ElementIndex
+    self.bBlockingHit = bBlockingHit
+    self.bStartPenetrating = bStartPenetrating
+    self.PhysMaterial = PhysMaterial
+    self.HitObjectHandle = HitObjectHandle
+    self.Component = Component
+    self.BoneName = BoneName
+    self.MyBoneName = MyBoneName
+    return self
+end
+
 return HitResult

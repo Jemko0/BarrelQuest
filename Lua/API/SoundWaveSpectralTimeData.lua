@@ -14,4 +14,16 @@
 ---The timestamp associated with this spectral data
 ---@field TimeSec number
 local SoundWaveSpectralTimeData = {}
+
+--- Constructor
+---@return SoundWaveSpectralTimeData
+---@param Data SoundWaveSpectralDataEntry[]
+---@param TimeSec number
+function SoundWaveSpectralTimeData.new(Data, TimeSec)
+    local self = {}
+    self.Data = Data
+    self.TimeSec = TimeSec
+    return self
+end
+
 return SoundWaveSpectralTimeData

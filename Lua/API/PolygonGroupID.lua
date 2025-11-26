@@ -12,4 +12,14 @@
 ---The actual mesh element index this ID represents.  Read-only.
 ---@field IDValue integer
 local PolygonGroupID = {}
+
+--- Constructor
+---@return PolygonGroupID
+---@param IDValue integer
+function PolygonGroupID.new(IDValue)
+    local self = {}
+    self.IDValue = IDValue
+    return self
+end
+
 return PolygonGroupID

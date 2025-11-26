@@ -16,4 +16,24 @@
 ---@field holes string[]
 ---@field clothingType EClothingType
 local WearingClothingData = {}
+
+--- Constructor
+---@return WearingClothingData
+---@param dirtLevel number
+---@param wearLevel number
+---@param wetLevel number
+---@param insulationLevel number
+---@param holes string[]
+---@param clothingType EClothingType
+function WearingClothingData.new(dirtLevel, wearLevel, wetLevel, insulationLevel, holes, clothingType)
+    local self = {}
+    self.dirtLevel = dirtLevel
+    self.wearLevel = wearLevel
+    self.wetLevel = wetLevel
+    self.insulationLevel = insulationLevel
+    self.holes = holes
+    self.clothingType = clothingType
+    return self
+end
+
 return WearingClothingData

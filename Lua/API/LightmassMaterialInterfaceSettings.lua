@@ -27,4 +27,28 @@
 ---If true, override the export resolution scale setting of the parent material.
 ---@field bOverrideExportResolutionScale boolean
 local LightmassMaterialInterfaceSettings = {}
+
+--- Constructor
+---@return LightmassMaterialInterfaceSettings
+---@param EmissiveBoost number
+---@param DiffuseBoost number
+---@param ExportResolutionScale number
+---@param bCastShadowAsMasked boolean
+---@param bOverrideCastShadowAsMasked boolean
+---@param bOverrideEmissiveBoost boolean
+---@param bOverrideDiffuseBoost boolean
+---@param bOverrideExportResolutionScale boolean
+function LightmassMaterialInterfaceSettings.new(EmissiveBoost, DiffuseBoost, ExportResolutionScale, bCastShadowAsMasked, bOverrideCastShadowAsMasked, bOverrideEmissiveBoost, bOverrideDiffuseBoost, bOverrideExportResolutionScale)
+    local self = {}
+    self.EmissiveBoost = EmissiveBoost
+    self.DiffuseBoost = DiffuseBoost
+    self.ExportResolutionScale = ExportResolutionScale
+    self.bCastShadowAsMasked = bCastShadowAsMasked
+    self.bOverrideCastShadowAsMasked = bOverrideCastShadowAsMasked
+    self.bOverrideEmissiveBoost = bOverrideEmissiveBoost
+    self.bOverrideDiffuseBoost = bOverrideDiffuseBoost
+    self.bOverrideExportResolutionScale = bOverrideExportResolutionScale
+    return self
+end
+
 return LightmassMaterialInterfaceSettings

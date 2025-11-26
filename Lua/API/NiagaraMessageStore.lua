@@ -12,4 +12,16 @@
 ---@field MessageKeyToMessageMap table<Guid, NiagaraMessageDataBase>
 ---@field DismissedMessageKeys Guid[]
 local NiagaraMessageStore = {}
+
+--- Constructor
+---@return NiagaraMessageStore
+---@param MessageKeyToMessageMap table<Guid, NiagaraMessageDataBase>
+---@param DismissedMessageKeys Guid[]
+function NiagaraMessageStore.new(MessageKeyToMessageMap, DismissedMessageKeys)
+    local self = {}
+    self.MessageKeyToMessageMap = MessageKeyToMessageMap
+    self.DismissedMessageKeys = DismissedMessageKeys
+    return self
+end
+
 return NiagaraMessageStore

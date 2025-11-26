@@ -78,4 +78,84 @@
 ---'Source' data/graphs for this script
 ---@field Source NiagaraScriptSourceBase
 local VersionedNiagaraScriptData = {}
+
+--- Constructor
+---@return VersionedNiagaraScriptData
+---@param Version NiagaraAssetVersion
+---@param VersionChangeDescription string
+---@param ModuleUsageBitmask integer
+---@param Category string
+---@param AssetTagDefinitionReferences NiagaraAssetTagDefinitionReference[]
+---@param bSuggested boolean
+---@param ProvidedDependencies string[]
+---@param RequiredDependencies NiagaraModuleDependency[]
+---@param bDeprecated boolean
+---@param DeprecationMessage string
+---@param DeprecationRecommendation NiagaraScript
+---@param bUsePythonScriptConversion boolean
+---@param ConversionScriptExecution ENiagaraPythonUpdateScriptReference
+---@param PythonConversionScript string
+---@param ConversionScriptAsset FilePath
+---@param ConversionUtility Class
+---@param bExperimental boolean
+---@param ExperimentalMessage string
+---@param NoteMessage string
+---@param DebugDrawMessage string
+---@param LibraryVisibility ENiagaraScriptLibraryVisibility
+---@param NumericOutputTypeSelectionMode ENiagaraNumericOutputTypeSelectionMode
+---@param Description string
+---@param Keywords string
+---@param CollapsedViewFormat string
+---@param InlineExpressionFormat NiagaraInlineDynamicInputFormatToken[]
+---@param InlineGraphFormat NiagaraInlineDynamicInputFormatToken[]
+---@param bCanBeUsedForTypeConversions boolean
+---@param ScriptMetaData table<string, string>
+---@param LastGeneratedVMId NiagaraVMExecutableDataId
+---@param UpdateScriptExecution ENiagaraPythonUpdateScriptReference
+---@param PythonUpdateScript string
+---@param ScriptAsset FilePath
+---@param ParameterDefinitionsSubscriptions ParameterDefinitionsSubscription[]
+---@param InputSections NiagaraStackSection[]
+---@param Source NiagaraScriptSourceBase
+function VersionedNiagaraScriptData.new(Version, VersionChangeDescription, ModuleUsageBitmask, Category, AssetTagDefinitionReferences, bSuggested, ProvidedDependencies, RequiredDependencies, bDeprecated, DeprecationMessage, DeprecationRecommendation, bUsePythonScriptConversion, ConversionScriptExecution, PythonConversionScript, ConversionScriptAsset, ConversionUtility, bExperimental, ExperimentalMessage, NoteMessage, DebugDrawMessage, LibraryVisibility, NumericOutputTypeSelectionMode, Description, Keywords, CollapsedViewFormat, InlineExpressionFormat, InlineGraphFormat, bCanBeUsedForTypeConversions, ScriptMetaData, LastGeneratedVMId, UpdateScriptExecution, PythonUpdateScript, ScriptAsset, ParameterDefinitionsSubscriptions, InputSections, Source)
+    local self = {}
+    self.Version = Version
+    self.VersionChangeDescription = VersionChangeDescription
+    self.ModuleUsageBitmask = ModuleUsageBitmask
+    self.Category = Category
+    self.AssetTagDefinitionReferences = AssetTagDefinitionReferences
+    self.bSuggested = bSuggested
+    self.ProvidedDependencies = ProvidedDependencies
+    self.RequiredDependencies = RequiredDependencies
+    self.bDeprecated = bDeprecated
+    self.DeprecationMessage = DeprecationMessage
+    self.DeprecationRecommendation = DeprecationRecommendation
+    self.bUsePythonScriptConversion = bUsePythonScriptConversion
+    self.ConversionScriptExecution = ConversionScriptExecution
+    self.PythonConversionScript = PythonConversionScript
+    self.ConversionScriptAsset = ConversionScriptAsset
+    self.ConversionUtility = ConversionUtility
+    self.bExperimental = bExperimental
+    self.ExperimentalMessage = ExperimentalMessage
+    self.NoteMessage = NoteMessage
+    self.DebugDrawMessage = DebugDrawMessage
+    self.LibraryVisibility = LibraryVisibility
+    self.NumericOutputTypeSelectionMode = NumericOutputTypeSelectionMode
+    self.Description = Description
+    self.Keywords = Keywords
+    self.CollapsedViewFormat = CollapsedViewFormat
+    self.InlineExpressionFormat = InlineExpressionFormat
+    self.InlineGraphFormat = InlineGraphFormat
+    self.bCanBeUsedForTypeConversions = bCanBeUsedForTypeConversions
+    self.ScriptMetaData = ScriptMetaData
+    self.LastGeneratedVMId = LastGeneratedVMId
+    self.UpdateScriptExecution = UpdateScriptExecution
+    self.PythonUpdateScript = PythonUpdateScript
+    self.ScriptAsset = ScriptAsset
+    self.ParameterDefinitionsSubscriptions = ParameterDefinitionsSubscriptions
+    self.InputSections = InputSections
+    self.Source = Source
+    return self
+end
+
 return VersionedNiagaraScriptData

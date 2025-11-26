@@ -12,4 +12,16 @@
 ---@field Magnitude number
 ---@field Center number
 local DisplacementScaling = {}
+
+--- Constructor
+---@return DisplacementScaling
+---@param Magnitude number
+---@param Center number
+function DisplacementScaling.new(Magnitude, Center)
+    local self = {}
+    self.Magnitude = Magnitude
+    self.Center = Center
+    return self
+end
+
 return DisplacementScaling

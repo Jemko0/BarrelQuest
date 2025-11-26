@@ -18,4 +18,20 @@
 ---Holds the margin to the bottom.
 ---@field Bottom number
 local Margin = {}
+
+--- Constructor
+---@return Margin
+---@param Left number
+---@param Top number
+---@param Right number
+---@param Bottom number
+function Margin.new(Left, Top, Right, Bottom)
+    local self = {}
+    self.Left = Left
+    self.Top = Top
+    self.Right = Right
+    self.Bottom = Bottom
+    return self
+end
+
 return Margin

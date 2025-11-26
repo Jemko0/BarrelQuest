@@ -13,4 +13,16 @@
 ---@field Regions SkeletalMeshSamplingRegion[]
 ---@field BuiltData SkeletalMeshSamplingBuiltData
 local SkeletalMeshSamplingInfo = {}
+
+--- Constructor
+---@return SkeletalMeshSamplingInfo
+---@param Regions SkeletalMeshSamplingRegion[]
+---@param BuiltData SkeletalMeshSamplingBuiltData
+function SkeletalMeshSamplingInfo.new(Regions, BuiltData)
+    local self = {}
+    self.Regions = Regions
+    self.BuiltData = BuiltData
+    return self
+end
+
 return SkeletalMeshSamplingInfo

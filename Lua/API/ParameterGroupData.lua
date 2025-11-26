@@ -12,4 +12,16 @@
 ---@field GroupName string
 ---@field GroupSortPriority integer
 local ParameterGroupData = {}
+
+--- Constructor
+---@return ParameterGroupData
+---@param GroupName string
+---@param GroupSortPriority integer
+function ParameterGroupData.new(GroupName, GroupSortPriority)
+    local self = {}
+    self.GroupName = GroupName
+    self.GroupSortPriority = GroupSortPriority
+    return self
+end
+
 return ParameterGroupData

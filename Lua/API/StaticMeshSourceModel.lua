@@ -29,4 +29,30 @@
 ---Whether this LOD was imported in the same file as the base mesh.
 ---@field bImportWithBaseMesh boolean
 local StaticMeshSourceModel = {}
+
+--- Constructor
+---@return StaticMeshSourceModel
+---@param StaticMeshDescriptionBulkData StaticMeshDescriptionBulkData
+---@param BuildSettings MeshBuildSettings
+---@param ReductionSettings MeshReductionSettings
+---@param CacheMeshDescriptionTrianglesCount integer
+---@param CacheMeshDescriptionVerticesCount integer
+---@param LODDistance number
+---@param ScreenSize PerPlatformFloat
+---@param SourceImportFilename string
+---@param bImportWithBaseMesh boolean
+function StaticMeshSourceModel.new(StaticMeshDescriptionBulkData, BuildSettings, ReductionSettings, CacheMeshDescriptionTrianglesCount, CacheMeshDescriptionVerticesCount, LODDistance, ScreenSize, SourceImportFilename, bImportWithBaseMesh)
+    local self = {}
+    self.StaticMeshDescriptionBulkData = StaticMeshDescriptionBulkData
+    self.BuildSettings = BuildSettings
+    self.ReductionSettings = ReductionSettings
+    self.CacheMeshDescriptionTrianglesCount = CacheMeshDescriptionTrianglesCount
+    self.CacheMeshDescriptionVerticesCount = CacheMeshDescriptionVerticesCount
+    self.LODDistance = LODDistance
+    self.ScreenSize = ScreenSize
+    self.SourceImportFilename = SourceImportFilename
+    self.bImportWithBaseMesh = bImportWithBaseMesh
+    return self
+end
+
 return StaticMeshSourceModel

@@ -18,4 +18,20 @@
 ---If set to false, the ascent and descent override specified in a Font face will be ignored, and the value from the font source file will be used instead.
 ---@field bEnableAscentDescentOverride boolean
 local CompositeFont = {}
+
+--- Constructor
+---@return CompositeFont
+---@param DefaultTypeface Typeface
+---@param FallbackTypeface CompositeFallbackFont
+---@param SubTypefaces CompositeSubFont[]
+---@param bEnableAscentDescentOverride boolean
+function CompositeFont.new(DefaultTypeface, FallbackTypeface, SubTypefaces, bEnableAscentDescentOverride)
+    local self = {}
+    self.DefaultTypeface = DefaultTypeface
+    self.FallbackTypeface = FallbackTypeface
+    self.SubTypefaces = SubTypefaces
+    self.bEnableAscentDescentOverride = bEnableAscentDescentOverride
+    return self
+end
+
 return CompositeFont

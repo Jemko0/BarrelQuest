@@ -32,4 +32,30 @@
 ---              be toggled in and out of sim and query collision without changing filtering details.
 ---@field CollisionEnabled integer
 local KConvexElem = {}
+
+--- Constructor
+---@return KConvexElem
+---@param VertexData Vector[]
+---@param IndexData integer[]
+---@param ElemBox Box
+---@param Transform Transform
+---@param RestOffset number
+---@param bIsGenerated boolean
+---@param Name string
+---@param bContributeToMass boolean
+---@param CollisionEnabled integer
+function KConvexElem.new(VertexData, IndexData, ElemBox, Transform, RestOffset, bIsGenerated, Name, bContributeToMass, CollisionEnabled)
+    local self = {}
+    self.VertexData = VertexData
+    self.IndexData = IndexData
+    self.ElemBox = ElemBox
+    self.Transform = Transform
+    self.RestOffset = RestOffset
+    self.bIsGenerated = bIsGenerated
+    self.Name = Name
+    self.bContributeToMass = bContributeToMass
+    self.CollisionEnabled = CollisionEnabled
+    return self
+end
+
 return KConvexElem

@@ -16,4 +16,24 @@
 ---@field Distribution DistributionVector
 ---@field Table DistributionLookupTable
 local RawDistributionVector = {}
+
+--- Constructor
+---@return RawDistributionVector
+---@param MinValue number
+---@param MaxValue number
+---@param MinValueVec Vector
+---@param MaxValueVec Vector
+---@param Distribution DistributionVector
+---@param Table DistributionLookupTable
+function RawDistributionVector.new(MinValue, MaxValue, MinValueVec, MaxValueVec, Distribution, Table)
+    local self = {}
+    self.MinValue = MinValue
+    self.MaxValue = MaxValue
+    self.MinValueVec = MinValueVec
+    self.MaxValueVec = MaxValueVec
+    self.Distribution = Distribution
+    self.Table = Table
+    return self
+end
+
 return RawDistributionVector

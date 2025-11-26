@@ -14,4 +14,18 @@
 ---@field Max Vector
 ---@field IsValid boolean
 local Box = {}
+
+--- Constructor
+---@return Box
+---@param Min Vector
+---@param Max Vector
+---@param IsValid boolean
+function Box.new(Min, Max, IsValid)
+    local self = {}
+    self.Min = Min
+    self.Max = Max
+    self.IsValid = IsValid
+    return self
+end
+
 return Box

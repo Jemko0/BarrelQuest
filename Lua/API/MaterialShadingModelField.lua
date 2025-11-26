@@ -11,4 +11,14 @@
 --- Properties
 ---@field ShadingModelField any
 local MaterialShadingModelField = {}
+
+--- Constructor
+---@return MaterialShadingModelField
+---@param ShadingModelField any
+function MaterialShadingModelField.new(ShadingModelField)
+    local self = {}
+    self.ShadingModelField = ShadingModelField
+    return self
+end
+
 return MaterialShadingModelField

@@ -12,4 +12,16 @@
 ---@field SystemLayout NiagaraSimCacheDataBuffersLayout
 ---@field EmitterLayouts NiagaraSimCacheDataBuffersLayout[]
 local NiagaraSimCacheLayout = {}
+
+--- Constructor
+---@return NiagaraSimCacheLayout
+---@param SystemLayout NiagaraSimCacheDataBuffersLayout
+---@param EmitterLayouts NiagaraSimCacheDataBuffersLayout[]
+function NiagaraSimCacheLayout.new(SystemLayout, EmitterLayouts)
+    local self = {}
+    self.SystemLayout = SystemLayout
+    self.EmitterLayouts = EmitterLayouts
+    return self
+end
+
 return NiagaraSimCacheLayout

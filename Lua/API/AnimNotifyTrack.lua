@@ -12,4 +12,16 @@
 ---@field TrackName string
 ---@field TrackColor LinearColor
 local AnimNotifyTrack = {}
+
+--- Constructor
+---@return AnimNotifyTrack
+---@param TrackName string
+---@param TrackColor LinearColor
+function AnimNotifyTrack.new(TrackName, TrackColor)
+    local self = {}
+    self.TrackName = TrackName
+    self.TrackColor = TrackColor
+    return self
+end
+
 return AnimNotifyTrack

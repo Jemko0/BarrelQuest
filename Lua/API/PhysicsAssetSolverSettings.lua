@@ -40,4 +40,28 @@
 ---When disabled, a single-point contact is generated in each solver iteration which is more expensive.
 ---@field bUseManifolds boolean
 local PhysicsAssetSolverSettings = {}
+
+--- Constructor
+---@return PhysicsAssetSolverSettings
+---@param PositionIterations integer
+---@param VelocityIterations integer
+---@param ProjectionIterations integer
+---@param CullDistance number
+---@param MaxDepenetrationVelocity number
+---@param FixedTimeStep number
+---@param bUseLinearJointSolver boolean
+---@param bUseManifolds boolean
+function PhysicsAssetSolverSettings.new(PositionIterations, VelocityIterations, ProjectionIterations, CullDistance, MaxDepenetrationVelocity, FixedTimeStep, bUseLinearJointSolver, bUseManifolds)
+    local self = {}
+    self.PositionIterations = PositionIterations
+    self.VelocityIterations = VelocityIterations
+    self.ProjectionIterations = ProjectionIterations
+    self.CullDistance = CullDistance
+    self.MaxDepenetrationVelocity = MaxDepenetrationVelocity
+    self.FixedTimeStep = FixedTimeStep
+    self.bUseLinearJointSolver = bUseLinearJointSolver
+    self.bUseManifolds = bUseManifolds
+    return self
+end
+
 return PhysicsAssetSolverSettings

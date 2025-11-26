@@ -12,4 +12,14 @@
 --- Properties
 ---@field Ticks integer
 local DateTime = {}
+
+--- Constructor
+---@return DateTime
+---@param Ticks integer
+function DateTime.new(Ticks)
+    local self = {}
+    self.Ticks = Ticks
+    return self
+end
+
 return DateTime

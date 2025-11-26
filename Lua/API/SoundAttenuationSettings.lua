@@ -163,4 +163,166 @@
 ---The custom volume attenuation curve to use.
 ---@field CustomAttenuationCurve RuntimeFloatCurve
 local SoundAttenuationSettings = {}
+
+--- Constructor
+---@return SoundAttenuationSettings
+---@param bAttenuate boolean
+---@param bSpatialize boolean
+---@param bAttenuateWithLPF boolean
+---@param bEnableListenerFocus boolean
+---@param bEnableFocusInterpolation boolean
+---@param bEnableOcclusion boolean
+---@param bUseComplexCollisionForOcclusion boolean
+---@param bEnableReverbSend boolean
+---@param bEnablePriorityAttenuation boolean
+---@param bApplyNormalizationToStereoSounds boolean
+---@param bEnableLogFrequencyScaling boolean
+---@param bEnableSubmixSends boolean
+---@param bEnableSourceDataOverride boolean
+---@param bEnableSendToAudioLink boolean
+---@param SpatializationAlgorithm integer
+---@param AudioLinkSettingsOverride AudioLinkSettingsAbstract
+---@param BinauralRadius number
+---@param CustomLowpassAirAbsorptionCurve RuntimeFloatCurve
+---@param CustomHighpassAirAbsorptionCurve RuntimeFloatCurve
+---@param AbsorptionMethod EAirAbsorptionMethod
+---@param OcclusionTraceChannel integer
+---@param ReverbSendMethod EReverbSendMethod
+---@param PriorityAttenuationMethod EPriorityAttenuationMethod
+---@param DistanceType integer
+---@param OmniRadius number
+---@param NonSpatializedRadiusStart number
+---@param NonSpatializedRadiusEnd number
+---@param NonSpatializedRadiusMode ENonSpatializedRadiusSpeakerMapMode
+---@param StereoSpread number
+---@param SpatializationPluginSettings SpatializationPluginSourceSettingsBase
+---@param RadiusMin number
+---@param RadiusMax number
+---@param LPFRadiusMin number
+---@param LPFRadiusMax number
+---@param LPFFrequencyAtMin number
+---@param LPFFrequencyAtMax number
+---@param HPFFrequencyAtMin number
+---@param HPFFrequencyAtMax number
+---@param FocusAzimuth number
+---@param NonFocusAzimuth number
+---@param FocusDistanceScale number
+---@param NonFocusDistanceScale number
+---@param FocusPriorityScale number
+---@param NonFocusPriorityScale number
+---@param FocusVolumeAttenuation number
+---@param NonFocusVolumeAttenuation number
+---@param FocusAttackInterpSpeed number
+---@param FocusReleaseInterpSpeed number
+---@param OcclusionLowPassFilterFrequency number
+---@param OcclusionVolumeAttenuation number
+---@param OcclusionInterpolationTime number
+---@param OcclusionPluginSettings OcclusionPluginSourceSettingsBase
+---@param ReverbPluginSettings ReverbPluginSourceSettingsBase
+---@param ReverbWetLevelMin number
+---@param ReverbWetLevelMax number
+---@param ReverbDistanceMin number
+---@param ReverbDistanceMax number
+---@param ManualReverbSendLevel number
+---@param PriorityAttenuationMin number
+---@param PriorityAttenuationMax number
+---@param PriorityAttenuationDistanceMin number
+---@param PriorityAttenuationDistanceMax number
+---@param ManualPriorityAttenuation number
+---@param CustomReverbSendCurve RuntimeFloatCurve
+---@param SubmixSendSettings AttenuationSubmixSendSettings[]
+---@param CustomPriorityAttenuationCurve RuntimeFloatCurve
+---@param PluginSettings SoundAttenuationPluginSettings
+---@param DistanceAlgorithm EAttenuationDistanceModel
+---@param AttenuationShape integer
+---@param FalloffMode ENaturalSoundFalloffMode
+---@param dBAttenuationAtMax number
+---@param AttenuationShapeExtents Vector
+---@param ConeOffset number
+---@param FalloffDistance number
+---@param ConeSphereRadius number
+---@param ConeSphereFalloffDistance number
+---@param CustomAttenuationCurve RuntimeFloatCurve
+function SoundAttenuationSettings.new(bAttenuate, bSpatialize, bAttenuateWithLPF, bEnableListenerFocus, bEnableFocusInterpolation, bEnableOcclusion, bUseComplexCollisionForOcclusion, bEnableReverbSend, bEnablePriorityAttenuation, bApplyNormalizationToStereoSounds, bEnableLogFrequencyScaling, bEnableSubmixSends, bEnableSourceDataOverride, bEnableSendToAudioLink, SpatializationAlgorithm, AudioLinkSettingsOverride, BinauralRadius, CustomLowpassAirAbsorptionCurve, CustomHighpassAirAbsorptionCurve, AbsorptionMethod, OcclusionTraceChannel, ReverbSendMethod, PriorityAttenuationMethod, DistanceType, OmniRadius, NonSpatializedRadiusStart, NonSpatializedRadiusEnd, NonSpatializedRadiusMode, StereoSpread, SpatializationPluginSettings, RadiusMin, RadiusMax, LPFRadiusMin, LPFRadiusMax, LPFFrequencyAtMin, LPFFrequencyAtMax, HPFFrequencyAtMin, HPFFrequencyAtMax, FocusAzimuth, NonFocusAzimuth, FocusDistanceScale, NonFocusDistanceScale, FocusPriorityScale, NonFocusPriorityScale, FocusVolumeAttenuation, NonFocusVolumeAttenuation, FocusAttackInterpSpeed, FocusReleaseInterpSpeed, OcclusionLowPassFilterFrequency, OcclusionVolumeAttenuation, OcclusionInterpolationTime, OcclusionPluginSettings, ReverbPluginSettings, ReverbWetLevelMin, ReverbWetLevelMax, ReverbDistanceMin, ReverbDistanceMax, ManualReverbSendLevel, PriorityAttenuationMin, PriorityAttenuationMax, PriorityAttenuationDistanceMin, PriorityAttenuationDistanceMax, ManualPriorityAttenuation, CustomReverbSendCurve, SubmixSendSettings, CustomPriorityAttenuationCurve, PluginSettings, DistanceAlgorithm, AttenuationShape, FalloffMode, dBAttenuationAtMax, AttenuationShapeExtents, ConeOffset, FalloffDistance, ConeSphereRadius, ConeSphereFalloffDistance, CustomAttenuationCurve)
+    local self = {}
+    self.bAttenuate = bAttenuate
+    self.bSpatialize = bSpatialize
+    self.bAttenuateWithLPF = bAttenuateWithLPF
+    self.bEnableListenerFocus = bEnableListenerFocus
+    self.bEnableFocusInterpolation = bEnableFocusInterpolation
+    self.bEnableOcclusion = bEnableOcclusion
+    self.bUseComplexCollisionForOcclusion = bUseComplexCollisionForOcclusion
+    self.bEnableReverbSend = bEnableReverbSend
+    self.bEnablePriorityAttenuation = bEnablePriorityAttenuation
+    self.bApplyNormalizationToStereoSounds = bApplyNormalizationToStereoSounds
+    self.bEnableLogFrequencyScaling = bEnableLogFrequencyScaling
+    self.bEnableSubmixSends = bEnableSubmixSends
+    self.bEnableSourceDataOverride = bEnableSourceDataOverride
+    self.bEnableSendToAudioLink = bEnableSendToAudioLink
+    self.SpatializationAlgorithm = SpatializationAlgorithm
+    self.AudioLinkSettingsOverride = AudioLinkSettingsOverride
+    self.BinauralRadius = BinauralRadius
+    self.CustomLowpassAirAbsorptionCurve = CustomLowpassAirAbsorptionCurve
+    self.CustomHighpassAirAbsorptionCurve = CustomHighpassAirAbsorptionCurve
+    self.AbsorptionMethod = AbsorptionMethod
+    self.OcclusionTraceChannel = OcclusionTraceChannel
+    self.ReverbSendMethod = ReverbSendMethod
+    self.PriorityAttenuationMethod = PriorityAttenuationMethod
+    self.DistanceType = DistanceType
+    self.OmniRadius = OmniRadius
+    self.NonSpatializedRadiusStart = NonSpatializedRadiusStart
+    self.NonSpatializedRadiusEnd = NonSpatializedRadiusEnd
+    self.NonSpatializedRadiusMode = NonSpatializedRadiusMode
+    self.StereoSpread = StereoSpread
+    self.SpatializationPluginSettings = SpatializationPluginSettings
+    self.RadiusMin = RadiusMin
+    self.RadiusMax = RadiusMax
+    self.LPFRadiusMin = LPFRadiusMin
+    self.LPFRadiusMax = LPFRadiusMax
+    self.LPFFrequencyAtMin = LPFFrequencyAtMin
+    self.LPFFrequencyAtMax = LPFFrequencyAtMax
+    self.HPFFrequencyAtMin = HPFFrequencyAtMin
+    self.HPFFrequencyAtMax = HPFFrequencyAtMax
+    self.FocusAzimuth = FocusAzimuth
+    self.NonFocusAzimuth = NonFocusAzimuth
+    self.FocusDistanceScale = FocusDistanceScale
+    self.NonFocusDistanceScale = NonFocusDistanceScale
+    self.FocusPriorityScale = FocusPriorityScale
+    self.NonFocusPriorityScale = NonFocusPriorityScale
+    self.FocusVolumeAttenuation = FocusVolumeAttenuation
+    self.NonFocusVolumeAttenuation = NonFocusVolumeAttenuation
+    self.FocusAttackInterpSpeed = FocusAttackInterpSpeed
+    self.FocusReleaseInterpSpeed = FocusReleaseInterpSpeed
+    self.OcclusionLowPassFilterFrequency = OcclusionLowPassFilterFrequency
+    self.OcclusionVolumeAttenuation = OcclusionVolumeAttenuation
+    self.OcclusionInterpolationTime = OcclusionInterpolationTime
+    self.OcclusionPluginSettings = OcclusionPluginSettings
+    self.ReverbPluginSettings = ReverbPluginSettings
+    self.ReverbWetLevelMin = ReverbWetLevelMin
+    self.ReverbWetLevelMax = ReverbWetLevelMax
+    self.ReverbDistanceMin = ReverbDistanceMin
+    self.ReverbDistanceMax = ReverbDistanceMax
+    self.ManualReverbSendLevel = ManualReverbSendLevel
+    self.PriorityAttenuationMin = PriorityAttenuationMin
+    self.PriorityAttenuationMax = PriorityAttenuationMax
+    self.PriorityAttenuationDistanceMin = PriorityAttenuationDistanceMin
+    self.PriorityAttenuationDistanceMax = PriorityAttenuationDistanceMax
+    self.ManualPriorityAttenuation = ManualPriorityAttenuation
+    self.CustomReverbSendCurve = CustomReverbSendCurve
+    self.SubmixSendSettings = SubmixSendSettings
+    self.CustomPriorityAttenuationCurve = CustomPriorityAttenuationCurve
+    self.PluginSettings = PluginSettings
+    self.DistanceAlgorithm = DistanceAlgorithm
+    self.AttenuationShape = AttenuationShape
+    self.FalloffMode = FalloffMode
+    self.dBAttenuationAtMax = dBAttenuationAtMax
+    self.AttenuationShapeExtents = AttenuationShapeExtents
+    self.ConeOffset = ConeOffset
+    self.FalloffDistance = FalloffDistance
+    self.ConeSphereRadius = ConeSphereRadius
+    self.ConeSphereFalloffDistance = ConeSphereFalloffDistance
+    self.CustomAttenuationCurve = CustomAttenuationCurve
+    return self
+end
+
 return SoundAttenuationSettings

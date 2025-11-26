@@ -13,4 +13,16 @@
 ---@field Key string
 ---@field Value string
 local UserSceneTextureOverride = {}
+
+--- Constructor
+---@return UserSceneTextureOverride
+---@param Key string
+---@param Value string
+function UserSceneTextureOverride.new(Key, Value)
+    local self = {}
+    self.Key = Key
+    self.Value = Value
+    return self
+end
+
 return UserSceneTextureOverride

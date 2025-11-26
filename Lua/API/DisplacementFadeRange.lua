@@ -17,4 +17,16 @@
 ---NOTE: This should be a SMALLER number than Start Fade Size.
 ---@field EndSizePixels number
 local DisplacementFadeRange = {}
+
+--- Constructor
+---@return DisplacementFadeRange
+---@param StartSizePixels number
+---@param EndSizePixels number
+function DisplacementFadeRange.new(StartSizePixels, EndSizePixels)
+    local self = {}
+    self.StartSizePixels = StartSizePixels
+    self.EndSizePixels = EndSizePixels
+    return self
+end
+
 return DisplacementFadeRange

@@ -16,4 +16,16 @@
 ---@see GetWalkableSlopeAngle(), SetWalkableSlopeAngle()
 ---@field WalkableSlopeAngle number
 local WalkableSlopeOverride = {}
+
+--- Constructor
+---@return WalkableSlopeOverride
+---@param WalkableSlopeBehavior integer
+---@param WalkableSlopeAngle number
+function WalkableSlopeOverride.new(WalkableSlopeBehavior, WalkableSlopeAngle)
+    local self = {}
+    self.WalkableSlopeBehavior = WalkableSlopeBehavior
+    self.WalkableSlopeAngle = WalkableSlopeAngle
+    return self
+end
+
 return WalkableSlopeOverride

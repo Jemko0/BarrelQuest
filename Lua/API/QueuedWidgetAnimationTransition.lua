@@ -12,4 +12,14 @@
 ---Animation with a queued transition
 ---@field WidgetAnimation WidgetAnimation
 local QueuedWidgetAnimationTransition = {}
+
+--- Constructor
+---@return QueuedWidgetAnimationTransition
+---@param WidgetAnimation WidgetAnimation
+function QueuedWidgetAnimationTransition.new(WidgetAnimation)
+    local self = {}
+    self.WidgetAnimation = WidgetAnimation
+    return self
+end
+
 return QueuedWidgetAnimationTransition

@@ -32,4 +32,32 @@
 ---Guid data to remap rapid iteration parameters after a function input was renamed.
 ---@field ParameterGuidMapping table<NiagaraVariable, Guid>
 local NiagaraUserRedirectionParameterStore = {}
+
+--- Constructor
+---@return NiagaraUserRedirectionParameterStore
+---@param UserParameterRedirects table<NiagaraVariable, NiagaraVariable>
+---@param Owner any
+---@param ParameterOffsets table<NiagaraVariable, integer>
+---@param SortedParameterOffsets NiagaraVariableWithOffset[]
+---@param ParameterData integer[]
+---@param DataInterfaces NiagaraDataInterface[]
+---@param UObjects Object[]
+---@param OriginalPositionData NiagaraPositionSource[]
+---@param DebugName string
+---@param ParameterGuidMapping table<NiagaraVariable, Guid>
+function NiagaraUserRedirectionParameterStore.new(UserParameterRedirects, Owner, ParameterOffsets, SortedParameterOffsets, ParameterData, DataInterfaces, UObjects, OriginalPositionData, DebugName, ParameterGuidMapping)
+    local self = {}
+    self.UserParameterRedirects = UserParameterRedirects
+    self.Owner = Owner
+    self.ParameterOffsets = ParameterOffsets
+    self.SortedParameterOffsets = SortedParameterOffsets
+    self.ParameterData = ParameterData
+    self.DataInterfaces = DataInterfaces
+    self.UObjects = UObjects
+    self.OriginalPositionData = OriginalPositionData
+    self.DebugName = DebugName
+    self.ParameterGuidMapping = ParameterGuidMapping
+    return self
+end
+
 return NiagaraUserRedirectionParameterStore

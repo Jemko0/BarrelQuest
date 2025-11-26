@@ -10,4 +10,12 @@
 ---
 --- Properties
 local WallCheckResult = {}
+
+--- Constructor
+---@return WallCheckResult
+function WallCheckResult.new()
+    local self = {}
+    return self
+end
+
 return WallCheckResult

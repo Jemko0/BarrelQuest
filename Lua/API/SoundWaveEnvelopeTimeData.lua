@@ -14,4 +14,16 @@
 ---The timestamp of the audio
 ---@field TimeSec number
 local SoundWaveEnvelopeTimeData = {}
+
+--- Constructor
+---@return SoundWaveEnvelopeTimeData
+---@param Amplitude number
+---@param TimeSec number
+function SoundWaveEnvelopeTimeData.new(Amplitude, TimeSec)
+    local self = {}
+    self.Amplitude = Amplitude
+    self.TimeSec = TimeSec
+    return self
+end
+
 return SoundWaveEnvelopeTimeData

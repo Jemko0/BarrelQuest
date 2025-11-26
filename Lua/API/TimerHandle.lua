@@ -11,4 +11,14 @@
 --- Properties
 ---@field Handle integer
 local TimerHandle = {}
+
+--- Constructor
+---@return TimerHandle
+---@param Handle integer
+function TimerHandle.new(Handle)
+    local self = {}
+    self.Handle = Handle
+    return self
+end
+
 return TimerHandle

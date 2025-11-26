@@ -26,4 +26,28 @@
 ---Lowpass modulation
 ---@field LowpassModulationDestination SoundModulationDestinationSettings
 local SoundModulationDefaultRoutingSettings = {}
+
+--- Constructor
+---@return SoundModulationDefaultRoutingSettings
+---@param VolumeRouting EModulationRouting
+---@param PitchRouting EModulationRouting
+---@param HighpassRouting EModulationRouting
+---@param LowpassRouting EModulationRouting
+---@param VolumeModulationDestination SoundModulationDestinationSettings
+---@param PitchModulationDestination SoundModulationDestinationSettings
+---@param HighpassModulationDestination SoundModulationDestinationSettings
+---@param LowpassModulationDestination SoundModulationDestinationSettings
+function SoundModulationDefaultRoutingSettings.new(VolumeRouting, PitchRouting, HighpassRouting, LowpassRouting, VolumeModulationDestination, PitchModulationDestination, HighpassModulationDestination, LowpassModulationDestination)
+    local self = {}
+    self.VolumeRouting = VolumeRouting
+    self.PitchRouting = PitchRouting
+    self.HighpassRouting = HighpassRouting
+    self.LowpassRouting = LowpassRouting
+    self.VolumeModulationDestination = VolumeModulationDestination
+    self.PitchModulationDestination = PitchModulationDestination
+    self.HighpassModulationDestination = HighpassModulationDestination
+    self.LowpassModulationDestination = LowpassModulationDestination
+    return self
+end
+
 return SoundModulationDefaultRoutingSettings

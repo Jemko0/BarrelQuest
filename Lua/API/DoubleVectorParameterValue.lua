@@ -14,4 +14,18 @@
 ---@field ParameterValue Vector4d
 ---@field ExpressionGUID Guid
 local DoubleVectorParameterValue = {}
+
+--- Constructor
+---@return DoubleVectorParameterValue
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue Vector4d
+---@param ExpressionGUID Guid
+function DoubleVectorParameterValue.new(ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return DoubleVectorParameterValue

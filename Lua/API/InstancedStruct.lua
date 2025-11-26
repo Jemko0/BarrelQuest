@@ -15,4 +15,12 @@
 ---
 --- Properties
 local InstancedStruct = {}
+
+--- Constructor
+---@return InstancedStruct
+function InstancedStruct.new()
+    local self = {}
+    return self
+end
+
 return InstancedStruct

@@ -15,4 +15,18 @@
 ---Layer or blend index this parameter is part of. INDEX_NONE for global parameters.
 ---@field Index integer
 local MaterialParameterInfo = {}
+
+--- Constructor
+---@return MaterialParameterInfo
+---@param Name string
+---@param Association integer
+---@param Index integer
+function MaterialParameterInfo.new(Name, Association, Index)
+    local self = {}
+    self.Name = Name
+    self.Association = Association
+    self.Index = Index
+    return self
+end
+
 return MaterialParameterInfo

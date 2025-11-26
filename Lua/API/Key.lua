@@ -11,4 +11,14 @@
 --- Properties
 ---@field KeyName string
 local Key = {}
+
+--- Constructor
+---@return Key
+---@param KeyName string
+function Key.new(KeyName)
+    local self = {}
+    self.KeyName = KeyName
+    return self
+end
+
 return Key

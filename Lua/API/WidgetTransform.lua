@@ -18,4 +18,20 @@
 ---The angle in degrees to rotate
 ---@field Angle number
 local WidgetTransform = {}
+
+--- Constructor
+---@return WidgetTransform
+---@param Translation Vector2D
+---@param Scale Vector2D
+---@param Shear Vector2D
+---@param Angle number
+function WidgetTransform.new(Translation, Scale, Shear, Angle)
+    local self = {}
+    self.Translation = Translation
+    self.Scale = Scale
+    self.Shear = Shear
+    self.Angle = Angle
+    return self
+end
+
 return WidgetTransform

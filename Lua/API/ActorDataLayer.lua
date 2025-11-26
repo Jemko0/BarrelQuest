@@ -14,4 +14,14 @@
 ---The name of this layer
 ---@field Name string
 local ActorDataLayer = {}
+
+--- Constructor
+---@return ActorDataLayer
+---@param Name string
+function ActorDataLayer.new(Name)
+    local self = {}
+    self.Name = Name
+    return self
+end
+
 return ActorDataLayer

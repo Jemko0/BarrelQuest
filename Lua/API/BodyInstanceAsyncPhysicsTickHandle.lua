@@ -10,4 +10,12 @@
 ---
 --- Properties
 local BodyInstanceAsyncPhysicsTickHandle = {}
+
+--- Constructor
+---@return BodyInstanceAsyncPhysicsTickHandle
+function BodyInstanceAsyncPhysicsTickHandle.new()
+    local self = {}
+    return self
+end
+
 return BodyInstanceAsyncPhysicsTickHandle

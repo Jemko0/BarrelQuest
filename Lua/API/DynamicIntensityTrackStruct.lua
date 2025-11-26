@@ -11,4 +11,14 @@
 --- Properties
 ---@field Layers_6_4310ACCC40B767D6C809BA8C3D91B93E table<integer, SoundBase>
 local DynamicIntensityTrackStruct = {}
+
+--- Constructor
+---@return DynamicIntensityTrackStruct
+---@param Layers_6_4310ACCC40B767D6C809BA8C3D91B93E table<integer, SoundBase>
+function DynamicIntensityTrackStruct.new(Layers_6_4310ACCC40B767D6C809BA8C3D91B93E)
+    local self = {}
+    self.Layers_6_4310ACCC40B767D6C809BA8C3D91B93E = Layers_6_4310ACCC40B767D6C809BA8C3D91B93E
+    return self
+end
+
 return DynamicIntensityTrackStruct

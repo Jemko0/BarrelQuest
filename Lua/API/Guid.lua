@@ -14,4 +14,20 @@
 ---@field C integer
 ---@field D integer
 local Guid = {}
+
+--- Constructor
+---@return Guid
+---@param A integer
+---@param B integer
+---@param C integer
+---@param D integer
+function Guid.new(A, B, C, D)
+    local self = {}
+    self.A = A
+    self.B = B
+    self.C = C
+    self.D = D
+    return self
+end
+
 return Guid

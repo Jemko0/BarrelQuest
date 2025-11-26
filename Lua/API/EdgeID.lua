@@ -12,4 +12,14 @@
 ---The actual mesh element index this ID represents.  Read-only.
 ---@field IDValue integer
 local EdgeID = {}
+
+--- Constructor
+---@return EdgeID
+---@param IDValue integer
+function EdgeID.new(IDValue)
+    local self = {}
+    self.IDValue = IDValue
+    return self
+end
+
 return EdgeID

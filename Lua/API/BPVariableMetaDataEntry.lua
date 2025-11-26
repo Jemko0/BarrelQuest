@@ -14,4 +14,16 @@
 ---Name of metadata value
 ---@field DataValue string
 local BPVariableMetaDataEntry = {}
+
+--- Constructor
+---@return BPVariableMetaDataEntry
+---@param DataKey string
+---@param DataValue string
+function BPVariableMetaDataEntry.new(DataKey, DataValue)
+    local self = {}
+    self.DataKey = DataKey
+    self.DataValue = DataValue
+    return self
+end
+
 return BPVariableMetaDataEntry

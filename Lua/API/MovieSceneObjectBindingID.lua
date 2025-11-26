@@ -23,4 +23,20 @@
 ---DEPRECATED: The binding's resolution space
 ---@field Space EMovieSceneObjectBindingSpace
 local MovieSceneObjectBindingID = {}
+
+--- Constructor
+---@return MovieSceneObjectBindingID
+---@param Guid Guid
+---@param SequenceID integer
+---@param ResolveParentIndex integer
+---@param Space EMovieSceneObjectBindingSpace
+function MovieSceneObjectBindingID.new(Guid, SequenceID, ResolveParentIndex, Space)
+    local self = {}
+    self.Guid = Guid
+    self.SequenceID = SequenceID
+    self.ResolveParentIndex = ResolveParentIndex
+    self.Space = Space
+    return self
+end
+
 return MovieSceneObjectBindingID

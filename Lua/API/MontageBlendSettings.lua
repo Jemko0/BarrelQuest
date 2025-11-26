@@ -16,4 +16,18 @@
 ---Type of blend mode (Standard vs Inertial)
 ---@field BlendMode EMontageBlendMode
 local MontageBlendSettings = {}
+
+--- Constructor
+---@return MontageBlendSettings
+---@param BlendProfile BlendProfile
+---@param Blend AlphaBlendArgs
+---@param BlendMode EMontageBlendMode
+function MontageBlendSettings.new(BlendProfile, Blend, BlendMode)
+    local self = {}
+    self.BlendProfile = BlendProfile
+    self.Blend = Blend
+    self.BlendMode = BlendMode
+    return self
+end
+
 return MontageBlendSettings

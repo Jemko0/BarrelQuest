@@ -14,4 +14,14 @@
 ---Network serialized data cache
 ---@field ReplicationBytes integer[]
 local UniqueNetIdRepl = {}
+
+--- Constructor
+---@return UniqueNetIdRepl
+---@param ReplicationBytes integer[]
+function UniqueNetIdRepl.new(ReplicationBytes)
+    local self = {}
+    self.ReplicationBytes = ReplicationBytes
+    return self
+end
+
 return UniqueNetIdRepl

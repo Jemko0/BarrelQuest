@@ -14,4 +14,16 @@
 ---should be of the IBlendableInterface* type but UProperties cannot express that
 ---@field Object Object
 local WeightedBlendable = {}
+
+--- Constructor
+---@return WeightedBlendable
+---@param Weight number
+---@param Object Object
+function WeightedBlendable.new(Weight, Object)
+    local self = {}
+    self.Weight = Weight
+    self.Object = Object
+    return self
+end
+
 return WeightedBlendable

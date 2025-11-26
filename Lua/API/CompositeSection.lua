@@ -40,4 +40,38 @@
 ---in either length or rate; the element will correctly place itself in relation to the sequence
 ---@field LinkedSequence AnimSequenceBase
 local CompositeSection = {}
+
+--- Constructor
+---@return CompositeSection
+---@param SectionName string
+---@param StartTime number
+---@param NextSectionName string
+---@param MetaData AnimMetaData[]
+---@param LinkedMontage AnimMontage
+---@param SlotIndex integer
+---@param SegmentIndex integer
+---@param LinkMethod integer
+---@param CachedLinkMethod integer
+---@param SegmentBeginTime number
+---@param SegmentLength number
+---@param LinkValue number
+---@param LinkedSequence AnimSequenceBase
+function CompositeSection.new(SectionName, StartTime, NextSectionName, MetaData, LinkedMontage, SlotIndex, SegmentIndex, LinkMethod, CachedLinkMethod, SegmentBeginTime, SegmentLength, LinkValue, LinkedSequence)
+    local self = {}
+    self.SectionName = SectionName
+    self.StartTime = StartTime
+    self.NextSectionName = NextSectionName
+    self.MetaData = MetaData
+    self.LinkedMontage = LinkedMontage
+    self.SlotIndex = SlotIndex
+    self.SegmentIndex = SegmentIndex
+    self.LinkMethod = LinkMethod
+    self.CachedLinkMethod = CachedLinkMethod
+    self.SegmentBeginTime = SegmentBeginTime
+    self.SegmentLength = SegmentLength
+    self.LinkValue = LinkValue
+    self.LinkedSequence = LinkedSequence
+    return self
+end
+
 return CompositeSection

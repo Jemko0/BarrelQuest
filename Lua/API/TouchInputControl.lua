@@ -31,4 +31,32 @@
 ---The alternate input to send from this control (for sticks, this is the vertical axis)
 ---@field AltInputKey Key
 local TouchInputControl = {}
+
+--- Constructor
+---@return TouchInputControl
+---@param bTreatAsButton boolean
+---@param Image1 Texture2D
+---@param Image2 Texture2D
+---@param Center Vector2D
+---@param VisualSize Vector2D
+---@param ThumbSize Vector2D
+---@param InteractionSize Vector2D
+---@param InputScale Vector2D
+---@param MainInputKey Key
+---@param AltInputKey Key
+function TouchInputControl.new(bTreatAsButton, Image1, Image2, Center, VisualSize, ThumbSize, InteractionSize, InputScale, MainInputKey, AltInputKey)
+    local self = {}
+    self.bTreatAsButton = bTreatAsButton
+    self.Image1 = Image1
+    self.Image2 = Image2
+    self.Center = Center
+    self.VisualSize = VisualSize
+    self.ThumbSize = ThumbSize
+    self.InteractionSize = InteractionSize
+    self.InputScale = InputScale
+    self.MainInputKey = MainInputKey
+    self.AltInputKey = AltInputKey
+    return self
+end
+
 return TouchInputControl

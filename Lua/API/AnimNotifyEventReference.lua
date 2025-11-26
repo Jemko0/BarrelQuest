@@ -13,4 +13,16 @@
 ---@field MirrorTable MirrorDataTable
 ---@field NotifySource Object
 local AnimNotifyEventReference = {}
+
+--- Constructor
+---@return AnimNotifyEventReference
+---@param MirrorTable MirrorDataTable
+---@param NotifySource Object
+function AnimNotifyEventReference.new(MirrorTable, NotifySource)
+    local self = {}
+    self.MirrorTable = MirrorTable
+    self.NotifySource = NotifySource
+    return self
+end
+
 return AnimNotifyEventReference

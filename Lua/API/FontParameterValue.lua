@@ -15,4 +15,22 @@
 ---@field FontPage integer
 ---@field ExpressionGUID Guid
 local FontParameterValue = {}
+
+--- Constructor
+---@return FontParameterValue
+---@param ParameterName string
+---@param ParameterInfo MaterialParameterInfo
+---@param FontValue Font
+---@param FontPage integer
+---@param ExpressionGUID Guid
+function FontParameterValue.new(ParameterName, ParameterInfo, FontValue, FontPage, ExpressionGUID)
+    local self = {}
+    self.ParameterName = ParameterName
+    self.ParameterInfo = ParameterInfo
+    self.FontValue = FontValue
+    self.FontPage = FontPage
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return FontParameterValue

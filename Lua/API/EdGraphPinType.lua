@@ -33,4 +33,36 @@
 ---Set to true if the type was serialized prior to BlueprintPinsUseRealNumbers
 ---@field bSerializeAsSinglePrecisionFloat boolean
 local EdGraphPinType = {}
+
+--- Constructor
+---@return EdGraphPinType
+---@param PinCategory string
+---@param PinSubCategory string
+---@param PinSubCategoryObject any
+---@param PinSubCategoryMemberReference SimpleMemberReference
+---@param PinValueType EdGraphTerminalType
+---@param ContainerType EPinContainerType
+---@param bIsArray boolean
+---@param bIsReference boolean
+---@param bIsConst boolean
+---@param bIsWeakPointer boolean
+---@param bIsUObjectWrapper boolean
+---@param bSerializeAsSinglePrecisionFloat boolean
+function EdGraphPinType.new(PinCategory, PinSubCategory, PinSubCategoryObject, PinSubCategoryMemberReference, PinValueType, ContainerType, bIsArray, bIsReference, bIsConst, bIsWeakPointer, bIsUObjectWrapper, bSerializeAsSinglePrecisionFloat)
+    local self = {}
+    self.PinCategory = PinCategory
+    self.PinSubCategory = PinSubCategory
+    self.PinSubCategoryObject = PinSubCategoryObject
+    self.PinSubCategoryMemberReference = PinSubCategoryMemberReference
+    self.PinValueType = PinValueType
+    self.ContainerType = ContainerType
+    self.bIsArray = bIsArray
+    self.bIsReference = bIsReference
+    self.bIsConst = bIsConst
+    self.bIsWeakPointer = bIsWeakPointer
+    self.bIsUObjectWrapper = bIsUObjectWrapper
+    self.bSerializeAsSinglePrecisionFloat = bSerializeAsSinglePrecisionFloat
+    return self
+end
+
 return EdGraphPinType

@@ -15,4 +15,18 @@
 ---Index into the geometry data structures
 ---@field SelectionIndex integer
 local GeomSelection = {}
+
+--- Constructor
+---@return GeomSelection
+---@param Type integer
+---@param Index integer
+---@param SelectionIndex integer
+function GeomSelection.new(Type, Index, SelectionIndex)
+    local self = {}
+    self.Type = Type
+    self.Index = Index
+    self.SelectionIndex = SelectionIndex
+    return self
+end
+
 return GeomSelection

@@ -69,4 +69,70 @@
 ---Shrinks or expands the scan radius used to determine the silhouette of the font edges.
 ---@field DistanceFieldScanRadiusScale number
 local FontImportOptionsData = {}
+
+--- Constructor
+---@return FontImportOptionsData
+---@param FontName string
+---@param Height number
+---@param bEnableAntialiasing boolean
+---@param bEnableBold boolean
+---@param bEnableItalic boolean
+---@param bEnableUnderline boolean
+---@param bAlphaOnly boolean
+---@param CharacterSet integer
+---@param Chars string
+---@param UnicodeRange string
+---@param CharsFilePath string
+---@param CharsFileWildcard string
+---@param bCreatePrintableOnly boolean
+---@param bIncludeASCIIRange boolean
+---@param ForegroundColor LinearColor
+---@param bEnableDropShadow boolean
+---@param TexturePageWidth integer
+---@param TexturePageMaxHeight integer
+---@param XPadding integer
+---@param YPadding integer
+---@param ExtendBoxTop integer
+---@param ExtendBoxBottom integer
+---@param ExtendBoxRight integer
+---@param ExtendBoxLeft integer
+---@param bEnableLegacyMode boolean
+---@param Kerning integer
+---@param bUseDistanceFieldAlpha boolean
+---@param DistanceFieldScaleFactor integer
+---@param DistanceFieldScanRadiusScale number
+function FontImportOptionsData.new(FontName, Height, bEnableAntialiasing, bEnableBold, bEnableItalic, bEnableUnderline, bAlphaOnly, CharacterSet, Chars, UnicodeRange, CharsFilePath, CharsFileWildcard, bCreatePrintableOnly, bIncludeASCIIRange, ForegroundColor, bEnableDropShadow, TexturePageWidth, TexturePageMaxHeight, XPadding, YPadding, ExtendBoxTop, ExtendBoxBottom, ExtendBoxRight, ExtendBoxLeft, bEnableLegacyMode, Kerning, bUseDistanceFieldAlpha, DistanceFieldScaleFactor, DistanceFieldScanRadiusScale)
+    local self = {}
+    self.FontName = FontName
+    self.Height = Height
+    self.bEnableAntialiasing = bEnableAntialiasing
+    self.bEnableBold = bEnableBold
+    self.bEnableItalic = bEnableItalic
+    self.bEnableUnderline = bEnableUnderline
+    self.bAlphaOnly = bAlphaOnly
+    self.CharacterSet = CharacterSet
+    self.Chars = Chars
+    self.UnicodeRange = UnicodeRange
+    self.CharsFilePath = CharsFilePath
+    self.CharsFileWildcard = CharsFileWildcard
+    self.bCreatePrintableOnly = bCreatePrintableOnly
+    self.bIncludeASCIIRange = bIncludeASCIIRange
+    self.ForegroundColor = ForegroundColor
+    self.bEnableDropShadow = bEnableDropShadow
+    self.TexturePageWidth = TexturePageWidth
+    self.TexturePageMaxHeight = TexturePageMaxHeight
+    self.XPadding = XPadding
+    self.YPadding = YPadding
+    self.ExtendBoxTop = ExtendBoxTop
+    self.ExtendBoxBottom = ExtendBoxBottom
+    self.ExtendBoxRight = ExtendBoxRight
+    self.ExtendBoxLeft = ExtendBoxLeft
+    self.bEnableLegacyMode = bEnableLegacyMode
+    self.Kerning = Kerning
+    self.bUseDistanceFieldAlpha = bUseDistanceFieldAlpha
+    self.DistanceFieldScaleFactor = DistanceFieldScaleFactor
+    self.DistanceFieldScanRadiusScale = DistanceFieldScanRadiusScale
+    return self
+end
+
 return FontImportOptionsData

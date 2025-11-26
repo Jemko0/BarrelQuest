@@ -15,4 +15,20 @@
 ---@field R integer
 ---@field A integer
 local Color = {}
+
+--- Constructor
+---@return Color
+---@param B integer
+---@param G integer
+---@param R integer
+---@param A integer
+function Color.new(B, G, R, A)
+    local self = {}
+    self.B = B
+    self.G = G
+    self.R = R
+    self.A = A
+    return self
+end
+
 return Color

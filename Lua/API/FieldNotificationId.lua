@@ -11,4 +11,14 @@
 --- Properties
 ---@field FieldName string
 local FieldNotificationId = {}
+
+--- Constructor
+---@return FieldNotificationId
+---@param FieldName string
+function FieldNotificationId.new(FieldName)
+    local self = {}
+    self.FieldName = FieldName
+    return self
+end
+
 return FieldNotificationId

@@ -24,4 +24,24 @@
 ---The recommended number of joint sub-push-out iterations. Increasing this can help with collision penetration problems.
 ---@field CollisionPushOutIterations integer
 local SolverIterations = {}
+
+--- Constructor
+---@return SolverIterations
+---@param SolverIterations integer
+---@param JointIterations integer
+---@param CollisionIterations integer
+---@param SolverPushOutIterations integer
+---@param JointPushOutIterations integer
+---@param CollisionPushOutIterations integer
+function SolverIterations.new(SolverIterations, JointIterations, CollisionIterations, SolverPushOutIterations, JointPushOutIterations, CollisionPushOutIterations)
+    local self = {}
+    self.SolverIterations = SolverIterations
+    self.JointIterations = JointIterations
+    self.CollisionIterations = CollisionIterations
+    self.SolverPushOutIterations = SolverPushOutIterations
+    self.JointPushOutIterations = JointPushOutIterations
+    self.CollisionPushOutIterations = CollisionPushOutIterations
+    return self
+end
+
 return SolverIterations

@@ -25,4 +25,18 @@
 ---It does not take into consideration StreamingDistanceMultiplier, or texture group scale.
 ---@field TexelFactor number
 local StreamingTextureBuildInfo = {}
+
+--- Constructor
+---@return StreamingTextureBuildInfo
+---@param PackedRelativeBox integer
+---@param TextureLevelIndex integer
+---@param TexelFactor number
+function StreamingTextureBuildInfo.new(PackedRelativeBox, TextureLevelIndex, TexelFactor)
+    local self = {}
+    self.PackedRelativeBox = PackedRelativeBox
+    self.TextureLevelIndex = TextureLevelIndex
+    self.TexelFactor = TexelFactor
+    return self
+end
+
 return StreamingTextureBuildInfo

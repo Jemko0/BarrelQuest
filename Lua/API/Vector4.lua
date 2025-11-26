@@ -15,4 +15,20 @@
 ---@field Z number
 ---@field W number
 local Vector4 = {}
+
+--- Constructor
+---@return Vector4
+---@param X number
+---@param Y number
+---@param Z number
+---@param W number
+function Vector4.new(X, Y, Z, W)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    self.Z = Z
+    self.W = W
+    return self
+end
+
 return Vector4

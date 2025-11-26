@@ -34,4 +34,36 @@
 ---Velocity
 ---@field LinearVelocity Vector_NetQuantize10
 local RepRootMotionMontage = {}
+
+--- Constructor
+---@return RepRootMotionMontage
+---@param Animation AnimSequenceBase
+---@param bIsActive boolean
+---@param bRelativePosition boolean
+---@param bRelativeRotation boolean
+---@param Position number
+---@param Location Vector_NetQuantize100
+---@param Rotation Rotator
+---@param MovementBase PrimitiveComponent
+---@param MovementBaseBoneName string
+---@param AuthoritativeRootMotion RootMotionSourceGroup
+---@param Acceleration Vector_NetQuantize10
+---@param LinearVelocity Vector_NetQuantize10
+function RepRootMotionMontage.new(Animation, bIsActive, bRelativePosition, bRelativeRotation, Position, Location, Rotation, MovementBase, MovementBaseBoneName, AuthoritativeRootMotion, Acceleration, LinearVelocity)
+    local self = {}
+    self.Animation = Animation
+    self.bIsActive = bIsActive
+    self.bRelativePosition = bRelativePosition
+    self.bRelativeRotation = bRelativeRotation
+    self.Position = Position
+    self.Location = Location
+    self.Rotation = Rotation
+    self.MovementBase = MovementBase
+    self.MovementBaseBoneName = MovementBaseBoneName
+    self.AuthoritativeRootMotion = AuthoritativeRootMotion
+    self.Acceleration = Acceleration
+    self.LinearVelocity = LinearVelocity
+    return self
+end
+
 return RepRootMotionMontage

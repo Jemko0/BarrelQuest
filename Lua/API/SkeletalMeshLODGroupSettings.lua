@@ -30,4 +30,32 @@
 ---Whether a Mesh Deformer applied to the mesh asset or Skinned Mesh Component should be used on this LOD or not
 ---@field bAllowMeshDeformer boolean
 local SkeletalMeshLODGroupSettings = {}
+
+--- Constructor
+---@return SkeletalMeshLODGroupSettings
+---@param ScreenSize PerPlatformFloat
+---@param LODHysteresis number
+---@param BoneFilterActionOption EBoneFilterActionOption
+---@param BoneList BoneFilter[]
+---@param BonesToPrioritize string[]
+---@param SectionsToPrioritize integer[]
+---@param WeightOfPrioritization number
+---@param BakePose AnimSequence
+---@param ReductionSettings SkeletalMeshOptimizationSettings
+---@param bAllowMeshDeformer boolean
+function SkeletalMeshLODGroupSettings.new(ScreenSize, LODHysteresis, BoneFilterActionOption, BoneList, BonesToPrioritize, SectionsToPrioritize, WeightOfPrioritization, BakePose, ReductionSettings, bAllowMeshDeformer)
+    local self = {}
+    self.ScreenSize = ScreenSize
+    self.LODHysteresis = LODHysteresis
+    self.BoneFilterActionOption = BoneFilterActionOption
+    self.BoneList = BoneList
+    self.BonesToPrioritize = BonesToPrioritize
+    self.SectionsToPrioritize = SectionsToPrioritize
+    self.WeightOfPrioritization = WeightOfPrioritization
+    self.BakePose = BakePose
+    self.ReductionSettings = ReductionSettings
+    self.bAllowMeshDeformer = bAllowMeshDeformer
+    return self
+end
+
 return SkeletalMeshLODGroupSettings

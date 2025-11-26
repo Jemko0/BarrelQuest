@@ -94,4 +94,148 @@
 ---@field AngularDriveDamping number
 ---@field AngularDriveForceLimit number
 local ConstraintInstance = {}
+
+--- Constructor
+---@return ConstraintInstance
+---@param JointName string
+---@param ConstraintBone1 string
+---@param ConstraintBone2 string
+---@param Pos1 Vector
+---@param PriAxis1 Vector
+---@param SecAxis1 Vector
+---@param Pos2 Vector
+---@param PriAxis2 Vector
+---@param SecAxis2 Vector
+---@param AngularRotationOffset Rotator
+---@param bScaleLinearLimits boolean
+---@param ProfileInstance ConstraintProfileProperties
+---@param bDisableCollision boolean
+---@param bEnableProjection boolean
+---@param ProjectionLinearTolerance number
+---@param ProjectionAngularTolerance number
+---@param LinearXMotion integer
+---@param LinearYMotion integer
+---@param LinearZMotion integer
+---@param LinearLimitSize number
+---@param bLinearLimitSoft boolean
+---@param LinearLimitStiffness number
+---@param LinearLimitDamping number
+---@param bLinearBreakable boolean
+---@param LinearBreakThreshold number
+---@param AngularSwing1Motion integer
+---@param AngularTwistMotion integer
+---@param AngularSwing2Motion integer
+---@param bSwingLimitSoft boolean
+---@param bTwistLimitSoft boolean
+---@param Swing1LimitAngle number
+---@param TwistLimitAngle number
+---@param Swing2LimitAngle number
+---@param SwingLimitStiffness number
+---@param SwingLimitDamping number
+---@param TwistLimitStiffness number
+---@param TwistLimitDamping number
+---@param bAngularBreakable boolean
+---@param AngularBreakThreshold number
+---@param bLinearXPositionDrive boolean
+---@param bLinearXVelocityDrive boolean
+---@param bLinearYPositionDrive boolean
+---@param bLinearYVelocityDrive boolean
+---@param bLinearZPositionDrive boolean
+---@param bLinearZVelocityDrive boolean
+---@param bLinearPositionDrive boolean
+---@param bLinearVelocityDrive boolean
+---@param LinearPositionTarget Vector
+---@param LinearVelocityTarget Vector
+---@param LinearDriveSpring number
+---@param LinearDriveDamping number
+---@param LinearDriveForceLimit number
+---@param bSwingPositionDrive boolean
+---@param bSwingVelocityDrive boolean
+---@param bTwistPositionDrive boolean
+---@param bTwistVelocityDrive boolean
+---@param bAngularSlerpDrive boolean
+---@param bAngularOrientationDrive boolean
+---@param bEnableSwingDrive boolean
+---@param bEnableTwistDrive boolean
+---@param bAngularVelocityDrive boolean
+---@param AngularPositionTarget Quat
+---@param AngularDriveMode integer
+---@param AngularOrientationTarget Rotator
+---@param AngularVelocityTarget Vector
+---@param AngularDriveSpring number
+---@param AngularDriveDamping number
+---@param AngularDriveForceLimit number
+function ConstraintInstance.new(JointName, ConstraintBone1, ConstraintBone2, Pos1, PriAxis1, SecAxis1, Pos2, PriAxis2, SecAxis2, AngularRotationOffset, bScaleLinearLimits, ProfileInstance, bDisableCollision, bEnableProjection, ProjectionLinearTolerance, ProjectionAngularTolerance, LinearXMotion, LinearYMotion, LinearZMotion, LinearLimitSize, bLinearLimitSoft, LinearLimitStiffness, LinearLimitDamping, bLinearBreakable, LinearBreakThreshold, AngularSwing1Motion, AngularTwistMotion, AngularSwing2Motion, bSwingLimitSoft, bTwistLimitSoft, Swing1LimitAngle, TwistLimitAngle, Swing2LimitAngle, SwingLimitStiffness, SwingLimitDamping, TwistLimitStiffness, TwistLimitDamping, bAngularBreakable, AngularBreakThreshold, bLinearXPositionDrive, bLinearXVelocityDrive, bLinearYPositionDrive, bLinearYVelocityDrive, bLinearZPositionDrive, bLinearZVelocityDrive, bLinearPositionDrive, bLinearVelocityDrive, LinearPositionTarget, LinearVelocityTarget, LinearDriveSpring, LinearDriveDamping, LinearDriveForceLimit, bSwingPositionDrive, bSwingVelocityDrive, bTwistPositionDrive, bTwistVelocityDrive, bAngularSlerpDrive, bAngularOrientationDrive, bEnableSwingDrive, bEnableTwistDrive, bAngularVelocityDrive, AngularPositionTarget, AngularDriveMode, AngularOrientationTarget, AngularVelocityTarget, AngularDriveSpring, AngularDriveDamping, AngularDriveForceLimit)
+    local self = {}
+    self.JointName = JointName
+    self.ConstraintBone1 = ConstraintBone1
+    self.ConstraintBone2 = ConstraintBone2
+    self.Pos1 = Pos1
+    self.PriAxis1 = PriAxis1
+    self.SecAxis1 = SecAxis1
+    self.Pos2 = Pos2
+    self.PriAxis2 = PriAxis2
+    self.SecAxis2 = SecAxis2
+    self.AngularRotationOffset = AngularRotationOffset
+    self.bScaleLinearLimits = bScaleLinearLimits
+    self.ProfileInstance = ProfileInstance
+    self.bDisableCollision = bDisableCollision
+    self.bEnableProjection = bEnableProjection
+    self.ProjectionLinearTolerance = ProjectionLinearTolerance
+    self.ProjectionAngularTolerance = ProjectionAngularTolerance
+    self.LinearXMotion = LinearXMotion
+    self.LinearYMotion = LinearYMotion
+    self.LinearZMotion = LinearZMotion
+    self.LinearLimitSize = LinearLimitSize
+    self.bLinearLimitSoft = bLinearLimitSoft
+    self.LinearLimitStiffness = LinearLimitStiffness
+    self.LinearLimitDamping = LinearLimitDamping
+    self.bLinearBreakable = bLinearBreakable
+    self.LinearBreakThreshold = LinearBreakThreshold
+    self.AngularSwing1Motion = AngularSwing1Motion
+    self.AngularTwistMotion = AngularTwistMotion
+    self.AngularSwing2Motion = AngularSwing2Motion
+    self.bSwingLimitSoft = bSwingLimitSoft
+    self.bTwistLimitSoft = bTwistLimitSoft
+    self.Swing1LimitAngle = Swing1LimitAngle
+    self.TwistLimitAngle = TwistLimitAngle
+    self.Swing2LimitAngle = Swing2LimitAngle
+    self.SwingLimitStiffness = SwingLimitStiffness
+    self.SwingLimitDamping = SwingLimitDamping
+    self.TwistLimitStiffness = TwistLimitStiffness
+    self.TwistLimitDamping = TwistLimitDamping
+    self.bAngularBreakable = bAngularBreakable
+    self.AngularBreakThreshold = AngularBreakThreshold
+    self.bLinearXPositionDrive = bLinearXPositionDrive
+    self.bLinearXVelocityDrive = bLinearXVelocityDrive
+    self.bLinearYPositionDrive = bLinearYPositionDrive
+    self.bLinearYVelocityDrive = bLinearYVelocityDrive
+    self.bLinearZPositionDrive = bLinearZPositionDrive
+    self.bLinearZVelocityDrive = bLinearZVelocityDrive
+    self.bLinearPositionDrive = bLinearPositionDrive
+    self.bLinearVelocityDrive = bLinearVelocityDrive
+    self.LinearPositionTarget = LinearPositionTarget
+    self.LinearVelocityTarget = LinearVelocityTarget
+    self.LinearDriveSpring = LinearDriveSpring
+    self.LinearDriveDamping = LinearDriveDamping
+    self.LinearDriveForceLimit = LinearDriveForceLimit
+    self.bSwingPositionDrive = bSwingPositionDrive
+    self.bSwingVelocityDrive = bSwingVelocityDrive
+    self.bTwistPositionDrive = bTwistPositionDrive
+    self.bTwistVelocityDrive = bTwistVelocityDrive
+    self.bAngularSlerpDrive = bAngularSlerpDrive
+    self.bAngularOrientationDrive = bAngularOrientationDrive
+    self.bEnableSwingDrive = bEnableSwingDrive
+    self.bEnableTwistDrive = bEnableTwistDrive
+    self.bAngularVelocityDrive = bAngularVelocityDrive
+    self.AngularPositionTarget = AngularPositionTarget
+    self.AngularDriveMode = AngularDriveMode
+    self.AngularOrientationTarget = AngularOrientationTarget
+    self.AngularVelocityTarget = AngularVelocityTarget
+    self.AngularDriveSpring = AngularDriveSpring
+    self.AngularDriveDamping = AngularDriveDamping
+    self.AngularDriveForceLimit = AngularDriveForceLimit
+    return self
+end
+
 return ConstraintInstance

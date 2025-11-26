@@ -18,4 +18,20 @@
 ---A user tag used to only get callbacks for specific runs of the animation.
 ---@field UserTag string
 local AnimationEventBinding = {}
+
+--- Constructor
+---@return AnimationEventBinding
+---@param Animation WidgetAnimation
+---@param Delegate function
+---@param AnimationEvent EWidgetAnimationEvent
+---@param UserTag string
+function AnimationEventBinding.new(Animation, Delegate, AnimationEvent, UserTag)
+    local self = {}
+    self.Animation = Animation
+    self.Delegate = Delegate
+    self.AnimationEvent = AnimationEvent
+    self.UserTag = UserTag
+    return self
+end
+
 return AnimationEventBinding

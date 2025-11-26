@@ -782,4 +782,988 @@
 ---for backwards compatibility
 ---@field Blendables Object[]
 local PostProcessSettings = {}
+
+--- Constructor
+---@return PostProcessSettings
+---@param bOverride_TemperatureType boolean
+---@param bOverride_WhiteTemp boolean
+---@param bOverride_WhiteTint boolean
+---@param bOverride_ColorSaturation boolean
+---@param bOverride_ColorContrast boolean
+---@param bOverride_ColorGamma boolean
+---@param bOverride_ColorGain boolean
+---@param bOverride_ColorOffset boolean
+---@param bOverride_ColorSaturationShadows boolean
+---@param bOverride_ColorContrastShadows boolean
+---@param bOverride_ColorGammaShadows boolean
+---@param bOverride_ColorGainShadows boolean
+---@param bOverride_ColorOffsetShadows boolean
+---@param bOverride_ColorSaturationMidtones boolean
+---@param bOverride_ColorContrastMidtones boolean
+---@param bOverride_ColorGammaMidtones boolean
+---@param bOverride_ColorGainMidtones boolean
+---@param bOverride_ColorOffsetMidtones boolean
+---@param bOverride_ColorSaturationHighlights boolean
+---@param bOverride_ColorContrastHighlights boolean
+---@param bOverride_ColorGammaHighlights boolean
+---@param bOverride_ColorGainHighlights boolean
+---@param bOverride_ColorOffsetHighlights boolean
+---@param bOverride_ColorCorrectionShadowsMax boolean
+---@param bOverride_ColorCorrectionHighlightsMin boolean
+---@param bOverride_ColorCorrectionHighlightsMax boolean
+---@param bOverride_BlueCorrection boolean
+---@param bOverride_ExpandGamut boolean
+---@param bOverride_ToneCurveAmount boolean
+---@param bOverride_FilmSlope boolean
+---@param bOverride_FilmToe boolean
+---@param bOverride_FilmShoulder boolean
+---@param bOverride_FilmBlackClip boolean
+---@param bOverride_FilmWhiteClip boolean
+---@param bOverride_SceneColorTint boolean
+---@param bOverride_SceneFringeIntensity boolean
+---@param bOverride_ChromaticAberrationStartOffset boolean
+---@param bOverride_bMegaLights boolean
+---@param bOverride_AmbientCubemapTint boolean
+---@param bOverride_AmbientCubemapIntensity boolean
+---@param bOverride_BloomMethod boolean
+---@param bOverride_BloomIntensity boolean
+---@param bOverride_BloomThreshold boolean
+---@param bOverride_Bloom1Tint boolean
+---@param bOverride_Bloom1Size boolean
+---@param bOverride_Bloom2Size boolean
+---@param bOverride_Bloom2Tint boolean
+---@param bOverride_Bloom3Tint boolean
+---@param bOverride_Bloom3Size boolean
+---@param bOverride_Bloom4Tint boolean
+---@param bOverride_Bloom4Size boolean
+---@param bOverride_Bloom5Tint boolean
+---@param bOverride_Bloom5Size boolean
+---@param bOverride_Bloom6Tint boolean
+---@param bOverride_Bloom6Size boolean
+---@param bOverride_BloomSizeScale boolean
+---@param bOverride_BloomConvolutionTexture boolean
+---@param bOverride_BloomConvolutionScatterDispersion boolean
+---@param bOverride_BloomConvolutionSize boolean
+---@param bOverride_BloomConvolutionCenterUV boolean
+---@param bOverride_BloomConvolutionPreFilter boolean
+---@param bOverride_BloomConvolutionPreFilterMin boolean
+---@param bOverride_BloomConvolutionPreFilterMax boolean
+---@param bOverride_BloomConvolutionPreFilterMult boolean
+---@param bOverride_BloomConvolutionBufferScale boolean
+---@param bOverride_BloomDirtMaskIntensity boolean
+---@param bOverride_BloomDirtMaskTint boolean
+---@param bOverride_BloomDirtMask boolean
+---@param bOverride_CameraShutterSpeed boolean
+---@param bOverride_CameraISO boolean
+---@param bOverride_AutoExposureMethod boolean
+---@param bOverride_AutoExposureLowPercent boolean
+---@param bOverride_AutoExposureHighPercent boolean
+---@param bOverride_AutoExposureMinBrightness boolean
+---@param bOverride_AutoExposureMaxBrightness boolean
+---@param bOverride_AutoExposureCalibrationConstant boolean
+---@param bOverride_AutoExposureSpeedUp boolean
+---@param bOverride_AutoExposureSpeedDown boolean
+---@param bOverride_AutoExposureBias boolean
+---@param bOverride_AutoExposureBiasCurve boolean
+---@param bOverride_AutoExposureMeterMask boolean
+---@param bOverride_AutoExposureApplyPhysicalCameraExposure boolean
+---@param bOverride_HistogramLogMin boolean
+---@param bOverride_HistogramLogMax boolean
+---@param bOverride_LocalExposureMethod boolean
+---@param bOverride_LocalExposureContrastScale boolean
+---@param bOverride_LocalExposureHighlightContrastScale boolean
+---@param bOverride_LocalExposureShadowContrastScale boolean
+---@param bOverride_LocalExposureHighlightContrastCurve boolean
+---@param bOverride_LocalExposureShadowContrastCurve boolean
+---@param bOverride_LocalExposureHighlightThreshold boolean
+---@param bOverride_LocalExposureShadowThreshold boolean
+---@param bOverride_LocalExposureDetailStrength boolean
+---@param bOverride_LocalExposureBlurredLuminanceBlend boolean
+---@param bOverride_LocalExposureBlurredLuminanceKernelSizePercent boolean
+---@param bOverride_LocalExposureHighlightThresholdStrength boolean
+---@param bOverride_LocalExposureShadowThresholdStrength boolean
+---@param bOverride_LocalExposureMiddleGreyBias boolean
+---@param bOverride_LensFlareIntensity boolean
+---@param bOverride_LensFlareTint boolean
+---@param bOverride_LensFlareTints boolean
+---@param bOverride_LensFlareBokehSize boolean
+---@param bOverride_LensFlareBokehShape boolean
+---@param bOverride_LensFlareThreshold boolean
+---@param bOverride_VignetteIntensity boolean
+---@param bOverride_Sharpen boolean
+---@param bOverride_GrainIntensity boolean
+---@param bOverride_GrainJitter boolean
+---@param bOverride_FilmGrainIntensity boolean
+---@param bOverride_FilmGrainIntensityShadows boolean
+---@param bOverride_FilmGrainIntensityMidtones boolean
+---@param bOverride_FilmGrainIntensityHighlights boolean
+---@param bOverride_FilmGrainShadowsMax boolean
+---@param bOverride_FilmGrainHighlightsMin boolean
+---@param bOverride_FilmGrainHighlightsMax boolean
+---@param bOverride_FilmGrainTexelSize boolean
+---@param bOverride_FilmGrainTexture boolean
+---@param bOverride_AmbientOcclusionIntensity boolean
+---@param bOverride_AmbientOcclusionStaticFraction boolean
+---@param bOverride_AmbientOcclusionRadius boolean
+---@param bOverride_AmbientOcclusionFadeDistance boolean
+---@param bOverride_AmbientOcclusionFadeRadius boolean
+---@param bOverride_AmbientOcclusionDistance boolean
+---@param bOverride_AmbientOcclusionRadiusInWS boolean
+---@param bOverride_AmbientOcclusionPower boolean
+---@param bOverride_AmbientOcclusionBias boolean
+---@param bOverride_AmbientOcclusionQuality boolean
+---@param bOverride_AmbientOcclusionMipBlend boolean
+---@param bOverride_AmbientOcclusionMipScale boolean
+---@param bOverride_AmbientOcclusionMipThreshold boolean
+---@param bOverride_AmbientOcclusionTemporalBlendWeight boolean
+---@param bOverride_RayTracingAO boolean
+---@param bOverride_RayTracingAOSamplesPerPixel boolean
+---@param bOverride_RayTracingAOIntensity boolean
+---@param bOverride_RayTracingAORadius boolean
+---@param bOverride_LPVIntensity boolean
+---@param bOverride_LPVDirectionalOcclusionIntensity boolean
+---@param bOverride_LPVDirectionalOcclusionRadius boolean
+---@param bOverride_LPVDiffuseOcclusionExponent boolean
+---@param bOverride_LPVSpecularOcclusionExponent boolean
+---@param bOverride_LPVDiffuseOcclusionIntensity boolean
+---@param bOverride_LPVSpecularOcclusionIntensity boolean
+---@param bOverride_LPVSize boolean
+---@param bOverride_LPVSecondaryOcclusionIntensity boolean
+---@param bOverride_LPVSecondaryBounceIntensity boolean
+---@param bOverride_LPVGeometryVolumeBias boolean
+---@param bOverride_LPVVplInjectionBias boolean
+---@param bOverride_LPVEmissiveInjectionIntensity boolean
+---@param bOverride_LPVFadeRange boolean
+---@param bOverride_LPVDirectionalOcclusionFadeRange boolean
+---@param bOverride_IndirectLightingColor boolean
+---@param bOverride_IndirectLightingIntensity boolean
+---@param bOverride_ColorGradingIntensity boolean
+---@param bOverride_ColorGradingLUT boolean
+---@param bOverride_DepthOfFieldFocalDistance boolean
+---@param bOverride_DepthOfFieldFstop boolean
+---@param bOverride_DepthOfFieldMinFstop boolean
+---@param bOverride_DepthOfFieldBladeCount boolean
+---@param bOverride_DepthOfFieldSensorWidth boolean
+---@param bOverride_DepthOfFieldSqueezeFactor boolean
+---@param bOverride_DepthOfFieldDepthBlurRadius boolean
+---@param bOverride_DepthOfFieldUseHairDepth boolean
+---@param bOverride_DepthOfFieldPetzvalBokeh boolean
+---@param bOverride_DepthOfFieldPetzvalBokehFalloff boolean
+---@param bOverride_DepthOfFieldPetzvalExclusionBoxExtents boolean
+---@param bOverride_DepthOfFieldPetzvalExclusionBoxRadius boolean
+---@param bOverride_DepthOfFieldAspectRatioScalar boolean
+---@param bOverride_DepthOfFieldMatteBoxFlags boolean
+---@param bOverride_DepthOfFieldBarrelRadius boolean
+---@param bOverride_DepthOfFieldBarrelLength boolean
+---@param bOverride_DepthOfFieldDepthBlurAmount boolean
+---@param bOverride_DepthOfFieldFocalRegion boolean
+---@param bOverride_DepthOfFieldNearTransitionRegion boolean
+---@param bOverride_DepthOfFieldFarTransitionRegion boolean
+---@param bOverride_DepthOfFieldScale boolean
+---@param bOverride_DepthOfFieldNearBlurSize boolean
+---@param bOverride_DepthOfFieldFarBlurSize boolean
+---@param bOverride_MobileHQGaussian boolean
+---@param bOverride_DepthOfFieldOcclusion boolean
+---@param bOverride_DepthOfFieldSkyFocusDistance boolean
+---@param bOverride_DepthOfFieldVignetteSize boolean
+---@param bOverride_MotionBlurAmount boolean
+---@param bOverride_MotionBlurMax boolean
+---@param bOverride_MotionBlurTargetFPS boolean
+---@param bOverride_MotionBlurPerObjectSize boolean
+---@param bOverride_ScreenPercentage boolean
+---@param bOverride_ReflectionMethod boolean
+---@param bOverride_LumenReflectionQuality boolean
+---@param bOverride_ScreenSpaceReflectionIntensity boolean
+---@param bOverride_ScreenSpaceReflectionQuality boolean
+---@param bOverride_ScreenSpaceReflectionMaxRoughness boolean
+---@param bOverride_ScreenSpaceReflectionRoughnessScale boolean
+---@param bOverride_UserFlags boolean
+---@param bOverride_ReflectionsType boolean
+---@param bOverride_RayTracingReflectionsMaxRoughness boolean
+---@param bOverride_RayTracingReflectionsMaxBounces boolean
+---@param bOverride_RayTracingReflectionsSamplesPerPixel boolean
+---@param bOverride_RayTracingReflectionsShadows boolean
+---@param bOverride_RayTracingReflectionsTranslucency boolean
+---@param bOverride_TranslucencyType boolean
+---@param bOverride_RayTracingTranslucencyMaxRoughness boolean
+---@param bOverride_RayTracingTranslucencyRefractionRays boolean
+---@param bOverride_RayTracingTranslucencySamplesPerPixel boolean
+---@param bOverride_RayTracingTranslucencyShadows boolean
+---@param bOverride_RayTracingTranslucencyRefraction boolean
+---@param bOverride_RayTracingTranslucencyMaxPrimaryHitEvents boolean
+---@param bOverride_RayTracingTranslucencyMaxSecondaryHitEvents boolean
+---@param bOverride_RayTracingTranslucencyUseRayTracedRefraction boolean
+---@param bOverride_DynamicGlobalIlluminationMethod boolean
+---@param bOverride_LumenSceneLightingQuality boolean
+---@param bOverride_LumenSceneDetail boolean
+---@param bOverride_LumenSceneViewDistance boolean
+---@param bOverride_LumenSceneLightingUpdateSpeed boolean
+---@param bOverride_LumenFinalGatherQuality boolean
+---@param bOverride_LumenFinalGatherLightingUpdateSpeed boolean
+---@param bOverride_LumenFinalGatherScreenTraces boolean
+---@param bOverride_LumenMaxTraceDistance boolean
+---@param bOverride_LumenDiffuseColorBoost boolean
+---@param bOverride_LumenSkylightLeaking boolean
+---@param bOverride_LumenSkylightLeakingTint boolean
+---@param bOverride_LumenFullSkylightLeakingDistance boolean
+---@param bOverride_LumenRayLightingMode boolean
+---@param bOverride_LumenReflectionsScreenTraces boolean
+---@param bOverride_LumenFrontLayerTranslucencyReflections boolean
+---@param bOverride_LumenMaxRoughnessToTraceReflections boolean
+---@param bOverride_LumenMaxReflectionBounces boolean
+---@param bOverride_LumenMaxRefractionBounces boolean
+---@param bOverride_LumenSurfaceCacheResolution boolean
+---@param bOverride_RayTracingGI boolean
+---@param bOverride_RayTracingGIMaxBounces boolean
+---@param bOverride_RayTracingGISamplesPerPixel boolean
+---@param bOverride_PathTracingMaxBounces boolean
+---@param bOverride_PathTracingSamplesPerPixel boolean
+---@param bOverride_PathTracingMaxPathIntensity boolean
+---@param bOverride_PathTracingEnableEmissiveMaterials boolean
+---@param bOverride_PathTracingEnableReferenceDOF boolean
+---@param bOverride_PathTracingEnableReferenceAtmosphere boolean
+---@param bOverride_PathTracingEnableDenoiser boolean
+---@param bOverride_PathTracingIncludeEmissive boolean
+---@param bOverride_PathTracingIncludeDiffuse boolean
+---@param bOverride_PathTracingIncludeIndirectDiffuse boolean
+---@param bOverride_PathTracingIncludeSpecular boolean
+---@param bOverride_PathTracingIncludeIndirectSpecular boolean
+---@param bOverride_PathTracingIncludeVolume boolean
+---@param bOverride_PathTracingIncludeIndirectVolume boolean
+---@param bMobileHQGaussian boolean
+---@param BloomMethod integer
+---@param AutoExposureMethod integer
+---@param DepthOfFieldMethod integer
+---@param TemperatureType integer
+---@param WhiteTemp number
+---@param WhiteTint number
+---@param ColorSaturation Vector4
+---@param ColorContrast Vector4
+---@param ColorGamma Vector4
+---@param ColorGain Vector4
+---@param ColorOffset Vector4
+---@param ColorSaturationShadows Vector4
+---@param ColorContrastShadows Vector4
+---@param ColorGammaShadows Vector4
+---@param ColorGainShadows Vector4
+---@param ColorOffsetShadows Vector4
+---@param ColorSaturationMidtones Vector4
+---@param ColorContrastMidtones Vector4
+---@param ColorGammaMidtones Vector4
+---@param ColorGainMidtones Vector4
+---@param ColorOffsetMidtones Vector4
+---@param ColorSaturationHighlights Vector4
+---@param ColorContrastHighlights Vector4
+---@param ColorGammaHighlights Vector4
+---@param ColorGainHighlights Vector4
+---@param ColorOffsetHighlights Vector4
+---@param ColorCorrectionHighlightsMin number
+---@param ColorCorrectionHighlightsMax number
+---@param ColorCorrectionShadowsMax number
+---@param BlueCorrection number
+---@param ExpandGamut number
+---@param ToneCurveAmount number
+---@param FilmSlope number
+---@param FilmToe number
+---@param FilmShoulder number
+---@param FilmBlackClip number
+---@param FilmWhiteClip number
+---@param SceneColorTint LinearColor
+---@param SceneFringeIntensity number
+---@param ChromaticAberrationStartOffset number
+---@param BloomIntensity number
+---@param BloomThreshold number
+---@param BloomSizeScale number
+---@param Bloom1Size number
+---@param Bloom2Size number
+---@param Bloom3Size number
+---@param Bloom4Size number
+---@param Bloom5Size number
+---@param Bloom6Size number
+---@param Bloom1Tint LinearColor
+---@param Bloom2Tint LinearColor
+---@param Bloom3Tint LinearColor
+---@param Bloom4Tint LinearColor
+---@param Bloom5Tint LinearColor
+---@param Bloom6Tint LinearColor
+---@param BloomConvolutionScatterDispersion number
+---@param BloomConvolutionSize number
+---@param BloomConvolutionTexture Texture2D
+---@param BloomConvolutionCenterUV Vector2D
+---@param BloomConvolutionPreFilter Vector3f
+---@param BloomConvolutionPreFilterMin number
+---@param BloomConvolutionPreFilterMax number
+---@param BloomConvolutionPreFilterMult number
+---@param BloomConvolutionBufferScale number
+---@param BloomDirtMask Texture
+---@param BloomDirtMaskIntensity number
+---@param BloomDirtMaskTint LinearColor
+---@param DynamicGlobalIlluminationMethod integer
+---@param IndirectLightingColor LinearColor
+---@param IndirectLightingIntensity number
+---@param LumenRayLightingMode ELumenRayLightingModeOverride
+---@param LumenSceneLightingQuality number
+---@param LumenSceneDetail number
+---@param LumenSceneViewDistance number
+---@param LumenSceneLightingUpdateSpeed number
+---@param LumenFinalGatherQuality number
+---@param LumenFinalGatherLightingUpdateSpeed number
+---@param LumenFinalGatherScreenTraces boolean
+---@param LumenMaxTraceDistance number
+---@param LumenDiffuseColorBoost number
+---@param LumenSkylightLeaking number
+---@param LumenSkylightLeakingTint LinearColor
+---@param LumenFullSkylightLeakingDistance number
+---@param LumenSurfaceCacheResolution number
+---@param ReflectionMethod integer
+---@param ReflectionsType EReflectionsType
+---@param LumenReflectionQuality number
+---@param LumenReflectionsScreenTraces boolean
+---@param LumenFrontLayerTranslucencyReflections boolean
+---@param LumenMaxRoughnessToTraceReflections number
+---@param LumenMaxReflectionBounces integer
+---@param LumenMaxRefractionBounces integer
+---@param ScreenSpaceReflectionIntensity number
+---@param ScreenSpaceReflectionQuality number
+---@param ScreenSpaceReflectionMaxRoughness number
+---@param bMegaLights boolean
+---@param AmbientCubemapTint LinearColor
+---@param AmbientCubemapIntensity number
+---@param AmbientCubemap TextureCube
+---@param CameraShutterSpeed number
+---@param CameraISO number
+---@param DepthOfFieldFstop number
+---@param DepthOfFieldMinFstop number
+---@param DepthOfFieldBladeCount integer
+---@param AutoExposureBias number
+---@param AutoExposureBiasBackup number
+---@param bOverride_AutoExposureBiasBackup boolean
+---@param AutoExposureApplyPhysicalCameraExposure boolean
+---@param AutoExposureBiasCurve CurveFloat
+---@param AutoExposureMeterMask Texture
+---@param AutoExposureLowPercent number
+---@param AutoExposureHighPercent number
+---@param AutoExposureMinBrightness number
+---@param AutoExposureMaxBrightness number
+---@param AutoExposureSpeedUp number
+---@param AutoExposureSpeedDown number
+---@param HistogramLogMin number
+---@param HistogramLogMax number
+---@param AutoExposureCalibrationConstant number
+---@param LocalExposureMethod ELocalExposureMethod
+---@param LocalExposureContrastScale number
+---@param LocalExposureHighlightContrastScale number
+---@param LocalExposureShadowContrastScale number
+---@param LocalExposureHighlightContrastCurve CurveFloat
+---@param LocalExposureShadowContrastCurve CurveFloat
+---@param LocalExposureHighlightThreshold number
+---@param LocalExposureShadowThreshold number
+---@param LocalExposureDetailStrength number
+---@param LocalExposureBlurredLuminanceBlend number
+---@param LocalExposureBlurredLuminanceKernelSizePercent number
+---@param LocalExposureHighlightThresholdStrength number
+---@param LocalExposureShadowThresholdStrength number
+---@param LocalExposureMiddleGreyBias number
+---@param LensFlareIntensity number
+---@param LensFlareTint LinearColor
+---@param LensFlareBokehSize number
+---@param LensFlareThreshold number
+---@param LensFlareBokehShape Texture
+---@param LensFlareTints LinearColor
+---@param VignetteIntensity number
+---@param Sharpen number
+---@param GrainJitter number
+---@param GrainIntensity number
+---@param FilmGrainIntensity number
+---@param FilmGrainIntensityShadows number
+---@param FilmGrainIntensityMidtones number
+---@param FilmGrainIntensityHighlights number
+---@param FilmGrainShadowsMax number
+---@param FilmGrainHighlightsMin number
+---@param FilmGrainHighlightsMax number
+---@param FilmGrainTexelSize number
+---@param FilmGrainTexture Texture2D
+---@param AmbientOcclusionIntensity number
+---@param AmbientOcclusionStaticFraction number
+---@param AmbientOcclusionRadius number
+---@param AmbientOcclusionRadiusInWS boolean
+---@param AmbientOcclusionFadeDistance number
+---@param AmbientOcclusionFadeRadius number
+---@param AmbientOcclusionDistance number
+---@param AmbientOcclusionPower number
+---@param AmbientOcclusionBias number
+---@param AmbientOcclusionQuality number
+---@param AmbientOcclusionMipBlend number
+---@param AmbientOcclusionMipScale number
+---@param AmbientOcclusionMipThreshold number
+---@param AmbientOcclusionTemporalBlendWeight number
+---@param RayTracingAO boolean
+---@param RayTracingAOSamplesPerPixel integer
+---@param RayTracingAOIntensity number
+---@param RayTracingAORadius number
+---@param ColorGradingIntensity number
+---@param ColorGradingLUT Texture
+---@param DepthOfFieldSensorWidth number
+---@param DepthOfFieldSqueezeFactor number
+---@param DepthOfFieldFocalDistance number
+---@param DepthOfFieldDepthBlurAmount number
+---@param DepthOfFieldDepthBlurRadius number
+---@param DepthOfFieldUseHairDepth boolean
+---@param DepthOfFieldPetzvalBokeh number
+---@param DepthOfFieldPetzvalBokehFalloff number
+---@param DepthOfFieldPetzvalExclusionBoxExtents Vector2f
+---@param DepthOfFieldPetzvalExclusionBoxRadius number
+---@param DepthOfFieldAspectRatioScalar number
+---@param DepthOfFieldBarrelRadius number
+---@param DepthOfFieldBarrelLength number
+---@param DepthOfFieldMatteBoxFlags MatteBoxFlag
+---@param DepthOfFieldFocalRegion number
+---@param DepthOfFieldNearTransitionRegion number
+---@param DepthOfFieldFarTransitionRegion number
+---@param DepthOfFieldScale number
+---@param DepthOfFieldNearBlurSize number
+---@param DepthOfFieldFarBlurSize number
+---@param DepthOfFieldOcclusion number
+---@param DepthOfFieldSkyFocusDistance number
+---@param DepthOfFieldVignetteSize number
+---@param MotionBlurAmount number
+---@param MotionBlurMax number
+---@param MotionBlurTargetFPS integer
+---@param MotionBlurPerObjectSize number
+---@param LPVIntensity number
+---@param LPVVplInjectionBias number
+---@param LPVSize number
+---@param LPVSecondaryOcclusionIntensity number
+---@param LPVSecondaryBounceIntensity number
+---@param LPVGeometryVolumeBias number
+---@param LPVEmissiveInjectionIntensity number
+---@param LPVDirectionalOcclusionIntensity number
+---@param LPVDirectionalOcclusionRadius number
+---@param LPVDiffuseOcclusionExponent number
+---@param LPVSpecularOcclusionExponent number
+---@param LPVDiffuseOcclusionIntensity number
+---@param LPVSpecularOcclusionIntensity number
+---@param TranslucencyType ETranslucencyType
+---@param RayTracingTranslucencyMaxRoughness number
+---@param RayTracingTranslucencyRefractionRays integer
+---@param RayTracingTranslucencySamplesPerPixel integer
+---@param RayTracingTranslucencyMaxPrimaryHitEvents integer
+---@param RayTracingTranslucencyMaxSecondaryHitEvents integer
+---@param RayTracingTranslucencyShadows EReflectedAndRefractedRayTracedShadows
+---@param RayTracingTranslucencyRefraction boolean
+---@param RayTracingTranslucencyUseRayTracedRefraction boolean
+---@param PathTracingMaxBounces integer
+---@param PathTracingSamplesPerPixel integer
+---@param PathTracingMaxPathIntensity number
+---@param PathTracingEnableEmissiveMaterials boolean
+---@param PathTracingEnableReferenceDOF boolean
+---@param PathTracingEnableReferenceAtmosphere boolean
+---@param PathTracingEnableDenoiser boolean
+---@param PathTracingIncludeEmissive boolean
+---@param PathTracingIncludeDiffuse boolean
+---@param PathTracingIncludeIndirectDiffuse boolean
+---@param PathTracingIncludeSpecular boolean
+---@param PathTracingIncludeIndirectSpecular boolean
+---@param PathTracingIncludeVolume boolean
+---@param PathTracingIncludeIndirectVolume boolean
+---@param LPVFadeRange number
+---@param LPVDirectionalOcclusionFadeRange number
+---@param ScreenPercentage number
+---@param UserFlags integer
+---@param WeightedBlendables WeightedBlendables
+---@param PreviewBlendable Object
+---@param Blendables Object[]
+function PostProcessSettings.new(bOverride_TemperatureType, bOverride_WhiteTemp, bOverride_WhiteTint, bOverride_ColorSaturation, bOverride_ColorContrast, bOverride_ColorGamma, bOverride_ColorGain, bOverride_ColorOffset, bOverride_ColorSaturationShadows, bOverride_ColorContrastShadows, bOverride_ColorGammaShadows, bOverride_ColorGainShadows, bOverride_ColorOffsetShadows, bOverride_ColorSaturationMidtones, bOverride_ColorContrastMidtones, bOverride_ColorGammaMidtones, bOverride_ColorGainMidtones, bOverride_ColorOffsetMidtones, bOverride_ColorSaturationHighlights, bOverride_ColorContrastHighlights, bOverride_ColorGammaHighlights, bOverride_ColorGainHighlights, bOverride_ColorOffsetHighlights, bOverride_ColorCorrectionShadowsMax, bOverride_ColorCorrectionHighlightsMin, bOverride_ColorCorrectionHighlightsMax, bOverride_BlueCorrection, bOverride_ExpandGamut, bOverride_ToneCurveAmount, bOverride_FilmSlope, bOverride_FilmToe, bOverride_FilmShoulder, bOverride_FilmBlackClip, bOverride_FilmWhiteClip, bOverride_SceneColorTint, bOverride_SceneFringeIntensity, bOverride_ChromaticAberrationStartOffset, bOverride_bMegaLights, bOverride_AmbientCubemapTint, bOverride_AmbientCubemapIntensity, bOverride_BloomMethod, bOverride_BloomIntensity, bOverride_BloomThreshold, bOverride_Bloom1Tint, bOverride_Bloom1Size, bOverride_Bloom2Size, bOverride_Bloom2Tint, bOverride_Bloom3Tint, bOverride_Bloom3Size, bOverride_Bloom4Tint, bOverride_Bloom4Size, bOverride_Bloom5Tint, bOverride_Bloom5Size, bOverride_Bloom6Tint, bOverride_Bloom6Size, bOverride_BloomSizeScale, bOverride_BloomConvolutionTexture, bOverride_BloomConvolutionScatterDispersion, bOverride_BloomConvolutionSize, bOverride_BloomConvolutionCenterUV, bOverride_BloomConvolutionPreFilter, bOverride_BloomConvolutionPreFilterMin, bOverride_BloomConvolutionPreFilterMax, bOverride_BloomConvolutionPreFilterMult, bOverride_BloomConvolutionBufferScale, bOverride_BloomDirtMaskIntensity, bOverride_BloomDirtMaskTint, bOverride_BloomDirtMask, bOverride_CameraShutterSpeed, bOverride_CameraISO, bOverride_AutoExposureMethod, bOverride_AutoExposureLowPercent, bOverride_AutoExposureHighPercent, bOverride_AutoExposureMinBrightness, bOverride_AutoExposureMaxBrightness, bOverride_AutoExposureCalibrationConstant, bOverride_AutoExposureSpeedUp, bOverride_AutoExposureSpeedDown, bOverride_AutoExposureBias, bOverride_AutoExposureBiasCurve, bOverride_AutoExposureMeterMask, bOverride_AutoExposureApplyPhysicalCameraExposure, bOverride_HistogramLogMin, bOverride_HistogramLogMax, bOverride_LocalExposureMethod, bOverride_LocalExposureContrastScale, bOverride_LocalExposureHighlightContrastScale, bOverride_LocalExposureShadowContrastScale, bOverride_LocalExposureHighlightContrastCurve, bOverride_LocalExposureShadowContrastCurve, bOverride_LocalExposureHighlightThreshold, bOverride_LocalExposureShadowThreshold, bOverride_LocalExposureDetailStrength, bOverride_LocalExposureBlurredLuminanceBlend, bOverride_LocalExposureBlurredLuminanceKernelSizePercent, bOverride_LocalExposureHighlightThresholdStrength, bOverride_LocalExposureShadowThresholdStrength, bOverride_LocalExposureMiddleGreyBias, bOverride_LensFlareIntensity, bOverride_LensFlareTint, bOverride_LensFlareTints, bOverride_LensFlareBokehSize, bOverride_LensFlareBokehShape, bOverride_LensFlareThreshold, bOverride_VignetteIntensity, bOverride_Sharpen, bOverride_GrainIntensity, bOverride_GrainJitter, bOverride_FilmGrainIntensity, bOverride_FilmGrainIntensityShadows, bOverride_FilmGrainIntensityMidtones, bOverride_FilmGrainIntensityHighlights, bOverride_FilmGrainShadowsMax, bOverride_FilmGrainHighlightsMin, bOverride_FilmGrainHighlightsMax, bOverride_FilmGrainTexelSize, bOverride_FilmGrainTexture, bOverride_AmbientOcclusionIntensity, bOverride_AmbientOcclusionStaticFraction, bOverride_AmbientOcclusionRadius, bOverride_AmbientOcclusionFadeDistance, bOverride_AmbientOcclusionFadeRadius, bOverride_AmbientOcclusionDistance, bOverride_AmbientOcclusionRadiusInWS, bOverride_AmbientOcclusionPower, bOverride_AmbientOcclusionBias, bOverride_AmbientOcclusionQuality, bOverride_AmbientOcclusionMipBlend, bOverride_AmbientOcclusionMipScale, bOverride_AmbientOcclusionMipThreshold, bOverride_AmbientOcclusionTemporalBlendWeight, bOverride_RayTracingAO, bOverride_RayTracingAOSamplesPerPixel, bOverride_RayTracingAOIntensity, bOverride_RayTracingAORadius, bOverride_LPVIntensity, bOverride_LPVDirectionalOcclusionIntensity, bOverride_LPVDirectionalOcclusionRadius, bOverride_LPVDiffuseOcclusionExponent, bOverride_LPVSpecularOcclusionExponent, bOverride_LPVDiffuseOcclusionIntensity, bOverride_LPVSpecularOcclusionIntensity, bOverride_LPVSize, bOverride_LPVSecondaryOcclusionIntensity, bOverride_LPVSecondaryBounceIntensity, bOverride_LPVGeometryVolumeBias, bOverride_LPVVplInjectionBias, bOverride_LPVEmissiveInjectionIntensity, bOverride_LPVFadeRange, bOverride_LPVDirectionalOcclusionFadeRange, bOverride_IndirectLightingColor, bOverride_IndirectLightingIntensity, bOverride_ColorGradingIntensity, bOverride_ColorGradingLUT, bOverride_DepthOfFieldFocalDistance, bOverride_DepthOfFieldFstop, bOverride_DepthOfFieldMinFstop, bOverride_DepthOfFieldBladeCount, bOverride_DepthOfFieldSensorWidth, bOverride_DepthOfFieldSqueezeFactor, bOverride_DepthOfFieldDepthBlurRadius, bOverride_DepthOfFieldUseHairDepth, bOverride_DepthOfFieldPetzvalBokeh, bOverride_DepthOfFieldPetzvalBokehFalloff, bOverride_DepthOfFieldPetzvalExclusionBoxExtents, bOverride_DepthOfFieldPetzvalExclusionBoxRadius, bOverride_DepthOfFieldAspectRatioScalar, bOverride_DepthOfFieldMatteBoxFlags, bOverride_DepthOfFieldBarrelRadius, bOverride_DepthOfFieldBarrelLength, bOverride_DepthOfFieldDepthBlurAmount, bOverride_DepthOfFieldFocalRegion, bOverride_DepthOfFieldNearTransitionRegion, bOverride_DepthOfFieldFarTransitionRegion, bOverride_DepthOfFieldScale, bOverride_DepthOfFieldNearBlurSize, bOverride_DepthOfFieldFarBlurSize, bOverride_MobileHQGaussian, bOverride_DepthOfFieldOcclusion, bOverride_DepthOfFieldSkyFocusDistance, bOverride_DepthOfFieldVignetteSize, bOverride_MotionBlurAmount, bOverride_MotionBlurMax, bOverride_MotionBlurTargetFPS, bOverride_MotionBlurPerObjectSize, bOverride_ScreenPercentage, bOverride_ReflectionMethod, bOverride_LumenReflectionQuality, bOverride_ScreenSpaceReflectionIntensity, bOverride_ScreenSpaceReflectionQuality, bOverride_ScreenSpaceReflectionMaxRoughness, bOverride_ScreenSpaceReflectionRoughnessScale, bOverride_UserFlags, bOverride_ReflectionsType, bOverride_RayTracingReflectionsMaxRoughness, bOverride_RayTracingReflectionsMaxBounces, bOverride_RayTracingReflectionsSamplesPerPixel, bOverride_RayTracingReflectionsShadows, bOverride_RayTracingReflectionsTranslucency, bOverride_TranslucencyType, bOverride_RayTracingTranslucencyMaxRoughness, bOverride_RayTracingTranslucencyRefractionRays, bOverride_RayTracingTranslucencySamplesPerPixel, bOverride_RayTracingTranslucencyShadows, bOverride_RayTracingTranslucencyRefraction, bOverride_RayTracingTranslucencyMaxPrimaryHitEvents, bOverride_RayTracingTranslucencyMaxSecondaryHitEvents, bOverride_RayTracingTranslucencyUseRayTracedRefraction, bOverride_DynamicGlobalIlluminationMethod, bOverride_LumenSceneLightingQuality, bOverride_LumenSceneDetail, bOverride_LumenSceneViewDistance, bOverride_LumenSceneLightingUpdateSpeed, bOverride_LumenFinalGatherQuality, bOverride_LumenFinalGatherLightingUpdateSpeed, bOverride_LumenFinalGatherScreenTraces, bOverride_LumenMaxTraceDistance, bOverride_LumenDiffuseColorBoost, bOverride_LumenSkylightLeaking, bOverride_LumenSkylightLeakingTint, bOverride_LumenFullSkylightLeakingDistance, bOverride_LumenRayLightingMode, bOverride_LumenReflectionsScreenTraces, bOverride_LumenFrontLayerTranslucencyReflections, bOverride_LumenMaxRoughnessToTraceReflections, bOverride_LumenMaxReflectionBounces, bOverride_LumenMaxRefractionBounces, bOverride_LumenSurfaceCacheResolution, bOverride_RayTracingGI, bOverride_RayTracingGIMaxBounces, bOverride_RayTracingGISamplesPerPixel, bOverride_PathTracingMaxBounces, bOverride_PathTracingSamplesPerPixel, bOverride_PathTracingMaxPathIntensity, bOverride_PathTracingEnableEmissiveMaterials, bOverride_PathTracingEnableReferenceDOF, bOverride_PathTracingEnableReferenceAtmosphere, bOverride_PathTracingEnableDenoiser, bOverride_PathTracingIncludeEmissive, bOverride_PathTracingIncludeDiffuse, bOverride_PathTracingIncludeIndirectDiffuse, bOverride_PathTracingIncludeSpecular, bOverride_PathTracingIncludeIndirectSpecular, bOverride_PathTracingIncludeVolume, bOverride_PathTracingIncludeIndirectVolume, bMobileHQGaussian, BloomMethod, AutoExposureMethod, DepthOfFieldMethod, TemperatureType, WhiteTemp, WhiteTint, ColorSaturation, ColorContrast, ColorGamma, ColorGain, ColorOffset, ColorSaturationShadows, ColorContrastShadows, ColorGammaShadows, ColorGainShadows, ColorOffsetShadows, ColorSaturationMidtones, ColorContrastMidtones, ColorGammaMidtones, ColorGainMidtones, ColorOffsetMidtones, ColorSaturationHighlights, ColorContrastHighlights, ColorGammaHighlights, ColorGainHighlights, ColorOffsetHighlights, ColorCorrectionHighlightsMin, ColorCorrectionHighlightsMax, ColorCorrectionShadowsMax, BlueCorrection, ExpandGamut, ToneCurveAmount, FilmSlope, FilmToe, FilmShoulder, FilmBlackClip, FilmWhiteClip, SceneColorTint, SceneFringeIntensity, ChromaticAberrationStartOffset, BloomIntensity, BloomThreshold, BloomSizeScale, Bloom1Size, Bloom2Size, Bloom3Size, Bloom4Size, Bloom5Size, Bloom6Size, Bloom1Tint, Bloom2Tint, Bloom3Tint, Bloom4Tint, Bloom5Tint, Bloom6Tint, BloomConvolutionScatterDispersion, BloomConvolutionSize, BloomConvolutionTexture, BloomConvolutionCenterUV, BloomConvolutionPreFilter, BloomConvolutionPreFilterMin, BloomConvolutionPreFilterMax, BloomConvolutionPreFilterMult, BloomConvolutionBufferScale, BloomDirtMask, BloomDirtMaskIntensity, BloomDirtMaskTint, DynamicGlobalIlluminationMethod, IndirectLightingColor, IndirectLightingIntensity, LumenRayLightingMode, LumenSceneLightingQuality, LumenSceneDetail, LumenSceneViewDistance, LumenSceneLightingUpdateSpeed, LumenFinalGatherQuality, LumenFinalGatherLightingUpdateSpeed, LumenFinalGatherScreenTraces, LumenMaxTraceDistance, LumenDiffuseColorBoost, LumenSkylightLeaking, LumenSkylightLeakingTint, LumenFullSkylightLeakingDistance, LumenSurfaceCacheResolution, ReflectionMethod, ReflectionsType, LumenReflectionQuality, LumenReflectionsScreenTraces, LumenFrontLayerTranslucencyReflections, LumenMaxRoughnessToTraceReflections, LumenMaxReflectionBounces, LumenMaxRefractionBounces, ScreenSpaceReflectionIntensity, ScreenSpaceReflectionQuality, ScreenSpaceReflectionMaxRoughness, bMegaLights, AmbientCubemapTint, AmbientCubemapIntensity, AmbientCubemap, CameraShutterSpeed, CameraISO, DepthOfFieldFstop, DepthOfFieldMinFstop, DepthOfFieldBladeCount, AutoExposureBias, AutoExposureBiasBackup, bOverride_AutoExposureBiasBackup, AutoExposureApplyPhysicalCameraExposure, AutoExposureBiasCurve, AutoExposureMeterMask, AutoExposureLowPercent, AutoExposureHighPercent, AutoExposureMinBrightness, AutoExposureMaxBrightness, AutoExposureSpeedUp, AutoExposureSpeedDown, HistogramLogMin, HistogramLogMax, AutoExposureCalibrationConstant, LocalExposureMethod, LocalExposureContrastScale, LocalExposureHighlightContrastScale, LocalExposureShadowContrastScale, LocalExposureHighlightContrastCurve, LocalExposureShadowContrastCurve, LocalExposureHighlightThreshold, LocalExposureShadowThreshold, LocalExposureDetailStrength, LocalExposureBlurredLuminanceBlend, LocalExposureBlurredLuminanceKernelSizePercent, LocalExposureHighlightThresholdStrength, LocalExposureShadowThresholdStrength, LocalExposureMiddleGreyBias, LensFlareIntensity, LensFlareTint, LensFlareBokehSize, LensFlareThreshold, LensFlareBokehShape, LensFlareTints, VignetteIntensity, Sharpen, GrainJitter, GrainIntensity, FilmGrainIntensity, FilmGrainIntensityShadows, FilmGrainIntensityMidtones, FilmGrainIntensityHighlights, FilmGrainShadowsMax, FilmGrainHighlightsMin, FilmGrainHighlightsMax, FilmGrainTexelSize, FilmGrainTexture, AmbientOcclusionIntensity, AmbientOcclusionStaticFraction, AmbientOcclusionRadius, AmbientOcclusionRadiusInWS, AmbientOcclusionFadeDistance, AmbientOcclusionFadeRadius, AmbientOcclusionDistance, AmbientOcclusionPower, AmbientOcclusionBias, AmbientOcclusionQuality, AmbientOcclusionMipBlend, AmbientOcclusionMipScale, AmbientOcclusionMipThreshold, AmbientOcclusionTemporalBlendWeight, RayTracingAO, RayTracingAOSamplesPerPixel, RayTracingAOIntensity, RayTracingAORadius, ColorGradingIntensity, ColorGradingLUT, DepthOfFieldSensorWidth, DepthOfFieldSqueezeFactor, DepthOfFieldFocalDistance, DepthOfFieldDepthBlurAmount, DepthOfFieldDepthBlurRadius, DepthOfFieldUseHairDepth, DepthOfFieldPetzvalBokeh, DepthOfFieldPetzvalBokehFalloff, DepthOfFieldPetzvalExclusionBoxExtents, DepthOfFieldPetzvalExclusionBoxRadius, DepthOfFieldAspectRatioScalar, DepthOfFieldBarrelRadius, DepthOfFieldBarrelLength, DepthOfFieldMatteBoxFlags, DepthOfFieldFocalRegion, DepthOfFieldNearTransitionRegion, DepthOfFieldFarTransitionRegion, DepthOfFieldScale, DepthOfFieldNearBlurSize, DepthOfFieldFarBlurSize, DepthOfFieldOcclusion, DepthOfFieldSkyFocusDistance, DepthOfFieldVignetteSize, MotionBlurAmount, MotionBlurMax, MotionBlurTargetFPS, MotionBlurPerObjectSize, LPVIntensity, LPVVplInjectionBias, LPVSize, LPVSecondaryOcclusionIntensity, LPVSecondaryBounceIntensity, LPVGeometryVolumeBias, LPVEmissiveInjectionIntensity, LPVDirectionalOcclusionIntensity, LPVDirectionalOcclusionRadius, LPVDiffuseOcclusionExponent, LPVSpecularOcclusionExponent, LPVDiffuseOcclusionIntensity, LPVSpecularOcclusionIntensity, TranslucencyType, RayTracingTranslucencyMaxRoughness, RayTracingTranslucencyRefractionRays, RayTracingTranslucencySamplesPerPixel, RayTracingTranslucencyMaxPrimaryHitEvents, RayTracingTranslucencyMaxSecondaryHitEvents, RayTracingTranslucencyShadows, RayTracingTranslucencyRefraction, RayTracingTranslucencyUseRayTracedRefraction, PathTracingMaxBounces, PathTracingSamplesPerPixel, PathTracingMaxPathIntensity, PathTracingEnableEmissiveMaterials, PathTracingEnableReferenceDOF, PathTracingEnableReferenceAtmosphere, PathTracingEnableDenoiser, PathTracingIncludeEmissive, PathTracingIncludeDiffuse, PathTracingIncludeIndirectDiffuse, PathTracingIncludeSpecular, PathTracingIncludeIndirectSpecular, PathTracingIncludeVolume, PathTracingIncludeIndirectVolume, LPVFadeRange, LPVDirectionalOcclusionFadeRange, ScreenPercentage, UserFlags, WeightedBlendables, PreviewBlendable, Blendables)
+    local self = {}
+    self.bOverride_TemperatureType = bOverride_TemperatureType
+    self.bOverride_WhiteTemp = bOverride_WhiteTemp
+    self.bOverride_WhiteTint = bOverride_WhiteTint
+    self.bOverride_ColorSaturation = bOverride_ColorSaturation
+    self.bOverride_ColorContrast = bOverride_ColorContrast
+    self.bOverride_ColorGamma = bOverride_ColorGamma
+    self.bOverride_ColorGain = bOverride_ColorGain
+    self.bOverride_ColorOffset = bOverride_ColorOffset
+    self.bOverride_ColorSaturationShadows = bOverride_ColorSaturationShadows
+    self.bOverride_ColorContrastShadows = bOverride_ColorContrastShadows
+    self.bOverride_ColorGammaShadows = bOverride_ColorGammaShadows
+    self.bOverride_ColorGainShadows = bOverride_ColorGainShadows
+    self.bOverride_ColorOffsetShadows = bOverride_ColorOffsetShadows
+    self.bOverride_ColorSaturationMidtones = bOverride_ColorSaturationMidtones
+    self.bOverride_ColorContrastMidtones = bOverride_ColorContrastMidtones
+    self.bOverride_ColorGammaMidtones = bOverride_ColorGammaMidtones
+    self.bOverride_ColorGainMidtones = bOverride_ColorGainMidtones
+    self.bOverride_ColorOffsetMidtones = bOverride_ColorOffsetMidtones
+    self.bOverride_ColorSaturationHighlights = bOverride_ColorSaturationHighlights
+    self.bOverride_ColorContrastHighlights = bOverride_ColorContrastHighlights
+    self.bOverride_ColorGammaHighlights = bOverride_ColorGammaHighlights
+    self.bOverride_ColorGainHighlights = bOverride_ColorGainHighlights
+    self.bOverride_ColorOffsetHighlights = bOverride_ColorOffsetHighlights
+    self.bOverride_ColorCorrectionShadowsMax = bOverride_ColorCorrectionShadowsMax
+    self.bOverride_ColorCorrectionHighlightsMin = bOverride_ColorCorrectionHighlightsMin
+    self.bOverride_ColorCorrectionHighlightsMax = bOverride_ColorCorrectionHighlightsMax
+    self.bOverride_BlueCorrection = bOverride_BlueCorrection
+    self.bOverride_ExpandGamut = bOverride_ExpandGamut
+    self.bOverride_ToneCurveAmount = bOverride_ToneCurveAmount
+    self.bOverride_FilmSlope = bOverride_FilmSlope
+    self.bOverride_FilmToe = bOverride_FilmToe
+    self.bOverride_FilmShoulder = bOverride_FilmShoulder
+    self.bOverride_FilmBlackClip = bOverride_FilmBlackClip
+    self.bOverride_FilmWhiteClip = bOverride_FilmWhiteClip
+    self.bOverride_SceneColorTint = bOverride_SceneColorTint
+    self.bOverride_SceneFringeIntensity = bOverride_SceneFringeIntensity
+    self.bOverride_ChromaticAberrationStartOffset = bOverride_ChromaticAberrationStartOffset
+    self.bOverride_bMegaLights = bOverride_bMegaLights
+    self.bOverride_AmbientCubemapTint = bOverride_AmbientCubemapTint
+    self.bOverride_AmbientCubemapIntensity = bOverride_AmbientCubemapIntensity
+    self.bOverride_BloomMethod = bOverride_BloomMethod
+    self.bOverride_BloomIntensity = bOverride_BloomIntensity
+    self.bOverride_BloomThreshold = bOverride_BloomThreshold
+    self.bOverride_Bloom1Tint = bOverride_Bloom1Tint
+    self.bOverride_Bloom1Size = bOverride_Bloom1Size
+    self.bOverride_Bloom2Size = bOverride_Bloom2Size
+    self.bOverride_Bloom2Tint = bOverride_Bloom2Tint
+    self.bOverride_Bloom3Tint = bOverride_Bloom3Tint
+    self.bOverride_Bloom3Size = bOverride_Bloom3Size
+    self.bOverride_Bloom4Tint = bOverride_Bloom4Tint
+    self.bOverride_Bloom4Size = bOverride_Bloom4Size
+    self.bOverride_Bloom5Tint = bOverride_Bloom5Tint
+    self.bOverride_Bloom5Size = bOverride_Bloom5Size
+    self.bOverride_Bloom6Tint = bOverride_Bloom6Tint
+    self.bOverride_Bloom6Size = bOverride_Bloom6Size
+    self.bOverride_BloomSizeScale = bOverride_BloomSizeScale
+    self.bOverride_BloomConvolutionTexture = bOverride_BloomConvolutionTexture
+    self.bOverride_BloomConvolutionScatterDispersion = bOverride_BloomConvolutionScatterDispersion
+    self.bOverride_BloomConvolutionSize = bOverride_BloomConvolutionSize
+    self.bOverride_BloomConvolutionCenterUV = bOverride_BloomConvolutionCenterUV
+    self.bOverride_BloomConvolutionPreFilter = bOverride_BloomConvolutionPreFilter
+    self.bOverride_BloomConvolutionPreFilterMin = bOverride_BloomConvolutionPreFilterMin
+    self.bOverride_BloomConvolutionPreFilterMax = bOverride_BloomConvolutionPreFilterMax
+    self.bOverride_BloomConvolutionPreFilterMult = bOverride_BloomConvolutionPreFilterMult
+    self.bOverride_BloomConvolutionBufferScale = bOverride_BloomConvolutionBufferScale
+    self.bOverride_BloomDirtMaskIntensity = bOverride_BloomDirtMaskIntensity
+    self.bOverride_BloomDirtMaskTint = bOverride_BloomDirtMaskTint
+    self.bOverride_BloomDirtMask = bOverride_BloomDirtMask
+    self.bOverride_CameraShutterSpeed = bOverride_CameraShutterSpeed
+    self.bOverride_CameraISO = bOverride_CameraISO
+    self.bOverride_AutoExposureMethod = bOverride_AutoExposureMethod
+    self.bOverride_AutoExposureLowPercent = bOverride_AutoExposureLowPercent
+    self.bOverride_AutoExposureHighPercent = bOverride_AutoExposureHighPercent
+    self.bOverride_AutoExposureMinBrightness = bOverride_AutoExposureMinBrightness
+    self.bOverride_AutoExposureMaxBrightness = bOverride_AutoExposureMaxBrightness
+    self.bOverride_AutoExposureCalibrationConstant = bOverride_AutoExposureCalibrationConstant
+    self.bOverride_AutoExposureSpeedUp = bOverride_AutoExposureSpeedUp
+    self.bOverride_AutoExposureSpeedDown = bOverride_AutoExposureSpeedDown
+    self.bOverride_AutoExposureBias = bOverride_AutoExposureBias
+    self.bOverride_AutoExposureBiasCurve = bOverride_AutoExposureBiasCurve
+    self.bOverride_AutoExposureMeterMask = bOverride_AutoExposureMeterMask
+    self.bOverride_AutoExposureApplyPhysicalCameraExposure = bOverride_AutoExposureApplyPhysicalCameraExposure
+    self.bOverride_HistogramLogMin = bOverride_HistogramLogMin
+    self.bOverride_HistogramLogMax = bOverride_HistogramLogMax
+    self.bOverride_LocalExposureMethod = bOverride_LocalExposureMethod
+    self.bOverride_LocalExposureContrastScale = bOverride_LocalExposureContrastScale
+    self.bOverride_LocalExposureHighlightContrastScale = bOverride_LocalExposureHighlightContrastScale
+    self.bOverride_LocalExposureShadowContrastScale = bOverride_LocalExposureShadowContrastScale
+    self.bOverride_LocalExposureHighlightContrastCurve = bOverride_LocalExposureHighlightContrastCurve
+    self.bOverride_LocalExposureShadowContrastCurve = bOverride_LocalExposureShadowContrastCurve
+    self.bOverride_LocalExposureHighlightThreshold = bOverride_LocalExposureHighlightThreshold
+    self.bOverride_LocalExposureShadowThreshold = bOverride_LocalExposureShadowThreshold
+    self.bOverride_LocalExposureDetailStrength = bOverride_LocalExposureDetailStrength
+    self.bOverride_LocalExposureBlurredLuminanceBlend = bOverride_LocalExposureBlurredLuminanceBlend
+    self.bOverride_LocalExposureBlurredLuminanceKernelSizePercent = bOverride_LocalExposureBlurredLuminanceKernelSizePercent
+    self.bOverride_LocalExposureHighlightThresholdStrength = bOverride_LocalExposureHighlightThresholdStrength
+    self.bOverride_LocalExposureShadowThresholdStrength = bOverride_LocalExposureShadowThresholdStrength
+    self.bOverride_LocalExposureMiddleGreyBias = bOverride_LocalExposureMiddleGreyBias
+    self.bOverride_LensFlareIntensity = bOverride_LensFlareIntensity
+    self.bOverride_LensFlareTint = bOverride_LensFlareTint
+    self.bOverride_LensFlareTints = bOverride_LensFlareTints
+    self.bOverride_LensFlareBokehSize = bOverride_LensFlareBokehSize
+    self.bOverride_LensFlareBokehShape = bOverride_LensFlareBokehShape
+    self.bOverride_LensFlareThreshold = bOverride_LensFlareThreshold
+    self.bOverride_VignetteIntensity = bOverride_VignetteIntensity
+    self.bOverride_Sharpen = bOverride_Sharpen
+    self.bOverride_GrainIntensity = bOverride_GrainIntensity
+    self.bOverride_GrainJitter = bOverride_GrainJitter
+    self.bOverride_FilmGrainIntensity = bOverride_FilmGrainIntensity
+    self.bOverride_FilmGrainIntensityShadows = bOverride_FilmGrainIntensityShadows
+    self.bOverride_FilmGrainIntensityMidtones = bOverride_FilmGrainIntensityMidtones
+    self.bOverride_FilmGrainIntensityHighlights = bOverride_FilmGrainIntensityHighlights
+    self.bOverride_FilmGrainShadowsMax = bOverride_FilmGrainShadowsMax
+    self.bOverride_FilmGrainHighlightsMin = bOverride_FilmGrainHighlightsMin
+    self.bOverride_FilmGrainHighlightsMax = bOverride_FilmGrainHighlightsMax
+    self.bOverride_FilmGrainTexelSize = bOverride_FilmGrainTexelSize
+    self.bOverride_FilmGrainTexture = bOverride_FilmGrainTexture
+    self.bOverride_AmbientOcclusionIntensity = bOverride_AmbientOcclusionIntensity
+    self.bOverride_AmbientOcclusionStaticFraction = bOverride_AmbientOcclusionStaticFraction
+    self.bOverride_AmbientOcclusionRadius = bOverride_AmbientOcclusionRadius
+    self.bOverride_AmbientOcclusionFadeDistance = bOverride_AmbientOcclusionFadeDistance
+    self.bOverride_AmbientOcclusionFadeRadius = bOverride_AmbientOcclusionFadeRadius
+    self.bOverride_AmbientOcclusionDistance = bOverride_AmbientOcclusionDistance
+    self.bOverride_AmbientOcclusionRadiusInWS = bOverride_AmbientOcclusionRadiusInWS
+    self.bOverride_AmbientOcclusionPower = bOverride_AmbientOcclusionPower
+    self.bOverride_AmbientOcclusionBias = bOverride_AmbientOcclusionBias
+    self.bOverride_AmbientOcclusionQuality = bOverride_AmbientOcclusionQuality
+    self.bOverride_AmbientOcclusionMipBlend = bOverride_AmbientOcclusionMipBlend
+    self.bOverride_AmbientOcclusionMipScale = bOverride_AmbientOcclusionMipScale
+    self.bOverride_AmbientOcclusionMipThreshold = bOverride_AmbientOcclusionMipThreshold
+    self.bOverride_AmbientOcclusionTemporalBlendWeight = bOverride_AmbientOcclusionTemporalBlendWeight
+    self.bOverride_RayTracingAO = bOverride_RayTracingAO
+    self.bOverride_RayTracingAOSamplesPerPixel = bOverride_RayTracingAOSamplesPerPixel
+    self.bOverride_RayTracingAOIntensity = bOverride_RayTracingAOIntensity
+    self.bOverride_RayTracingAORadius = bOverride_RayTracingAORadius
+    self.bOverride_LPVIntensity = bOverride_LPVIntensity
+    self.bOverride_LPVDirectionalOcclusionIntensity = bOverride_LPVDirectionalOcclusionIntensity
+    self.bOverride_LPVDirectionalOcclusionRadius = bOverride_LPVDirectionalOcclusionRadius
+    self.bOverride_LPVDiffuseOcclusionExponent = bOverride_LPVDiffuseOcclusionExponent
+    self.bOverride_LPVSpecularOcclusionExponent = bOverride_LPVSpecularOcclusionExponent
+    self.bOverride_LPVDiffuseOcclusionIntensity = bOverride_LPVDiffuseOcclusionIntensity
+    self.bOverride_LPVSpecularOcclusionIntensity = bOverride_LPVSpecularOcclusionIntensity
+    self.bOverride_LPVSize = bOverride_LPVSize
+    self.bOverride_LPVSecondaryOcclusionIntensity = bOverride_LPVSecondaryOcclusionIntensity
+    self.bOverride_LPVSecondaryBounceIntensity = bOverride_LPVSecondaryBounceIntensity
+    self.bOverride_LPVGeometryVolumeBias = bOverride_LPVGeometryVolumeBias
+    self.bOverride_LPVVplInjectionBias = bOverride_LPVVplInjectionBias
+    self.bOverride_LPVEmissiveInjectionIntensity = bOverride_LPVEmissiveInjectionIntensity
+    self.bOverride_LPVFadeRange = bOverride_LPVFadeRange
+    self.bOverride_LPVDirectionalOcclusionFadeRange = bOverride_LPVDirectionalOcclusionFadeRange
+    self.bOverride_IndirectLightingColor = bOverride_IndirectLightingColor
+    self.bOverride_IndirectLightingIntensity = bOverride_IndirectLightingIntensity
+    self.bOverride_ColorGradingIntensity = bOverride_ColorGradingIntensity
+    self.bOverride_ColorGradingLUT = bOverride_ColorGradingLUT
+    self.bOverride_DepthOfFieldFocalDistance = bOverride_DepthOfFieldFocalDistance
+    self.bOverride_DepthOfFieldFstop = bOverride_DepthOfFieldFstop
+    self.bOverride_DepthOfFieldMinFstop = bOverride_DepthOfFieldMinFstop
+    self.bOverride_DepthOfFieldBladeCount = bOverride_DepthOfFieldBladeCount
+    self.bOverride_DepthOfFieldSensorWidth = bOverride_DepthOfFieldSensorWidth
+    self.bOverride_DepthOfFieldSqueezeFactor = bOverride_DepthOfFieldSqueezeFactor
+    self.bOverride_DepthOfFieldDepthBlurRadius = bOverride_DepthOfFieldDepthBlurRadius
+    self.bOverride_DepthOfFieldUseHairDepth = bOverride_DepthOfFieldUseHairDepth
+    self.bOverride_DepthOfFieldPetzvalBokeh = bOverride_DepthOfFieldPetzvalBokeh
+    self.bOverride_DepthOfFieldPetzvalBokehFalloff = bOverride_DepthOfFieldPetzvalBokehFalloff
+    self.bOverride_DepthOfFieldPetzvalExclusionBoxExtents = bOverride_DepthOfFieldPetzvalExclusionBoxExtents
+    self.bOverride_DepthOfFieldPetzvalExclusionBoxRadius = bOverride_DepthOfFieldPetzvalExclusionBoxRadius
+    self.bOverride_DepthOfFieldAspectRatioScalar = bOverride_DepthOfFieldAspectRatioScalar
+    self.bOverride_DepthOfFieldMatteBoxFlags = bOverride_DepthOfFieldMatteBoxFlags
+    self.bOverride_DepthOfFieldBarrelRadius = bOverride_DepthOfFieldBarrelRadius
+    self.bOverride_DepthOfFieldBarrelLength = bOverride_DepthOfFieldBarrelLength
+    self.bOverride_DepthOfFieldDepthBlurAmount = bOverride_DepthOfFieldDepthBlurAmount
+    self.bOverride_DepthOfFieldFocalRegion = bOverride_DepthOfFieldFocalRegion
+    self.bOverride_DepthOfFieldNearTransitionRegion = bOverride_DepthOfFieldNearTransitionRegion
+    self.bOverride_DepthOfFieldFarTransitionRegion = bOverride_DepthOfFieldFarTransitionRegion
+    self.bOverride_DepthOfFieldScale = bOverride_DepthOfFieldScale
+    self.bOverride_DepthOfFieldNearBlurSize = bOverride_DepthOfFieldNearBlurSize
+    self.bOverride_DepthOfFieldFarBlurSize = bOverride_DepthOfFieldFarBlurSize
+    self.bOverride_MobileHQGaussian = bOverride_MobileHQGaussian
+    self.bOverride_DepthOfFieldOcclusion = bOverride_DepthOfFieldOcclusion
+    self.bOverride_DepthOfFieldSkyFocusDistance = bOverride_DepthOfFieldSkyFocusDistance
+    self.bOverride_DepthOfFieldVignetteSize = bOverride_DepthOfFieldVignetteSize
+    self.bOverride_MotionBlurAmount = bOverride_MotionBlurAmount
+    self.bOverride_MotionBlurMax = bOverride_MotionBlurMax
+    self.bOverride_MotionBlurTargetFPS = bOverride_MotionBlurTargetFPS
+    self.bOverride_MotionBlurPerObjectSize = bOverride_MotionBlurPerObjectSize
+    self.bOverride_ScreenPercentage = bOverride_ScreenPercentage
+    self.bOverride_ReflectionMethod = bOverride_ReflectionMethod
+    self.bOverride_LumenReflectionQuality = bOverride_LumenReflectionQuality
+    self.bOverride_ScreenSpaceReflectionIntensity = bOverride_ScreenSpaceReflectionIntensity
+    self.bOverride_ScreenSpaceReflectionQuality = bOverride_ScreenSpaceReflectionQuality
+    self.bOverride_ScreenSpaceReflectionMaxRoughness = bOverride_ScreenSpaceReflectionMaxRoughness
+    self.bOverride_ScreenSpaceReflectionRoughnessScale = bOverride_ScreenSpaceReflectionRoughnessScale
+    self.bOverride_UserFlags = bOverride_UserFlags
+    self.bOverride_ReflectionsType = bOverride_ReflectionsType
+    self.bOverride_RayTracingReflectionsMaxRoughness = bOverride_RayTracingReflectionsMaxRoughness
+    self.bOverride_RayTracingReflectionsMaxBounces = bOverride_RayTracingReflectionsMaxBounces
+    self.bOverride_RayTracingReflectionsSamplesPerPixel = bOverride_RayTracingReflectionsSamplesPerPixel
+    self.bOverride_RayTracingReflectionsShadows = bOverride_RayTracingReflectionsShadows
+    self.bOverride_RayTracingReflectionsTranslucency = bOverride_RayTracingReflectionsTranslucency
+    self.bOverride_TranslucencyType = bOverride_TranslucencyType
+    self.bOverride_RayTracingTranslucencyMaxRoughness = bOverride_RayTracingTranslucencyMaxRoughness
+    self.bOverride_RayTracingTranslucencyRefractionRays = bOverride_RayTracingTranslucencyRefractionRays
+    self.bOverride_RayTracingTranslucencySamplesPerPixel = bOverride_RayTracingTranslucencySamplesPerPixel
+    self.bOverride_RayTracingTranslucencyShadows = bOverride_RayTracingTranslucencyShadows
+    self.bOverride_RayTracingTranslucencyRefraction = bOverride_RayTracingTranslucencyRefraction
+    self.bOverride_RayTracingTranslucencyMaxPrimaryHitEvents = bOverride_RayTracingTranslucencyMaxPrimaryHitEvents
+    self.bOverride_RayTracingTranslucencyMaxSecondaryHitEvents = bOverride_RayTracingTranslucencyMaxSecondaryHitEvents
+    self.bOverride_RayTracingTranslucencyUseRayTracedRefraction = bOverride_RayTracingTranslucencyUseRayTracedRefraction
+    self.bOverride_DynamicGlobalIlluminationMethod = bOverride_DynamicGlobalIlluminationMethod
+    self.bOverride_LumenSceneLightingQuality = bOverride_LumenSceneLightingQuality
+    self.bOverride_LumenSceneDetail = bOverride_LumenSceneDetail
+    self.bOverride_LumenSceneViewDistance = bOverride_LumenSceneViewDistance
+    self.bOverride_LumenSceneLightingUpdateSpeed = bOverride_LumenSceneLightingUpdateSpeed
+    self.bOverride_LumenFinalGatherQuality = bOverride_LumenFinalGatherQuality
+    self.bOverride_LumenFinalGatherLightingUpdateSpeed = bOverride_LumenFinalGatherLightingUpdateSpeed
+    self.bOverride_LumenFinalGatherScreenTraces = bOverride_LumenFinalGatherScreenTraces
+    self.bOverride_LumenMaxTraceDistance = bOverride_LumenMaxTraceDistance
+    self.bOverride_LumenDiffuseColorBoost = bOverride_LumenDiffuseColorBoost
+    self.bOverride_LumenSkylightLeaking = bOverride_LumenSkylightLeaking
+    self.bOverride_LumenSkylightLeakingTint = bOverride_LumenSkylightLeakingTint
+    self.bOverride_LumenFullSkylightLeakingDistance = bOverride_LumenFullSkylightLeakingDistance
+    self.bOverride_LumenRayLightingMode = bOverride_LumenRayLightingMode
+    self.bOverride_LumenReflectionsScreenTraces = bOverride_LumenReflectionsScreenTraces
+    self.bOverride_LumenFrontLayerTranslucencyReflections = bOverride_LumenFrontLayerTranslucencyReflections
+    self.bOverride_LumenMaxRoughnessToTraceReflections = bOverride_LumenMaxRoughnessToTraceReflections
+    self.bOverride_LumenMaxReflectionBounces = bOverride_LumenMaxReflectionBounces
+    self.bOverride_LumenMaxRefractionBounces = bOverride_LumenMaxRefractionBounces
+    self.bOverride_LumenSurfaceCacheResolution = bOverride_LumenSurfaceCacheResolution
+    self.bOverride_RayTracingGI = bOverride_RayTracingGI
+    self.bOverride_RayTracingGIMaxBounces = bOverride_RayTracingGIMaxBounces
+    self.bOverride_RayTracingGISamplesPerPixel = bOverride_RayTracingGISamplesPerPixel
+    self.bOverride_PathTracingMaxBounces = bOverride_PathTracingMaxBounces
+    self.bOverride_PathTracingSamplesPerPixel = bOverride_PathTracingSamplesPerPixel
+    self.bOverride_PathTracingMaxPathIntensity = bOverride_PathTracingMaxPathIntensity
+    self.bOverride_PathTracingEnableEmissiveMaterials = bOverride_PathTracingEnableEmissiveMaterials
+    self.bOverride_PathTracingEnableReferenceDOF = bOverride_PathTracingEnableReferenceDOF
+    self.bOverride_PathTracingEnableReferenceAtmosphere = bOverride_PathTracingEnableReferenceAtmosphere
+    self.bOverride_PathTracingEnableDenoiser = bOverride_PathTracingEnableDenoiser
+    self.bOverride_PathTracingIncludeEmissive = bOverride_PathTracingIncludeEmissive
+    self.bOverride_PathTracingIncludeDiffuse = bOverride_PathTracingIncludeDiffuse
+    self.bOverride_PathTracingIncludeIndirectDiffuse = bOverride_PathTracingIncludeIndirectDiffuse
+    self.bOverride_PathTracingIncludeSpecular = bOverride_PathTracingIncludeSpecular
+    self.bOverride_PathTracingIncludeIndirectSpecular = bOverride_PathTracingIncludeIndirectSpecular
+    self.bOverride_PathTracingIncludeVolume = bOverride_PathTracingIncludeVolume
+    self.bOverride_PathTracingIncludeIndirectVolume = bOverride_PathTracingIncludeIndirectVolume
+    self.bMobileHQGaussian = bMobileHQGaussian
+    self.BloomMethod = BloomMethod
+    self.AutoExposureMethod = AutoExposureMethod
+    self.DepthOfFieldMethod = DepthOfFieldMethod
+    self.TemperatureType = TemperatureType
+    self.WhiteTemp = WhiteTemp
+    self.WhiteTint = WhiteTint
+    self.ColorSaturation = ColorSaturation
+    self.ColorContrast = ColorContrast
+    self.ColorGamma = ColorGamma
+    self.ColorGain = ColorGain
+    self.ColorOffset = ColorOffset
+    self.ColorSaturationShadows = ColorSaturationShadows
+    self.ColorContrastShadows = ColorContrastShadows
+    self.ColorGammaShadows = ColorGammaShadows
+    self.ColorGainShadows = ColorGainShadows
+    self.ColorOffsetShadows = ColorOffsetShadows
+    self.ColorSaturationMidtones = ColorSaturationMidtones
+    self.ColorContrastMidtones = ColorContrastMidtones
+    self.ColorGammaMidtones = ColorGammaMidtones
+    self.ColorGainMidtones = ColorGainMidtones
+    self.ColorOffsetMidtones = ColorOffsetMidtones
+    self.ColorSaturationHighlights = ColorSaturationHighlights
+    self.ColorContrastHighlights = ColorContrastHighlights
+    self.ColorGammaHighlights = ColorGammaHighlights
+    self.ColorGainHighlights = ColorGainHighlights
+    self.ColorOffsetHighlights = ColorOffsetHighlights
+    self.ColorCorrectionHighlightsMin = ColorCorrectionHighlightsMin
+    self.ColorCorrectionHighlightsMax = ColorCorrectionHighlightsMax
+    self.ColorCorrectionShadowsMax = ColorCorrectionShadowsMax
+    self.BlueCorrection = BlueCorrection
+    self.ExpandGamut = ExpandGamut
+    self.ToneCurveAmount = ToneCurveAmount
+    self.FilmSlope = FilmSlope
+    self.FilmToe = FilmToe
+    self.FilmShoulder = FilmShoulder
+    self.FilmBlackClip = FilmBlackClip
+    self.FilmWhiteClip = FilmWhiteClip
+    self.SceneColorTint = SceneColorTint
+    self.SceneFringeIntensity = SceneFringeIntensity
+    self.ChromaticAberrationStartOffset = ChromaticAberrationStartOffset
+    self.BloomIntensity = BloomIntensity
+    self.BloomThreshold = BloomThreshold
+    self.BloomSizeScale = BloomSizeScale
+    self.Bloom1Size = Bloom1Size
+    self.Bloom2Size = Bloom2Size
+    self.Bloom3Size = Bloom3Size
+    self.Bloom4Size = Bloom4Size
+    self.Bloom5Size = Bloom5Size
+    self.Bloom6Size = Bloom6Size
+    self.Bloom1Tint = Bloom1Tint
+    self.Bloom2Tint = Bloom2Tint
+    self.Bloom3Tint = Bloom3Tint
+    self.Bloom4Tint = Bloom4Tint
+    self.Bloom5Tint = Bloom5Tint
+    self.Bloom6Tint = Bloom6Tint
+    self.BloomConvolutionScatterDispersion = BloomConvolutionScatterDispersion
+    self.BloomConvolutionSize = BloomConvolutionSize
+    self.BloomConvolutionTexture = BloomConvolutionTexture
+    self.BloomConvolutionCenterUV = BloomConvolutionCenterUV
+    self.BloomConvolutionPreFilter = BloomConvolutionPreFilter
+    self.BloomConvolutionPreFilterMin = BloomConvolutionPreFilterMin
+    self.BloomConvolutionPreFilterMax = BloomConvolutionPreFilterMax
+    self.BloomConvolutionPreFilterMult = BloomConvolutionPreFilterMult
+    self.BloomConvolutionBufferScale = BloomConvolutionBufferScale
+    self.BloomDirtMask = BloomDirtMask
+    self.BloomDirtMaskIntensity = BloomDirtMaskIntensity
+    self.BloomDirtMaskTint = BloomDirtMaskTint
+    self.DynamicGlobalIlluminationMethod = DynamicGlobalIlluminationMethod
+    self.IndirectLightingColor = IndirectLightingColor
+    self.IndirectLightingIntensity = IndirectLightingIntensity
+    self.LumenRayLightingMode = LumenRayLightingMode
+    self.LumenSceneLightingQuality = LumenSceneLightingQuality
+    self.LumenSceneDetail = LumenSceneDetail
+    self.LumenSceneViewDistance = LumenSceneViewDistance
+    self.LumenSceneLightingUpdateSpeed = LumenSceneLightingUpdateSpeed
+    self.LumenFinalGatherQuality = LumenFinalGatherQuality
+    self.LumenFinalGatherLightingUpdateSpeed = LumenFinalGatherLightingUpdateSpeed
+    self.LumenFinalGatherScreenTraces = LumenFinalGatherScreenTraces
+    self.LumenMaxTraceDistance = LumenMaxTraceDistance
+    self.LumenDiffuseColorBoost = LumenDiffuseColorBoost
+    self.LumenSkylightLeaking = LumenSkylightLeaking
+    self.LumenSkylightLeakingTint = LumenSkylightLeakingTint
+    self.LumenFullSkylightLeakingDistance = LumenFullSkylightLeakingDistance
+    self.LumenSurfaceCacheResolution = LumenSurfaceCacheResolution
+    self.ReflectionMethod = ReflectionMethod
+    self.ReflectionsType = ReflectionsType
+    self.LumenReflectionQuality = LumenReflectionQuality
+    self.LumenReflectionsScreenTraces = LumenReflectionsScreenTraces
+    self.LumenFrontLayerTranslucencyReflections = LumenFrontLayerTranslucencyReflections
+    self.LumenMaxRoughnessToTraceReflections = LumenMaxRoughnessToTraceReflections
+    self.LumenMaxReflectionBounces = LumenMaxReflectionBounces
+    self.LumenMaxRefractionBounces = LumenMaxRefractionBounces
+    self.ScreenSpaceReflectionIntensity = ScreenSpaceReflectionIntensity
+    self.ScreenSpaceReflectionQuality = ScreenSpaceReflectionQuality
+    self.ScreenSpaceReflectionMaxRoughness = ScreenSpaceReflectionMaxRoughness
+    self.bMegaLights = bMegaLights
+    self.AmbientCubemapTint = AmbientCubemapTint
+    self.AmbientCubemapIntensity = AmbientCubemapIntensity
+    self.AmbientCubemap = AmbientCubemap
+    self.CameraShutterSpeed = CameraShutterSpeed
+    self.CameraISO = CameraISO
+    self.DepthOfFieldFstop = DepthOfFieldFstop
+    self.DepthOfFieldMinFstop = DepthOfFieldMinFstop
+    self.DepthOfFieldBladeCount = DepthOfFieldBladeCount
+    self.AutoExposureBias = AutoExposureBias
+    self.AutoExposureBiasBackup = AutoExposureBiasBackup
+    self.bOverride_AutoExposureBiasBackup = bOverride_AutoExposureBiasBackup
+    self.AutoExposureApplyPhysicalCameraExposure = AutoExposureApplyPhysicalCameraExposure
+    self.AutoExposureBiasCurve = AutoExposureBiasCurve
+    self.AutoExposureMeterMask = AutoExposureMeterMask
+    self.AutoExposureLowPercent = AutoExposureLowPercent
+    self.AutoExposureHighPercent = AutoExposureHighPercent
+    self.AutoExposureMinBrightness = AutoExposureMinBrightness
+    self.AutoExposureMaxBrightness = AutoExposureMaxBrightness
+    self.AutoExposureSpeedUp = AutoExposureSpeedUp
+    self.AutoExposureSpeedDown = AutoExposureSpeedDown
+    self.HistogramLogMin = HistogramLogMin
+    self.HistogramLogMax = HistogramLogMax
+    self.AutoExposureCalibrationConstant = AutoExposureCalibrationConstant
+    self.LocalExposureMethod = LocalExposureMethod
+    self.LocalExposureContrastScale = LocalExposureContrastScale
+    self.LocalExposureHighlightContrastScale = LocalExposureHighlightContrastScale
+    self.LocalExposureShadowContrastScale = LocalExposureShadowContrastScale
+    self.LocalExposureHighlightContrastCurve = LocalExposureHighlightContrastCurve
+    self.LocalExposureShadowContrastCurve = LocalExposureShadowContrastCurve
+    self.LocalExposureHighlightThreshold = LocalExposureHighlightThreshold
+    self.LocalExposureShadowThreshold = LocalExposureShadowThreshold
+    self.LocalExposureDetailStrength = LocalExposureDetailStrength
+    self.LocalExposureBlurredLuminanceBlend = LocalExposureBlurredLuminanceBlend
+    self.LocalExposureBlurredLuminanceKernelSizePercent = LocalExposureBlurredLuminanceKernelSizePercent
+    self.LocalExposureHighlightThresholdStrength = LocalExposureHighlightThresholdStrength
+    self.LocalExposureShadowThresholdStrength = LocalExposureShadowThresholdStrength
+    self.LocalExposureMiddleGreyBias = LocalExposureMiddleGreyBias
+    self.LensFlareIntensity = LensFlareIntensity
+    self.LensFlareTint = LensFlareTint
+    self.LensFlareBokehSize = LensFlareBokehSize
+    self.LensFlareThreshold = LensFlareThreshold
+    self.LensFlareBokehShape = LensFlareBokehShape
+    self.LensFlareTints = LensFlareTints
+    self.VignetteIntensity = VignetteIntensity
+    self.Sharpen = Sharpen
+    self.GrainJitter = GrainJitter
+    self.GrainIntensity = GrainIntensity
+    self.FilmGrainIntensity = FilmGrainIntensity
+    self.FilmGrainIntensityShadows = FilmGrainIntensityShadows
+    self.FilmGrainIntensityMidtones = FilmGrainIntensityMidtones
+    self.FilmGrainIntensityHighlights = FilmGrainIntensityHighlights
+    self.FilmGrainShadowsMax = FilmGrainShadowsMax
+    self.FilmGrainHighlightsMin = FilmGrainHighlightsMin
+    self.FilmGrainHighlightsMax = FilmGrainHighlightsMax
+    self.FilmGrainTexelSize = FilmGrainTexelSize
+    self.FilmGrainTexture = FilmGrainTexture
+    self.AmbientOcclusionIntensity = AmbientOcclusionIntensity
+    self.AmbientOcclusionStaticFraction = AmbientOcclusionStaticFraction
+    self.AmbientOcclusionRadius = AmbientOcclusionRadius
+    self.AmbientOcclusionRadiusInWS = AmbientOcclusionRadiusInWS
+    self.AmbientOcclusionFadeDistance = AmbientOcclusionFadeDistance
+    self.AmbientOcclusionFadeRadius = AmbientOcclusionFadeRadius
+    self.AmbientOcclusionDistance = AmbientOcclusionDistance
+    self.AmbientOcclusionPower = AmbientOcclusionPower
+    self.AmbientOcclusionBias = AmbientOcclusionBias
+    self.AmbientOcclusionQuality = AmbientOcclusionQuality
+    self.AmbientOcclusionMipBlend = AmbientOcclusionMipBlend
+    self.AmbientOcclusionMipScale = AmbientOcclusionMipScale
+    self.AmbientOcclusionMipThreshold = AmbientOcclusionMipThreshold
+    self.AmbientOcclusionTemporalBlendWeight = AmbientOcclusionTemporalBlendWeight
+    self.RayTracingAO = RayTracingAO
+    self.RayTracingAOSamplesPerPixel = RayTracingAOSamplesPerPixel
+    self.RayTracingAOIntensity = RayTracingAOIntensity
+    self.RayTracingAORadius = RayTracingAORadius
+    self.ColorGradingIntensity = ColorGradingIntensity
+    self.ColorGradingLUT = ColorGradingLUT
+    self.DepthOfFieldSensorWidth = DepthOfFieldSensorWidth
+    self.DepthOfFieldSqueezeFactor = DepthOfFieldSqueezeFactor
+    self.DepthOfFieldFocalDistance = DepthOfFieldFocalDistance
+    self.DepthOfFieldDepthBlurAmount = DepthOfFieldDepthBlurAmount
+    self.DepthOfFieldDepthBlurRadius = DepthOfFieldDepthBlurRadius
+    self.DepthOfFieldUseHairDepth = DepthOfFieldUseHairDepth
+    self.DepthOfFieldPetzvalBokeh = DepthOfFieldPetzvalBokeh
+    self.DepthOfFieldPetzvalBokehFalloff = DepthOfFieldPetzvalBokehFalloff
+    self.DepthOfFieldPetzvalExclusionBoxExtents = DepthOfFieldPetzvalExclusionBoxExtents
+    self.DepthOfFieldPetzvalExclusionBoxRadius = DepthOfFieldPetzvalExclusionBoxRadius
+    self.DepthOfFieldAspectRatioScalar = DepthOfFieldAspectRatioScalar
+    self.DepthOfFieldBarrelRadius = DepthOfFieldBarrelRadius
+    self.DepthOfFieldBarrelLength = DepthOfFieldBarrelLength
+    self.DepthOfFieldMatteBoxFlags = DepthOfFieldMatteBoxFlags
+    self.DepthOfFieldFocalRegion = DepthOfFieldFocalRegion
+    self.DepthOfFieldNearTransitionRegion = DepthOfFieldNearTransitionRegion
+    self.DepthOfFieldFarTransitionRegion = DepthOfFieldFarTransitionRegion
+    self.DepthOfFieldScale = DepthOfFieldScale
+    self.DepthOfFieldNearBlurSize = DepthOfFieldNearBlurSize
+    self.DepthOfFieldFarBlurSize = DepthOfFieldFarBlurSize
+    self.DepthOfFieldOcclusion = DepthOfFieldOcclusion
+    self.DepthOfFieldSkyFocusDistance = DepthOfFieldSkyFocusDistance
+    self.DepthOfFieldVignetteSize = DepthOfFieldVignetteSize
+    self.MotionBlurAmount = MotionBlurAmount
+    self.MotionBlurMax = MotionBlurMax
+    self.MotionBlurTargetFPS = MotionBlurTargetFPS
+    self.MotionBlurPerObjectSize = MotionBlurPerObjectSize
+    self.LPVIntensity = LPVIntensity
+    self.LPVVplInjectionBias = LPVVplInjectionBias
+    self.LPVSize = LPVSize
+    self.LPVSecondaryOcclusionIntensity = LPVSecondaryOcclusionIntensity
+    self.LPVSecondaryBounceIntensity = LPVSecondaryBounceIntensity
+    self.LPVGeometryVolumeBias = LPVGeometryVolumeBias
+    self.LPVEmissiveInjectionIntensity = LPVEmissiveInjectionIntensity
+    self.LPVDirectionalOcclusionIntensity = LPVDirectionalOcclusionIntensity
+    self.LPVDirectionalOcclusionRadius = LPVDirectionalOcclusionRadius
+    self.LPVDiffuseOcclusionExponent = LPVDiffuseOcclusionExponent
+    self.LPVSpecularOcclusionExponent = LPVSpecularOcclusionExponent
+    self.LPVDiffuseOcclusionIntensity = LPVDiffuseOcclusionIntensity
+    self.LPVSpecularOcclusionIntensity = LPVSpecularOcclusionIntensity
+    self.TranslucencyType = TranslucencyType
+    self.RayTracingTranslucencyMaxRoughness = RayTracingTranslucencyMaxRoughness
+    self.RayTracingTranslucencyRefractionRays = RayTracingTranslucencyRefractionRays
+    self.RayTracingTranslucencySamplesPerPixel = RayTracingTranslucencySamplesPerPixel
+    self.RayTracingTranslucencyMaxPrimaryHitEvents = RayTracingTranslucencyMaxPrimaryHitEvents
+    self.RayTracingTranslucencyMaxSecondaryHitEvents = RayTracingTranslucencyMaxSecondaryHitEvents
+    self.RayTracingTranslucencyShadows = RayTracingTranslucencyShadows
+    self.RayTracingTranslucencyRefraction = RayTracingTranslucencyRefraction
+    self.RayTracingTranslucencyUseRayTracedRefraction = RayTracingTranslucencyUseRayTracedRefraction
+    self.PathTracingMaxBounces = PathTracingMaxBounces
+    self.PathTracingSamplesPerPixel = PathTracingSamplesPerPixel
+    self.PathTracingMaxPathIntensity = PathTracingMaxPathIntensity
+    self.PathTracingEnableEmissiveMaterials = PathTracingEnableEmissiveMaterials
+    self.PathTracingEnableReferenceDOF = PathTracingEnableReferenceDOF
+    self.PathTracingEnableReferenceAtmosphere = PathTracingEnableReferenceAtmosphere
+    self.PathTracingEnableDenoiser = PathTracingEnableDenoiser
+    self.PathTracingIncludeEmissive = PathTracingIncludeEmissive
+    self.PathTracingIncludeDiffuse = PathTracingIncludeDiffuse
+    self.PathTracingIncludeIndirectDiffuse = PathTracingIncludeIndirectDiffuse
+    self.PathTracingIncludeSpecular = PathTracingIncludeSpecular
+    self.PathTracingIncludeIndirectSpecular = PathTracingIncludeIndirectSpecular
+    self.PathTracingIncludeVolume = PathTracingIncludeVolume
+    self.PathTracingIncludeIndirectVolume = PathTracingIncludeIndirectVolume
+    self.LPVFadeRange = LPVFadeRange
+    self.LPVDirectionalOcclusionFadeRange = LPVDirectionalOcclusionFadeRange
+    self.ScreenPercentage = ScreenPercentage
+    self.UserFlags = UserFlags
+    self.WeightedBlendables = WeightedBlendables
+    self.PreviewBlendable = PreviewBlendable
+    self.Blendables = Blendables
+    return self
+end
+
 return PostProcessSettings

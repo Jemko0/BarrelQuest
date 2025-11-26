@@ -20,4 +20,22 @@
 ---If set, StopActiveMovement call will abort current path following request
 ---@field bStopMovementAbortPaths boolean
 local NavMovementProperties = {}
+
+--- Constructor
+---@return NavMovementProperties
+---@param FixedPathBrakingDistance number
+---@param bUpdateNavAgentWithOwnersCollision boolean
+---@param bUseAccelerationForPaths boolean
+---@param bUseFixedBrakingDistanceForPaths boolean
+---@param bStopMovementAbortPaths boolean
+function NavMovementProperties.new(FixedPathBrakingDistance, bUpdateNavAgentWithOwnersCollision, bUseAccelerationForPaths, bUseFixedBrakingDistanceForPaths, bStopMovementAbortPaths)
+    local self = {}
+    self.FixedPathBrakingDistance = FixedPathBrakingDistance
+    self.bUpdateNavAgentWithOwnersCollision = bUpdateNavAgentWithOwnersCollision
+    self.bUseAccelerationForPaths = bUseAccelerationForPaths
+    self.bUseFixedBrakingDistanceForPaths = bUseFixedBrakingDistanceForPaths
+    self.bStopMovementAbortPaths = bStopMovementAbortPaths
+    return self
+end
+
 return NavMovementProperties

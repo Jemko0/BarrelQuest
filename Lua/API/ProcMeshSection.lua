@@ -20,4 +20,22 @@
 ---Should we display this section
 ---@field bSectionVisible boolean
 local ProcMeshSection = {}
+
+--- Constructor
+---@return ProcMeshSection
+---@param ProcVertexBuffer ProcMeshVertex[]
+---@param ProcIndexBuffer integer[]
+---@param SectionLocalBox Box
+---@param bEnableCollision boolean
+---@param bSectionVisible boolean
+function ProcMeshSection.new(ProcVertexBuffer, ProcIndexBuffer, SectionLocalBox, bEnableCollision, bSectionVisible)
+    local self = {}
+    self.ProcVertexBuffer = ProcVertexBuffer
+    self.ProcIndexBuffer = ProcIndexBuffer
+    self.SectionLocalBox = SectionLocalBox
+    self.bEnableCollision = bEnableCollision
+    self.bSectionVisible = bSectionVisible
+    return self
+end
+
 return ProcMeshSection

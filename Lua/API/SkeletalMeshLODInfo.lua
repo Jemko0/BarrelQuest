@@ -67,4 +67,62 @@
 ---* This boolean specify if the LOD was imported with the base mesh or not.
 ---@field bImportWithBaseMesh boolean
 local SkeletalMeshLODInfo = {}
+
+--- Constructor
+---@return SkeletalMeshLODInfo
+---@param ScreenSize PerPlatformFloat
+---@param LODHysteresis number
+---@param LODMaterialMap integer[]
+---@param bEnableShadowCasting boolean[]
+---@param RemovedBones string[]
+---@param BuildSettings SkeletalMeshBuildSettings
+---@param ReductionSettings SkeletalMeshOptimizationSettings
+---@param BonesToRemove BoneReference[]
+---@param BonesToPrioritize BoneReference[]
+---@param SectionsToPrioritize SectionReference[]
+---@param WeightOfPrioritization number
+---@param BakePose AnimSequence
+---@param BakePoseOverride AnimSequence
+---@param SourceImportFilename string
+---@param SkinCacheUsage ESkinCacheUsage
+---@param MorphTargetPositionErrorTolerance number
+---@param ImportedMorphTargetSourceFilename table<string, MorphTargetImportedSourceFileInfo>
+---@param bHasBeenSimplified boolean
+---@param bHasPerLODVertexColors boolean
+---@param bAllowCPUAccess boolean
+---@param bBuildHalfEdgeBuffers boolean
+---@param bAllowMeshDeformer boolean
+---@param VertexAttributes SkeletalMeshVertexAttributeInfo[]
+---@param bSupportUniformlyDistributedSampling boolean
+---@param bImportWithBaseMesh boolean
+function SkeletalMeshLODInfo.new(ScreenSize, LODHysteresis, LODMaterialMap, bEnableShadowCasting, RemovedBones, BuildSettings, ReductionSettings, BonesToRemove, BonesToPrioritize, SectionsToPrioritize, WeightOfPrioritization, BakePose, BakePoseOverride, SourceImportFilename, SkinCacheUsage, MorphTargetPositionErrorTolerance, ImportedMorphTargetSourceFilename, bHasBeenSimplified, bHasPerLODVertexColors, bAllowCPUAccess, bBuildHalfEdgeBuffers, bAllowMeshDeformer, VertexAttributes, bSupportUniformlyDistributedSampling, bImportWithBaseMesh)
+    local self = {}
+    self.ScreenSize = ScreenSize
+    self.LODHysteresis = LODHysteresis
+    self.LODMaterialMap = LODMaterialMap
+    self.bEnableShadowCasting = bEnableShadowCasting
+    self.RemovedBones = RemovedBones
+    self.BuildSettings = BuildSettings
+    self.ReductionSettings = ReductionSettings
+    self.BonesToRemove = BonesToRemove
+    self.BonesToPrioritize = BonesToPrioritize
+    self.SectionsToPrioritize = SectionsToPrioritize
+    self.WeightOfPrioritization = WeightOfPrioritization
+    self.BakePose = BakePose
+    self.BakePoseOverride = BakePoseOverride
+    self.SourceImportFilename = SourceImportFilename
+    self.SkinCacheUsage = SkinCacheUsage
+    self.MorphTargetPositionErrorTolerance = MorphTargetPositionErrorTolerance
+    self.ImportedMorphTargetSourceFilename = ImportedMorphTargetSourceFilename
+    self.bHasBeenSimplified = bHasBeenSimplified
+    self.bHasPerLODVertexColors = bHasPerLODVertexColors
+    self.bAllowCPUAccess = bAllowCPUAccess
+    self.bBuildHalfEdgeBuffers = bBuildHalfEdgeBuffers
+    self.bAllowMeshDeformer = bAllowMeshDeformer
+    self.VertexAttributes = VertexAttributes
+    self.bSupportUniformlyDistributedSampling = bSupportUniformlyDistributedSampling
+    self.bImportWithBaseMesh = bImportWithBaseMesh
+    return self
+end
+
 return SkeletalMeshLODInfo

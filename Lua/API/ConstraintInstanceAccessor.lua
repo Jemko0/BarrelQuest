@@ -12,4 +12,16 @@
 ---@field Owner any
 ---@field Index integer
 local ConstraintInstanceAccessor = {}
+
+--- Constructor
+---@return ConstraintInstanceAccessor
+---@param Owner any
+---@param Index integer
+function ConstraintInstanceAccessor.new(Owner, Index)
+    local self = {}
+    self.Owner = Owner
+    self.Index = Index
+    return self
+end
+
 return ConstraintInstanceAccessor

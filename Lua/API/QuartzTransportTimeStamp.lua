@@ -18,4 +18,20 @@
 ---The time in seconds that this TimeStamp occured at
 ---@field Seconds number
 local QuartzTransportTimeStamp = {}
+
+--- Constructor
+---@return QuartzTransportTimeStamp
+---@param Bars integer
+---@param Beat integer
+---@param BeatFraction number
+---@param Seconds number
+function QuartzTransportTimeStamp.new(Bars, Beat, BeatFraction, Seconds)
+    local self = {}
+    self.Bars = Bars
+    self.Beat = Beat
+    self.BeatFraction = BeatFraction
+    self.Seconds = Seconds
+    return self
+end
+
 return QuartzTransportTimeStamp

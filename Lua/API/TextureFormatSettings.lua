@@ -16,4 +16,24 @@
 ---@field CompressionYCoCg boolean
 ---@field SRGB boolean
 local TextureFormatSettings = {}
+
+--- Constructor
+---@return TextureFormatSettings
+---@param CompressionSettings integer
+---@param CompressionNoAlpha boolean
+---@param CompressionForceAlpha boolean
+---@param CompressionNone boolean
+---@param CompressionYCoCg boolean
+---@param SRGB boolean
+function TextureFormatSettings.new(CompressionSettings, CompressionNoAlpha, CompressionForceAlpha, CompressionNone, CompressionYCoCg, SRGB)
+    local self = {}
+    self.CompressionSettings = CompressionSettings
+    self.CompressionNoAlpha = CompressionNoAlpha
+    self.CompressionForceAlpha = CompressionForceAlpha
+    self.CompressionNone = CompressionNone
+    self.CompressionYCoCg = CompressionYCoCg
+    self.SRGB = SRGB
+    return self
+end
+
 return TextureFormatSettings

@@ -17,4 +17,18 @@
 ---Holds the radius of the bounding sphere.
 ---@field SphereRadius number
 local BoxSphereBounds = {}
+
+--- Constructor
+---@return BoxSphereBounds
+---@param Origin Vector
+---@param BoxExtent Vector
+---@param SphereRadius number
+function BoxSphereBounds.new(Origin, BoxExtent, SphereRadius)
+    local self = {}
+    self.Origin = Origin
+    self.BoxExtent = BoxExtent
+    self.SphereRadius = SphereRadius
+    return self
+end
+
 return BoxSphereBounds

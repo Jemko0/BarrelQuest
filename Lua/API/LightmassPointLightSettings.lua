@@ -17,4 +17,18 @@
 ---Area shadows get softer the further they are from shadow casters, but require higher lightmap resolution to get the same quality where the shadow is sharp.
 ---@field bUseAreaShadowsForStationaryLight boolean
 local LightmassPointLightSettings = {}
+
+--- Constructor
+---@return LightmassPointLightSettings
+---@param IndirectLightingSaturation number
+---@param ShadowExponent number
+---@param bUseAreaShadowsForStationaryLight boolean
+function LightmassPointLightSettings.new(IndirectLightingSaturation, ShadowExponent, bUseAreaShadowsForStationaryLight)
+    local self = {}
+    self.IndirectLightingSaturation = IndirectLightingSaturation
+    self.ShadowExponent = ShadowExponent
+    self.bUseAreaShadowsForStationaryLight = bUseAreaShadowsForStationaryLight
+    return self
+end
+
 return LightmassPointLightSettings

@@ -17,4 +17,20 @@
 ---@field TrackIndex integer
 ---@field Guid Guid
 local AnimSyncMarker = {}
+
+--- Constructor
+---@return AnimSyncMarker
+---@param MarkerName string
+---@param Time number
+---@param TrackIndex integer
+---@param Guid Guid
+function AnimSyncMarker.new(MarkerName, Time, TrackIndex, Guid)
+    local self = {}
+    self.MarkerName = MarkerName
+    self.Time = Time
+    self.TrackIndex = TrackIndex
+    self.Guid = Guid
+    return self
+end
+
 return AnimSyncMarker

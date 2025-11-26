@@ -17,4 +17,18 @@
 ---The Guid of the member
 ---@field MemberGuid Guid
 local SimpleMemberReference = {}
+
+--- Constructor
+---@return SimpleMemberReference
+---@param MemberParent Object
+---@param MemberName string
+---@param MemberGuid Guid
+function SimpleMemberReference.new(MemberParent, MemberName, MemberGuid)
+    local self = {}
+    self.MemberParent = MemberParent
+    self.MemberName = MemberName
+    self.MemberGuid = MemberGuid
+    return self
+end
+
 return SimpleMemberReference

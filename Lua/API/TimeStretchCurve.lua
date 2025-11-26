@@ -128,4 +128,20 @@
 ---Cached Sum(dT_i * C_i)
 ---@field Sum_dT_i_by_C_i number
 local TimeStretchCurve = {}
+
+--- Constructor
+---@return TimeStretchCurve
+---@param SamplingRate number
+---@param CurveValueMinPrecision number
+---@param Markers TimeStretchCurveMarker[]
+---@param Sum_dT_i_by_C_i number
+function TimeStretchCurve.new(SamplingRate, CurveValueMinPrecision, Markers, Sum_dT_i_by_C_i)
+    local self = {}
+    self.SamplingRate = SamplingRate
+    self.CurveValueMinPrecision = CurveValueMinPrecision
+    self.Markers = Markers
+    self.Sum_dT_i_by_C_i = Sum_dT_i_by_C_i
+    return self
+end
+
 return TimeStretchCurve

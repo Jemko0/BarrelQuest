@@ -13,4 +13,18 @@
 ---@field ParameterValue SparseVolumeTexture
 ---@field ExpressionGUID Guid
 local SparseVolumeTextureParameterValue = {}
+
+--- Constructor
+---@return SparseVolumeTextureParameterValue
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue SparseVolumeTexture
+---@param ExpressionGUID Guid
+function SparseVolumeTextureParameterValue.new(ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return SparseVolumeTextureParameterValue

@@ -22,4 +22,22 @@
 ---Default setting for play rate of SequenceToPlay to play.
 ---@field SavedPlayRate number
 local SingleAnimationPlayData = {}
+
+--- Constructor
+---@return SingleAnimationPlayData
+---@param AnimToPlay AnimationAsset
+---@param bSavedLooping boolean
+---@param bSavedPlaying boolean
+---@param SavedPosition number
+---@param SavedPlayRate number
+function SingleAnimationPlayData.new(AnimToPlay, bSavedLooping, bSavedPlaying, SavedPosition, SavedPlayRate)
+    local self = {}
+    self.AnimToPlay = AnimToPlay
+    self.bSavedLooping = bSavedLooping
+    self.bSavedPlaying = bSavedPlaying
+    self.SavedPosition = SavedPosition
+    self.SavedPlayRate = SavedPlayRate
+    return self
+end
+
 return SingleAnimationPlayData

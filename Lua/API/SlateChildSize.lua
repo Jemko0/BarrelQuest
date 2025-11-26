@@ -14,4 +14,16 @@
 ---The sizing rule of the content.
 ---@field SizeRule integer
 local SlateChildSize = {}
+
+--- Constructor
+---@return SlateChildSize
+---@param Value number
+---@param SizeRule integer
+function SlateChildSize.new(Value, SizeRule)
+    local self = {}
+    self.Value = Value
+    self.SizeRule = SizeRule
+    return self
+end
+
 return SlateChildSize

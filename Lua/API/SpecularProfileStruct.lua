@@ -20,4 +20,20 @@
 ---Define the texture used as a specular profile
 ---@field Texture Texture2D
 local SpecularProfileStruct = {}
+
+--- Constructor
+---@return SpecularProfileStruct
+---@param Format ESpecularProfileFormat
+---@param ViewColor RuntimeCurveLinearColor
+---@param LightColor RuntimeCurveLinearColor
+---@param Texture Texture2D
+function SpecularProfileStruct.new(Format, ViewColor, LightColor, Texture)
+    local self = {}
+    self.Format = Format
+    self.ViewColor = ViewColor
+    self.LightColor = LightColor
+    self.Texture = Texture
+    return self
+end
+
 return SpecularProfileStruct

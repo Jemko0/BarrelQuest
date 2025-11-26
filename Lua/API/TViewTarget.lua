@@ -16,4 +16,18 @@
 ---PlayerState (used to follow same player through pawn transitions, etc., when spectating)
 ---@field PlayerState PlayerState
 local TViewTarget = {}
+
+--- Constructor
+---@return TViewTarget
+---@param Target Actor
+---@param POV MinimalViewInfo
+---@param PlayerState PlayerState
+function TViewTarget.new(Target, POV, PlayerState)
+    local self = {}
+    self.Target = Target
+    self.POV = POV
+    self.PlayerState = PlayerState
+    return self
+end
+
 return TViewTarget

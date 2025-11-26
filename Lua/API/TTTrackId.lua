@@ -12,4 +12,16 @@
 ---@field TrackType integer
 ---@field TrackIndex integer
 local TTTrackId = {}
+
+--- Constructor
+---@return TTTrackId
+---@param TrackType integer
+---@param TrackIndex integer
+function TTTrackId.new(TrackType, TrackIndex)
+    local self = {}
+    self.TrackType = TrackType
+    self.TrackIndex = TrackIndex
+    return self
+end
+
 return TTTrackId

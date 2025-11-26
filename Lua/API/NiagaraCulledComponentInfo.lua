@@ -10,4 +10,12 @@
 ---
 --- Properties
 local NiagaraCulledComponentInfo = {}
+
+--- Constructor
+---@return NiagaraCulledComponentInfo
+function NiagaraCulledComponentInfo.new()
+    local self = {}
+    return self
+end
+
 return NiagaraCulledComponentInfo

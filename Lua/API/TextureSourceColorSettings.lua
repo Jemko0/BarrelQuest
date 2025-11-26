@@ -24,4 +24,26 @@
 ---Chromatic adaption method applied if the source white point differs from the working color space white point.
 ---@field ChromaticAdaptationMethod ETextureChromaticAdaptationMethod
 local TextureSourceColorSettings = {}
+
+--- Constructor
+---@return TextureSourceColorSettings
+---@param EncodingOverride ETextureSourceEncoding
+---@param ColorSpace ETextureColorSpace
+---@param RedChromaticityCoordinate Vector2D
+---@param GreenChromaticityCoordinate Vector2D
+---@param BlueChromaticityCoordinate Vector2D
+---@param WhiteChromaticityCoordinate Vector2D
+---@param ChromaticAdaptationMethod ETextureChromaticAdaptationMethod
+function TextureSourceColorSettings.new(EncodingOverride, ColorSpace, RedChromaticityCoordinate, GreenChromaticityCoordinate, BlueChromaticityCoordinate, WhiteChromaticityCoordinate, ChromaticAdaptationMethod)
+    local self = {}
+    self.EncodingOverride = EncodingOverride
+    self.ColorSpace = ColorSpace
+    self.RedChromaticityCoordinate = RedChromaticityCoordinate
+    self.GreenChromaticityCoordinate = GreenChromaticityCoordinate
+    self.BlueChromaticityCoordinate = BlueChromaticityCoordinate
+    self.WhiteChromaticityCoordinate = WhiteChromaticityCoordinate
+    self.ChromaticAdaptationMethod = ChromaticAdaptationMethod
+    return self
+end
+
 return TextureSourceColorSettings

@@ -12,4 +12,14 @@
 --- Properties
 ---@field SoloEnableSetting integer[]
 local LODSoloTrack = {}
+
+--- Constructor
+---@return LODSoloTrack
+---@param SoloEnableSetting integer[]
+function LODSoloTrack.new(SoloEnableSetting)
+    local self = {}
+    self.SoloEnableSetting = SoloEnableSetting
+    return self
+end
+
 return LODSoloTrack

@@ -12,4 +12,16 @@
 ---@field ShowFlagName string
 ---@field Enabled boolean
 local EngineShowFlagsSetting = {}
+
+--- Constructor
+---@return EngineShowFlagsSetting
+---@param ShowFlagName string
+---@param Enabled boolean
+function EngineShowFlagsSetting.new(ShowFlagName, Enabled)
+    local self = {}
+    self.ShowFlagName = ShowFlagName
+    self.Enabled = Enabled
+    return self
+end
+
 return EngineShowFlagsSetting

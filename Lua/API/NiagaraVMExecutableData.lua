@@ -69,4 +69,88 @@
 ---@field bReadsSignificanceIndex boolean
 ---@field bNeedsGPUContextInit boolean
 local NiagaraVMExecutableData = {}
+
+--- Constructor
+---@return NiagaraVMExecutableData
+---@param ByteCode NiagaraVMExecutableByteCode
+---@param OptimizedByteCode NiagaraVMExecutableByteCode
+---@param NumTempRegisters integer
+---@param NumUserPtrs integer
+---@param Parameters NiagaraParameters
+---@param InternalParameters NiagaraParameters
+---@param ExternalDependencies NiagaraCompileDependency[]
+---@param BakedRapidIterationParameters NiagaraVariable[]
+---@param CompileTagsEditorOnly NiagaraCompilerTag[]
+---@param CompileTags NiagaraCompilerTag[]
+---@param ScriptLiterals integer[]
+---@param Attributes NiagaraVariableBase[]
+---@param DataUsage NiagaraScriptDataUsageInfo
+---@param DataSetToParameters table<string, NiagaraParameters>
+---@param AdditionalExternalFunctions NiagaraFunctionSignature[]
+---@param UObjectInfos NiagaraScriptUObjectCompileInfo[]
+---@param DataInterfaceInfo NiagaraScriptDataInterfaceCompileInfo[]
+---@param CalledVMExternalFunctions VMExternalFunctionBindingInfo[]
+---@param ReadDataSets NiagaraDataSetID[]
+---@param WriteDataSets NiagaraDataSetProperties[]
+---@param StatScopes NiagaraStatScope[]
+---@param LastHlslTranslation string
+---@param LastHlslTranslationGPU string
+---@param LastAssemblyTranslation string
+---@param LastOpCount integer
+---@param ShaderScriptParametersMetadata NiagaraShaderScriptParametersMetadata
+---@param ParameterCollectionPaths string[]
+---@param LastCompileStatus ENiagaraScriptCompileStatus
+---@param SimulationStageMetaData SimulationStageMetaData[]
+---@param bReadsAttributeData boolean
+---@param AttributesWritten NiagaraVariableBase[]
+---@param StaticVariablesWritten NiagaraVariable[]
+---@param ErrorMsg string
+---@param LastCompileEvents NiagaraCompileEvent[]
+---@param ExperimentalContextData integer[]
+---@param LastExperimentalAssemblyScript string
+---@param bReadsSignificanceIndex boolean
+---@param bNeedsGPUContextInit boolean
+function NiagaraVMExecutableData.new(ByteCode, OptimizedByteCode, NumTempRegisters, NumUserPtrs, Parameters, InternalParameters, ExternalDependencies, BakedRapidIterationParameters, CompileTagsEditorOnly, CompileTags, ScriptLiterals, Attributes, DataUsage, DataSetToParameters, AdditionalExternalFunctions, UObjectInfos, DataInterfaceInfo, CalledVMExternalFunctions, ReadDataSets, WriteDataSets, StatScopes, LastHlslTranslation, LastHlslTranslationGPU, LastAssemblyTranslation, LastOpCount, ShaderScriptParametersMetadata, ParameterCollectionPaths, LastCompileStatus, SimulationStageMetaData, bReadsAttributeData, AttributesWritten, StaticVariablesWritten, ErrorMsg, LastCompileEvents, ExperimentalContextData, LastExperimentalAssemblyScript, bReadsSignificanceIndex, bNeedsGPUContextInit)
+    local self = {}
+    self.ByteCode = ByteCode
+    self.OptimizedByteCode = OptimizedByteCode
+    self.NumTempRegisters = NumTempRegisters
+    self.NumUserPtrs = NumUserPtrs
+    self.Parameters = Parameters
+    self.InternalParameters = InternalParameters
+    self.ExternalDependencies = ExternalDependencies
+    self.BakedRapidIterationParameters = BakedRapidIterationParameters
+    self.CompileTagsEditorOnly = CompileTagsEditorOnly
+    self.CompileTags = CompileTags
+    self.ScriptLiterals = ScriptLiterals
+    self.Attributes = Attributes
+    self.DataUsage = DataUsage
+    self.DataSetToParameters = DataSetToParameters
+    self.AdditionalExternalFunctions = AdditionalExternalFunctions
+    self.UObjectInfos = UObjectInfos
+    self.DataInterfaceInfo = DataInterfaceInfo
+    self.CalledVMExternalFunctions = CalledVMExternalFunctions
+    self.ReadDataSets = ReadDataSets
+    self.WriteDataSets = WriteDataSets
+    self.StatScopes = StatScopes
+    self.LastHlslTranslation = LastHlslTranslation
+    self.LastHlslTranslationGPU = LastHlslTranslationGPU
+    self.LastAssemblyTranslation = LastAssemblyTranslation
+    self.LastOpCount = LastOpCount
+    self.ShaderScriptParametersMetadata = ShaderScriptParametersMetadata
+    self.ParameterCollectionPaths = ParameterCollectionPaths
+    self.LastCompileStatus = LastCompileStatus
+    self.SimulationStageMetaData = SimulationStageMetaData
+    self.bReadsAttributeData = bReadsAttributeData
+    self.AttributesWritten = AttributesWritten
+    self.StaticVariablesWritten = StaticVariablesWritten
+    self.ErrorMsg = ErrorMsg
+    self.LastCompileEvents = LastCompileEvents
+    self.ExperimentalContextData = ExperimentalContextData
+    self.LastExperimentalAssemblyScript = LastExperimentalAssemblyScript
+    self.bReadsSignificanceIndex = bReadsSignificanceIndex
+    self.bNeedsGPUContextInit = bNeedsGPUContextInit
+    return self
+end
+
 return NiagaraVMExecutableData

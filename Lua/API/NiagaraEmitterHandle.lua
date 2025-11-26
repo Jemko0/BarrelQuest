@@ -31,4 +31,34 @@
 ----TODO:Stateless: Should we return a bass class here / have a factory method to generate the runtime instance?
 ---@field StatelessEmitter NiagaraStatelessEmitter
 local NiagaraEmitterHandle = {}
+
+--- Constructor
+---@return NiagaraEmitterHandle
+---@param Name string
+---@param Id Guid
+---@param IdName string
+---@param bIsEnabled boolean
+---@param EmitterMode ENiagaraEmitterMode
+---@param Source NiagaraEmitter
+---@param LastMergedSource NiagaraEmitter
+---@param bIsolated boolean
+---@param Instance NiagaraEmitter
+---@param VersionedInstance VersionedNiagaraEmitter
+---@param StatelessEmitter NiagaraStatelessEmitter
+function NiagaraEmitterHandle.new(Name, Id, IdName, bIsEnabled, EmitterMode, Source, LastMergedSource, bIsolated, Instance, VersionedInstance, StatelessEmitter)
+    local self = {}
+    self.Name = Name
+    self.Id = Id
+    self.IdName = IdName
+    self.bIsEnabled = bIsEnabled
+    self.EmitterMode = EmitterMode
+    self.Source = Source
+    self.LastMergedSource = LastMergedSource
+    self.bIsolated = bIsolated
+    self.Instance = Instance
+    self.VersionedInstance = VersionedInstance
+    self.StatelessEmitter = StatelessEmitter
+    return self
+end
+
 return NiagaraEmitterHandle

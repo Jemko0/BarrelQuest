@@ -11,4 +11,14 @@
 --- Properties
 ---@field DeformerInstances MeshDeformerInstance[]
 local MeshDeformerInstanceSet = {}
+
+--- Constructor
+---@return MeshDeformerInstanceSet
+---@param DeformerInstances MeshDeformerInstance[]
+function MeshDeformerInstanceSet.new(DeformerInstances)
+    local self = {}
+    self.DeformerInstances = DeformerInstances
+    return self
+end
+
 return MeshDeformerInstanceSet

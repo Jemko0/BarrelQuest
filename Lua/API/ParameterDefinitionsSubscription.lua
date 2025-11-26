@@ -13,4 +13,18 @@
 ---@field DefinitionsId Guid
 ---@field CachedChangeIdHash integer
 local ParameterDefinitionsSubscription = {}
+
+--- Constructor
+---@return ParameterDefinitionsSubscription
+---@param Definitions NiagaraParameterDefinitionsBase
+---@param DefinitionsId Guid
+---@param CachedChangeIdHash integer
+function ParameterDefinitionsSubscription.new(Definitions, DefinitionsId, CachedChangeIdHash)
+    local self = {}
+    self.Definitions = Definitions
+    self.DefinitionsId = DefinitionsId
+    self.CachedChangeIdHash = CachedChangeIdHash
+    return self
+end
+
 return ParameterDefinitionsSubscription

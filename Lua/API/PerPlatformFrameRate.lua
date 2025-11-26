@@ -12,4 +12,16 @@
 ---@field Default FrameRate
 ---@field PerPlatform table<string, FrameRate>
 local PerPlatformFrameRate = {}
+
+--- Constructor
+---@return PerPlatformFrameRate
+---@param Default FrameRate
+---@param PerPlatform table<string, FrameRate>
+function PerPlatformFrameRate.new(Default, PerPlatform)
+    local self = {}
+    self.Default = Default
+    self.PerPlatform = PerPlatform
+    return self
+end
+
 return PerPlatformFrameRate

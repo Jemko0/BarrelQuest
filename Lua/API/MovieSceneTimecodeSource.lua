@@ -12,4 +12,14 @@
 ---The global timecode at which this target is based (ie. the timecode at the beginning of the movie scene section when it was recorded)
 ---@field Timecode Timecode
 local MovieSceneTimecodeSource = {}
+
+--- Constructor
+---@return MovieSceneTimecodeSource
+---@param Timecode Timecode
+function MovieSceneTimecodeSource.new(Timecode)
+    local self = {}
+    self.Timecode = Timecode
+    return self
+end
+
 return MovieSceneTimecodeSource

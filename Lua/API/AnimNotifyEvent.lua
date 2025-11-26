@@ -64,4 +64,70 @@
 ---in either length or rate; the element will correctly place itself in relation to the sequence
 ---@field LinkedSequence AnimSequenceBase
 local AnimNotifyEvent = {}
+
+--- Constructor
+---@return AnimNotifyEvent
+---@param DisplayTime number
+---@param TriggerTimeOffset number
+---@param EndTriggerTimeOffset number
+---@param TriggerWeightThreshold number
+---@param NotifyName string
+---@param Notify AnimNotify
+---@param NotifyStateClass AnimNotifyState
+---@param Duration number
+---@param EndLink AnimLinkableElement
+---@param bConvertedFromBranchingPoint boolean
+---@param MontageTickType integer
+---@param NotifyTriggerChance number
+---@param NotifyFilterType integer
+---@param NotifyFilterLOD integer
+---@param bCanBeFilteredViaRequest boolean
+---@param bTriggerOnDedicatedServer boolean
+---@param bTriggerOnFollower boolean
+---@param NotifyColor Color
+---@param Guid Guid
+---@param TrackIndex integer
+---@param LinkedMontage AnimMontage
+---@param SlotIndex integer
+---@param SegmentIndex integer
+---@param LinkMethod integer
+---@param CachedLinkMethod integer
+---@param SegmentBeginTime number
+---@param SegmentLength number
+---@param LinkValue number
+---@param LinkedSequence AnimSequenceBase
+function AnimNotifyEvent.new(DisplayTime, TriggerTimeOffset, EndTriggerTimeOffset, TriggerWeightThreshold, NotifyName, Notify, NotifyStateClass, Duration, EndLink, bConvertedFromBranchingPoint, MontageTickType, NotifyTriggerChance, NotifyFilterType, NotifyFilterLOD, bCanBeFilteredViaRequest, bTriggerOnDedicatedServer, bTriggerOnFollower, NotifyColor, Guid, TrackIndex, LinkedMontage, SlotIndex, SegmentIndex, LinkMethod, CachedLinkMethod, SegmentBeginTime, SegmentLength, LinkValue, LinkedSequence)
+    local self = {}
+    self.DisplayTime = DisplayTime
+    self.TriggerTimeOffset = TriggerTimeOffset
+    self.EndTriggerTimeOffset = EndTriggerTimeOffset
+    self.TriggerWeightThreshold = TriggerWeightThreshold
+    self.NotifyName = NotifyName
+    self.Notify = Notify
+    self.NotifyStateClass = NotifyStateClass
+    self.Duration = Duration
+    self.EndLink = EndLink
+    self.bConvertedFromBranchingPoint = bConvertedFromBranchingPoint
+    self.MontageTickType = MontageTickType
+    self.NotifyTriggerChance = NotifyTriggerChance
+    self.NotifyFilterType = NotifyFilterType
+    self.NotifyFilterLOD = NotifyFilterLOD
+    self.bCanBeFilteredViaRequest = bCanBeFilteredViaRequest
+    self.bTriggerOnDedicatedServer = bTriggerOnDedicatedServer
+    self.bTriggerOnFollower = bTriggerOnFollower
+    self.NotifyColor = NotifyColor
+    self.Guid = Guid
+    self.TrackIndex = TrackIndex
+    self.LinkedMontage = LinkedMontage
+    self.SlotIndex = SlotIndex
+    self.SegmentIndex = SegmentIndex
+    self.LinkMethod = LinkMethod
+    self.CachedLinkMethod = CachedLinkMethod
+    self.SegmentBeginTime = SegmentBeginTime
+    self.SegmentLength = SegmentLength
+    self.LinkValue = LinkValue
+    self.LinkedSequence = LinkedSequence
+    return self
+end
+
 return AnimNotifyEvent

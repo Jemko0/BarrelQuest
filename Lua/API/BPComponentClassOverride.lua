@@ -14,4 +14,16 @@
 ---The class to use when constructing the component.
 ---@field ComponentClass Class
 local BPComponentClassOverride = {}
+
+--- Constructor
+---@return BPComponentClassOverride
+---@param ComponentName string
+---@param ComponentClass Class
+function BPComponentClassOverride.new(ComponentName, ComponentClass)
+    local self = {}
+    self.ComponentName = ComponentName
+    self.ComponentClass = ComponentClass
+    return self
+end
+
 return BPComponentClassOverride

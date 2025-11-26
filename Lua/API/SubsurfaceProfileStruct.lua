@@ -48,4 +48,52 @@
 ---Transmission tint control. It is multiplied on the transmission results. Works only when Burley is enabled.
 ---@field TransmissionTintColor LinearColor
 local SubsurfaceProfileStruct = {}
+
+--- Constructor
+---@return SubsurfaceProfileStruct
+---@param SurfaceAlbedo LinearColor
+---@param MeanFreePathColor LinearColor
+---@param MeanFreePathDistance number
+---@param WorldUnitScale number
+---@param bEnableBurley boolean
+---@param bEnableMeanFreePath boolean
+---@param Tint LinearColor
+---@param ScatterRadius number
+---@param SubsurfaceColor LinearColor
+---@param FalloffColor LinearColor
+---@param BoundaryColorBleed LinearColor
+---@param Implementation ESubsurfaceImplementationTechniqueHint
+---@param ExtinctionScale number
+---@param NormalScale number
+---@param ScatteringDistribution number
+---@param IOR number
+---@param Roughness0 number
+---@param Roughness1 number
+---@param LobeMix number
+---@param TransmissionTintColor LinearColor
+function SubsurfaceProfileStruct.new(SurfaceAlbedo, MeanFreePathColor, MeanFreePathDistance, WorldUnitScale, bEnableBurley, bEnableMeanFreePath, Tint, ScatterRadius, SubsurfaceColor, FalloffColor, BoundaryColorBleed, Implementation, ExtinctionScale, NormalScale, ScatteringDistribution, IOR, Roughness0, Roughness1, LobeMix, TransmissionTintColor)
+    local self = {}
+    self.SurfaceAlbedo = SurfaceAlbedo
+    self.MeanFreePathColor = MeanFreePathColor
+    self.MeanFreePathDistance = MeanFreePathDistance
+    self.WorldUnitScale = WorldUnitScale
+    self.bEnableBurley = bEnableBurley
+    self.bEnableMeanFreePath = bEnableMeanFreePath
+    self.Tint = Tint
+    self.ScatterRadius = ScatterRadius
+    self.SubsurfaceColor = SubsurfaceColor
+    self.FalloffColor = FalloffColor
+    self.BoundaryColorBleed = BoundaryColorBleed
+    self.Implementation = Implementation
+    self.ExtinctionScale = ExtinctionScale
+    self.NormalScale = NormalScale
+    self.ScatteringDistribution = ScatteringDistribution
+    self.IOR = IOR
+    self.Roughness0 = Roughness0
+    self.Roughness1 = Roughness1
+    self.LobeMix = LobeMix
+    self.TransmissionTintColor = TransmissionTintColor
+    return self
+end
+
 return SubsurfaceProfileStruct

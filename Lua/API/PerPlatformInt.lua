@@ -12,4 +12,16 @@
 ---@field Default integer
 ---@field PerPlatform table<string, integer>
 local PerPlatformInt = {}
+
+--- Constructor
+---@return PerPlatformInt
+---@param Default integer
+---@param PerPlatform table<string, integer>
+function PerPlatformInt.new(Default, PerPlatform)
+    local self = {}
+    self.Default = Default
+    self.PerPlatform = PerPlatform
+    return self
+end
+
 return PerPlatformInt

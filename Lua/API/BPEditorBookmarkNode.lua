@@ -16,4 +16,18 @@
 ---Display name
 ---@field DisplayName string
 local BPEditorBookmarkNode = {}
+
+--- Constructor
+---@return BPEditorBookmarkNode
+---@param NodeGuid Guid
+---@param ParentGuid Guid
+---@param DisplayName string
+function BPEditorBookmarkNode.new(NodeGuid, ParentGuid, DisplayName)
+    local self = {}
+    self.NodeGuid = NodeGuid
+    self.ParentGuid = ParentGuid
+    self.DisplayName = DisplayName
+    return self
+end
+
 return BPEditorBookmarkNode

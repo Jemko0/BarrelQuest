@@ -38,4 +38,38 @@
 ---Allows tuning the compression level for replicated rotation. You should only need to change this from the default if you see visual artifacts.
 ---@field RotationQuantizationLevel ERotatorQuantization
 local RepMovement = {}
+
+--- Constructor
+---@return RepMovement
+---@param LinearVelocity Vector
+---@param AngularVelocity Vector
+---@param Location Vector
+---@param Rotation Rotator
+---@param Acceleration Vector
+---@param bSimulatedPhysicSleep boolean
+---@param bRepPhysics boolean
+---@param bRepAcceleration boolean
+---@param ServerFrame integer
+---@param ServerPhysicsHandle integer
+---@param LocationQuantizationLevel EVectorQuantization
+---@param VelocityQuantizationLevel EVectorQuantization
+---@param RotationQuantizationLevel ERotatorQuantization
+function RepMovement.new(LinearVelocity, AngularVelocity, Location, Rotation, Acceleration, bSimulatedPhysicSleep, bRepPhysics, bRepAcceleration, ServerFrame, ServerPhysicsHandle, LocationQuantizationLevel, VelocityQuantizationLevel, RotationQuantizationLevel)
+    local self = {}
+    self.LinearVelocity = LinearVelocity
+    self.AngularVelocity = AngularVelocity
+    self.Location = Location
+    self.Rotation = Rotation
+    self.Acceleration = Acceleration
+    self.bSimulatedPhysicSleep = bSimulatedPhysicSleep
+    self.bRepPhysics = bRepPhysics
+    self.bRepAcceleration = bRepAcceleration
+    self.ServerFrame = ServerFrame
+    self.ServerPhysicsHandle = ServerPhysicsHandle
+    self.LocationQuantizationLevel = LocationQuantizationLevel
+    self.VelocityQuantizationLevel = VelocityQuantizationLevel
+    self.RotationQuantizationLevel = RotationQuantizationLevel
+    return self
+end
+
 return RepMovement

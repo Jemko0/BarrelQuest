@@ -26,4 +26,20 @@
 ---Legacy editor soft reference that has been replaced by OverrideMaterialEditor.
 ---@field OverrideMaterialRef any
 local MaterialOverrideNanite = {}
+
+--- Constructor
+---@return MaterialOverrideNanite
+---@param bEnableOverride boolean
+---@param OverrideMaterialEditor MaterialInterface
+---@param OverrideMaterial MaterialInterface
+---@param OverrideMaterialRef any
+function MaterialOverrideNanite.new(bEnableOverride, OverrideMaterialEditor, OverrideMaterial, OverrideMaterialRef)
+    local self = {}
+    self.bEnableOverride = bEnableOverride
+    self.OverrideMaterialEditor = OverrideMaterialEditor
+    self.OverrideMaterial = OverrideMaterial
+    self.OverrideMaterialRef = OverrideMaterialRef
+    return self
+end
+
 return MaterialOverrideNanite

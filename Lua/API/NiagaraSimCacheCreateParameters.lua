@@ -45,4 +45,36 @@
 ---For example, adding MyEmitter.Particles.Position will only gather that attribute inside the cache.
 ---@field ExplicitCaptureAttributes string[]
 local NiagaraSimCacheCreateParameters = {}
+
+--- Constructor
+---@return NiagaraSimCacheCreateParameters
+---@param AttributeCaptureMode ENiagaraSimCacheAttributeCaptureMode
+---@param bAllowRebasing boolean
+---@param bAllowDataInterfaceCaching boolean
+---@param bAllowInterpolation boolean
+---@param bAllowVelocityExtrapolation boolean
+---@param bAllowSerializeLargeCache boolean
+---@param bIncludeDebugData boolean
+---@param RebaseIncludeAttributes string[]
+---@param RebaseExcludeAttributes string[]
+---@param InterpolationIncludeAttributes string[]
+---@param InterpolationExcludeAttributes string[]
+---@param ExplicitCaptureAttributes string[]
+function NiagaraSimCacheCreateParameters.new(AttributeCaptureMode, bAllowRebasing, bAllowDataInterfaceCaching, bAllowInterpolation, bAllowVelocityExtrapolation, bAllowSerializeLargeCache, bIncludeDebugData, RebaseIncludeAttributes, RebaseExcludeAttributes, InterpolationIncludeAttributes, InterpolationExcludeAttributes, ExplicitCaptureAttributes)
+    local self = {}
+    self.AttributeCaptureMode = AttributeCaptureMode
+    self.bAllowRebasing = bAllowRebasing
+    self.bAllowDataInterfaceCaching = bAllowDataInterfaceCaching
+    self.bAllowInterpolation = bAllowInterpolation
+    self.bAllowVelocityExtrapolation = bAllowVelocityExtrapolation
+    self.bAllowSerializeLargeCache = bAllowSerializeLargeCache
+    self.bIncludeDebugData = bIncludeDebugData
+    self.RebaseIncludeAttributes = RebaseIncludeAttributes
+    self.RebaseExcludeAttributes = RebaseExcludeAttributes
+    self.InterpolationIncludeAttributes = InterpolationIncludeAttributes
+    self.InterpolationExcludeAttributes = InterpolationExcludeAttributes
+    self.ExplicitCaptureAttributes = ExplicitCaptureAttributes
+    return self
+end
+
 return NiagaraSimCacheCreateParameters

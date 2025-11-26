@@ -14,4 +14,16 @@
 ---Root Motion information
 ---@field RootMotion RepRootMotionMontage
 local SimulatedRootMotionReplicatedMove = {}
+
+--- Constructor
+---@return SimulatedRootMotionReplicatedMove
+---@param Time number
+---@param RootMotion RepRootMotionMontage
+function SimulatedRootMotionReplicatedMove.new(Time, RootMotion)
+    local self = {}
+    self.Time = Time
+    self.RootMotion = RootMotion
+    return self
+end
+
 return SimulatedRootMotionReplicatedMove

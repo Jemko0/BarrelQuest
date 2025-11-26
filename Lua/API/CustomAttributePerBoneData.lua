@@ -12,4 +12,16 @@
 ---@field BoneTreeIndex integer
 ---@field Attributes CustomAttribute[]
 local CustomAttributePerBoneData = {}
+
+--- Constructor
+---@return CustomAttributePerBoneData
+---@param BoneTreeIndex integer
+---@param Attributes CustomAttribute[]
+function CustomAttributePerBoneData.new(BoneTreeIndex, Attributes)
+    local self = {}
+    self.BoneTreeIndex = BoneTreeIndex
+    self.Attributes = Attributes
+    return self
+end
+
 return CustomAttributePerBoneData

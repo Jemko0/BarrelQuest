@@ -12,4 +12,16 @@
 ---@field Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D integer
 ---@field ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40 integer
 local CraftingQueueQuickAmountLookupMapValueStruct = {}
+
+--- Constructor
+---@return CraftingQueueQuickAmountLookupMapValueStruct
+---@param Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D integer
+---@param ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40 integer
+function CraftingQueueQuickAmountLookupMapValueStruct.new(Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D, ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40)
+    local self = {}
+    self.Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D = Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D
+    self.ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40 = ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40
+    return self
+end
+
 return CraftingQueueQuickAmountLookupMapValueStruct

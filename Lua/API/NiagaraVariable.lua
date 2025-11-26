@@ -16,4 +16,20 @@
 ---@field TypeDefHandle NiagaraTypeDefinitionHandle
 ---@field TypeDef NiagaraTypeDefinition
 local NiagaraVariable = {}
+
+--- Constructor
+---@return NiagaraVariable
+---@param VarData integer[]
+---@param Name string
+---@param TypeDefHandle NiagaraTypeDefinitionHandle
+---@param TypeDef NiagaraTypeDefinition
+function NiagaraVariable.new(VarData, Name, TypeDefHandle, TypeDef)
+    local self = {}
+    self.VarData = VarData
+    self.Name = Name
+    self.TypeDefHandle = TypeDefHandle
+    self.TypeDef = TypeDef
+    return self
+end
+
 return NiagaraVariable

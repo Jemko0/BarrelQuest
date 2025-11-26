@@ -12,4 +12,16 @@
 ---@field Name string
 ---@field Material MaterialInterface
 local NamedEmitterMaterial = {}
+
+--- Constructor
+---@return NamedEmitterMaterial
+---@param Name string
+---@param Material MaterialInterface
+function NamedEmitterMaterial.new(Name, Material)
+    local self = {}
+    self.Name = Name
+    self.Material = Material
+    return self
+end
+
 return NamedEmitterMaterial

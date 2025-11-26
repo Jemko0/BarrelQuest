@@ -18,4 +18,22 @@
 ---@field UVChannelData MeshUVChannelInfo
 ---@field OverlayMaterialInterface MaterialInterface
 local StaticMaterial = {}
+
+--- Constructor
+---@return StaticMaterial
+---@param MaterialInterface MaterialInterface
+---@param MaterialSlotName string
+---@param ImportedMaterialSlotName string
+---@param UVChannelData MeshUVChannelInfo
+---@param OverlayMaterialInterface MaterialInterface
+function StaticMaterial.new(MaterialInterface, MaterialSlotName, ImportedMaterialSlotName, UVChannelData, OverlayMaterialInterface)
+    local self = {}
+    self.MaterialInterface = MaterialInterface
+    self.MaterialSlotName = MaterialSlotName
+    self.ImportedMaterialSlotName = ImportedMaterialSlotName
+    self.UVChannelData = UVChannelData
+    self.OverlayMaterialInterface = OverlayMaterialInterface
+    return self
+end
+
 return StaticMaterial

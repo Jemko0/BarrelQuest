@@ -69,4 +69,72 @@
 ---The maximum World Position Offset distance. Zero means no maximum.
 ---@field MaxWorldPositionOffsetDisplacement number
 local MaterialInstanceBasePropertyOverrides = {}
+
+--- Constructor
+---@return MaterialInstanceBasePropertyOverrides
+---@param bOverride_OpacityMaskClipValue boolean
+---@param bOverride_BlendMode boolean
+---@param bOverride_ShadingModel boolean
+---@param bOverride_DitheredLODTransition boolean
+---@param bOverride_CastDynamicShadowAsMasked boolean
+---@param bOverride_TwoSided boolean
+---@param bOverride_bIsThinSurface boolean
+---@param bOverride_OutputTranslucentVelocity boolean
+---@param bOverride_bHasPixelAnimation boolean
+---@param bOverride_bEnableTessellation boolean
+---@param bOverride_DisplacementScaling boolean
+---@param bOverride_bEnableDisplacementFade boolean
+---@param bOverride_DisplacementFadeRange boolean
+---@param bOverride_MaxWorldPositionOffsetDisplacement boolean
+---@param bOverride_CompatibleWithLumenCardSharing boolean
+---@param TwoSided boolean
+---@param bIsThinSurface boolean
+---@param DitheredLODTransition boolean
+---@param bCastDynamicShadowAsMasked boolean
+---@param bOutputTranslucentVelocity boolean
+---@param bHasPixelAnimation boolean
+---@param bEnableTessellation boolean
+---@param bEnableDisplacementFade boolean
+---@param bCompatibleWithLumenCardSharing boolean
+---@param BlendMode integer
+---@param ShadingModel integer
+---@param OpacityMaskClipValue number
+---@param DisplacementScaling DisplacementScaling
+---@param DisplacementFadeRange DisplacementFadeRange
+---@param MaxWorldPositionOffsetDisplacement number
+function MaterialInstanceBasePropertyOverrides.new(bOverride_OpacityMaskClipValue, bOverride_BlendMode, bOverride_ShadingModel, bOverride_DitheredLODTransition, bOverride_CastDynamicShadowAsMasked, bOverride_TwoSided, bOverride_bIsThinSurface, bOverride_OutputTranslucentVelocity, bOverride_bHasPixelAnimation, bOverride_bEnableTessellation, bOverride_DisplacementScaling, bOverride_bEnableDisplacementFade, bOverride_DisplacementFadeRange, bOverride_MaxWorldPositionOffsetDisplacement, bOverride_CompatibleWithLumenCardSharing, TwoSided, bIsThinSurface, DitheredLODTransition, bCastDynamicShadowAsMasked, bOutputTranslucentVelocity, bHasPixelAnimation, bEnableTessellation, bEnableDisplacementFade, bCompatibleWithLumenCardSharing, BlendMode, ShadingModel, OpacityMaskClipValue, DisplacementScaling, DisplacementFadeRange, MaxWorldPositionOffsetDisplacement)
+    local self = {}
+    self.bOverride_OpacityMaskClipValue = bOverride_OpacityMaskClipValue
+    self.bOverride_BlendMode = bOverride_BlendMode
+    self.bOverride_ShadingModel = bOverride_ShadingModel
+    self.bOverride_DitheredLODTransition = bOverride_DitheredLODTransition
+    self.bOverride_CastDynamicShadowAsMasked = bOverride_CastDynamicShadowAsMasked
+    self.bOverride_TwoSided = bOverride_TwoSided
+    self.bOverride_bIsThinSurface = bOverride_bIsThinSurface
+    self.bOverride_OutputTranslucentVelocity = bOverride_OutputTranslucentVelocity
+    self.bOverride_bHasPixelAnimation = bOverride_bHasPixelAnimation
+    self.bOverride_bEnableTessellation = bOverride_bEnableTessellation
+    self.bOverride_DisplacementScaling = bOverride_DisplacementScaling
+    self.bOverride_bEnableDisplacementFade = bOverride_bEnableDisplacementFade
+    self.bOverride_DisplacementFadeRange = bOverride_DisplacementFadeRange
+    self.bOverride_MaxWorldPositionOffsetDisplacement = bOverride_MaxWorldPositionOffsetDisplacement
+    self.bOverride_CompatibleWithLumenCardSharing = bOverride_CompatibleWithLumenCardSharing
+    self.TwoSided = TwoSided
+    self.bIsThinSurface = bIsThinSurface
+    self.DitheredLODTransition = DitheredLODTransition
+    self.bCastDynamicShadowAsMasked = bCastDynamicShadowAsMasked
+    self.bOutputTranslucentVelocity = bOutputTranslucentVelocity
+    self.bHasPixelAnimation = bHasPixelAnimation
+    self.bEnableTessellation = bEnableTessellation
+    self.bEnableDisplacementFade = bEnableDisplacementFade
+    self.bCompatibleWithLumenCardSharing = bCompatibleWithLumenCardSharing
+    self.BlendMode = BlendMode
+    self.ShadingModel = ShadingModel
+    self.OpacityMaskClipValue = OpacityMaskClipValue
+    self.DisplacementScaling = DisplacementScaling
+    self.DisplacementFadeRange = DisplacementFadeRange
+    self.MaxWorldPositionOffsetDisplacement = MaxWorldPositionOffsetDisplacement
+    return self
+end
+
 return MaterialInstanceBasePropertyOverrides

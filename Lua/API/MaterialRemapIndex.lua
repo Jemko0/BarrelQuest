@@ -12,4 +12,16 @@
 ---@field ImportVersionKey integer
 ---@field MaterialRemap integer[]
 local MaterialRemapIndex = {}
+
+--- Constructor
+---@return MaterialRemapIndex
+---@param ImportVersionKey integer
+---@param MaterialRemap integer[]
+function MaterialRemapIndex.new(ImportVersionKey, MaterialRemap)
+    local self = {}
+    self.ImportVersionKey = ImportVersionKey
+    self.MaterialRemap = MaterialRemap
+    return self
+end
+
 return MaterialRemapIndex

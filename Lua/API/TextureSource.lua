@@ -53,4 +53,46 @@
 ---For non-UDIM textures, this will always have a single entry equal to 0
 ---@field BlockDataOffsets integer[]
 local TextureSource = {}
+
+--- Constructor
+---@return TextureSource
+---@param Id Guid
+---@param BaseBlockX integer
+---@param BaseBlockY integer
+---@param SizeX integer
+---@param SizeY integer
+---@param NumSlices integer
+---@param NumMips integer
+---@param NumLayers integer
+---@param bPNGCompressed boolean
+---@param bLongLatCubemap boolean
+---@param CompressionFormat integer
+---@param bGuidIsHash boolean
+---@param LayerColorInfo_LockProtected TextureSourceLayerColorInfo[]
+---@param Format integer
+---@param LayerFormat integer[]
+---@param Blocks TextureSourceBlock[]
+---@param BlockDataOffsets integer[]
+function TextureSource.new(Id, BaseBlockX, BaseBlockY, SizeX, SizeY, NumSlices, NumMips, NumLayers, bPNGCompressed, bLongLatCubemap, CompressionFormat, bGuidIsHash, LayerColorInfo_LockProtected, Format, LayerFormat, Blocks, BlockDataOffsets)
+    local self = {}
+    self.Id = Id
+    self.BaseBlockX = BaseBlockX
+    self.BaseBlockY = BaseBlockY
+    self.SizeX = SizeX
+    self.SizeY = SizeY
+    self.NumSlices = NumSlices
+    self.NumMips = NumMips
+    self.NumLayers = NumLayers
+    self.bPNGCompressed = bPNGCompressed
+    self.bLongLatCubemap = bLongLatCubemap
+    self.CompressionFormat = CompressionFormat
+    self.bGuidIsHash = bGuidIsHash
+    self.LayerColorInfo_LockProtected = LayerColorInfo_LockProtected
+    self.Format = Format
+    self.LayerFormat = LayerFormat
+    self.Blocks = Blocks
+    self.BlockDataOffsets = BlockDataOffsets
+    return self
+end
+
 return TextureSource

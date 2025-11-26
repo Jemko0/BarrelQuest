@@ -12,4 +12,16 @@
 ---@field Default number
 ---@field PerPlatform table<string, number>
 local PerPlatformFloat = {}
+
+--- Constructor
+---@return PerPlatformFloat
+---@param Default number
+---@param PerPlatform table<string, number>
+function PerPlatformFloat.new(Default, PerPlatform)
+    local self = {}
+    self.Default = Default
+    self.PerPlatform = PerPlatform
+    return self
+end
+
 return PerPlatformFloat

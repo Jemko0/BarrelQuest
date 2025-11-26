@@ -620,6 +620,14 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
 
     LuaMetaContent += TEXT("---\n--- Properties\n");
 
+    // Structure to hold field info for the constructor generation later
+    struct FLuaStructField
+    {
+        FString Name;
+        FString Type;
+    };
+    TArray<FLuaStructField> CollectedFields;
+
     // Generate fields
     for (TFieldIterator<FProperty> PropIt(InStruct); PropIt; ++PropIt)
     {
@@ -631,6 +639,9 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
         
         FString LuaType = GetLuaTypeFromProperty(Property);
         
+        // Store for constructor generation
+        CollectedFields.Add({PropNameDisplay, LuaType});
+
         // Add property documentation
         FString PropTooltip = Property->GetToolTipText().ToString();
         if (!PropTooltip.IsEmpty())
@@ -671,6 +682,38 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
     }
 
     LuaMetaContent += FString::Printf(TEXT("local %s = {}\n"), *StructName);
+
+    // --- Constructor Generation Start ---
+    LuaMetaContent += TEXT("\n--- Constructor\n");
+    LuaMetaContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
+
+    // Generate @param annotations for the constructor
+    for (const FLuaStructField& Field : CollectedFields)
+    {
+        LuaMetaContent += FString::Printf(TEXT("---@param %s %s\n"), *Field.Name, *Field.Type);
+    }
+
+    // Generate function signature
+    TArray<FString> ParamNames;
+    for (const FLuaStructField& Field : CollectedFields)
+    {
+        ParamNames.Add(Field.Name);
+    }
+    FString ParamList = FString::Join(ParamNames, TEXT(", "));
+
+    LuaMetaContent += FString::Printf(TEXT("function %s.new(%s)\n"), *StructName, *ParamList);
+    LuaMetaContent += TEXT("    local self = {}\n");
+    
+    // Assign values
+    for (const FLuaStructField& Field : CollectedFields)
+    {
+        LuaMetaContent += FString::Printf(TEXT("    self.%s = %s\n"), *Field.Name, *Field.Name);
+    }
+
+    LuaMetaContent += TEXT("    return self\n");
+    LuaMetaContent += TEXT("end\n\n");
+    // --- Constructor Generation End ---
+
     LuaMetaContent += FString::Printf(TEXT("return %s\n"), *StructName);
 
     // Save to file

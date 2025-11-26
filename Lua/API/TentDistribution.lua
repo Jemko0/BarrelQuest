@@ -13,4 +13,18 @@
 ---@field TipValue number
 ---@field Width number
 local TentDistribution = {}
+
+--- Constructor
+---@return TentDistribution
+---@param TipAltitude number
+---@param TipValue number
+---@param Width number
+function TentDistribution.new(TipAltitude, TipValue, Width)
+    local self = {}
+    self.TipAltitude = TipAltitude
+    self.TipValue = TipValue
+    self.Width = Width
+    return self
+end
+
 return TentDistribution

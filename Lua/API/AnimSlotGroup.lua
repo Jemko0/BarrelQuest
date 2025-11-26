@@ -12,4 +12,16 @@
 ---@field GroupName string
 ---@field SlotNames string[]
 local AnimSlotGroup = {}
+
+--- Constructor
+---@return AnimSlotGroup
+---@param GroupName string
+---@param SlotNames string[]
+function AnimSlotGroup.new(GroupName, SlotNames)
+    local self = {}
+    self.GroupName = GroupName
+    self.SlotNames = SlotNames
+    return self
+end
+
 return AnimSlotGroup

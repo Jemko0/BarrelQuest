@@ -13,4 +13,16 @@
 ---@field X number
 ---@field Y number
 local Vector2D = {}
+
+--- Constructor
+---@return Vector2D
+---@param X number
+---@param Y number
+function Vector2D.new(X, Y)
+    local self = {}
+    self.X = X
+    self.Y = Y
+    return self
+end
+
 return Vector2D

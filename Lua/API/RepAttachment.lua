@@ -22,4 +22,24 @@
 ---Specific component we are attached to
 ---@field AttachComponent SceneComponent
 local RepAttachment = {}
+
+--- Constructor
+---@return RepAttachment
+---@param AttachParent Actor
+---@param LocationOffset Vector_NetQuantize100
+---@param RelativeScale3D Vector_NetQuantize100
+---@param RotationOffset Rotator
+---@param AttachSocket string
+---@param AttachComponent SceneComponent
+function RepAttachment.new(AttachParent, LocationOffset, RelativeScale3D, RotationOffset, AttachSocket, AttachComponent)
+    local self = {}
+    self.AttachParent = AttachParent
+    self.LocationOffset = LocationOffset
+    self.RelativeScale3D = RelativeScale3D
+    self.RotationOffset = RotationOffset
+    self.AttachSocket = AttachSocket
+    self.AttachComponent = AttachComponent
+    return self
+end
+
 return RepAttachment

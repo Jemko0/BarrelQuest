@@ -15,4 +15,22 @@
 ---@field RegisteredParameterMapRead string
 ---@field RegisteredParameterMapWrites string[]
 local NiagaraScriptUObjectCompileInfo = {}
+
+--- Constructor
+---@return NiagaraScriptUObjectCompileInfo
+---@param Variable NiagaraVariableBase
+---@param Object Object
+---@param ObjectPath SoftObjectPath
+---@param RegisteredParameterMapRead string
+---@param RegisteredParameterMapWrites string[]
+function NiagaraScriptUObjectCompileInfo.new(Variable, Object, ObjectPath, RegisteredParameterMapRead, RegisteredParameterMapWrites)
+    local self = {}
+    self.Variable = Variable
+    self.Object = Object
+    self.ObjectPath = ObjectPath
+    self.RegisteredParameterMapRead = RegisteredParameterMapRead
+    self.RegisteredParameterMapWrites = RegisteredParameterMapWrites
+    return self
+end
+
 return NiagaraScriptUObjectCompileInfo

@@ -12,4 +12,16 @@
 ---@field BoneReference BoneReference
 ---@field BlendScale number
 local BlendProfileBoneEntry = {}
+
+--- Constructor
+---@return BlendProfileBoneEntry
+---@param BoneReference BoneReference
+---@param BlendScale number
+function BlendProfileBoneEntry.new(BoneReference, BlendScale)
+    local self = {}
+    self.BoneReference = BoneReference
+    self.BlendScale = BlendScale
+    return self
+end
+
 return BlendProfileBoneEntry

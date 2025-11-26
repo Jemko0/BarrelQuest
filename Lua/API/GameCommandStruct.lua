@@ -12,4 +12,16 @@
 ---@field MinPermissionLevel_3_1D83C25745F8AF3AE9EE2EAD373A5A4C integer
 ---@field Arguments_8_C13E4372422AE89B64309EB969BE7295 GameCommandArgumentStruct
 local GameCommandStruct = {}
+
+--- Constructor
+---@return GameCommandStruct
+---@param MinPermissionLevel_3_1D83C25745F8AF3AE9EE2EAD373A5A4C integer
+---@param Arguments_8_C13E4372422AE89B64309EB969BE7295 GameCommandArgumentStruct
+function GameCommandStruct.new(MinPermissionLevel_3_1D83C25745F8AF3AE9EE2EAD373A5A4C, Arguments_8_C13E4372422AE89B64309EB969BE7295)
+    local self = {}
+    self.MinPermissionLevel_3_1D83C25745F8AF3AE9EE2EAD373A5A4C = MinPermissionLevel_3_1D83C25745F8AF3AE9EE2EAD373A5A4C
+    self.Arguments_8_C13E4372422AE89B64309EB969BE7295 = Arguments_8_C13E4372422AE89B64309EB969BE7295
+    return self
+end
+
 return GameCommandStruct

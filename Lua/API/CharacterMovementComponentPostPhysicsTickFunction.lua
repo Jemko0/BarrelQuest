@@ -28,4 +28,26 @@
 ---The frequency in seconds at which this tick function will be executed.  If less than or equal to 0 then it will tick every frame
 ---@field TickInterval number
 local CharacterMovementComponentPostPhysicsTickFunction = {}
+
+--- Constructor
+---@return CharacterMovementComponentPostPhysicsTickFunction
+---@param TickGroup integer
+---@param EndTickGroup integer
+---@param bTickEvenWhenPaused boolean
+---@param bCanEverTick boolean
+---@param bStartWithTickEnabled boolean
+---@param bAllowTickOnDedicatedServer boolean
+---@param TickInterval number
+function CharacterMovementComponentPostPhysicsTickFunction.new(TickGroup, EndTickGroup, bTickEvenWhenPaused, bCanEverTick, bStartWithTickEnabled, bAllowTickOnDedicatedServer, TickInterval)
+    local self = {}
+    self.TickGroup = TickGroup
+    self.EndTickGroup = EndTickGroup
+    self.bTickEvenWhenPaused = bTickEvenWhenPaused
+    self.bCanEverTick = bCanEverTick
+    self.bStartWithTickEnabled = bStartWithTickEnabled
+    self.bAllowTickOnDedicatedServer = bAllowTickOnDedicatedServer
+    self.TickInterval = TickInterval
+    return self
+end
+
 return CharacterMovementComponentPostPhysicsTickFunction

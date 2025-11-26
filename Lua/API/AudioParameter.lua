@@ -35,4 +35,38 @@
 ---Optional TypeName used to describe what constructed type this parameter should be initializing.
 ---@field TypeName string
 local AudioParameter = {}
+
+--- Constructor
+---@return AudioParameter
+---@param ParamName string
+---@param FloatParam number
+---@param BoolParam boolean
+---@param IntParam integer
+---@param ObjectParam Object
+---@param StringParam string
+---@param ArrayFloatParam number[]
+---@param ArrayBoolParam boolean[]
+---@param ArrayIntParam integer[]
+---@param ArrayObjectParam Object[]
+---@param ArrayStringParam string[]
+---@param ParamType EAudioParameterType
+---@param TypeName string
+function AudioParameter.new(ParamName, FloatParam, BoolParam, IntParam, ObjectParam, StringParam, ArrayFloatParam, ArrayBoolParam, ArrayIntParam, ArrayObjectParam, ArrayStringParam, ParamType, TypeName)
+    local self = {}
+    self.ParamName = ParamName
+    self.FloatParam = FloatParam
+    self.BoolParam = BoolParam
+    self.IntParam = IntParam
+    self.ObjectParam = ObjectParam
+    self.StringParam = StringParam
+    self.ArrayFloatParam = ArrayFloatParam
+    self.ArrayBoolParam = ArrayBoolParam
+    self.ArrayIntParam = ArrayIntParam
+    self.ArrayObjectParam = ArrayObjectParam
+    self.ArrayStringParam = ArrayStringParam
+    self.ParamType = ParamType
+    self.TypeName = TypeName
+    return self
+end
+
 return AudioParameter

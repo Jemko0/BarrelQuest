@@ -18,4 +18,20 @@
 ---The rotation to apply around the orbit point
 ---@field CamOrbitRotation Rotator
 local AssetEditorOrbitCameraPosition = {}
+
+--- Constructor
+---@return AssetEditorOrbitCameraPosition
+---@param bIsSet boolean
+---@param CamOrbitPoint Vector
+---@param CamOrbitZoom Vector
+---@param CamOrbitRotation Rotator
+function AssetEditorOrbitCameraPosition.new(bIsSet, CamOrbitPoint, CamOrbitZoom, CamOrbitRotation)
+    local self = {}
+    self.bIsSet = bIsSet
+    self.CamOrbitPoint = CamOrbitPoint
+    self.CamOrbitZoom = CamOrbitZoom
+    self.CamOrbitRotation = CamOrbitRotation
+    return self
+end
+
 return AssetEditorOrbitCameraPosition

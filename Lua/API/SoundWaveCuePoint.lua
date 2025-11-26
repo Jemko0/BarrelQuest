@@ -21,4 +21,22 @@
 ---only USoundFactory should modify this value on import
 ---@field bIsLoopRegion boolean
 local SoundWaveCuePoint = {}
+
+--- Constructor
+---@return SoundWaveCuePoint
+---@param CuePointID integer
+---@param Label string
+---@param FramePosition integer
+---@param FrameLength integer
+---@param bIsLoopRegion boolean
+function SoundWaveCuePoint.new(CuePointID, Label, FramePosition, FrameLength, bIsLoopRegion)
+    local self = {}
+    self.CuePointID = CuePointID
+    self.Label = Label
+    self.FramePosition = FramePosition
+    self.FrameLength = FrameLength
+    self.bIsLoopRegion = bIsLoopRegion
+    return self
+end
+
 return SoundWaveCuePoint

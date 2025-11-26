@@ -14,4 +14,20 @@
 ---@field ParameterValue LinearColor
 ---@field ExpressionGUID Guid
 local VectorParameterValue = {}
+
+--- Constructor
+---@return VectorParameterValue
+---@param ParameterName string
+---@param ParameterInfo MaterialParameterInfo
+---@param ParameterValue LinearColor
+---@param ExpressionGUID Guid
+function VectorParameterValue.new(ParameterName, ParameterInfo, ParameterValue, ExpressionGUID)
+    local self = {}
+    self.ParameterName = ParameterName
+    self.ParameterInfo = ParameterInfo
+    self.ParameterValue = ParameterValue
+    self.ExpressionGUID = ExpressionGUID
+    return self
+end
+
 return VectorParameterValue

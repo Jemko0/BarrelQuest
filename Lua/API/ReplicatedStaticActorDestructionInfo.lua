@@ -13,4 +13,14 @@
 --- Properties
 ---@field ObjClass Class
 local ReplicatedStaticActorDestructionInfo = {}
+
+--- Constructor
+---@return ReplicatedStaticActorDestructionInfo
+---@param ObjClass Class
+function ReplicatedStaticActorDestructionInfo.new(ObjClass)
+    local self = {}
+    self.ObjClass = ObjClass
+    return self
+end
+
 return ReplicatedStaticActorDestructionInfo

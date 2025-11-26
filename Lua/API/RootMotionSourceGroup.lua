@@ -27,4 +27,24 @@
 ---this method we override that resulting Velocity due to obstructions
 ---@field LastPreAdditiveVelocity Vector_NetQuantize10
 local RootMotionSourceGroup = {}
+
+--- Constructor
+---@return RootMotionSourceGroup
+---@param bHasAdditiveSources boolean
+---@param bHasOverrideSources boolean
+---@param bHasOverrideSourcesWithIgnoreZAccumulate boolean
+---@param bIsAdditiveVelocityApplied boolean
+---@param LastAccumulatedSettings RootMotionSourceSettings
+---@param LastPreAdditiveVelocity Vector_NetQuantize10
+function RootMotionSourceGroup.new(bHasAdditiveSources, bHasOverrideSources, bHasOverrideSourcesWithIgnoreZAccumulate, bIsAdditiveVelocityApplied, LastAccumulatedSettings, LastPreAdditiveVelocity)
+    local self = {}
+    self.bHasAdditiveSources = bHasAdditiveSources
+    self.bHasOverrideSources = bHasOverrideSources
+    self.bHasOverrideSourcesWithIgnoreZAccumulate = bHasOverrideSourcesWithIgnoreZAccumulate
+    self.bIsAdditiveVelocityApplied = bIsAdditiveVelocityApplied
+    self.LastAccumulatedSettings = LastAccumulatedSettings
+    self.LastPreAdditiveVelocity = LastPreAdditiveVelocity
+    return self
+end
+
 return RootMotionSourceGroup

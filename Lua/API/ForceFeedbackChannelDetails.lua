@@ -19,4 +19,22 @@
 ---@field bAffectsRightSmall boolean
 ---@field Curve RuntimeFloatCurve
 local ForceFeedbackChannelDetails = {}
+
+--- Constructor
+---@return ForceFeedbackChannelDetails
+---@param bAffectsLeftLarge boolean
+---@param bAffectsLeftSmall boolean
+---@param bAffectsRightLarge boolean
+---@param bAffectsRightSmall boolean
+---@param Curve RuntimeFloatCurve
+function ForceFeedbackChannelDetails.new(bAffectsLeftLarge, bAffectsLeftSmall, bAffectsRightLarge, bAffectsRightSmall, Curve)
+    local self = {}
+    self.bAffectsLeftLarge = bAffectsLeftLarge
+    self.bAffectsLeftSmall = bAffectsLeftSmall
+    self.bAffectsRightLarge = bAffectsRightLarge
+    self.bAffectsRightSmall = bAffectsRightSmall
+    self.Curve = Curve
+    return self
+end
+
 return ForceFeedbackChannelDetails

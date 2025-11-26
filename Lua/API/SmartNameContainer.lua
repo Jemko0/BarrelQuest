@@ -10,4 +10,12 @@
 ---
 --- Properties
 local SmartNameContainer = {}
+
+--- Constructor
+---@return SmartNameContainer
+function SmartNameContainer.new()
+    local self = {}
+    return self
+end
+
 return SmartNameContainer

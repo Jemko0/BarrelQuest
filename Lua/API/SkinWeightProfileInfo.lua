@@ -17,4 +17,20 @@
 ---@field DefaultProfileFromLODIndex PerPlatformInt
 ---@field PerLODSourceFiles table<integer, string>
 local SkinWeightProfileInfo = {}
+
+--- Constructor
+---@return SkinWeightProfileInfo
+---@param Name string
+---@param DefaultProfile PerPlatformBool
+---@param DefaultProfileFromLODIndex PerPlatformInt
+---@param PerLODSourceFiles table<integer, string>
+function SkinWeightProfileInfo.new(Name, DefaultProfile, DefaultProfileFromLODIndex, PerLODSourceFiles)
+    local self = {}
+    self.Name = Name
+    self.DefaultProfile = DefaultProfile
+    self.DefaultProfileFromLODIndex = DefaultProfileFromLODIndex
+    self.PerLODSourceFiles = PerLODSourceFiles
+    return self
+end
+
 return SkinWeightProfileInfo

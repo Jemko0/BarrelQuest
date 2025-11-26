@@ -16,4 +16,24 @@
 ---@field MaskB integer
 ---@field MaskA integer
 local ExpressionOutput = {}
+
+--- Constructor
+---@return ExpressionOutput
+---@param OutputName string
+---@param Mask integer
+---@param MaskR integer
+---@param MaskG integer
+---@param MaskB integer
+---@param MaskA integer
+function ExpressionOutput.new(OutputName, Mask, MaskR, MaskG, MaskB, MaskA)
+    local self = {}
+    self.OutputName = OutputName
+    self.Mask = Mask
+    self.MaskR = MaskR
+    self.MaskG = MaskG
+    self.MaskB = MaskB
+    self.MaskA = MaskA
+    return self
+end
+
 return ExpressionOutput

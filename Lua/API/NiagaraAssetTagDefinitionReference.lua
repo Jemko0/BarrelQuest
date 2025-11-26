@@ -11,4 +11,14 @@
 --- Properties
 ---@field AssetTagDefinitionGuid Guid
 local NiagaraAssetTagDefinitionReference = {}
+
+--- Constructor
+---@return NiagaraAssetTagDefinitionReference
+---@param AssetTagDefinitionGuid Guid
+function NiagaraAssetTagDefinitionReference.new(AssetTagDefinitionGuid)
+    local self = {}
+    self.AssetTagDefinitionGuid = AssetTagDefinitionGuid
+    return self
+end
+
 return NiagaraAssetTagDefinitionReference

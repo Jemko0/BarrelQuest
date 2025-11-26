@@ -39,4 +39,38 @@
 ---Scale to apply to font when rendering
 ---@field FontScale number
 local DebugTextInfo = {}
+
+--- Constructor
+---@return DebugTextInfo
+---@param SrcActor Actor
+---@param SrcActorOffset Vector
+---@param SrcActorDesiredOffset Vector
+---@param DebugText string
+---@param TimeRemaining number
+---@param Duration number
+---@param TextColor Color
+---@param bAbsoluteLocation boolean
+---@param bKeepAttachedToActor boolean
+---@param bDrawShadow boolean
+---@param OrigActorLocation Vector
+---@param Font Font
+---@param FontScale number
+function DebugTextInfo.new(SrcActor, SrcActorOffset, SrcActorDesiredOffset, DebugText, TimeRemaining, Duration, TextColor, bAbsoluteLocation, bKeepAttachedToActor, bDrawShadow, OrigActorLocation, Font, FontScale)
+    local self = {}
+    self.SrcActor = SrcActor
+    self.SrcActorOffset = SrcActorOffset
+    self.SrcActorDesiredOffset = SrcActorDesiredOffset
+    self.DebugText = DebugText
+    self.TimeRemaining = TimeRemaining
+    self.Duration = Duration
+    self.TextColor = TextColor
+    self.bAbsoluteLocation = bAbsoluteLocation
+    self.bKeepAttachedToActor = bKeepAttachedToActor
+    self.bDrawShadow = bDrawShadow
+    self.OrigActorLocation = OrigActorLocation
+    self.Font = Font
+    self.FontScale = FontScale
+    return self
+end
+
 return DebugTextInfo

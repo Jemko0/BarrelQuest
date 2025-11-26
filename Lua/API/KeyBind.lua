@@ -31,4 +31,34 @@
 ---@field bIgnoreCmd boolean
 ---@field bDisabled boolean
 local KeyBind = {}
+
+--- Constructor
+---@return KeyBind
+---@param Key Key
+---@param Command string
+---@param Control boolean
+---@param Shift boolean
+---@param Alt boolean
+---@param Cmd boolean
+---@param bIgnoreCtrl boolean
+---@param bIgnoreShift boolean
+---@param bIgnoreAlt boolean
+---@param bIgnoreCmd boolean
+---@param bDisabled boolean
+function KeyBind.new(Key, Command, Control, Shift, Alt, Cmd, bIgnoreCtrl, bIgnoreShift, bIgnoreAlt, bIgnoreCmd, bDisabled)
+    local self = {}
+    self.Key = Key
+    self.Command = Command
+    self.Control = Control
+    self.Shift = Shift
+    self.Alt = Alt
+    self.Cmd = Cmd
+    self.bIgnoreCtrl = bIgnoreCtrl
+    self.bIgnoreShift = bIgnoreShift
+    self.bIgnoreAlt = bIgnoreAlt
+    self.bIgnoreCmd = bIgnoreCmd
+    self.bDisabled = bDisabled
+    return self
+end
+
 return KeyBind

@@ -16,4 +16,18 @@
 ---Type of blending used (Linear, Cubic, etc.)
 ---@field BlendOption EAlphaBlendOption
 local AlphaBlend = {}
+
+--- Constructor
+---@return AlphaBlend
+---@param CustomCurve CurveFloat
+---@param BlendTime number
+---@param BlendOption EAlphaBlendOption
+function AlphaBlend.new(CustomCurve, BlendTime, BlendOption)
+    local self = {}
+    self.CustomCurve = CustomCurve
+    self.BlendTime = BlendTime
+    self.BlendOption = BlendOption
+    return self
+end
+
 return AlphaBlend
