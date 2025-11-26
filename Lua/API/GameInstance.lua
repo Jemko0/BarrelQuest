@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class GameInstance
 ---GameInstance: high-level manager object for an instance of the running game.
 ---Spawned at game creation and not destroyed until game instance is shut down.

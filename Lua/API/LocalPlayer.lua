@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class LocalPlayer : Player
 ---Each player that is active on the current client/listen server has a LocalPlayer.
 ---It stays active across maps, and there may be several spawned in the case of splitscreen/coop.

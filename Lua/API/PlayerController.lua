@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class PlayerController : Controller
 ---PlayerControllers are used by human players to control Pawns.
 ---ControlRotation (accessed via GetControlRotation()), determines the aiming
@@ -301,6 +302,15 @@ function PlayerController.PlayHapticEffect(HapticEffect, Hand, Scale, bLoop) end
 ---@param LatentInfo LatentActionInfo
 ---@return nil
 function PlayerController.PlayDynamicForceFeedback(Intensity, Duration, bAffectsLeftLarge, bAffectsLeftSmall, bAffectsRightLarge, bAffectsRightSmall, Action, LatentInfo) end
+
+---Play a force feedback pattern on the player's controller
+---@param ForceFeedbackEffect ForceFeedbackEffect
+---@param Tag string
+---@param bLooping boolean
+---@param bIgnoreTimeDilation boolean
+---@param bPlayWhilePaused boolean
+---@return nil
+function PlayerController.K2_ClientPlayForceFeedback(ForceFeedbackEffect, Tag, bLooping, bIgnoreTimeDilation, bPlayWhilePaused) end
 
 ---Whether the PlayerController should be used as a World Partiton streaming source.
 ---Default implementation returns bEnableStreamingSource but can be overriden in child classes.

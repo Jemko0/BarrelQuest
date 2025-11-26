@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class WidgetChild
 ---Represent a Widget present in the Tree Widget of the UserWidget
 ---

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class PrimitiveComponent : SceneComponent
 ---PrimitiveComponents are SceneComponents that contain or generate some sort of geometry, generally to be rendered or used as collision data.
 ---There are several subclasses for the various types of geometry, but the most common by far are the ShapeComponents (Capsule, Sphere, Box), StaticMeshComponent, and SkeletalMeshComponent.
@@ -787,6 +788,55 @@ function PrimitiveComponent.RegisterAsFocalPointInPhysicsReplicationLOD() end
 ---@param BoneName string
 ---@return nil
 function PrimitiveComponent.PutRigidBodyToSleep(BoneName) end
+
+---Perform a sphere trace against a single component
+---@param TraceStart Vector
+---@param TraceEnd Vector
+---@param SphereRadius number
+---@param bTraceComplex boolean
+---@param bShowTrace boolean
+---@param bPersistentShowTrace boolean
+---@return boolean
+function PrimitiveComponent.K2_SphereTraceComponent(TraceStart, TraceEnd, SphereRadius, bTraceComplex, bShowTrace, bPersistentShowTrace) end
+
+---Perform a sphere overlap against a single component
+---@param InSphereCentre Vector
+---@param InSphereRadius number
+---@param bTraceComplex boolean
+---@param bShowTrace boolean
+---@param bPersistentShowTrace boolean
+---@return boolean
+function PrimitiveComponent.K2_SphereOverlapComponent(InSphereCentre, InSphereRadius, bTraceComplex, bShowTrace, bPersistentShowTrace) end
+
+---Perform a line trace against a single component
+---@param TraceStart Vector
+---@param TraceEnd Vector
+---@param bTraceComplex boolean
+---@param bShowTrace boolean
+---@param bPersistentShowTrace boolean
+---@return boolean
+function PrimitiveComponent.K2_LineTraceComponent(TraceStart, TraceEnd, bTraceComplex, bShowTrace, bPersistentShowTrace) end
+
+---Utility to see if there is any query collision enabled on this component.
+---@return boolean
+function PrimitiveComponent.K2_IsQueryCollisionEnabled() end
+
+---Utility to see if there is any physics collision enabled on this component.
+---@return boolean
+function PrimitiveComponent.K2_IsPhysicsCollisionEnabled() end
+
+---Utility to see if there is any form of collision (query or physics) enabled on this component.
+---@return boolean
+function PrimitiveComponent.K2_IsCollisionEnabled() end
+
+---Perform a box overlap against a single component as an AABB (No rotation)
+---@param InBoxCentre Vector
+---@param InBox Box
+---@param bTraceComplex boolean
+---@param bShowTrace boolean
+---@param bPersistentShowTrace boolean
+---@return boolean
+function PrimitiveComponent.K2_BoxOverlapComponent(InBoxCentre, InBox, bTraceComplex, bShowTrace, bPersistentShowTrace) end
 
 ---Check whether this component is overlapping another component.
 ---@param OtherComp PrimitiveComponent

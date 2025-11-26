@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Transform
 ---Transform composed of Quat/Translation/Scale.
 ---@note This is implemented in either TransformVectorized.h or TransformNonVectorized.h depending on the platform.

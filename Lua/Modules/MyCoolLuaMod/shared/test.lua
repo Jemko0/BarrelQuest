@@ -1,6 +1,3 @@
-local Vector = require("bqAPI.vector")
+local ply = barrel.getLocalPlayer()
 
-local v = Vector(0, 0, 5000)
-local ply = getLocalPlayer()
-
-ply.LaunchCharacter(v, false, true)
+ply.K2_SetActorLocation(Vector(0, 0, 1000), false, false)

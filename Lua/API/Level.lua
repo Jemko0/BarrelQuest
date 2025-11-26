@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Level
 ---A Level is a collection of Actors (lights, volumes, mesh instances etc.).
 ---Multiple Levels can be loaded and unloaded into the World to create a streaming experience.

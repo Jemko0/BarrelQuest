@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class MeshComponent : PrimitiveComponent
 ---MeshComponent is an abstract base for any component that is an instance of a renderable collection of triangles.
 ---@see UStaticMeshComponent

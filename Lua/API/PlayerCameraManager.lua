@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class PlayerCameraManager : Actor
 ---A PlayerCameraManager is responsible for managing the camera for a particular
 ---player. It defines the final view properties used by other systems (e.g. the renderer),

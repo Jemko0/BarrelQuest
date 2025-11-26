@@ -24,8 +24,10 @@ void UBarrelUtilityFunctionLibrary::SetLuaMetaOutputDirectory(const FString& Rel
     UE_LOG(LogTemp, Log, TEXT("Lua meta output directory set to: %s"), *RelativePath);
 }
 
-void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass)
+void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass, bool suppressWarnings)
 {
+    GenerateBaseMetaFiles(suppressWarnings);
+    
     if (!InClass)
     {
         UE_LOG(LogTemp, Error, TEXT("GenerateLuaMetaFileFromClass: Invalid class provided"));
@@ -43,6 +45,11 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
     LuaMetaContent += FString::Printf(TEXT("--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.\n"));
     LuaMetaContent += FString::Printf(TEXT("--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.\n"));
     LuaMetaContent += FString::Printf(TEXT("--- Access these using bracket notation: object[\"Apply Damage\"]\n\n"));
+    
+    if (suppressWarnings)
+    {
+        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n"));
+    }
     
     if (bIsInterface)
     {
@@ -149,11 +156,14 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
         FString FuncName = Function->GetName();
 
         // Skip K2_ functions (Blueprint internal functions)
+        
+        /*
         if (FuncName.StartsWith(TEXT("K2_")))
         {
             continue;
         }
-
+        */
+        
         // Skip internal engine functions
         if (FuncName.StartsWith(TEXT("Execute")) || 
             FuncName.StartsWith(TEXT("Receive")) ||
@@ -483,15 +493,7 @@ void UBarrelUtilityFunctionLibrary::CollectReferencedTypes(UClass* InClass, TSet
         // Check for struct properties
         if (FStructProperty* StructProp = CastField<FStructProperty>(Property))
         {
-            if (StructProp->Struct && StructProp->Struct != TBaseStructure<FVector>::Get() &&
-                StructProp->Struct != TBaseStructure<FRotator>::Get() &&
-                StructProp->Struct != TBaseStructure<FTransform>::Get() &&
-                StructProp->Struct != TBaseStructure<FLinearColor>::Get() &&
-                StructProp->Struct != TBaseStructure<FColor>::Get())
-            {
-                // Skip engine built-in structs, collect custom structs
-                OutStructs.Add(StructProp->Struct);
-            }
+            OutStructs.Add(StructProp->Struct);
         }
         
         // Check for object/class properties
@@ -556,12 +558,7 @@ void UBarrelUtilityFunctionLibrary::CollectReferencedTypes(UClass* InClass, TSet
             // Check for struct parameters
             if (FStructProperty* StructProp = CastField<FStructProperty>(Param))
             {
-                if (StructProp->Struct && StructProp->Struct != TBaseStructure<FVector>::Get() &&
-                    StructProp->Struct != TBaseStructure<FRotator>::Get() &&
-                    StructProp->Struct != TBaseStructure<FTransform>::Get())
-                {
-                    OutStructs.Add(StructProp->Struct);
-                }
+                OutStructs.Add(StructProp->Struct);
             }
             
             // Check for object parameters
@@ -585,7 +582,7 @@ void UBarrelUtilityFunctionLibrary::CollectReferencedTypes(UClass* InClass, TSet
     }
 }
 
-void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStruct)
+void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStruct, bool suppressWarnings)
 {
     if (!InStruct)
     {
@@ -601,6 +598,11 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
     LuaMetaContent += FString::Printf(TEXT("--- NOTE: In this file, underscores (_) in names represent spaces from Blueprint.\n"));
     LuaMetaContent += FString::Printf(TEXT("--- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.\n"));
     LuaMetaContent += FString::Printf(TEXT("--- Access these using bracket notation: object[\"Apply Damage\"]\n\n"));
+    
+    if (suppressWarnings)
+    {
+        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n"));
+    }
     
     LuaMetaContent += FString::Printf(TEXT("---@class %s\n"), *StructName);
     
@@ -694,8 +696,10 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
     }
 }
 
-void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClass)
+void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings)
 {
+    GenerateBaseMetaFiles(suppressWarnings);
+    
     if (!InClass)
     {
         UE_LOG(LogTemp, Error, TEXT("GenerateLuaMetaFilesRecursive: Invalid class provided"));
@@ -741,7 +745,7 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClas
     {
         if (!ProcessedClasses.Contains(ParentClass))
         {
-            GenerateLuaMetaFilesRecursive(ParentClass);
+            GenerateLuaMetaFilesRecursive(ParentClass, suppressWarnings);
         }
     }
 
@@ -756,7 +760,7 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClas
         if (!ProcessedStructs.Contains(ReferencedStruct))
         {
             ProcessedStructs.Add(ReferencedStruct);
-            GenerateLuaMetaFileFromStruct(ReferencedStruct);
+            GenerateLuaMetaFileFromStruct(ReferencedStruct, suppressWarnings);
             UE_LOG(LogTemp, Log, TEXT("Generated meta file for struct: %s"), *ReferencedStruct->GetName());
         }
     }
@@ -767,13 +771,22 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClas
         // Check BEFORE recursing to prevent circular references
         if (!ProcessedClasses.Contains(ReferencedClass) && ReferencedClass != UObject::StaticClass())
         {
-            GenerateLuaMetaFilesRecursive(ReferencedClass);
+            GenerateLuaMetaFilesRecursive(ReferencedClass, suppressWarnings);
         }
     }
 
     // Now generate the meta file for this class
-    GenerateLuaMetaFileFromClass(InClass);
+    GenerateLuaMetaFileFromClass(InClass, suppressWarnings);
     UE_LOG(LogTemp, Log, TEXT("Generated meta file for class: %s"), *InClass->GetName());
     
     RecursionDepth--;
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateBaseMetaFiles(bool suppressWarnings)
+{
+    GenerateLuaMetaFileFromStruct(TBaseStructure<FTransform>::Get(), suppressWarnings);
+    GenerateLuaMetaFileFromStruct(TBaseStructure<FRotator>::Get(), suppressWarnings);
+    GenerateLuaMetaFileFromStruct(TBaseStructure<FVector>::Get(), suppressWarnings);
+    GenerateLuaMetaFileFromStruct(TBaseStructure<FVector2D>::Get(), suppressWarnings);
+    GenerateLuaMetaFileFromStruct(TBaseStructure<FQuat>::Get(), suppressWarnings);
 }

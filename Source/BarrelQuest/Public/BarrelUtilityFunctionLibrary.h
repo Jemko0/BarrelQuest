@@ -19,10 +19,12 @@ public:
 	static FLinearColor HexStringToLinearColor(FString hexString);
 
 	UFUNCTION(BlueprintCallable)
-	static void GenerateLuaMetaFileFromClass(UClass* InClass);
+	static void GenerateLuaMetaFileFromClass(UClass* InClass, bool suppressWarnings);
 	
 	UFUNCTION(BlueprintCallable)
-	static void GenerateLuaMetaFilesRecursive(UClass* InClass);
+	static void GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings);
+	
+	static void GenerateBaseMetaFiles(bool suppressWarnings);
 	
 	static FString GetLuaTypeFromProperty(FProperty* Property);
 	static bool IsValidLuaIdentifier(const FString& Name);
@@ -31,6 +33,6 @@ public:
 	static FString GetLuaMetaOutputDirectory();
 	static void SetLuaMetaOutputDirectory(const FString& RelativePath);
 
-	static void GenerateLuaMetaFileFromStruct(UStruct* InStruct);
+	static void GenerateLuaMetaFileFromStruct(UStruct* InStruct, bool suppressWarnings);
 	static void CollectReferencedTypes(UClass* InClass, TSet<UStruct*>& OutStructs, TSet<UClass*>& OutClasses);
 };

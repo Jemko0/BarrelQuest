@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class NiagaraScriptExecutionParameterStore
 ---Storage class containing actual runtime buffers to be used by the VM and the GPU.
 ---Is not the actual source for any parameter data, rather just the final place it's gathered from various other places ready for execution.

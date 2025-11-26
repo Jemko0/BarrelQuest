@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SkeletalMeshComponent : SkinnedMeshComponent
 ---SkeletalMeshComponent is used to create an instance of an animated SkeletalMesh asset.
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Content/Types/SkeletalMeshes/
@@ -531,6 +532,10 @@ function SkeletalMeshComponent.LinkAnimGraphByTag(InTag, InClass) end
 ---@param InClass Class
 ---@return nil
 function SkeletalMeshComponent.LinkAnimClassLayers(InClass) end
+
+---Given a world position, find the closest point on the physics asset. Note that this is independent of collision and welding. This is based purely on animation position
+---@return boolean
+function SkeletalMeshComponent.K2_GetClosestPointOnPhysicsAsset() end
 
 ---Animation play functions
 ---      *

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ClothingSimulationInteractor
 ---If a clothing simulation is able to be interacted with at runtime then a derived
 ---interactor should be created, and at least the basic API implemented for that

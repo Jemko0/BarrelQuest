@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SceneCaptureComponent2D : SceneCaptureComponent
 ---Used to capture a 'snapshot' of the scene from a single plane and feed it to a render target.
 ---

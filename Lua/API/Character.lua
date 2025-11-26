@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Character : Pawn
 ---Characters are Pawns that have a mesh, collision, and built-in movement logic.
 ---They are responsible for all physical interaction between the player or AI and the world, and also implement basic networking and input models.

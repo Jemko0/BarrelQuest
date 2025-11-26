@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class NiagaraVMExecutableDataId
 ---Struct containing all of the data necessary to look up a NiagaraScript's VM executable results from the Derived Data Cache.
 ---

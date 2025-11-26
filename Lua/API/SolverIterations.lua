@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SolverIterations
 ---Solver settings for use by the Legacy RigidBody AnimNode (RBAN) solver.
 ---These settings are no longer used by default and will eventually be deprecated and then removed.

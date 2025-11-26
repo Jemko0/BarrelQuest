@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ViewConeActor : Actor
 ---An actor that generates a procedural mesh representing a cone of vision.
 ---It uses asynchronous line traces to detect obstacles and builds the mesh based on hit results.

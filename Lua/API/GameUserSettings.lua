@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class GameUserSettings
 ---Stores user settings for a game (for example graphics and sound settings), with the ability to save and load to and from a file.
 ---

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class HUD : Actor
 ---Base class of the heads-up display. This has a canvas and a debug canvas on which primitives can be drawn.
 ---It also contains a list of simple hit boxes that can be used for simple item click detection.

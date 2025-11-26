@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class CompositeSection
 ---Section data for each track. Reference of data will be stored in the child class for the way they want
 ---AnimComposite vs AnimMontage have different requirement for the actual data reference

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class AnimMontage : AnimCompositeBase
 ---Any property you're adding to AnimMontage and parent class has to be considered for Child Asset
 ---Child Asset is considered to be only asset mapping feature using everything else in the class

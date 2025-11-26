@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class MeshDeformer
 ---Base class for mesh deformer assets.
 ---Mesh deformers can be added to mesh components to implement flexible deformation systems.

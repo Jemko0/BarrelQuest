@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class BarrelHUD_C : HUD
 ---Barrel HUD
 ---
@@ -17,6 +18,7 @@
 ---@field EscMenu EscapeMenu_C
 ---@field Settings CollapsablePanel_C
 ---@field DeathUI DeathUI_C
+---@field ClientJoinLoading ClientJoinLoadingScreenUI_C
 local BarrelHUD_C = {}
 
 --- Methods
@@ -27,6 +29,11 @@ function BarrelHUD_C.CreateSettings() end
 ---Get Debug RCMButtons
 ---@return nil, boolean
 function BarrelHUD_C.GetDebugRCMButtons() end
+
+---Create Client Loading Screen
+---@param destroy boolean
+---@return nil
+function BarrelHUD_C.CreateClientLoadingScreen(destroy) end
 
 ---On Settings Closed
 ---@return nil

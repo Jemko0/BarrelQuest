@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class GameStateBase : Info
 ---GameStateBase is a class that manages the game's global state, and is spawned by GameModeBase.
 ---It exists on both the client and the server and is fully replicated.

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class CameraShakeBase
 ---Base class for a camera shake. A camera shake contains a root shake "pattern" which is
 ---the object that contains the actual logic driving how the camera is shaken. Keeping the two

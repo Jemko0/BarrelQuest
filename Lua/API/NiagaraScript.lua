@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class NiagaraScript : NiagaraScriptBase
 ---Scripts are function graphs that define the runtime execution for a Niagara system (similar to a Blueprint).
 ---There are three types of scripts:

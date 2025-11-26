@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SpotLightComponent : PointLightComponent
 ---A spot light component emits a directional cone shaped light (Eg a Torch).
 ---

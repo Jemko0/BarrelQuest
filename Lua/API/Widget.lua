@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Widget : Visual
 ---This is the base class for all wrapped Slate controls that are exposed to UObjects.
 ---
@@ -208,6 +209,23 @@ function Widget.ResetCursor() end
 ---it will also be removed from those containers.
 ---@return nil
 function Widget.RemoveFromParent() end
+
+---K2 Remove Field Value Changed Delegate
+---@param FieldId FieldNotificationId
+---@param Delegate function
+---@return nil
+function Widget.K2_RemoveFieldValueChangedDelegate(FieldId, Delegate) end
+
+---K2 Broadcast Field Value Changed
+---@param FieldId FieldNotificationId
+---@return nil
+function Widget.K2_BroadcastFieldValueChanged(FieldId) end
+
+---K2 Add Field Value Changed Delegate
+---@param FieldId FieldNotificationId
+---@param Delegate function
+---@return nil
+function Widget.K2_AddFieldValueChangedDelegate(FieldId, Delegate) end
 
 ---Returns true if the widget is Visible, HitTestInvisible or SelfHitTestInvisible.
 ---@return boolean

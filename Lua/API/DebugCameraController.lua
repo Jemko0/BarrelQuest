@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class DebugCameraController : PlayerController
 ---Camera controller that allows you to fly around a level mostly unrestricted by normal movement rules.
 ---To turn it on, please press Alt+C or both (left and right) analogs on XBox pad,

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Pawn : Actor
 ---Pawn is the base class of all actors that can be possessed by players or AI.
 ---They are the physical representations of players and creatures in a level.

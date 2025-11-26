@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SkinnedMeshComponent : MeshComponent
 ---Skinned mesh component that supports bone skinned mesh rendering.
 ---This class does not support animation.

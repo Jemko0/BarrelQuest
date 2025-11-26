@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SpringArmComponent : SceneComponent
 ---This component tries to maintain its children at a fixed distance from the parent,
 ---but will retract the children if there is a collision, and spring back when there is no collision.

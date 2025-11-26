@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class BarrelGamemode_C : GameModeBase
 ---Barrel Gamemode
 ---
@@ -11,6 +12,7 @@
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field DefaultSceneRoot SceneComponent
 ---@field SpawnedPlayers table<string, Pawn>
+---@field NetLoadClientLuaFiles string[]
 local BarrelGamemode_C = {}
 
 --- Methods

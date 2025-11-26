@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ParticleSystem : FXSystemAsset
 ---A ParticleSystem is a complete particle effect that contains any number of ParticleEmitters. By allowing multiple emitters
 ---in a system, the designer can create elaborate particle effects that are held in a single system. Once created using

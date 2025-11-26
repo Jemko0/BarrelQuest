@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Controller : Actor
 ---Controllers are non-physical actors that can possess a Pawn to control
 ---its actions.  PlayerControllers are used by human players to control pawns, while
@@ -91,6 +92,10 @@ function Controller.Possess(InPawn) end
 ---@param bAlternateChecks boolean
 ---@return boolean
 function Controller.LineOfSightTo(Other, ViewPoint, bAlternateChecks) end
+
+---Return the Pawn that is currently 'controlled' by this PlayerController
+---@return Pawn
+function Controller.K2_GetPawn() end
 
 ---Returns whether this Controller is a PlayerController.
 ---@return boolean

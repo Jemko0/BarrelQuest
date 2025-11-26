@@ -22,14 +22,14 @@ function Vector.__sub(a, b)
     return Vector(a.x - b.x, a.y - b.y, a.z - b.z)
 end
 
--- Multiplication supports: vector * scalar OR scalar * vector
+-- Multiplication supports: vector * scalar OR vector * vector
 function Vector.__mul(a, b)
     if type(a) == "number" then
         return Vector(a * b.x, a * b.y, a * b.z)
     elseif type(b) == "number" then
         return Vector(a.x * b, a.y * b, a.z * b)
     else
-        error("Vector * Vector not supported (use dot or cross)")
+        return Vector(a.x * b.x, a.y * b.y, a.z * b.z)
     end
 end
 
@@ -74,4 +74,6 @@ function Vector:cross(b)
     )
 end
 
-return Vector
+_G.Vector = Vector
+
+print("RUNNING VECTROR VECTRORVECTRORVECTRORVECTRORVECTRORVECTROR")

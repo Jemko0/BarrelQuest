@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ReplicatedStaticActorDestructionInfo
 ---Stored information about replicated static/placed actors that have been destroyed in a level.
 ---This information is cached in ULevel so that any net drivers that are created after these actors

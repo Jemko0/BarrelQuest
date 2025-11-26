@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Actor
 ---Actor is the base class for an Object that can be placed or spawned in a level.
 ---Actors may contain a collection of ActorComponents, which can be used to control how actors move, how they are rendered, etc.
@@ -405,6 +406,240 @@ function Actor.PrestreamTextures(Seconds, bEnableStreaming, CinematicTextureGrou
 ---@param Tag string
 ---@return nil
 function Actor.MakeNoise(Loudness, NoiseInstigator, NoiseLocation, MaxRange, Tag) end
+
+---Teleport this actor to a new location. If the actor doesn't fit exactly at the location specified, tries to slightly move it out of walls and such.
+---@param DestLocation Vector
+---@param DestRotation Rotator
+---@return boolean
+function Actor.K2_TeleportTo(DestLocation, DestRotation) end
+
+---Set the Actors transform to the specified one.
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the transform without teleporting will not update the transform of simulated child/attached components.
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return boolean
+function Actor.K2_SetActorTransform(bSweep, bTeleport) end
+
+---Set the Actor's rotation instantly to the specified rotation.
+---                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---         Setting the rotation without teleporting will not update the rotation of simulated child/attached components.
+---@param NewRotation Rotator
+---@param bTeleportPhysics boolean
+---@return boolean
+function Actor.K2_SetActorRotation(NewRotation, bTeleportPhysics) end
+
+---Set the actor's RootComponent to the specified relative transform
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the transform without teleporting will not update the transform of simulated child/attached components.
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_SetActorRelativeTransform(bSweep, bTeleport) end
+
+---Set the actor's RootComponent to the specified relative rotation
+---                                                             Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                             If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                             If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                             If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                             Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                             Setting the rotation without teleporting will not update the rotation of simulated child/attached components.
+---@param NewRelativeRotation Rotator
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_SetActorRelativeRotation(NewRelativeRotation, bSweep, bTeleport) end
+
+---Set the actor's RootComponent to the specified relative location.
+---                                                             Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                             If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                             If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                             If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                             Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                             Setting the location without teleporting will not update the location of simulated child/attached components.
+---@param NewRelativeLocation Vector
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_SetActorRelativeLocation(NewRelativeLocation, bSweep, bTeleport) end
+
+---Move the actor instantly to the specified location and rotation.
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the location without teleporting will not update the location of simulated child/attached components.
+---@param NewLocation Vector
+---@param NewRotation Rotator
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return boolean
+function Actor.K2_SetActorLocationAndRotation(NewLocation, NewRotation, bSweep, bTeleport) end
+
+---Move the Actor to the specified location.
+---                                             Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                             If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                             If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                             If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                     Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                     Setting the location without teleporting will not update the location of simulated child/attached components.
+---@param NewLocation Vector
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return boolean
+function Actor.K2_SetActorLocation(NewLocation, bSweep, bTeleport) end
+
+---Returns the RootComponent of this Actor
+---@return SceneComponent
+function Actor.K2_GetRootComponent() end
+
+---Gets all the components that inherit from the given class.
+---Currently returns an array of UActorComponent which must be cast to the correct type.
+---This intended to only be used by blueprints. Use GetComponents() in C++.
+---@param ComponentClass Class
+---@return ActorComponent[]
+function Actor.K2_GetComponentsByClass(ComponentClass) end
+
+---Returns rotation of the RootComponent of this Actor.
+---@return Rotator
+function Actor.K2_GetActorRotation() end
+
+---Returns the location of the RootComponent of this Actor
+---@return Vector
+function Actor.K2_GetActorLocation() end
+
+---Detaches the RootComponent of this Actor from any SceneComponent it is currently attached to.
+---@param LocationRule EDetachmentRule
+---@param RotationRule EDetachmentRule
+---@param ScaleRule EDetachmentRule
+---@return nil
+function Actor.K2_DetachFromActor(LocationRule, RotationRule, ScaleRule) end
+
+---Destroy the actor
+---@return nil
+function Actor.K2_DestroyActor() end
+
+---Attaches the RootComponent of this Actor to the supplied component, optionally at a named socket. It is not valid to call this on components that are not Registered.
+---@param Parent SceneComponent
+---@param SocketName string
+---@param LocationRule EAttachmentRule
+---@param RotationRule EAttachmentRule
+---@param ScaleRule EAttachmentRule
+---@param bWeldSimulatedBodies boolean
+---@return boolean
+function Actor.K2_AttachToComponent(Parent, SocketName, LocationRule, RotationRule, ScaleRule, bWeldSimulatedBodies) end
+
+---Attaches the RootComponent of this Actor to the supplied actor, optionally at a named socket.
+---@param ParentActor Actor
+---@param SocketName string
+---@param LocationRule EAttachmentRule
+---@param RotationRule EAttachmentRule
+---@param ScaleRule EAttachmentRule
+---@param bWeldSimulatedBodies boolean
+---@return boolean
+function Actor.K2_AttachToActor(ParentActor, SocketName, LocationRule, RotationRule, ScaleRule, bWeldSimulatedBodies) end
+
+---K2 Attach Root Component to Actor
+---@param InParentActor Actor
+---@param InSocketName string
+---@param AttachLocationType integer
+---@param bWeldSimulatedBodies boolean
+---@return nil
+function Actor.K2_AttachRootComponentToActor(InParentActor, InSocketName, AttachLocationType, bWeldSimulatedBodies) end
+
+---K2 Attach Root Component To
+---@param InParent SceneComponent
+---@param InSocketName string
+---@param AttachLocationType integer
+---@param bWeldSimulatedBodies boolean
+---@return nil
+function Actor.K2_AttachRootComponentTo(InParent, InSocketName, AttachLocationType, bWeldSimulatedBodies) end
+
+---Adds a delta to the transform of this actor in world space. Scale is unchanged.
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorWorldTransformKeepScale(bSweep, bTeleport) end
+
+---Adds a delta to the transform of this actor in world space. Ignores scale and sets it to (1,1,1).
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorWorldTransform(bSweep, bTeleport) end
+
+---Adds a delta to the rotation of this actor in world space.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the rotation without teleporting will not update the rotation of simulated child/attached components.
+---@param DeltaRotation Rotator
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorWorldRotation(DeltaRotation, bSweep, bTeleport) end
+
+---Adds a delta to the location of this actor in world space.
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the location without teleporting will not update the location of simulated child/attached components.
+---@param DeltaLocation Vector
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorWorldOffset(DeltaLocation, bSweep, bTeleport) end
+
+---Adds a delta to the transform of this component in its local reference frame
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the transform without teleporting will not update the transform of simulated child/attached components.
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorLocalTransform(bSweep, bTeleport) end
+
+---Adds a delta to the rotation of this component in its local reference frame
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the rotation without teleporting will not update the rotation of simulated child/attached components.
+---@param DeltaRotation Rotator
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorLocalRotation(DeltaRotation, bSweep, bTeleport) end
+
+---Adds a delta to the location of this component in its local reference frame.
+---                                                     Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+---                                                     If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location).
+---                                                     If false, physics velocity is updated based on the change in position (affecting ragdoll parts).
+---                                                     If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+---                         Note that when teleporting, any child/attached components will be teleported too, maintaining their current offset even if they are being simulated.
+---                         Setting the location without teleporting will not update the location of simulated child/attached components.
+---@param DeltaLocation Vector
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return nil, HitResult
+function Actor.K2_AddActorLocalOffset(DeltaLocation, bSweep, bTeleport) end
 
 ---Returns whether or not this actor was explicitly hidden in the editor for the duration of the current editor session
 ---@param bIncludeParent boolean

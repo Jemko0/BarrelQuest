@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class StaticMeshComponent : MeshComponent
 ---StaticMeshComponent is used to create an instance of a UStaticMesh.
 ---A static mesh is a piece of geometry that consists of a static set of polygons.

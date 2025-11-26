@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Blueprint : BlueprintCore
 ---Blueprints are special assets that provide an intuitive, node-based interface that can be used to create new types of Actors
 ---and script level events; giving designers and gameplay programmers the tools to quickly create and iterate gameplay from

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class DamageType
 ---A DamageType is intended to define and describe a particular form of damage and to provide an avenue
 ---for customizing responses to damage from various sources.

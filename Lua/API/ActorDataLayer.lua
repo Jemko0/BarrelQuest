@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ActorDataLayer
 ---This class is deprecated and only present for backward compatibility purposes.
 ---Instead of using FActorDatalayer, directly save the DataLayerInstance FName if the DataLayer not exposed in data.

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class BarrelPlayerController_C : PlayerController
 ---Barrel Player Controller
 ---
@@ -94,6 +95,11 @@ function BarrelPlayerController_C.IsInBuildMode() end
 ---Is in Blocking UI
 ---@return nil, boolean
 function BarrelPlayerController_C.IsInBlockingUI() end
+
+---Create Client Join Loading Screen
+---@param destroy boolean
+---@return nil
+function BarrelPlayerController_C.CreateClientJoinLoadingScreen(destroy) end
 
 ---Try Take Off Clothing
 ---@param InputPin integer

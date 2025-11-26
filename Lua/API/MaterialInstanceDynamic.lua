@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class MaterialInstanceDynamic : MaterialInstance
 ---Material Instance Dynamic
 ---
@@ -86,6 +87,61 @@ function MaterialInstanceDynamic.SetRuntimeVirtualTextureParameterValue(Paramete
 ---@param Value Vector4
 ---@return nil
 function MaterialInstanceDynamic.SetDoubleVectorParameterValue(ParameterName, Value) end
+
+---Interpolates the scalar and vector parameters of this material instance based on two other material instances, and an alpha blending factor
+---The output is the object itself (this).
+---Supports the case SourceA==this || SourceB==this
+---Both material have to be from the same base material
+---@param SourceA MaterialInstance
+---@param SourceB MaterialInstance
+---@param Alpha number
+---@return nil
+function MaterialInstanceDynamic.K2_InterpolateMaterialInstanceParams(SourceA, SourceB, Alpha) end
+
+---Get the current MID vector parameter value, using MPI (to allow access to layer parameters)
+---@return LinearColor
+function MaterialInstanceDynamic.K2_GetVectorParameterValueByInfo() end
+
+---Get the current MID vector parameter value
+---@param ParameterName string
+---@return LinearColor
+function MaterialInstanceDynamic.K2_GetVectorParameterValue(ParameterName) end
+
+---Get the current MID texture parameter value, using MPI (to allow access to layer parameters)
+---@return Texture
+function MaterialInstanceDynamic.K2_GetTextureParameterValueByInfo() end
+
+---Get the current MID texture parameter value
+---@param ParameterName string
+---@return Texture
+function MaterialInstanceDynamic.K2_GetTextureParameterValue(ParameterName) end
+
+---Get the current MID texture collection parameter value, using MPI (to allow access to layer parameters)
+---@return TextureCollection
+function MaterialInstanceDynamic.K2_GetTextureCollectionParameterValueByInfo() end
+
+---Get the current MID texture collection parameter value
+---@param ParameterName string
+---@return TextureCollection
+function MaterialInstanceDynamic.K2_GetTextureCollectionParameterValue(ParameterName) end
+
+---Get the current scalar (float) parameter value from an MID, using MPI (to allow access to layer parameters)
+---@return number
+function MaterialInstanceDynamic.K2_GetScalarParameterValueByInfo() end
+
+---Get the current scalar (float) parameter value from an MID
+---@param ParameterName string
+---@return number
+function MaterialInstanceDynamic.K2_GetScalarParameterValue(ParameterName) end
+
+---Copies over parameters given a material interface (copy each instance following the hierarchy)
+---Very slow implementation, avoid using at runtime. Hopefully we can replace it later with something like CopyInterpParameters()
+---The output is the object itself (this). Copying 'quick parameters only' will result in a much
+---faster copy process but will only copy dynamic scalar, vector and texture parameters on clients.
+---@param Source MaterialInterface
+---@param bQuickParametersOnly boolean
+---@return nil
+function MaterialInstanceDynamic.K2_CopyMaterialInstanceParameters(Source, bQuickParametersOnly) end
 
 ---Use this function to set an initial value and fetch the index for use in SetScalarParameterByIndex.  This
 ---function should only be called once for a particular name, and then use SetScalarParameterByIndex for subsequent

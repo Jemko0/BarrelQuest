@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class MovementComponent : ActorComponent
 ---MovementComponent is an abstract component class that defines functionality for moving a PrimitiveComponent (our UpdatedComponent) each tick.
 ---Base functionality includes:
@@ -98,6 +99,15 @@ function MovementComponent.SetPlaneConstraintEnabled(bEnabled) end
 ---@param NewAxisSetting EPlaneConstraintAxisSetting
 ---@return nil
 function MovementComponent.SetPlaneConstraintAxisSetting(NewAxisSetting) end
+
+---Moves our UpdatedComponent by the given Delta, and sets rotation to NewRotation.
+---Respects the plane constraint, if enabled.
+---@param Delta Vector
+---@param NewRotation Rotator
+---@param bSweep boolean
+---@param bTeleport boolean
+---@return boolean
+function MovementComponent.K2_MoveUpdatedComponent(Delta, NewRotation, bSweep, bTeleport) end
 
 ---Returns true if the current velocity is exceeding the given max speed (usually the result of GetMaxSpeed()), within a small error tolerance.
 ---Note that under normal circumstances updates cause by acceleration will not cause this to be true, however external forces or changes in the max speed limit

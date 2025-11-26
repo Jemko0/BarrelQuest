@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ActorComponent
 ---ActorComponent is the base class for components that define reusable behavior that can be added to different types of Actors.
 ---ActorComponents that have a transform are known as SceneComponents and those that can be rendered are PrimitiveComponents.
@@ -102,6 +103,11 @@ function ActorComponent.RemoveTickPrerequisiteComponent(PrerequisiteComponent) e
 ---@param PrerequisiteActor Actor
 ---@return nil
 function ActorComponent.RemoveTickPrerequisiteActor(PrerequisiteActor) end
+
+---Unregister and mark for pending kill a component.  This may not be used to destroy a component that is owned by an actor unless the owning actor is calling the function.
+---@param Object Object
+---@return nil
+function ActorComponent.K2_DestroyComponent(Object) end
 
 ---Returns whether this component has tick enabled or not
 ---@return boolean

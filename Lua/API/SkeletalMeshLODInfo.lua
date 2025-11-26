@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SkeletalMeshLODInfo
 ---Struct containing information for a particular LOD level, such as materials and info for when to use it.
 ---

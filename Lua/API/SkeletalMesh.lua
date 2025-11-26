@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SkeletalMesh : SkinnedAsset
 ---SkeletalMesh is geometry bound to a hierarchical skeleton of bones which can be animated for the purpose of deforming the mesh.
 ---Skeletal Meshes are built up of two parts; a set of polygons composed to make up the surface of the mesh, and a hierarchical skeleton which can be used to animate the polygons.
@@ -126,6 +127,10 @@ function SkeletalMesh.SetDefaultAnimatingRig(InAnimatingRig) end
 ---Returns the number of sockets available. Both on this mesh and it's skeleton.
 ---@return integer
 function SkeletalMesh.NumSockets() end
+
+---Returns the list of all morph targets of this skeletal mesh
+---@return string[]
+function SkeletalMesh.K2_GetAllMorphTargetNames() end
 
 ---Checks whether the provided section is using APEX cloth. if bCheckCorrespondingSections is true
 ---disabled sections will defer to correspond sections to see if they use cloth (non-cloth sections

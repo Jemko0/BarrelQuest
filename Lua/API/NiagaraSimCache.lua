@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class NiagaraSimCache
 ---Recording of multiple frames of simulation data from a running Niagara system.
 ---Can be used to play back the captured recording or to inspect the captured data for debug purposes.

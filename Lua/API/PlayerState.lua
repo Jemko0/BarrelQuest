@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class PlayerState : Info
 ---A PlayerState is created for every player on a server (or in a standalone game).
 ---PlayerStates are replicated to all clients, and contain network game relevant information about the player, such as playername, score, etc.

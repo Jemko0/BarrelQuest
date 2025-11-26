@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class StreamingTextureBuildInfo
 ---This struct holds the result of TextureStreaming Build for each component texture, as referred by its used materials.
 ---It is possible that the entry referred by this data is not actually relevant in a given quality / target.

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class QuartzClockHandle
 ---This class is a BP / Game thread wrapper around FQuartzClockProxy
 ---   (to talk to the underlying clock)

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class GameModeBase : Info
 ---The GameModeBase defines the game being played. It governs the game rules, scoring, what actors
 ---are allowed to exist in this game type, and who may enter the game.
@@ -88,6 +89,13 @@ function GameModeBase.ResetLevel() end
 ---@param Player PlayerController
 ---@return boolean
 function GameModeBase.PlayerCanRestart(Player) end
+
+---Return the specific player start actor that should be used for the next spawn
+---This will either use a previously saved startactor, or calls ChoosePlayerStart
+---@param Player Controller
+---@param IncomingName string
+---@return Actor
+function GameModeBase.K2_FindPlayerStart(Player, IncomingName) end
 
 ---Returns true if the match start callbacks have been called
 ---@return boolean

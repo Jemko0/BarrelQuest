@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class CameraModifier
 ---A CameraModifier is a base class for objects that may adjust the final camera properties after
 ---being computed by the APlayerCameraManager (@see ModifyCamera). A CameraModifier

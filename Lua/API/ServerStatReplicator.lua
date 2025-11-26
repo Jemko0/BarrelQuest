@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ServerStatReplicator : Info
 ---Class used to replicate server "stat net" data over. For server only values, the client data is
 ---is overwritten when bUpdateStatNet == true. For data that both the client and server set, the server

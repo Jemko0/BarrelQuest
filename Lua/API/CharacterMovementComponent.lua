@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class CharacterMovementComponent : PawnMovementComponent
 ---CharacterMovementComponent handles movement logic for the associated Character owner.
 ---It supports various movement modes including: walking, falling, swimming, flying, custom.
@@ -512,6 +513,30 @@ function CharacterMovementComponent.SetAvoidanceGroup(GroupFlags) end
 ---@param bEnable boolean
 ---@return nil
 function CharacterMovementComponent.SetAvoidanceEnabled(bEnable) end
+
+---Get the Z component of the normal of the steepest walkable surface for the character. Any lower than this and it is not walkable.
+---@return number
+function CharacterMovementComponent.K2_GetWalkableFloorZ() end
+
+---Get the max angle in degrees of a walkable surface for the character.
+---@return number
+function CharacterMovementComponent.K2_GetWalkableFloorAngle() end
+
+---Sweeps a vertical trace to find the floor for the capsule at the given location. Will attempt to perch if ShouldComputePerchResult() returns true for the downward sweep result.
+---No floor will be found if collision is disabled on the capsule!
+---@param CapsuleLocation Vector
+---@return nil, FindFloorResult
+function CharacterMovementComponent.K2_FindFloor(CapsuleLocation) end
+
+---Compute distance to the floor from bottom sphere of capsule and store the result in FloorResult.
+---This distance is the swept distance of the capsule to the first point impacted by the lower hemisphere, or distance from the bottom of the capsule in the case of a line trace.
+---This function does not care if collision is disabled on the capsule (unlike FindFloor).
+---@param CapsuleLocation Vector
+---@param LineDistance number
+---@param SweepDistance number
+---@param SweepRadius number
+---@return nil, FindFloorResult
+function CharacterMovementComponent.K2_ComputeFloorDist(CapsuleLocation, LineDistance, SweepDistance, SweepRadius) end
 
 ---Returns true if the character is in the 'Walking' movement mode.
 ---@return boolean

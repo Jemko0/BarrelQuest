@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class DateTime
 ---A value representing a specific point date and time over a wide range of years.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Misc\DateTime.h

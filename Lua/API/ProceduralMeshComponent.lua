@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ProceduralMeshComponent : MeshComponent
 ---Component that allows you to specify custom triangle mesh geometry
 ---Beware! This feature is experimental and may be substantially changed in future releases.

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class PostProcessSettings
 ---To be able to use struct PostProcessSettings. // Each property consists of a bool to enable it (by default off),
 ---// the variable declaration and further down the default value for it.

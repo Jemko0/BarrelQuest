@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class CameraComponent : SceneComponent
 ---Represents a camera viewpoint and settings, such as projection type, field of view, and post-process overrides.
 ---The default behavior for an actor used as the camera view target is to look for an attached camera component and use its location, rotation, and settings.

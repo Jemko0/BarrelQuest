@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class AnimNotifyEvent
 ---Triggers an animation notify.  Each AnimNotifyEvent contains an AnimNotify object
 ---which has its Notify method called and passed to the animation.

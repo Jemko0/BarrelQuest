@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class NiagaraSystem : FXSystemAsset
 ---A Niagara System contains multiple Niagara Emitters to create various effects.
 ---Niagara Systems can be placed in the world, unlike Emitters, and expose User Parameters to configure an effect at runtime.

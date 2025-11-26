@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class BodySetup : BodySetupCore
 ---BodySetup contains all collision information that is associated with a single asset.
 ---A single BodySetup instance is shared among many BodyInstances so that geometry data is not duplicated.

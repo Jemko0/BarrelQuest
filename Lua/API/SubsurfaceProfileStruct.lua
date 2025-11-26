@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class SubsurfaceProfileStruct
 ---struct with all the settings we want in USubsurfaceProfile, separate to make it easer to pass this data around in the engine.
 ---

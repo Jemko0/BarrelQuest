@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class RepMovement
 ---Replicated movement data of our RootComponent.
 ---Struct used for efficient replication as velocity and location are generally replicated together (this saves a repindex)

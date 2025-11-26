@@ -13,12 +13,11 @@ function printTable(table)
 end
 
 ---@return BarrelCharacter_C
----gets the local player, nil on dedicated server
-function getLocalPlayer() end
+function __getLocalPlayer() end
 
 ---@return string
 ---gets the path to the lua module directory
-function getLuaModulePath() end
+function __getLuaModulePath() end
 
 ---adds a lua file to package.path, usually used internally and not by user code
 function addPackage(path) end

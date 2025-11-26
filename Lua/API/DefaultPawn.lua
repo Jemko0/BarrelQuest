@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class DefaultPawn : Pawn
 ---DefaultPawn implements a simple Pawn with spherical collision and built-in flying movement.
 ---@see UFloatingPawnMovement

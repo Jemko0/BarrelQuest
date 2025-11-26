@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class ClothingAssetBase
 ---An interface object for any clothing asset the engine can use.
 ---Any clothing asset concrete object should derive from this.

@@ -4,6 +4,7 @@
 --- For example: 'Apply_Damage' in Lua corresponds to 'Apply Damage' in Blueprint.
 --- Access these using bracket notation: object["Apply Damage"]
 
+---@diagnostic disable: undefined-doc-name
 ---@class Vector4f
 ---A 4-D homogeneous vector.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Vector4.h
