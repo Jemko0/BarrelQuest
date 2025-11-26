@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EditedDocumentInfo
 ---Edited Document Info
 ---
 --- Properties
+---
 ---Edited object
 ---@field EditedObjectPath SoftObjectPath
 ---Saved view position

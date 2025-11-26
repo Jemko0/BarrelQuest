@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DynamicIntensityTrackStruct
 ---Dynamic Intensity Track Struct
 ---
 --- Properties
----@field Layers_6_4310ACCC40B767D6C809BA8C3D91B93E table<integer, SoundBase>
+---
+---@field protected Layers_6_4310ACCC40B767D6C809BA8C3D91B93E table<integer, SoundBase>
 local DynamicIntensityTrackStruct = {}
 
 --- Constructor

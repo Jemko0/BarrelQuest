@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Anchors
 ---Describes how a widget is anchored.
 ---
 --- Properties
+---
 ---Holds the minimum anchors, left + top.
 ---@field Minimum Vector2D
 ---Holds the maximum anchors, right + bottom.

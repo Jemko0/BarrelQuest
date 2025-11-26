@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshSourceModel
 ---Skeletal Mesh Source Model
 ---
 --- Properties
+---
 ---@field TriangleCount integer
 ---@field VertexCount integer
 ---@field Bounds BoxSphereBounds

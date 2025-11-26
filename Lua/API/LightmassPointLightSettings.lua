@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightmassPointLightSettings
 ---Point/spot settings for Lightmass
 ---
 --- Properties
+---
 ---0 will be completely desaturated, 1 will be unchanged
 ---@field IndirectLightingSaturation number
 ---Controls the falloff of shadow penumbras

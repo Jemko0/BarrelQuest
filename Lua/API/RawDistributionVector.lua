@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RawDistributionVector
 ---Raw Distribution Vector
 ---
 --- Properties
+---
 ---@field MinValue number
 ---@field MaxValue number
 ---@field MinValueVec Vector

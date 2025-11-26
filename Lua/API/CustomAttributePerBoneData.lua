@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CustomAttributePerBoneData
 ---Custom Attribute Per Bone Data
 ---
 --- Properties
+---
 ---@field BoneTreeIndex integer
 ---@field Attributes CustomAttribute[]
 local CustomAttributePerBoneData = {}

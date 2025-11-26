@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightingChannels
 ---Specifies which lighting channels are relevant
 ---
 --- Properties
+---
 ---Default channel for all primitives and lights.
 ---@field bChannel0 boolean
 ---First custom channel

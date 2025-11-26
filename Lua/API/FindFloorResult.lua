@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FindFloorResult
 ---Data about the floor for walking movement, used by CharacterMovementComponent.
 ---
 --- Properties
+---
 ---True if there was a blocking hit in the floor test that was NOT in initial penetration.
 ---The HitResult can give more info about other circumstances.
 ---@field bBlockingHit boolean

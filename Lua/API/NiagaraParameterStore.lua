@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraParameterStore
 ---Base storage class for Niagara parameter values.
 ---
 --- Properties
+---
 ---Owner of this store. Used to provide an outer to data interfaces in this store.
 ---@field Owner any
 ---Map from parameter defs to their offset in the data table or the data interface. TODO: Separate out into a layout and instance class to reduce duplicated data for this?

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class KAggregateGeom
 ---Container for an aggregate of collision shapes
 ---
 --- Properties
+---
 ---@field SphereElems KSphereElem[]
 ---@field BoxElems KBoxElem[]
 ---@field SphylElems KSphylElem[]

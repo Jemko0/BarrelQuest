@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MovementProperties
 ---Movement capabilities, determining available movement options for Pawns and used by AI for reachability tests.
 ---
 --- Properties
+---
 ---If true, this Pawn is capable of crouching.
 ---@field bCanCrouch boolean
 ---If true, this Pawn is capable of jumping.

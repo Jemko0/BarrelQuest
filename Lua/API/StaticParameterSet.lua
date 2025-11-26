@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StaticParameterSet
 ---Contains all the information needed to identify a single permutation of static parameters.
 ---
 --- Properties
+---
 ---@field EditorOnly StaticParameterSetEditorOnlyData
 ---@field MaterialLayersParameters StaticMaterialLayersParameter[]
 ---@field StaticSwitchParameters StaticSwitchParameter[]

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParameterGroupData
 ---Parameter Group Data
 ---
 --- Properties
+---
 ---@field GroupName string
 ---@field GroupSortPriority integer
 local ParameterGroupData = {}

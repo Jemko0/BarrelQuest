@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundWaveCuePoint
 ---Struct defining a cue point in a sound wave asset
 ---
 --- Properties
+---
 ---Unique identifier for the wave cue point
 ---@field CuePointID integer
 ---The label for the cue point

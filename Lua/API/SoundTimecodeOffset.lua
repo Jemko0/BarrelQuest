@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundTimecodeOffset
 ---Sound Timecode Offset
 ---
 --- Properties
+---
 ---@field NumOfSecondsSinceMidnight number
 local SoundTimecodeOffset = {}
 

@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LinearColor
 ---A linear, 32-bit/component floating point RGBA color.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Color.h
 ---
 --- Properties
+---
 ---@field R number
 ---@field G number
 ---@field B number

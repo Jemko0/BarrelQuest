@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RuntimeVirtualTextureParameterValue
 ---Editable runtime virtual texture parameter.
 ---
 --- Properties
+---
 ---@field ParameterInfo MaterialParameterInfo
 ---@field ParameterValue RuntimeVirtualTexture
 ---@field ExpressionGUID Guid

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraphPinReference
 ---Ed Graph Pin Reference
 ---
 --- Properties
+---
 ---The node that owns the pin referred to by this struct. Updated at Set and Save time.
 ---@field OwningNode any
 ---The pin's unique ID. Updated at Set and Save time.

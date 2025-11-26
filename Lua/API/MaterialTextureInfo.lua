@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialTextureInfo
 ---This struct holds data about how a texture is sampled within a material.
 ---
 --- Properties
+---
 ---The scale used when sampling the texture
 ---@field SamplingScale number
 ---The coordinate index used when sampling the texture

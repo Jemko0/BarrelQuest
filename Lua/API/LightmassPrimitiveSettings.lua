@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightmassPrimitiveSettings
 ---Per-object settings for Lightmass
 ---
 --- Properties
+---
 ---If true, this object will be lit as if it receives light from both sides of its polygons.
 ---@field bUseTwoSidedLighting boolean
 ---If true, this object will only shadow indirect lighting.

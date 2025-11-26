@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FontParameterValue
 ---Editable font parameter.
 ---
 --- Properties
+---
 ---@field ParameterName string
 ---@field ParameterInfo MaterialParameterInfo
 ---@field FontValue Font

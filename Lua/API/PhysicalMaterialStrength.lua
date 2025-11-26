@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicalMaterialStrength
 ---Defines the directional strengths of a physical material in term of force per surface area
 ---
 --- Properties
+---
 ---Tensile strength of the material in MegaPascal ( 10^6 N/m2 )
 ---This amount of tension force per area the material can withstand before it fractures
 ---@field TensileStrength number

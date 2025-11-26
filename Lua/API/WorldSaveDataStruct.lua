@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WorldSaveDataStruct
 ---World Save Data Struct
 ---
 --- Properties
----@field DestroyedTrees_7_FE9DA9A743048ABDF5C047AC5ACDACA1 table<Vector, integer>
----@field Subcontainers_17_A3C896AA47DC532158193AAA49D99A8B table<string, SavedSubcontainerStruct>
+---
+---@field protected DestroyedTrees_7_FE9DA9A743048ABDF5C047AC5ACDACA1 table<Vector, integer>
+---@field protected Subcontainers_17_A3C896AA47DC532158193AAA49D99A8B table<string, SavedSubcontainerStruct>
 local WorldSaveDataStruct = {}
 
 --- Constructor

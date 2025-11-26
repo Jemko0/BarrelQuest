@@ -612,7 +612,7 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
     
     if (suppressWarnings)
     {
-        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n"));
+        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n\n"));
     }
     
     LuaMetaContent += FString::Printf(TEXT("---@class %s\n"), *StructName);
@@ -629,15 +629,14 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
         }
     }
 
-    LuaMetaContent += TEXT("---\n--- Properties\n");
-
-    // Structure to hold field info for the constructor generation later
-    struct FLuaStructField
-    {
-        FString Name;
-        FString Type;
-    };
+    LuaMetaContent += TEXT("---\n--- Properties\n---\n");
+    
     TArray<FLuaStructField> CollectedFields;
+
+    // Collect field mappings for wrapper generation
+    TMap<FString, FString> FieldMappings; // CleanName -> UglyName
+    TMap<FString, FString> FieldTypes;    // CleanName -> Type
+    bool bHasUglyNames = false;
 
     // Generate fields
     for (TFieldIterator<FProperty> PropIt(InStruct); PropIt; ++PropIt)
@@ -650,8 +649,44 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
         
         FString LuaType = GetLuaTypeFromProperty(Property);
         
+        // Extract clean name (remove GUID suffix pattern like "_7_DF6FEDCF...")
+        FString CleanName = PropNameDisplay;
+        bool bIsUglyName = false;
+        
+        // Check for pattern: SomeName_Number_GUID
+        int32 LastUnderscoreIndex;
+        if (CleanName.FindLastChar('_', LastUnderscoreIndex))
+        {
+            FString AfterUnderscore = CleanName.RightChop(LastUnderscoreIndex + 1);
+            
+            // If it's all hex or long enough to be a GUID, it's likely generated
+            if (AfterUnderscore.Len() > 8 || (AfterUnderscore.Len() > 0 && AfterUnderscore.IsNumeric()))
+            {
+                // Look for the pattern before: Name_Number_GUID
+                FString BeforeLastUnderscore = CleanName.Left(LastUnderscoreIndex);
+                int32 SecondLastUnderscoreIndex;
+                if (BeforeLastUnderscore.FindLastChar('_', SecondLastUnderscoreIndex))
+                {
+                    FString NumberPart = BeforeLastUnderscore.RightChop(SecondLastUnderscoreIndex + 1);
+                    if (NumberPart.IsNumeric())
+                    {
+                        // It's the pattern: Name_Number_GUID
+                        CleanName = BeforeLastUnderscore.Left(SecondLastUnderscoreIndex);
+                        bIsUglyName = true;
+                        bHasUglyNames = true;
+                    }
+                }
+            }
+        }
+        
+        if (bIsUglyName)
+        {
+            FieldMappings.Add(CleanName, PropNameDisplay);
+            FieldTypes.Add(CleanName, LuaType);
+        }
+        
         // Store for constructor generation
-        CollectedFields.Add({PropNameDisplay, LuaType});
+        CollectedFields.Add({PropName, PropNameDisplay, LuaType, CleanName});
 
         // Add property documentation
         FString PropTooltip = Property->GetToolTipText().ToString();
@@ -660,7 +695,6 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
             TArray<FString> TooltipLines;
             PropTooltip.ParseIntoArray(TooltipLines, TEXT("\n"), true);
             
-            // Check if first line is @deprecated
             bool bStartsWithDeprecated = false;
             if (TooltipLines.Num() > 0)
             {
@@ -668,7 +702,6 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
                 bStartsWithDeprecated = FirstLine.StartsWith(TEXT("@deprecated"));
             }
             
-            // Add extra newline before @deprecated for spacing
             if (bStartsWithDeprecated)
             {
                 LuaMetaContent += TEXT("---\n");
@@ -676,70 +709,68 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
             
             for (const FString& Line : TooltipLines)
             {
-                LuaMetaContent += FString::Printf(TEXT("---%s\n"), *Line);
+                FString ProcessedLine = Line;
+                ProcessedLine.ReplaceInline(TEXT("@see"), TEXT("\\@see"));
+                LuaMetaContent += FString::Printf(TEXT("---%s\n"), *ProcessedLine);
             }
         }
         
-        // Add original name comment if it contains spaces
+        // Mark ugly names as protected to hide from autocomplete but allow internal access
+        FString FieldVisibility = bIsUglyName ? TEXT("protected ") : TEXT("");
+        
         if (PropName.Contains(TEXT(" ")))
         {
-            LuaMetaContent += FString::Printf(TEXT("---@field %s %s -- Original name: \"%s\"\n"), 
-                *PropNameDisplay, *LuaType, *PropName);
+            LuaMetaContent += FString::Printf(TEXT("---@field %s%s %s -- Original name: \"%s\"\n"), 
+                *FieldVisibility, *PropNameDisplay, *LuaType, *PropName);
         }
         else
         {
-            LuaMetaContent += FString::Printf(TEXT("---@field %s %s\n"), *PropNameDisplay, *LuaType);
+            LuaMetaContent += FString::Printf(TEXT("---@field %s%s %s\n"), *FieldVisibility, *PropNameDisplay, *LuaType);
         }
     }
 
     LuaMetaContent += FString::Printf(TEXT("local %s = {}\n"), *StructName);
 
-    // --- Constructor Generation Start ---
+    // Constructor
     LuaMetaContent += TEXT("\n--- Constructor\n");
     LuaMetaContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
 
-    // Generate @param annotations for the constructor
     for (const FLuaStructField& Field : CollectedFields)
     {
-        LuaMetaContent += FString::Printf(TEXT("---@param %s %s\n"), *Field.Name, *Field.Type);
+        LuaMetaContent += FString::Printf(TEXT("---@param %s %s\n"), *Field.DisplayName, *Field.Type);
     }
 
-    // Generate function signature
     TArray<FString> ParamNames;
     for (const FLuaStructField& Field : CollectedFields)
     {
-        ParamNames.Add(Field.Name);
+        ParamNames.Add(Field.DisplayName);
     }
     FString ParamList = FString::Join(ParamNames, TEXT(", "));
 
     LuaMetaContent += FString::Printf(TEXT("function %s.new(%s)\n"), *StructName, *ParamList);
     LuaMetaContent += TEXT("    local self = {}\n");
     
-    // Assign values
     for (const FLuaStructField& Field : CollectedFields)
     {
-        LuaMetaContent += FString::Printf(TEXT("    self.%s = %s\n"), *Field.Name, *Field.Name);
+        LuaMetaContent += FString::Printf(TEXT("    self.%s = %s\n"), *Field.DisplayName, *Field.DisplayName);
     }
 
     LuaMetaContent += TEXT("    return self\n");
     LuaMetaContent += TEXT("end\n\n");
-    // --- Constructor Generation End ---
 
     LuaMetaContent += FString::Printf(TEXT("return %s\n"), *StructName);
 
-    // Save to file
+    // Save main struct file
     FString ProjectDir = FPaths::ProjectDir();
     FString MetaDir = FPaths::Combine(ProjectDir, GetLuaMetaOutputDirectory());
     FString FilePath = FPaths::Combine(MetaDir, FString::Printf(TEXT("%s.lua"), *StructName));
 
-    // Create directory if it doesn't exist
     IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
     if (!PlatformFile.DirectoryExists(*MetaDir))
     {
         PlatformFile.CreateDirectoryTree(*MetaDir);
     }
 
-    // Write file
     if (FFileHelper::SaveStringToFile(LuaMetaContent, *FilePath))
     {
         UE_LOG(LogTemp, Log, TEXT("Successfully generated Lua meta file: %s"), *FilePath);
@@ -747,6 +778,154 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
     else
     {
         UE_LOG(LogTemp, Error, TEXT("Failed to write Lua meta file: %s"), *FilePath);
+    }
+
+    // Generate wrapper if struct has ugly generated names
+    if (bHasUglyNames && FieldMappings.Num() > 0)
+    {
+        FString WrappersDir = FPaths::Combine(MetaDir, TEXT("wrappers"));
+        GenerateStructWrapper(StructName, CollectedFields, FieldMappings, FieldTypes, WrappersDir);
+    }
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
+    const FString& StructName,
+    const TArray<FLuaStructField>& Fields,
+    const TMap<FString, FString>& FieldMappings,
+    const TMap<FString, FString>& FieldTypes,
+    const FString& OutputDir)
+{
+    // ... (Directory setup is correct) ...
+
+    IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+    if (!PlatformFile.DirectoryExists(*OutputDir))
+    {
+        PlatformFile.CreateDirectoryTree(*OutputDir);
+    }
+    
+    FString WrapperName = StructName;
+    if (WrapperName.EndsWith(TEXT("Struct")))
+    {
+        WrapperName = WrapperName.LeftChop(6);
+    }
+    
+    FString WrapperContent;
+    
+    // Header & Class Definitions (Unchanged)
+    WrapperContent += TEXT("---@meta\n");
+    WrapperContent += FString::Printf(TEXT("local %s = require(\"API.%s\")\n\n"), *StructName, *StructName);
+    WrapperContent += FString::Printf(TEXT("---@class %s : %s\n"), *WrapperName, *StructName);
+    WrapperContent += FString::Printf(TEXT("---@field private _raw %s\n"), *StructName);
+    for (const TPair<FString, FString>& Pair : FieldTypes)
+    {
+        WrapperContent += FString::Printf(TEXT("---@field %s %s\n"), *Pair.Key, *Pair.Value);
+    }
+    WrapperContent += FString::Printf(TEXT("local %s = {}\n"), *WrapperName);
+    WrapperContent += FString::Printf(TEXT("%s.__index = %s\n\n"), *WrapperName, *WrapperName);
+    
+    // Constructor (Unchanged)
+    TArray<FString> ConstructorParamNames;
+    FString ParamAnnotations;
+
+    for (const FLuaStructField& Field : Fields)
+    {
+        FString ParamName = FieldMappings.Contains(Field.CleanName) ? Field.CleanName : Field.DisplayName;
+        ConstructorParamNames.Add(ParamName);
+        ParamAnnotations += FString::Printf(TEXT("---@param %s %s\n"), *ParamName, *Field.Type);
+    }
+
+    WrapperContent += TEXT("--- Constructor\n");
+    WrapperContent += ParamAnnotations;
+    WrapperContent += FString::Printf(TEXT("---@return %s\n"), *WrapperName);
+    
+    FString ParamListString = FString::Join(ConstructorParamNames, TEXT(", "));
+    
+    WrapperContent += FString::Printf(TEXT("function %s.new(%s)\n"), *WrapperName, *ParamListString);
+    WrapperContent += FString::Printf(TEXT("    local raw = %s.new(%s)\n\n"), *StructName, *ParamListString);
+    WrapperContent += FString::Printf(TEXT("    local self = setmetatable({}, %s)\n"), *WrapperName);
+    WrapperContent += TEXT("    rawset(self, \"_raw\", raw)\n"); // Use rawset for consistency and safety
+    WrapperContent += TEXT("    return self\n");
+    WrapperContent += TEXT("end\n\n");
+
+    
+    // --- __index (Getter) - Stack Overflow prevention maintained ---
+    WrapperContent += FString::Printf(TEXT("function %s:__index(key)\n"), *WrapperName);
+    
+    // Lookup Mappings
+    WrapperContent += TEXT("    local mappings = {\n");
+    for (const TPair<FString, FString>& Pair : FieldMappings)
+    {
+        WrapperContent += FString::Printf(TEXT("        %s = \"%s\",\n"), *Pair.Key, *Pair.Value);
+    }
+    WrapperContent += TEXT("    }\n\n");
+
+    // 1. Check the metatable for functions (methods)
+    WrapperContent += TEXT("    local mt = getmetatable(self)\n");
+    WrapperContent += TEXT("    local value = rawget(mt, key)\n");
+    
+    // If a value is found AND it's a function (method) or the value is not the metatable itself (avoids recursion), return it.
+    WrapperContent += TEXT("    if value and (type(value) == 'function' or value ~= mt) then return value end\n\n");
+    
+    // 2. Perform the delegation lookup
+    WrapperContent += TEXT("    local uglyKey = mappings[key]\n");
+    WrapperContent += TEXT("    local finalKey = uglyKey or key\n");
+    
+    // 3. Delegate to the raw struct.
+    WrapperContent += TEXT("    local raw = rawget(self, \"_raw\")\n");
+    WrapperContent += TEXT("    return raw[finalKey]\n");
+    WrapperContent += FString::Printf(TEXT("end\n\n"));
+
+
+    // --- __newindex (Setter) - Recursion prevention maintained ---
+    WrapperContent += FString::Printf(TEXT("function %s:__newindex(key, value)\n"), *WrapperName);
+    
+    // Lookup Mappings
+    WrapperContent += TEXT("    local mappings = {\n");
+    for (const TPair<FString, FString>& Pair : FieldMappings)
+    {
+        WrapperContent += FString::Printf(TEXT("        %s = \"%s\",\n"), *Pair.Key, *Pair.Value);
+    }
+    WrapperContent += TEXT("    }\n\n");
+
+    WrapperContent += TEXT("    local uglyKey = mappings[key]\n");
+    WrapperContent += TEXT("    local finalKey = uglyKey or key\n"); 
+    
+    // FIX: Use rawget to safely retrieve the _raw table without triggering infinite __newindex recursion.
+    WrapperContent += TEXT("    local raw = rawget(self, \"_raw\")\n");
+    WrapperContent += TEXT("    raw[finalKey] = value\n");
+    
+    WrapperContent += FString::Printf(TEXT("end\n\n"));
+
+    
+    // 🌟 FIX: Add GetRaw() method for engine compatibility 
+    // This allows user code to call InventoryItem.new(...):GetRaw()
+    WrapperContent += FString::Printf(TEXT("--- Returns the raw underlying C++ struct (flat table format).\n"));
+    WrapperContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
+    WrapperContent += FString::Printf(TEXT("function %s:GetRaw()\n"), *WrapperName);
+    WrapperContent += TEXT("    return rawget(self, \"_raw\")\n"); 
+    WrapperContent += FString::Printf(TEXT("end\n\n"));
+
+    // 🌟 OPTIONAL: Add __unm (Unary Minus) for easy shorthand: -i 
+    WrapperContent += FString::Printf(TEXT("--- Unary Minus (-) operator shorthand for GetRaw().\n"));
+    WrapperContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
+    WrapperContent += FString::Printf(TEXT("function %s:__unm()\n"), *WrapperName);
+    WrapperContent += TEXT("    return rawget(self, \"_raw\")\n"); 
+    WrapperContent += FString::Printf(TEXT("end\n\n"));
+
+
+    WrapperContent += FString::Printf(TEXT("return %s\n"), *WrapperName);
+
+    // 💥 FIX: Define FilePath before saving!
+    FString FilePath = FPaths::Combine(OutputDir, FString::Printf(TEXT("%s.lua"), *WrapperName));
+
+    // --- File Saving ---
+    if (FFileHelper::SaveStringToFile(WrapperContent, *FilePath))
+    {
+        UE_LOG(LogTemp, Log, TEXT("Successfully generated Lua wrapper: %s"), *FilePath);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to write Lua wrapper: %s"), *FilePath);
     }
 }
 

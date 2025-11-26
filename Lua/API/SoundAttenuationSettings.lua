@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundAttenuationSettings
 ---The settings for attenuating.
 ---
 --- Properties
+---
 ---Allows distance-based volume attenuation.
 ---@field bAttenuate boolean
 ---Allows the source to be 3D spatialized.

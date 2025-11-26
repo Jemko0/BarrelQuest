@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RichCurve
 ---A rich, editable float curve
 ---
 --- Properties
+---
 ---Sorted array of keys
 ---@field Keys RichCurveKey[]
 ---Default value

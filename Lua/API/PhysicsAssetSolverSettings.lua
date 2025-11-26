@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicsAssetSolverSettings
 ---Solver iterations settings for use by RigidBody AnimNode (RBAN) in the Anim Graph. Each RBAN node runs its own solver with these settings.
 ---@note These settings have no effect when the Physics Asset is used in a world simulation (i.e., as a ragdoll on a SkeletalMeshComponent).
 ---
 --- Properties
+---
 ---RBAN: The number of position iterations to run. The position solve is responsible for depenetration.
 ---Increasing this will improve simulation stability, but increase the cost.
 ---@field PositionIterations integer

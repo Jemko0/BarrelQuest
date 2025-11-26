@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class VirtualBone
 ---Virtual Bone
 ---
 --- Properties
+---
 ---@field SourceBoneName string
 ---@field TargetBoneName string
 ---@field VirtualBoneName string

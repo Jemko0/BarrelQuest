@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavAgentProperties
 ---Properties of representation of an 'agent' (or Pawn) used by AI navigation/pathfinding.
 ---
 --- Properties
+---
 ---Radius of the capsule used for navigation/pathfinding.
 ---@field AgentRadius number
 ---Total height of the capsule used for navigation/pathfinding.

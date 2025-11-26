@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SmartNameContainer
 ---Smart Name Container
 ---
 --- Properties
+---
 local SmartNameContainer = {}
 
 --- Constructor

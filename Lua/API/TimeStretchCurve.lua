@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TimeStretchCurve
 ---= Time Stretch Curve =
 ---= What is it?
@@ -115,6 +116,7 @@
 ---        That's in a nutshell how this system works.
 ---
 --- Properties
+---
 ---Desired Sampling rate of above curve.
 ---This will be rounded off so we sample the whole curve
 ---with a fixed time step.

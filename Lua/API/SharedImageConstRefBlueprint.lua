@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SharedImageConstRefBlueprint
 ---Exposes a FSharedImage to blueprint in an unalterable way.
 ---
 --- Properties
+---
 local SharedImageConstRefBlueprint = {}
 
 --- Constructor

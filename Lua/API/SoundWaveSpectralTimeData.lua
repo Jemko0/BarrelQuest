@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundWaveSpectralTimeData
 ---Struct used to store spectral data with time-stamps
 ---
 --- Properties
+---
 ---The spectral data at the given time. The array indices correspond to the frequencies set to analyze.
 ---@field Data SoundWaveSpectralDataEntry[]
 ---The timestamp associated with this spectral data

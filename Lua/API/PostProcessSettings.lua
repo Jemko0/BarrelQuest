@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PostProcessSettings
 ---To be able to use struct PostProcessSettings. // Each property consists of a bool to enable it (by default off),
 ---// the variable declaration and further down the default value for it.
 ---// The comment should include the meaning and usable range.
 ---
 --- Properties
+---
 ---first all bOverride_... as they get grouped together into bitfields
 ---@field bOverride_TemperatureType boolean
 ---@field bOverride_WhiteTemp boolean

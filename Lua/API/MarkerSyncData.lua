@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MarkerSyncData
 ---Marker Sync Data
 ---
 --- Properties
+---
 ---Authored Sync markers
 ---@field AuthoredSyncMarkers AnimSyncMarker[]
 local MarkerSyncData = {}

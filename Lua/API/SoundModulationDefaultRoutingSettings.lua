@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundModulationDefaultRoutingSettings
 ---Default parameter destination settings for source audio object.
 ---
 --- Properties
+---
 ---What volume modulation settings to use
 ---@field VolumeRouting EModulationRouting
 ---What pitch modulation settings to use

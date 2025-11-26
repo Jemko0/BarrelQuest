@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Vector_NetQuantizeNormal
 ---FVector_NetQuantizeNormal
 ---16 bits per component
 ---Valid range: -1..+1 inclusive
 ---
 --- Properties
+---
 ---@field X number
 ---@field Y number
 ---@field Z number

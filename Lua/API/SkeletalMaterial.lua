@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMaterial
 ---Skeletal Material
 ---
 --- Properties
+---
 ---@field MaterialInterface MaterialInterface
 ---This name should be use by the gameplay to avoid error if the skeletal mesh Materials array topology change
 ---@field MaterialSlotName string

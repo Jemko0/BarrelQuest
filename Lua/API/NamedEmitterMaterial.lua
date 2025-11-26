@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NamedEmitterMaterial
 ---Named Emitter Material
 ---
 --- Properties
+---
 ---@field Name string
 ---@field Material MaterialInterface
 local NamedEmitterMaterial = {}

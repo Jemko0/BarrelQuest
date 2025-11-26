@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BPEditorBookmarkNode
 ---Bookmark node info
 ---
 --- Properties
+---
 ---Node ID
 ---@field NodeGuid Guid
 ---Parent ID

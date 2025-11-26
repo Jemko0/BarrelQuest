@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureSourceColorSettings
 ---Texture Source Color Settings
 ---
 --- Properties
+---
 ---Source encoding of the texture, exposing more options than just sRGB.
 ---@field EncodingOverride ETextureSourceEncoding
 ---Source color space of the texture.

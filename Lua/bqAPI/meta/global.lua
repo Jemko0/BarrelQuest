@@ -7,13 +7,17 @@
 ---@return RightClickMenuOption
 function test_get_rco() end
 
----prints a tables content, can also just print normally but consistent behavior not guaranteed
----@param table any
-function printTable(table)
-end
-
 ---@return BarrelCharacter_C
 function __getLocalPlayer() end
+
+---@return BarrelLuaNetworkActor_C
+function __getNetActor() end
+
+---@return Class
+function __getCBN(className) end
+
+---@return AssetData
+function __getAsset(objPath) end
 
 ---@return string
 ---gets the path to the lua module directory

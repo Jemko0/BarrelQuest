@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DisplacementScaling
 ---Displacement Scaling
 ---
 --- Properties
+---
 ---@field Magnitude number
 ---@field Center number
 local DisplacementScaling = {}

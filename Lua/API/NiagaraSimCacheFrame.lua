@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSimCacheFrame
 ---Niagara Sim Cache Frame
 ---
 --- Properties
+---
 ---@field LocalToWorld Transform
 ---@field LWCTile Vector3f
 ---@field SimulationAge number

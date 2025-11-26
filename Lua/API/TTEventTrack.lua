@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TTEventTrack
 ---Structure storing information about one event track
 ---
 --- Properties
+---
 ---@field FunctionName string
 ---Curve object used to store keys
 ---@field CurveKeys CurveFloat

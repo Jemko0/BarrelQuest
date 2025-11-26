@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SubstrateMaterialInput
 ---Substrate Material Input
 ---
 --- Properties
+---
 ---Material expression that this input is connected to, or NULL if not connected.
 ---@field Expression MaterialExpression
 ---Index into Expression's outputs array that this input is connected to.

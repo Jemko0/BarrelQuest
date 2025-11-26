@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SlateColor
 ---A Slate color can be a directly specified value, or the color can be pulled from a WidgetStyle.
 ---
 --- Properties
+---
 ---The current specified color; only meaningful when ColorToUse == UseColor_Specified.
 ---@field SpecifiedColor LinearColor
 ---The rule for which color to pick.

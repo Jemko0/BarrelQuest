@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MarkerSyncAnimPosition
 ---Represent a current play position in an animation
 ---based on sync markers
 ---
 --- Properties
+---
 ---The marker we have passed
 ---@field PreviousMarkerName string
 ---The marker we are heading towards

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class KConvexElem
 ---One convex hull, used for simplified collision.
 ---
 --- Properties
+---
 ---Array of indices that make up the convex hull.
 ---@field VertexData Vector[]
 ---@field IndexData integer[]

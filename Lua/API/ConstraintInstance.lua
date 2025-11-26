@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ConstraintInstance
 ---Container for a physics representation of an object.
 ---
 --- Properties
+---
 ---Name of bone that this joint is associated with.
 ---@field JointName string
 ---Name of first bone (body) that this constraint is connecting.

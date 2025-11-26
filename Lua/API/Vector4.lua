@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Vector4
 ---A 4-D homogeneous vector.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Vector4.h
 ---
 --- Properties
+---
 ---@field X number
 ---@field Y number
 ---@field Z number

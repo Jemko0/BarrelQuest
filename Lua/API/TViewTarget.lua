@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TViewTarget
 ---A ViewTarget is the primary actor the camera is associated with.
 ---
 --- Properties
+---
 ---Target Actor used to compute POV
 ---@field Target Actor
 ---Computed point of view

@@ -9,6 +9,17 @@
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FLuaStructField
+{
+	GENERATED_BODY()
+	
+	FString Name;
+	FString DisplayName;
+	FString Type;
+	FString CleanName;
+};
+
 UCLASS()
 class BARRELQUEST_API UBarrelUtilityFunctionLibrary : public UBlueprintFunctionLibrary
 {
@@ -35,4 +46,12 @@ public:
 
 	static void GenerateLuaMetaFileFromStruct(UStruct* InStruct, bool suppressWarnings);
 	static void CollectReferencedTypes(UClass* InClass, TSet<UStruct*>& OutStructs, TSet<UClass*>& OutClasses);
+	
+	UFUNCTION(BlueprintCallable)
+	static void GenerateStructWrapper(
+	const FString& StructName,
+	const TArray<FLuaStructField>& Fields,
+	const TMap<FString, FString>& FieldMappings,
+	const TMap<FString, FString>& FieldTypes,
+	const FString& OutputDir);
 };

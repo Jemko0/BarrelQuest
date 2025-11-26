@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BoxSphereBounds
 ---A bounding box and bounding sphere with the same origin.
 ---@note The full C++ class is located here : Engine\Source\Runtime\Core\Public\Math\BoxSphereBounds.h
 ---
 --- Properties
+---
 ---Holds the origin of the bounding box and sphere.
 ---@field Origin Vector
 ---Holds the extent of the bounding box, which is half the size of the box in 3D space

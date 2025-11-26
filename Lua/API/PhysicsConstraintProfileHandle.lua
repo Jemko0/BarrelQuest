@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicsConstraintProfileHandle
 ---Physics Constraint Profile Handle
 ---
 --- Properties
+---
 ---@field ProfileProperties ConstraintProfileProperties
 ---@field ProfileName string
 local PhysicsConstraintProfileHandle = {}

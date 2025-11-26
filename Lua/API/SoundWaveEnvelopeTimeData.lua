@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundWaveEnvelopeTimeData
 ---Struct used to store time-stamped envelope data
 ---
 --- Properties
+---
 ---The normalized linear amplitude of the audio
 ---@field Amplitude number
 ---The timestamp of the audio

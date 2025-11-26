@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BPVariableMetaDataEntry
 ---One metadata entry for a variable
 ---
 --- Properties
+---
 ---Name of metadata key
 ---@field DataKey string
 ---Name of metadata value

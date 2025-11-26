@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialOverrideNanite
 ---Storage for nanite material override.
 ---An override material can be selected, and the override material can be used according to the current settings.
@@ -12,6 +13,7 @@
 ---that the override material can never be used.
 ---
 --- Properties
+---
 ---Stored flag to set whether we apply this override.
 ---This is useful when evaluating an override along a hierachy of settings.
 ---We default to true to always override.

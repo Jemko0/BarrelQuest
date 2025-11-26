@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParameterDefinitionsSubscription
 ---Parameter Definitions Subscription
 ---
 --- Properties
+---
 ---@field Definitions NiagaraParameterDefinitionsBase
 ---@field DefinitionsId Guid
 ---@field CachedChangeIdHash integer

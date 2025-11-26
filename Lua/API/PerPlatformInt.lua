@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PerPlatformInt
 ---FPerPlatformInt - int32 property with per-platform overrides
 ---
 --- Properties
+---
 ---@field Default integer
 ---@field PerPlatform table<string, integer>
 local PerPlatformInt = {}

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundWaveTimecodeInfo
 ---Sound Wave Timecode Info
 ---
 --- Properties
+---
 ---@field NumSamplesSinceMidnight integer
 ---@field NumSamplesPerSecond integer
 ---@field Description string

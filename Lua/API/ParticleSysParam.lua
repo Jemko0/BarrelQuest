@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleSysParam
 ---Struct used for a particular named instance parameter for this ParticleSystemComponent.
 ---
 --- Properties
+---
 ---The name of the parameter
 ---@field Name string
 ---The type of parameters

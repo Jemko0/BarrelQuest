@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Geometry
 ---Represents the position, size, and absolute position of a Widget in Slate.
 ---The absolute location of a geometry is usually screen space or
@@ -15,6 +16,7 @@
 ---the corresponding parent widget.
 ---
 --- Properties
+---
 local Geometry = {}
 
 --- Constructor

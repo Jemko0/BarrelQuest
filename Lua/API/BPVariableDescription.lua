@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BPVariableDescription
 ---Struct indicating a variable in the generated class
 ---
 --- Properties
+---
 ---Name of the variable
 ---@field VarName string
 ---A Guid that will remain constant even if the VarName changes

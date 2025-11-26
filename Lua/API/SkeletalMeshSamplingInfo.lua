@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshSamplingInfo
 ---Skeletal Mesh Sampling Info
 ---
 --- Properties
+---
 ---Info defining sampling of named regions on this mesh.
 ---@field Regions SkeletalMeshSamplingRegion[]
 ---@field BuiltData SkeletalMeshSamplingBuiltData

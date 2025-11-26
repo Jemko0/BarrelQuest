@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class InstancedStruct
 ---FInstancedStruct works similarly as instanced UObject* property but is USTRUCTs.
 ---Example:
@@ -14,6 +15,7 @@
 ---    TArray<FInstancedStruct> TestArray;
 ---
 --- Properties
+---
 local InstancedStruct = {}
 
 --- Constructor

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicalAnimationProfile
 ---Physical Animation Profile
 ---
 --- Properties
+---
 ---Profile name used to identify set of physical animation parameters
 ---@field ProfileName string
 ---Physical animation parameters used to drive animation

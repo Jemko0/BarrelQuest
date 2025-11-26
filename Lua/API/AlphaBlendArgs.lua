@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AlphaBlendArgs
 ---Alpha Blend construction arguments. Used for creation of an AlphaBlend.
 ---
 --- Properties
+---
 ---If you're using Custom BlendOption, you can specify curve
 ---@field CustomCurve CurveFloat
 ---Blend Time

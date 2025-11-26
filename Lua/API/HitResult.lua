@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class HitResult
 ---Structure containing information about one hit of a trace, such as point of impact and surface normal at that point.
 ---
 --- Properties
+---
 ---Face index we hit (for complex hits with triangle meshes).
 ---@field FaceIndex integer
 ---'Time' of impact along trace direction (ranging from 0.0 to 1.0) if there is a hit, indicating time between TraceStart and TraceEnd.

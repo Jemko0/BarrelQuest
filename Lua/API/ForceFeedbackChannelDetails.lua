@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ForceFeedbackChannelDetails
 ---Force Feedback Channel Details
 ---
 --- Properties
+---
 ---Please note the final channel mapping depends on the software and hardware capabilities of the platform used to run the engine or the game. Refer to documentation for more information.
 ---@field bAffectsLeftLarge boolean
 ---Please note the final channel mapping depends on the software and hardware capabilities of the platform used to run the engine or the game. Refer to documentation for more information.

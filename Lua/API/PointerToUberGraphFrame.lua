@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PointerToUberGraphFrame
 ---Pointer to Uber Graph Frame
 ---
 --- Properties
+---
 local PointerToUberGraphFrame = {}
 
 --- Constructor

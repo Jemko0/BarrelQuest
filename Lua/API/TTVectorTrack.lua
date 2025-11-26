@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TTVectorTrack
 ---Structure storing information about one vector interpolation track
 ---
 --- Properties
+---
 ---Curve object used to define vector value over time
 ---@field CurveVector CurveVector
 ---@field PropertyName string

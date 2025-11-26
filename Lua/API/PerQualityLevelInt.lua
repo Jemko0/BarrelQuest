@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PerQualityLevelInt
 ---Per Quality Level Int
 ---
 --- Properties
+---
 ---@field Default integer
 ---@field PerQuality table<integer, integer>
 local PerQualityLevelInt = {}

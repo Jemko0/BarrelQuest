@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TTFloatTrack
 ---Structure storing information about one float interpolation track
 ---
 --- Properties
+---
 ---Curve object used to define float value over time
 ---@field CurveFloat CurveFloat
 ---@field PropertyName string

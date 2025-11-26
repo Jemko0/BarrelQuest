@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraphPinType
 ---Struct used to define the type of information carried on this pin
 ---
 --- Properties
+---
 ---Category of pin type
 ---@field PinCategory string
 ---Sub-category of pin type

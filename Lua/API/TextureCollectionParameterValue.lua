@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureCollectionParameterValue
 ---Editable texture collection parameter.
 ---
 --- Properties
+---
 ---@field ParameterInfo MaterialParameterInfo
 ---@field ParameterValue TextureCollection
 ---@field ExpressionGUID Guid

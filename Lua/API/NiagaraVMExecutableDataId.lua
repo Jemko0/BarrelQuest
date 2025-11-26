@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraVMExecutableDataId
 ---Struct containing all of the data necessary to look up a NiagaraScript's VM executable results from the Derived Data Cache.
 ---
 --- Properties
+---
 ---The version of the compiler that this needs to be built against.
 ---@field CompilerVersionID Guid
 ---Do we require interpolated spawning

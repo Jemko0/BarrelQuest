@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimNotifyTrack
 ---Keyframe position data for one track.  Pos(i) occurs at Time(i).  Pos.Num() always equals Time.Num().
 ---
 --- Properties
+---
 ---@field TrackName string
 ---@field TrackColor LinearColor
 local AnimNotifyTrack = {}

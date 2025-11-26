@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundSourceBusSendInfo
 ---Sound Source Bus Send Info
 ---
 --- Properties
+---
 ---Manual: Use Send Level only
 ---Linear: Interpolate between Min and Max Send Levels based on listener distance (between Min/Max Send Distance)
 ---Custom Curve: Use the float curve to map Send Level to distance (0.0-1.0 on curve maps to Min/Max Send Distance)

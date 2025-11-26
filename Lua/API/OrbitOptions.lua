@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class OrbitOptions
 ---Container struct for holding options on the data updating for the module.
 ---
 --- Properties
+---
 ---Whether to process the data during spawning.
 ---@field bProcessDuringSpawn boolean
 ---Whether to process the data during updating.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshRayTracingProxySettings
 ---Mesh Ray Tracing Proxy Settings
 ---
 --- Properties
+---
 ---If true, Ray Tracing Proxy data will be generated.
 ---@field bEnabled boolean
 ---Which heuristic to use when generating the fallback mesh.

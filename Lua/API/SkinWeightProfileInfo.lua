@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkinWeightProfileInfo
 ---Structure storing user facing properties, and is used to identify profiles at the SkeletalMesh level
 ---
 --- Properties
+---
 ---Name of the Skin Weight Profile
 ---@field Name string
 ---Whether or not this Profile should be considered the Default loaded for specific LODs rather than the original Skin Weights of the Skeletal Mesh

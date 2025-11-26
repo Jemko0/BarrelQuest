@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MovieSceneObjectBindingID
 ---Persistent identifier to a specific object binding within a sequence hierarchy.
 ---Binding IDs come in 3 flavors with Local and External being preferred as they are reslilient towards sequences being authored in isolation or included in other root sequences:
@@ -14,6 +15,7 @@
 ---Fixed bindings will break if the sequence is evaluated inside a different root sequence.
 ---
 --- Properties
+---
 ---Identifier for the object binding within the sequence
 ---@field Guid Guid
 ---Sequence ID stored as an int32 so that it can be used in the blueprint VM

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSystemCompiledData
 ---Niagara System Compiled Data
 ---
 --- Properties
+---
 ---@field InstanceParamStore NiagaraParameterStore
 ---@field DataSetCompiledData NiagaraDataSetCompiledData
 ---@field SpawnInstanceParamsDataSetCompiledData NiagaraDataSetCompiledData

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SubsurfaceProfileStruct
 ---struct with all the settings we want in USubsurfaceProfile, separate to make it easer to pass this data around in the engine.
 ---
 --- Properties
+---
 ---It should match The base color of the corresponding material as much as possible.
 ---@field SurfaceAlbedo LinearColor
 ---Controls how far light goes into the subsurface in the Red, Green and Blue channel. It is scaled by Mean Free path distance.

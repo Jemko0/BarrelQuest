@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EngineShowFlagsSetting
 ---Engine Show Flags Setting
 ---
 --- Properties
+---
 ---@field ShowFlagName string
 ---@field Enabled boolean
 local EngineShowFlagsSetting = {}

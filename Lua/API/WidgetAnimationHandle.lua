@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WidgetAnimationHandle
 ---Handle to an ongoing or finished widget animation.
 ---
 --- Properties
+---
 ---The widget this handle relates to.
 ---@field WeakUserWidget any
 ---The animation state index.

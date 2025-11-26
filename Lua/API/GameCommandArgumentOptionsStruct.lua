@@ -5,13 +5,15 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GameCommandArgumentOptionsStruct
 ---Game Command Argument Options Struct
 ---
 --- Properties
----@field argType_4_E816316540C5BAE1CD8E0C98F85FC262 integer
----@field isOptional_3_1B8F2D3D4BAD8877587A93B235F6FF56 boolean
----@field defaultValue_8_43BD092E4F47433FEE41E1A89990E75B string
+---
+---@field protected argType_4_E816316540C5BAE1CD8E0C98F85FC262 integer
+---@field protected isOptional_3_1B8F2D3D4BAD8877587A93B235F6FF56 boolean
+---@field protected defaultValue_8_43BD092E4F47433FEE41E1A89990E75B string
 local GameCommandArgumentOptionsStruct = {}
 
 --- Constructor

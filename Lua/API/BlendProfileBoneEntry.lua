@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BlendProfileBoneEntry
 ---A single entry for a blend scale within a profile, mapping a bone to a blendscale
 ---
 --- Properties
+---
 ---@field BoneReference BoneReference
 ---@field BlendScale number
 local BlendProfileBoneEntry = {}

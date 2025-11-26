@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshSectionInfoMap
 ---Map containing per-section settings for each section of each LOD.
 ---
 --- Properties
+---
 ---Maps an LOD+Section to the material it should render with.
 ---@field Map table<integer, MeshSectionInfo>
 local MeshSectionInfoMap = {}

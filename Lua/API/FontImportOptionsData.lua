@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FontImportOptionsData
 ---Font import options
 ---
 --- Properties
+---
 ---Name of the typeface for the font to import
 ---@field FontName string
 ---Height of font (point size)

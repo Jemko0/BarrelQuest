@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class KeyBind
 ---Struct containing mappings for legacy method of binding keys to exec commands.
 ---
 --- Properties
+---
 ---The key to be bound to the command
 ---@field Key Key
 ---The command to execute when the key is pressed/released

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class VersionedNiagaraScriptData
 ---Struct containing all of the data that can be different between different script versions.
 ---
 --- Properties
+---
 ---@field Version NiagaraAssetVersion
 ---What changed in this version compared to the last? Displayed to the user when upgrading to a new script version.
 ---@field VersionChangeDescription string

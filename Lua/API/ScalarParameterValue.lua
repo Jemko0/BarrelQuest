@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ScalarParameterValue
 ---Scalar Parameter Value
 ---
 --- Properties
+---
 ---@field ParameterName string
 ---@field AtlasData ScalarParameterAtlasInstanceData
 ---@field ParameterInfo MaterialParameterInfo

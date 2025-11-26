@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavMovementProperties
 ---Struct to hold properties a user might set for navigation movement
 ---
 --- Properties
+---
 ---Braking distance override used with acceleration driven path following (bUseAccelerationForPaths)
 ---@field FixedPathBrakingDistance number
 ---If set to true, NavAgentProperties' radius and height will be updated with Owner's collision capsule size

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SparseVolumeTextureParameterValue
 ---Editable sparse volume texture parameter.
 ---
 --- Properties
+---
 ---@field ParameterInfo MaterialParameterInfo
 ---@field ParameterValue SparseVolumeTexture
 ---@field ExpressionGUID Guid

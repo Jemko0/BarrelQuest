@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundConcurrencySettings
 ---Sound Concurrency Settings
 ---
 --- Properties
+---
 ---The max number of allowable concurrent active voices for voices playing in this concurrency group.
 ---@field MaxCount integer
 ---Whether or not to limit the concurrency to per sound owner (i.e. the actor that plays the sound). If the sound doesn't have an owner, it falls back to global concurrency.

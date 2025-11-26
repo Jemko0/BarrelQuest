@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NamedSlotBinding
 ---Named Slot Binding
 ---
 --- Properties
+---
 ---@field Name string
 ---GUID of the NamedSlot is used as a secondary identifier to find a binding in case the name of NamedSlot has changed.
 ---@field Guid Guid

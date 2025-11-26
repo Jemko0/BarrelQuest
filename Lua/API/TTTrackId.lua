@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TTTrackId
 ---TTTrack Id
 ---
 --- Properties
+---
 ---@field TrackType integer
 ---@field TrackIndex integer
 local TTTrackId = {}

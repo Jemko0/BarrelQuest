@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StaticParameterSetRuntimeData
 ---Static Parameter Set Runtime Data
 ---
 --- Properties
+---
 ---An array of static switch parameters in this set
 ---@field StaticSwitchParameters StaticSwitchParameter[]
 ---Material layers for this set

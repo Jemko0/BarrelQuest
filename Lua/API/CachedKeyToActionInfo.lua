@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CachedKeyToActionInfo
 ---Struct that exists to store runtime cache to make key to action lookups faster.
 ---
 --- Properties
+---
 ---Which PlayerInput object this has been built for
 ---@field PlayerInput any
 local CachedKeyToActionInfo = {}

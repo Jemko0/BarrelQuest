@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ColorMaterialInput
 ---Color Material Input
 ---
 --- Properties
+---
 ---@field UseConstant boolean
 ---@field Constant LinearColor
 ---Material expression that this input is connected to, or NULL if not connected.

@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Vector2D
 ---A vector in 2-D space composed of components (X, Y) with floating point precision.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Vector2D.h
 ---
 --- Properties
+---
 ---@field X number
 ---@field Y number
 local Vector2D = {}

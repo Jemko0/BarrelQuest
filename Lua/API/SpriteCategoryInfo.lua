@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SpriteCategoryInfo
 ---Information about the sprite category, used for visualization in the editor
 ---
 --- Properties
+---
 ---Sprite category that the component belongs to
 ---@field Category string
 ---Localized name of the sprite category

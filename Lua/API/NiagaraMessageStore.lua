@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraMessageStore
 ---Niagara Message Store
 ---
 --- Properties
+---
 ---@field MessageKeyToMessageMap table<Guid, NiagaraMessageDataBase>
 ---@field DismissedMessageKeys Guid[]
 local NiagaraMessageStore = {}

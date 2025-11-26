@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LatentActionInfo
 ---Latent action info
 ---
 --- Properties
+---
 ---The resume point within the function to execute
 ---@field Linkage integer
 ---the UUID for this action

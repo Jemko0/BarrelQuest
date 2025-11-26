@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialParameterInfo
 ---Material Parameter Info
 ---
 --- Properties
+---
 ---@field Name string
 ---Whether this is a global parameter, or part of a layer or blend
 ---@field Association integer

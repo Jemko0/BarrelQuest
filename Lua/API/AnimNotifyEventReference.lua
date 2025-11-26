@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimNotifyEventReference
 ---Anim Notify Event Reference
 ---
 --- Properties
+---
 ---If set, the Notify has been mirrored.  The mirrored name can be found in MirrorTable->AnimNotifyToMirrorAnimNotifyMap
 ---@field MirrorTable MirrorDataTable
 ---@field NotifySource Object

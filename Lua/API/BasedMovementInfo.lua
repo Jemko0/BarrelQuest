@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BasedMovementInfo
 ---Struct to hold information about the "base" object the character is standing on.
 ---
 --- Properties
+---
 ---Unique (within a reasonable timespan) ID of the base component. Can be used to detect changes in the base when the pointer can't replicate, eg during fast shared replication.
 ---@field BaseID any
 ---Whether the server says that there is a base. On clients, the component may not have resolved yet.

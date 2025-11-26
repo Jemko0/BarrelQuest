@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StreamingTextureBuildInfo
 ---This struct holds the result of TextureStreaming Build for each component texture, as referred by its used materials.
 ---It is possible that the entry referred by this data is not actually relevant in a given quality / target.
@@ -12,6 +13,7 @@
 ---Because each component holds its precomputed data for each texture, this struct is designed to be as compact as possible.
 ---
 --- Properties
+---
 ---The relative bounding box for this entry. The relative bounds is a bound equal or smaller than the component bounds and represent
 ---the merged LOD section bounds of all LOD section referencing the given texture. When the level transform is modified following
 ---a call to ApplyLevelTransform, this relative bound becomes deprecated as it was computed from the transform at build time.

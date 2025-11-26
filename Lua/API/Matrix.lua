@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Matrix
 ---A 4x4 matrix.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Matrix.h
 ---
 --- Properties
+---
 ---@field XPlane Plane
 ---@field YPlane Plane
 ---@field ZPlane Plane

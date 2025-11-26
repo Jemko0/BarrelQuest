@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ProcMeshSection
 ---One section of the procedural mesh. Each material has its own section.
 ---
 --- Properties
+---
 ---Vertex buffer for this section
 ---@field ProcVertexBuffer ProcMeshVertex[]
 ---Index buffer for this section

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkelMeshComponentLODInfo
 ---LOD specific setup for the skeletal mesh component.
 ---
 --- Properties
+---
 ---Material corresponds to section. To show/hide each section, use this.
 ---@field HiddenMaterials boolean[]
 local SkelMeshComponentLODInfo = {}

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraVMExecutableData
 ---Struct containing all of the data needed to run a Niagara VM executable script.
 ---
 --- Properties
+---
 ---Byte code to execute for this system.
 ---@field ByteCode NiagaraVMExecutableByteCode
 ---Optimized version of the byte code to execute for this system

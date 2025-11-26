@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PerPlatformFrameRate
 ---FPerPlatformFrameRate - FFrameRate property with per-platform overrides
 ---
 --- Properties
+---
 ---@field Default FrameRate
 ---@field PerPlatform table<string, FrameRate>
 local PerPlatformFrameRate = {}

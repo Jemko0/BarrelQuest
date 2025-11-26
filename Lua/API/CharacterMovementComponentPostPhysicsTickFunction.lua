@@ -5,17 +5,19 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CharacterMovementComponentPostPhysicsTickFunction
 ---Tick function that calls UCharacterMovementComponent::PostPhysicsTickComponent
 ---
 --- Properties
+---
 ---Defines the minimum tick group for this tick function. These groups determine the relative order of when objects tick during a frame update.
 ---Given prerequisites, the tick may be delayed.
----@see ETickingGroup
----@see FTickFunction::AddPrerequisite()
+---\@see ETickingGroup
+---\@see FTickFunction::AddPrerequisite()
 ---@field TickGroup integer
 ---Defines the tick group that this tick function must finish in. These groups determine the relative order of when objects tick during a frame update.
----@see ETickingGroup
+---\@see ETickingGroup
 ---@field EndTickGroup integer
 ---Bool indicating that this function should execute even if the game is paused. Pause ticks are very limited in capabilities. *
 ---@field bTickEvenWhenPaused boolean

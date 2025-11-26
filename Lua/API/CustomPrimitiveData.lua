@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CustomPrimitiveData
 ---Custom primitive data payload.
 ---
 --- Properties
+---
 ---@field Data number[]
 local CustomPrimitiveData = {}
 

@@ -5,15 +5,17 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class UserSettingsStruct
 ---User Settings Struct
 ---
 --- Properties
----@field EffectsQuality_2_52ADE12B4D0BBDE38ADE12A659B2E654 integer
----@field FoliageQuality_4_492BD3E54BDCB10A13F838AC07733FD8 integer
----@field Volume_15_276EE4AF4B7D45D6DDB9538968F6A8EA UserSettingsVolumeStruct
----@field ViewCone_18_74649BE74815277F8D1175A233970A27 UserSettingsViewConeStruct
----@field LogVerbosityLevel_21_17B4DC834C071F4BFC621C81195FC04E integer
+---
+---@field protected EffectsQuality_2_52ADE12B4D0BBDE38ADE12A659B2E654 integer
+---@field protected FoliageQuality_4_492BD3E54BDCB10A13F838AC07733FD8 integer
+---@field protected Volume_15_276EE4AF4B7D45D6DDB9538968F6A8EA UserSettingsVolumeStruct
+---@field protected ViewCone_18_74649BE74815277F8D1175A233970A27 UserSettingsViewConeStruct
+---@field protected LogVerbosityLevel_21_17B4DC834C071F4BFC621C81195FC04E integer
 local UserSettingsStruct = {}
 
 --- Constructor

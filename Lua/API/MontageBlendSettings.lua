@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MontageBlendSettings
 ---Montage blend settings. Can be used to overwrite default Montage settings on Play/Stop
 ---
 --- Properties
+---
 ---Blend Profile to use for this blend
 ---@field BlendProfile BlendProfile
 ---AlphaBlend options (time, curve, etc.)

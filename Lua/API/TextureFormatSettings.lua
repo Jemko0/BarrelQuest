@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureFormatSettings
 ---Collection of values that contribute to pixel format chosen for texture
 ---
 --- Properties
+---
 ---@field CompressionSettings integer
 ---@field CompressionNoAlpha boolean
 ---@field CompressionForceAlpha boolean

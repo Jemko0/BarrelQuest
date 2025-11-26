@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleSystemLOD
 ---Structure containing per-LOD settings that pertain to the entire UParticleSystem.
 ---
 --- Properties
+---
 local ParticleSystemLOD = {}
 
 --- Constructor

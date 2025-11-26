@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TTLinearColorTrack
 ---Structure storing information about one color interpolation track
 ---
 --- Properties
+---
 ---Curve object used to define color value over time
 ---@field CurveLinearColor CurveLinearColor
 ---@field PropertyName string

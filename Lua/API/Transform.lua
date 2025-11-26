@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Transform
 ---Transform composed of Quat/Translation/Scale.
 ---@note This is implemented in either TransformVectorized.h or TransformNonVectorized.h depending on the platform.
 ---
 --- Properties
+---
 ---Rotation of this transformation, as a quaternion.
 ---@field Rotation Quat
 ---Translation of this transformation, as a vector.

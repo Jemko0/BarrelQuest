@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ActiveForceFeedbackEffect
 ---Active Force Feedback Effect
 ---
 --- Properties
+---
 ---@field ForceFeedbackEffect ForceFeedbackEffect
 ---Array of device properties that have been activated by this force feedback effect
 ---@field ActiveDeviceProperties table<InputDevicePropertyHandle, boolean>

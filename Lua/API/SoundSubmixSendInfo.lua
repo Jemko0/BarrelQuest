@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundSubmixSendInfo
 ---Sound Submix Send Info
 ---
 --- Properties
+---
 ---Defines at what mix stage the send should happen.
 ---@field SendStage ESubmixSendStage
 ---Manual: Use Send Level only

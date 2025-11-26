@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WallCheckResult
 ---Wall Check Result
 ---
 --- Properties
+---
 local WallCheckResult = {}
 
 --- Constructor

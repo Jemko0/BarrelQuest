@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AlphaBlend
 ---Alpha Blend class that supports different blend options as well as custom curves
 ---
 --- Properties
+---
 ---If you're using Custom BlendOption, you can specify curve
 ---@field CustomCurve CurveFloat
 ---Blend Time

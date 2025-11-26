@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CraftingQueueQuickAmountLookupMapValueStruct
 ---Crafting Queue Quick Amount Lookup Map Value Struct
 ---
 --- Properties
----@field Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D integer
----@field ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40 integer
+---
+---@field protected Amount_2_A41B59BB447A147A252EB9AF9BCD3F5D integer
+---@field protected ArrayIndex_4_2CA6D95045E28EA5E6EF67939F24DD40 integer
 local CraftingQueueQuickAmountLookupMapValueStruct = {}
 
 --- Constructor

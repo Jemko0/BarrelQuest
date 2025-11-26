@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialInstanceBasePropertyOverrides
 ---Properties from the base material that can be overridden in material instances.
 ---
 --- Properties
+---
 ---Enables override of the opacity mask clip value.
 ---@field bOverride_OpacityMaskClipValue boolean
 ---Enables override of the blend mode.

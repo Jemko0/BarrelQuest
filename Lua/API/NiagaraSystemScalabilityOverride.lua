@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSystemScalabilityOverride
 ---Niagara System Scalability Override
 ---
 --- Properties
+---
 ---Controls whether we override the distance culling settings.
 ---@field bOverrideDistanceSettings boolean
 ---Controls whether we override the instance count culling settings.

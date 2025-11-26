@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraAssetTagDefinitionReference
 ---A Tag Definition Reference stores the guid of a Tag Definition. This is what assets should be storing.
 ---
 --- Properties
+---
 ---@field AssetTagDefinitionGuid Guid
 local NiagaraAssetTagDefinitionReference = {}
 

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SlateChildSize
 ---A struct exposing size param related properties to UMG.
 ---
 --- Properties
+---
 ---The parameter of the size rule.
 ---@field Value number
 ---The sizing rule of the content.

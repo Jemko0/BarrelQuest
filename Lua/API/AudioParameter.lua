@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AudioParameter
 ---Audio Parameter
 ---
 --- Properties
+---
 ---Name of the parameter
 ---@field ParamName string
 ---Float value of parameter

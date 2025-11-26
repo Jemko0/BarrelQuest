@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BPComponentClassOverride
 ---Utility struct to store class overrides for components.
 ---
 --- Properties
+---
 ---The component name an override is being specified for.
 ---@field ComponentName string
 ---The class to use when constructing the component.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GeomSelection
 ---Selection information for geometry mode
 ---
 --- Properties
+---
 ---@field Type integer
 ---EGeometrySelectionType_
 ---@field Index integer

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshNaniteSettings
 ---Settings applied when building Nanite data.
 ---
 --- Properties
+---
 ---If true, Nanite data will be generated.
 ---@field bEnabled boolean
 ---Whether to try and maintain the same surface area at all distances. Useful for foliage that thins out otherwise.

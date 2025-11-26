@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SimpleMemberReference
 ---Simple Member Reference
 ---
 --- Properties
+---
 ---Most often the Class that this member is defined in. Could be a UPackage
 ---if it is a native delegate signature function (declared globally).
 ---@field MemberParent Object

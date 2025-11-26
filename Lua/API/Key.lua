@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Key
 ---Key
 ---
 --- Properties
+---
 ---@field KeyName string
 local Key = {}
 

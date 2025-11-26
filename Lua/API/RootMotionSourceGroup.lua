@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RootMotionSourceGroup
 ---Group of Root Motion Sources that are applied
 ---
 --- Properties
+---
 ---Whether this group has additive root motion sources
 ---@field bHasAdditiveSources boolean
 ---Whether this group has override root motion sources

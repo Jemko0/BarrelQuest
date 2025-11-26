@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshLODGroupSettings
 ---Skeletal Mesh LODGroup Settings
 ---
 --- Properties
+---
 ---The screen sizes to use for the respective LOD level
 ---@field ScreenSize PerPlatformFloat
 ---Used to avoid 'flickering' when on LOD boundary. Only taken into account when moving from complex->simple.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PoseSnapshot
 ---A pose for a skeletal mesh
 ---
 --- Properties
+---
 ---Array of transforms per-bone
 ---@field LocalTransforms Transform[]
 ---Array of bone names (corresponding to LocalTransforms)

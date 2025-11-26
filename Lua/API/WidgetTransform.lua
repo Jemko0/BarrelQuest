@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WidgetTransform
 ---Describes the standard transformation of a widget
 ---
 --- Properties
+---
 ---The amount to translate the widget in slate units
 ---@field Translation Vector2D
 ---The scale to apply to the widget

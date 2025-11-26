@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class UserSceneTextureOverride
 ---User Scene Texture Override
 ---
 --- Properties
+---
 ---Key value of NONE represents override of UserSceneTexture output
 ---@field Key string
 ---@field Value string

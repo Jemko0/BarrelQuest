@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Timeline
 ---Timeline
 ---
 --- Properties
+---
 ---Specified how the timeline determines its own length (e.g. specified length, last keyframe)
 ---@field LengthMode integer
 ---Whether timeline should loop when it reaches the end, or stop

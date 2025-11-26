@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ConstraintProfileProperties
 ---Container for properties of a physics constraint that can be easily swapped at runtime. This is useful for switching different setups when going from ragdoll to standup for example
 ---
 --- Properties
+---
 ---If the joint error is above this distance after the solve phase, the child body will be teleported to fix the error. Only used if bEnableProjection is true.
 ---@field ProjectionLinearTolerance number
 ---If the joint error is above this distance after the solve phase, the child body will be teleported to fix the error. Only used if bEnableProjection is true.

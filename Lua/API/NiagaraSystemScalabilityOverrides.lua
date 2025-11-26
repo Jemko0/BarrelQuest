@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSystemScalabilityOverrides
 ---Container struct for an array of system scalability overrides. Enables details customization and data validation.
 ---
 --- Properties
+---
 ---@field Overrides NiagaraSystemScalabilityOverride[]
 local NiagaraSystemScalabilityOverrides = {}
 

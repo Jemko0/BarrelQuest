@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class QuartzTransportTimeStamp
 ---Transport Time stamp, used for tracking the musical time stamp on a clock
 ---
 --- Properties
+---
 ---The current bar this clock is on
 ---@field Bars integer
 ---The current beat this clock is on

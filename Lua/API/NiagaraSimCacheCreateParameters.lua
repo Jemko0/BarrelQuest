@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSimCacheCreateParameters
 ---Niagara Sim Cache Create Parameters
 ---
 --- Properties
+---
 ---How do we want to capture attributes for the simulation cache.
 ---The mode selected depends on what situations the cache can be used in.
 ---@field AttributeCaptureMode ENiagaraSimCacheAttributeCaptureMode

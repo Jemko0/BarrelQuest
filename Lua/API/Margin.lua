@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Margin
 ---Describes the space around a Widget.
 ---
 --- Properties
+---
 ---Holds the margin to the left.
 ---@field Left number
 ---Holds the margin to the top.

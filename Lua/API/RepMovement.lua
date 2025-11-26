@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RepMovement
 ---Replicated movement data of our RootComponent.
 ---Struct used for efficient replication as velocity and location are generally replicated together (this saves a repindex)
 ---and velocity.Z is commonly zero (most position replications are for walking pawns).
 ---
 --- Properties
+---
 ---Velocity of component in world space
 ---@field LinearVelocity Vector
 ---Velocity of rotation for component (only valid if bRepPhysics is set)

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimSyncMarker
 ---Anim Sync Marker
 ---
 --- Properties
+---
 ---The name of this marker
 ---@field MarkerName string
 ---Time in seconds of this marker

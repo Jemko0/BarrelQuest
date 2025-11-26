@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ExpressionOutput
 ---Struct that represents an expression's output.
 ---
 --- Properties
+---
 ---@field OutputName string
 ---@field Mask integer
 ---@field MaskR integer

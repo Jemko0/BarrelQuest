@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RepRootMotionMontage
 ---Replicated data when playing a root motion montage.
 ---
 --- Properties
+---
 ---Animation providing Root Motion
 ---@field Animation AnimSequenceBase
 ---Whether this has useful/active data.

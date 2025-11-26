@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RootMotionMovementParams
 ---Utility struct to accumulate root motion.
 ---
 --- Properties
+---
 ---@field bHasRootMotion boolean
 ---@field BlendWeight number
 ---@field RootMotionTransform Transform

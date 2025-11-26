@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Box
 ---A bounding box.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\Box.h
 ---
 --- Properties
+---
 ---@field Min Vector
 ---@field Max Vector
 ---@field IsValid boolean

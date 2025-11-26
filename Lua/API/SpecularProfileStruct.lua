@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SpecularProfileStruct
 ---struct with all the settings we want in USpecularProfile, separate to make it easer to pass this data around in the engine.
 ---
 --- Properties
+---
 ---Define the format driving the sampling of the specular LUT.
 ---@field Format ESpecularProfileFormat
 ---Define the view facing color.

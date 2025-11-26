@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraPlatformSet
 ---Niagara Platform Set
 ---
 --- Properties
+---
 ---States of specific device profiles we've set.
 ---@field DeviceProfileStates NiagaraDeviceProfileStateEntry[]
 ---Set of CVars values we require for this platform set to be enabled. If any of the linked CVars don't have the required values then this platform set will not be enabled.

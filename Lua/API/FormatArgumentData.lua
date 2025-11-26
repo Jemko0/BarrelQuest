@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FormatArgumentData
 ---Used to pass argument/value pairs into FText::Format.
 ---The full C++ struct is located here: Engine\Source\Runtime\Core\Public\Internationalization\Text.h
 ---
 --- Properties
+---
 ---@field ArgumentName string
 ---@field ArgumentValueType integer
 ---@field ArgumentValue string

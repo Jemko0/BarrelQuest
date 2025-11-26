@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class QuartzQuantizationBoundary
 ---struct used to specify the quantization boundary of an event
 ---
 --- Properties
+---
 ---resolution we are interested in
 ---@field Quantization EQuartzCommandQuantization
 ---how many "Resolutions" to wait before the onset we care about

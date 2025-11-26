@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SolverIterations
 ---Solver settings for use by the Legacy RigidBody AnimNode (RBAN) solver.
 ---These settings are no longer used by default and will eventually be deprecated and then removed.
 ---@note These settings have no effect when the Physics Asset is used in a world simulation (ragdoll).
 ---
 --- Properties
+---
 ---The recommended number of solver iterations. Increase this if collision and joints are fighting, or joint chains are stretching.
 ---@field SolverIterations integer
 ---The recommended number of joint sub-iterations. Increasing this can help with chains of long-thin bodies.

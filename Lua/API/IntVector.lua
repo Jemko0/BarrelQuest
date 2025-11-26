@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class IntVector
 ---An integer vector in 3D space.
 ---@note The full C++ class is located here: Engine\Source\Runtime\Core\Public\Math\IntVector.h
 ---
 --- Properties
+---
 ---@field X integer
 ---@field Y integer
 ---@field Z integer

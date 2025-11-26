@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FieldNotificationId
 ---namespace
 ---
 --- Properties
+---
 ---@field FieldName string
 local FieldNotificationId = {}
 

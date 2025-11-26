@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DoubleVectorParameterValue
 ---Editable vector parameter.
 ---
 --- Properties
+---
 ---@field ParameterInfo MaterialParameterInfo
 ---LWC_TODO: Blueprint?
 ---@field ParameterValue Vector4d

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StreamingSourceShape
 ---Streaming Source Shape
 ---
 --- Properties
+---
 ---If True, streaming source shape radius is bound to loading range radius.
 ---@field bUseGridLoadingRange boolean
 ---Applies a scale to the grid's loading range (used if bUseGridLoadingRange is True).

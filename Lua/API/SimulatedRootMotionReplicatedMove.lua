@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SimulatedRootMotionReplicatedMove
 ---Simulated Root Motion Replicated Move
 ---
 --- Properties
+---
 ---Local time when move was received on client and saved.
 ---@field Time number
 ---Root Motion information

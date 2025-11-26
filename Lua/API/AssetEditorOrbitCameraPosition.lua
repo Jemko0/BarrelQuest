@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AssetEditorOrbitCameraPosition
 ---Asset Editor Orbit Camera Position
 ---
 --- Properties
+---
 ---Whether or not this has been set to a valid value
 ---@field bIsSet boolean
 ---The position to orbit the camera around

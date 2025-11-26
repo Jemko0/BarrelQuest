@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraEmitterHandle
 ---Stores emitter information within the context of a System.
 ---
 --- Properties
+---
 ---The display name for this emitter in the System.
 ---@field Name string
 ---The id of this emitter handle.

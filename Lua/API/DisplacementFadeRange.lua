@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DisplacementFadeRange
 ---Displacement Fade Range
 ---
 --- Properties
+---
 ---How large the max displacement should be, in on-screen pixels, when beginning to fade out displacement.
 ---NOTE: This should be a LARGER number than End Fade Size.
 ---@field StartSizePixels number

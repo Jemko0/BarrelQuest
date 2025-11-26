@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ClothingAssetData_Legacy
 ---Legacy struct for handling back compat serialization
 ---
 --- Properties
+---
 ---@field AssetName string
 ---@field ApexFileName string
 ---@field bClothPropertiesChanged boolean

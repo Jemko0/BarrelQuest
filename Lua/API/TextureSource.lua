@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureSource
 ---Texture source data management.
 ---
 --- Properties
+---
 ---GUID used to track changes to the source data.
 ---      Typically with UseHashAsGuid , this "Id" is the hash of the BulkData.
 ---      Note that GetId() is not == Id.

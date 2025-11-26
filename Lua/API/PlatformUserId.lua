@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlatformUserId
 ---Handle that defines a local user on this platform.
 ---This used to be just a typedef int32 that was used interchangeably as ControllerId and LocalUserIndex.
@@ -12,6 +13,7 @@
 ---Opaque struct for the FPlatformUserId struct defined in CoreMiscDefines.h
 ---
 --- Properties
+---
 ---@field InternalId integer
 local PlatformUserId = {}
 

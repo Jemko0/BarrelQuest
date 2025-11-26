@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightmassMaterialInterfaceSettings
 ---UMaterial interface settings for Lightmass
 ---
 --- Properties
+---
 ---Scales the emissive contribution of this material to static lighting.
 ---@field EmissiveBoost number
 ---Scales the diffuse contribution of this material to static lighting.

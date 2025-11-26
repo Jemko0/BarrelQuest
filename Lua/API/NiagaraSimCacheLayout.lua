@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSimCacheLayout
 ---Niagara Sim Cache Layout
 ---
 --- Properties
+---
 ---@field SystemLayout NiagaraSimCacheDataBuffersLayout
 ---@field EmitterLayouts NiagaraSimCacheDataBuffersLayout[]
 local NiagaraSimCacheLayout = {}

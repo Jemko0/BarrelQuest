@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WearingClothingData
 ---Wearing Clothing Data
 ---
 --- Properties
+---
 ---@field dirtLevel number
 ---@field wearLevel number
 ---@field wetLevel number

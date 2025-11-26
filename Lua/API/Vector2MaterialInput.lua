@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Vector2MaterialInput
 ---Vector 2Material Input
 ---
 --- Properties
+---
 ---@field UseConstant boolean
 ---@field ConstantX number
 ---@field ConstantY number

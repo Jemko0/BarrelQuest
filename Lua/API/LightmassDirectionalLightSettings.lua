@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightmassDirectionalLightSettings
 ---Directional light settings for Lightmass
 ---
 --- Properties
+---
 ---Angle that the directional light's emissive surface extends relative to a receiver, affects penumbra sizes.
 ---@field LightSourceAngle number
 ---0 will be completely desaturated, 1 will be unchanged

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WidgetAnimationBinding
 ---A single object bound to a UMG sequence.
 ---
 --- Properties
+---
 ---@field WidgetName string
 ---@field SlotWidgetName string
 ---@field AnimationGuid Guid

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BodyInstanceAsyncPhysicsTickHandle
 ---Body Instance Async Physics Tick Handle
 ---
 --- Properties
+---
 local BodyInstanceAsyncPhysicsTickHandle = {}
 
 --- Constructor

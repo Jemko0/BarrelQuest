@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshDeformerInstanceSet
 ---Same as FMeshDeformerSet, except for mesh deformer instances
 ---
 --- Properties
+---
 ---@field DeformerInstances MeshDeformerInstance[]
 local MeshDeformerInstanceSet = {}
 

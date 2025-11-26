@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraModuleDependency
 ---Niagara Module Dependency
 ---
 --- Properties
+---
 ---Specifies the provided id of the required dependent module (e.g. 'ProvidesNormalizedAge')
 ---@field Id string
 ---Whether the dependency belongs before or after this module

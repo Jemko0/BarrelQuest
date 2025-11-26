@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraBoundParameter
 ---Niagara Bound Parameter
 ---
 --- Properties
+---
 ---@field Parameter NiagaraVariableBase
 ---@field SrcOffset integer
 ---@field DestOffset integer

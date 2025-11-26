@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialRemapIndex
 ---Material Remap Index
 ---
 --- Properties
+---
 ---@field ImportVersionKey integer
 ---@field MaterialRemap integer[]
 local MaterialRemapIndex = {}

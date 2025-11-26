@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraScriptResolvedDataInterfaceInfo
 ---Niagara Script Resolved Data Interface Info
 ---
 --- Properties
+---
 ---@field Name string
 ---@field CompileName string
 ---@field ResolvedSourceEmitterName string

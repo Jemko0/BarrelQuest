@@ -5,18 +5,20 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ClothingItemDataStruct
 ---Clothing Item Data Struct
 ---
 --- Properties
----@field Surface_2_B7653A8B47C3DDC5B960F9B08066B70A any
----@field Tint_10_F23AE89E4E93FAA9D992BF8EDECC7DAF LinearColor
----@field HueShift_7_C5F078E74DF6393ADE00CF8D04A1074C number
----@field RipDefense_5_7418128A4FABED535936E8A0582B84C3 number
----@field ClothingName_14_0490941946987C0F147C099F1322B5CD string
----@field ClothingSlot_24_D10F3CB249DD7D0E5CD0A1BE56B773F8 table<integer, integer>
----@field ClothingRefID_28_D09EB6C549CDBEFDBD9819866D2CB201 string
----@field WearingData_32_E82152354D89F1A1AEECB2BBC555AA7F WearingClothingData
+---
+---@field protected Surface_2_B7653A8B47C3DDC5B960F9B08066B70A any
+---@field protected Tint_10_F23AE89E4E93FAA9D992BF8EDECC7DAF LinearColor
+---@field protected HueShift_7_C5F078E74DF6393ADE00CF8D04A1074C number
+---@field protected RipDefense_5_7418128A4FABED535936E8A0582B84C3 number
+---@field protected ClothingName_14_0490941946987C0F147C099F1322B5CD string
+---@field protected ClothingSlot_24_D10F3CB249DD7D0E5CD0A1BE56B773F8 table<integer, integer>
+---@field protected ClothingRefID_28_D09EB6C549CDBEFDBD9819866D2CB201 string
+---@field protected WearingData_32_E82152354D89F1A1AEECB2BBC555AA7F WearingClothingData
 local ClothingItemDataStruct = {}
 
 --- Constructor

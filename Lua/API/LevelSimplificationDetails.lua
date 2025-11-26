@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LevelSimplificationDetails
 ---Level Simplification Details
 ---
 --- Properties
+---
 ---Whether to create separate packages for each generated asset. All in map package otherwise
 ---@field bCreatePackagePerAsset boolean
 ---Percentage of details for static mesh proxy

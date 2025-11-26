@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PerPlatformBool
 ---FPerPlatformBool - bool property with per-platform overrides
 ---
 --- Properties
+---
 ---@field Default boolean
 ---@field PerPlatform table<string, boolean>
 local PerPlatformBool = {}

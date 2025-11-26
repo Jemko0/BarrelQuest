@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class QueuedWidgetAnimationTransition
 ---Struct that maintains state of currently queued animation transtions to be evaluated next frame.
 ---
 --- Properties
+---
 ---Animation with a queued transition
 ---@field WidgetAnimation WidgetAnimation
 local QueuedWidgetAnimationTransition = {}

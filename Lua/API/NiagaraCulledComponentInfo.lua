@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraCulledComponentInfo
 ---Info on a culled Niagara Component for use by it's cull proxy.
 ---
 --- Properties
+---
 local NiagaraCulledComponentInfo = {}
 
 --- Constructor

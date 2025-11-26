@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TouchInputControl
 ---Touch Input Control
 ---
 --- Properties
+---
 ---Set this to true to treat the joystick as a simple button
 ---@field bTreatAsButton boolean
 ---For sticks, this is the Thumb

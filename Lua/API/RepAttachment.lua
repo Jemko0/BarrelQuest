@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RepAttachment
 ---Handles attachment replication to clients.
 ---
 --- Properties
+---
 ---Actor we are attached to, movement replication will not happen while AttachParent is non-nullptr
 ---@field AttachParent Actor
 ---Location offset from attach parent

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavAvoidanceMask
 ---Nav Avoidance Mask
 ---
 --- Properties
+---
 ---@field bGroup0 boolean
 ---@field bGroup1 boolean
 ---@field bGroup2 boolean

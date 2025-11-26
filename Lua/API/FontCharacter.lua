@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FontCharacter
 ---This struct is serialized using native serialization so any changes to it require a package version bump.
 ---
 --- Properties
+---
 ---@field StartU integer
 ---@field StartV integer
 ---@field USize integer

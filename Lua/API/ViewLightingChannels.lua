@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ViewLightingChannels
 ---View / light masking support
 ---
 --- Properties
+---
 ---View specific lighting channel 0 (enabled by default).
 ---@field bViewChannel0 boolean
 ---View specific lighting channel 1.

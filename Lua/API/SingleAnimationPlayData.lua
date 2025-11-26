@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SingleAnimationPlayData
 ---Single Animation Play Data
 ---
 --- Properties
+---
 ---@todo in the future, we should make this one UObject
 ---and have detail customization to display different things
 ---The default sequence to play on this skeletal mesh

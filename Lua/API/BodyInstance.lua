@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BodyInstance
 ---Container for a physics representation of an object
 ---
 --- Properties
+---
 ---This physics body's solver iteration count for position. Increasing this will be more CPU intensive, but better stabilized.
 ---@field PositionSolverIterationCount integer
 ---This physics body's solver iteration count for velocity. Increasing this will be more CPU intensive, but better stabilized.
@@ -94,7 +96,7 @@
 ---This overrides the CollisionInitialOverlapDepenetrationVelocity project setting on a per-body basis (and not the MaxDepenetrationVelocity solver setting that will be deprecated).
 ---@field MaxDepenetrationVelocity number
 ---Mass of the body in KG. By default we compute this based on physical material and mass scale.
----@see bOverrideMass to set this directly
+---\@see bOverrideMass to set this directly
 ---@field MassInKgOverride number
 ---'Drag' force added to reduce linear movement
 ---@field LinearDamping number
@@ -111,7 +113,7 @@
 ---Per-instance scaling of inertia (bigger number means  it'll be harder to rotate)
 ---@field InertiaTensorScale Vector
 ---Custom walkable slope override setting for this instance.
----@see GetWalkableSlopeOverride(), SetWalkableSlopeOverride()
+---\@see GetWalkableSlopeOverride(), SetWalkableSlopeOverride()
 ---@field WalkableSlopeOverride WalkableSlopeOverride
 ---Allows you to override the PhysicalMaterial to use for simple collision on this body.
 ---@field PhysMaterialOverride PhysicalMaterial

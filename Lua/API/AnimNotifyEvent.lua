@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimNotifyEvent
 ---Triggers an animation notify.  Each AnimNotifyEvent contains an AnimNotify object
 ---which has its Notify method called and passed to the animation.
 ---
 --- Properties
+---
 ---The user requested time for this notify
 ---@field DisplayTime number
 ---An offset from the DisplayTime to the actual time we will trigger the notify, as we cannot always trigger it exactly at the time the user wants

@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraUserRedirectionParameterStore
 ---Extension of the base parameter store to allow the user in the editor to use variable names without
 ---the "User." namespace prefix. The names without the prefix just redirect to the original variables, it is just done
 ---for better usability.
 ---
 --- Properties
+---
 ---Map from the variables with shortened display names to the original variables with the full namespace
 ---@field UserParameterRedirects table<NiagaraVariable, NiagaraVariable>
 ---Owner of this store. Used to provide an outer to data interfaces in this store.

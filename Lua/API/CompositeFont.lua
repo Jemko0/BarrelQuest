@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CompositeFont
 ---Composite Font
 ---
 --- Properties
+---
 ---The default typeface that will be used when not overridden by a sub-typeface
 ---@field DefaultTypeface Typeface
 ---The fallback typeface that will be used as a last resort when no other typeface provides a match

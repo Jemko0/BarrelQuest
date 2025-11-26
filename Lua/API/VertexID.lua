@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class VertexID
 ---Vertex ID
 ---
 --- Properties
+---
 ---The actual mesh element index this ID represents.  Read-only.
 ---@field IDValue integer
 local VertexID = {}

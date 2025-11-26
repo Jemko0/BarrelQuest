@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DebugTextInfo
 ---* Single entry of a debug text item to render.
 ---*
@@ -12,6 +13,7 @@
 ---* @see AddDebugText(), RemoveDebugText() and DrawDebugTextList()
 ---
 --- Properties
+---
 ---AActor related to text item
 ---@field SrcActor Actor
 ---Offset from SrcActor.Location to apply
