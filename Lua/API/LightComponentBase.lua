@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightComponentBase : SceneComponent
 ---Light Component Base
 ---
 --- Properties
+---
 ---GUID used to associate a light component with precomputed shadowing information across levels.
 ---The GUID changes whenever the light position changes.
 ---@field OriginalLightGuid Guid

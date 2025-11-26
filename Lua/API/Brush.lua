@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Brush : Actor
 ---Brush
 ---
 --- Properties
+---
 ---Type of brush
 ---@field BrushType integer
 ---Information.

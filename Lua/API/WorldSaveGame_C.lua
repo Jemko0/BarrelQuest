@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WorldSaveGame_C : SaveGame
 ---World Save Game
 ---
 --- Properties
+---
 ---@field WorldData WorldSaveDataStruct
 local WorldSaveGame_C = {}
 

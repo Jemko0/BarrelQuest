@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicsAsset
 ---PhysicsAsset contains a set of rigid bodies and constraints that make up a single ragdoll.
 ---The asset is not limited to human ragdolls, and can be used for any physical simulation using bodies and constraints.
@@ -14,6 +15,7 @@
 ---@see USkeletalMesh
 ---
 --- Properties
+---
 ---Default skeletal mesh to use when previewing this PhysicsAsset etc.
 ---Is the one that was used as the basis for creating this Asset.
 ---@field DefaultSkelMesh SkeletalMesh

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialExpression
 ---Material Expression
 ---
 --- Properties
+---
 ---@field MaterialExpressionEditorX integer
 ---@field MaterialExpressionEditorY integer
 ---Expression's Graph representation

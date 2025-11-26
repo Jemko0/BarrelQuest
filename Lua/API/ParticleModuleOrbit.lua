@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleModuleOrbit : ParticleModuleOrbitBase
 ---Particle Module Orbit
 ---
 --- Properties
+---
 ---Orbit modules will chain together in the order they appear in the module stack.
 ---The combination of a module with the one prior to it is defined by using one
 ---of the following enumerations:

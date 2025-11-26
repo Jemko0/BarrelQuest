@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BodyTemperatureComponent : ActorComponent
 ---Body Temperature Component
 ---
 --- Properties
+---
 ---@field BodyTemp number
 ---@field InsulationWeights table<EClothingType, number>
 ---@field ClothingInsulation number

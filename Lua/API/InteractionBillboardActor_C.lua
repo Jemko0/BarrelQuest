@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class InteractionBillboardActor_C : Actor
 ---Interaction Billboard Actor
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field Widget WidgetComponent
 local InteractionBillboardActor_C = {}

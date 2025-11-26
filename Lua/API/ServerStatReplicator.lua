@@ -5,109 +5,111 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ServerStatReplicator : Info
 ---Class used to replicate server "stat net" data over. For server only values, the client data is
 ---is overwritten when bUpdateStatNet == true. For data that both the client and server set, the server
 ---data will only overwrite if bUpdateStatNet == true && bOverwriteClientStats == true.
 ---
 --- Properties
+---
 ---Whether to update stat net with data from the server or not
 ---@field bUpdateStatNet boolean
 ---Whether to overwrite client data stat net with data from the server or not
 ---@field bOverwriteClientStats boolean
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field Channels integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InRate integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutRate integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field MaxPacketOverhead integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InRateClientMax integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InRateClientMin integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InRateClientAvg integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InPacketsClientMax integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InPacketsClientMin integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InPacketsClientAvg integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutRateClientMax integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutRateClientMin integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutRateClientAvg integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutPacketsClientMax integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutPacketsClientMin integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutPacketsClientAvg integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NetNumClients integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InPackets integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutPackets integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InBunches integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutBunches integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field OutLoss integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field InLoss integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field VoiceBytesSent integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field VoiceBytesRecv integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field VoicePacketsSent integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field VoicePacketsRecv integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field PercentInVoice integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field PercentOutVoice integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumActorChannels integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumConsideredActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field PrioritizedActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumRelevantActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumRelevantDeletedActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumReplicatedActorAttempts integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumReplicatedActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumNetActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumDormantActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumInitiallyDormantActors integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumNetGUIDsAckd integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumNetGUIDsPending integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NumNetGUIDsUnAckd integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field ObjPathBytes integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NetGUIDOutRate integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NetGUIDInRate integer
----@see Network stats counters in EngineStats.h
+---\@see Network stats counters in EngineStats.h
 ---@field NetSaturated integer
 local ServerStatReplicator = {}
 

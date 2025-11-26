@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class HapticFeedbackEffect_Base
 ---Haptic Feedback Effect Base
 ---
 --- Properties
+---
 local HapticFeedbackEffect_Base = {}
 
 --- Methods

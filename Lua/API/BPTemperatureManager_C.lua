@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BPTemperatureManager_C : TemperatureManager
 ---BPTemperature Manager
 ---
 --- Properties
+---
 ---@field DefaultSceneRoot SceneComponent
 local BPTemperatureManager_C = {}
 

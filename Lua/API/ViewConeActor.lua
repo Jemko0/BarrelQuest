@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ViewConeActor : Actor
 ---An actor that generates a procedural mesh representing a cone of vision.
 ---It uses asynchronous line traces to detect obstacles and builds the mesh based on hit results.
 ---
 --- Properties
+---
 ---Number of traces to process per asynchronous task.
 ---@field TracesPerThread integer
 ---The maximum distance of the vision cone.

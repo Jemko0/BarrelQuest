@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TileBase_C : BarrelNetCulledActor
 ---Tile Base
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field Ceil StaticMeshComponent
 ---@field HealthComponent HealthComponent_C

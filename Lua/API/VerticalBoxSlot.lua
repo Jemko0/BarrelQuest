@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class VerticalBoxSlot : PanelSlot
 ---The Slot for the UVerticalBox, contains the widget that is flowed vertically
 ---
 --- Properties
+---
 ---How much space this slot should occupy in the direction of the panel.
 ---@field Size SlateChildSize
 ---The padding area between the slot and the content it contains.

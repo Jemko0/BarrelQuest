@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundBase
 ---The base class for a playable sound object
 ---
 --- Properties
+---
 ---Sound class this sound belongs to
 ---@field SoundClassObject SoundClass
 ---When "au.3dVisualize.Attenuation" has been specified, draw this sound's attenuation shape when the sound is audible. For debugging purposes only.

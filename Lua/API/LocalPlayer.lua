@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LocalPlayer : Player
 ---Each player that is active on the current client/listen server has a LocalPlayer.
 ---It stays active across maps, and there may be several spawned in the case of splitscreen/coop.
 ---There will be 0 spawned on dedicated servers.
 ---
 --- Properties
+---
 ---The primary viewport containing this player's view.
 ---@field ViewportClient GameViewportClient
 ---How to constrain perspective viewport FOV

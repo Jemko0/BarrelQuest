@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LocalLightComponent : LightComponent
 ---A light component which emits light from a single point equally in all directions.
 ---
 --- Properties
+---
 ---Units used for the intensity.
 ---The peak luminous intensity is measured in candelas, while the luminous flux is measured in lumens.
 ---When the units are set in Nits, the light's power is also determined by the size of the light source (larger sources will emit more light).

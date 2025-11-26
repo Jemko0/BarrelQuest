@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AssetUserData
 ---Object that can be subclassed to store custom data on Unreal asset objects.
 ---
 --- Properties
+---
 local AssetUserData = {}
 
 --- Methods

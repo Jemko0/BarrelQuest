@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StreamableRenderAsset
 ---Streamable Render Asset
 ---
 --- Properties
+---
 ---WorldSettings timestamp that tells the streamer to force all miplevels to be resident up until that time.
 ---@field ForceMipLevelsToBeResidentTimestamp number
 ---Number of mip-levels to use for cinematic quality.

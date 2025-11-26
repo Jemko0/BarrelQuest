@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimSequence : AnimSequenceBase
 ---Anim Sequence
 ---
 --- Properties
+---
 ---The DCC framerate of the imported file. UI information only, unit are Hz
 ---@field ImportFileFramerate number
 ---The resample framerate that was computed during import. UI information only, unit are Hz

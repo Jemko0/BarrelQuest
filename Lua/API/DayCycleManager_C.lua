@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DayCycleManager_C : Actor
 ---Day Cycle Manager
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field SkyAtmosphere SkyAtmosphereComponent
 ---@field CameraRainParticles NiagaraComponent

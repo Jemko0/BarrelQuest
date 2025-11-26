@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TemperatureManager : Actor
 ---Temperature Manager
 ---
 --- Properties
+---
 ---@field ambientTemperature number
 ---@field temperatureMap table<Vector, number>
 ---@field registeredInvokers table<TemperatureInvoker, boolean>

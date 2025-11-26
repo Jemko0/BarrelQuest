@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StaticMesh : StreamableRenderAsset
 ---A StaticMesh is a piece of geometry that consists of a static set of polygons.
 ---Static Meshes can be translated, rotated, and scaled, but they cannot have their vertices animated in any way. As such, they are more efficient
@@ -13,6 +14,7 @@
 ---@see AStaticMeshActor, UStaticMeshComponent
 ---
 --- Properties
+---
 ---The LOD group to which this mesh belongs.
 ---@field LODGroup string
 ---If non-negative, specify the maximum number of streamed LODs. Only has effect if

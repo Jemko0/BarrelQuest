@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StatsComponent_C : ActorComponent
 ---Stats Component
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field StatTickTimer TimerHandle
 ---@field Stats StatDefinitionStruct[]

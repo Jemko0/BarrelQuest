@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CharacterMovementComponent : PawnMovementComponent
 ---CharacterMovementComponent handles movement logic for the associated Character owner.
 ---It supports various movement modes including: walking, falling, swimming, flying, custom.
@@ -15,6 +16,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/Pawn/Character/
 ---
 --- Properties
+---
 ---Character movement component belongs to
 ---@field CharacterOwner Character
 ---Custom gravity scale. Gravity is multiplied by this amount for the character.
@@ -32,11 +34,11 @@
 ---   - swimming: Swimming through a fluid volume, under the effects of gravity and buoyancy.
 ---   - custom:   User-defined custom movement mode, including many possible sub-modes.
 ---This is automatically replicated through the Character owner and for client-server movement functions.
----@see SetMovementMode(), CustomMovementMode
+---\@see SetMovementMode(), CustomMovementMode
 ---@field MovementMode integer
 ---Current custom sub-mode if MovementMode is set to Custom.
 ---This is automatically replicated through the Character owner and for client-server movement functions.
----@see SetMovementMode()
+---\@see SetMovementMode()
 ---@field CustomMovementMode integer
 ---Smoothing mode for simulated proxies in network game.
 ---@field NetworkSmoothingMode ENetworkSmoothingMode
@@ -44,7 +46,7 @@
 ---If bUseSeparateBrakingFriction is false, also affects the ability to stop more quickly when braking (whenever Acceleration is zero), where it is multiplied by BrakingFrictionFactor.
 ---When braking, this property allows you to control how much friction is applied when moving across the ground, applying an opposing force that scales with current velocity.
 ---This can be used to simulate slippery surfaces such as ice or oil by changing the value (possibly based on the material pawn is standing on).
----@see BrakingDecelerationWalking, BrakingFriction, bUseSeparateBrakingFriction, BrakingFrictionFactor
+---\@see BrakingDecelerationWalking, BrakingFriction, bUseSeparateBrakingFriction, BrakingFrictionFactor
 ---@field GroundFriction number
 ---The maximum ground speed when walking. Also determines maximum lateral speed when falling.
 ---@field MaxWalkSpeed number
@@ -63,28 +65,28 @@
 ---Factor used to multiply actual value of friction used when braking.
 ---This applies to any friction value that is currently used, which may depend on bUseSeparateBrakingFriction.
 ---@note This is 2 by default for historical reasons, a value of 1 gives the true drag equation.
----@see bUseSeparateBrakingFriction, GroundFriction, BrakingFriction
+---\@see bUseSeparateBrakingFriction, GroundFriction, BrakingFriction
 ---@field BrakingFrictionFactor number
 ---Friction (drag) coefficient applied when braking (whenever Acceleration = 0, or if character is exceeding max speed); actual value used is this multiplied by BrakingFrictionFactor.
 ---When braking, this property allows you to control how much friction is applied when moving across the ground, applying an opposing force that scales with current velocity.
 ---Braking is composed of friction (velocity-dependent drag) and constant deceleration.
 ---This is the current value, used in all movement modes; if this is not desired, override it or bUseSeparateBrakingFriction when movement mode changes.
 ---@note Only used if bUseSeparateBrakingFriction setting is true, otherwise current friction such as GroundFriction is used.
----@see bUseSeparateBrakingFriction, BrakingFrictionFactor, GroundFriction, BrakingDecelerationWalking
+---\@see bUseSeparateBrakingFriction, BrakingFrictionFactor, GroundFriction, BrakingDecelerationWalking
 ---@field BrakingFriction number
 ---Time substepping when applying braking friction. Smaller time steps increase accuracy at the slight cost of performance, especially if there are large frame times.
 ---@field BrakingSubStepTime number
 ---Deceleration when walking and not applying acceleration. This is a constant opposing force that directly lowers velocity by a constant value.
----@see GroundFriction, MaxAcceleration
+---\@see GroundFriction, MaxAcceleration
 ---@field BrakingDecelerationWalking number
 ---Lateral deceleration when falling and not applying acceleration.
----@see MaxAcceleration
+---\@see MaxAcceleration
 ---@field BrakingDecelerationFalling number
 ---Deceleration when swimming and not applying acceleration.
----@see MaxAcceleration
+---\@see MaxAcceleration
 ---@field BrakingDecelerationSwimming number
 ---Deceleration when flying and not applying acceleration.
----@see MaxAcceleration
+---\@see MaxAcceleration
 ---@field BrakingDecelerationFlying number
 ---When falling, amount of lateral movement control available to the character.
 ---0 = no control, 1 = full control at max speed of MaxWalkSpeed.
@@ -97,7 +99,7 @@
 ---@field AirControlBoostVelocityThreshold number
 ---Friction to apply to lateral air movement when falling.
 ---If bUseSeparateBrakingFriction is false, also affects the ability to stop more quickly when braking (whenever Acceleration is zero).
----@see BrakingFriction, bUseSeparateBrakingFriction
+---\@see BrakingFriction, bUseSeparateBrakingFriction
 ---@field FallingLateralFriction number
 ---@field CrouchedHalfHeight number
 ---Water buoyancy. A ratio (1.0 = neutral buoyancy, 0.0 = no buoyancy)
@@ -107,14 +109,14 @@
 ---@field PerchRadiusThreshold number
 ---When perching on a ledge, add this additional distance to MaxStepHeight when determining how high above a walkable floor we can perch.
 ---Note that we still enforce MaxStepHeight to start the step up; this just allows the character to hang off the edge or step slightly higher off the floor.
----(@see PerchRadiusThreshold)
+---(\@see PerchRadiusThreshold)
 ---@field PerchAdditionalHeight number
 ---Change in rotation per second, used when UseControllerDesiredRotation or OrientRotationToMovement are true. Set a negative value for infinite rotation rate and instant turns.
 ---@field RotationRate Rotator
 ---If true, BrakingFriction will be used to slow the character to a stop (when there is no Acceleration).
 ---If false, braking uses the same friction passed to CalcVelocity() (ie GroundFriction when walking), multiplied by BrakingFrictionFactor.
 ---This setting applies to all movement modes; if only desired in certain modes, consider toggling it when movement modes change.
----@see BrakingFriction
+---\@see BrakingFriction
 ---@field bUseSeparateBrakingFriction boolean
 ---True means while the jump key is held, we will not allow the vertical speed to fall below the JumpZVelocity tuning value
 ---even if a stronger force, such as gravity, is opposing the jump.
@@ -129,27 +131,27 @@
 ---Normally you will want to make sure that other settings are cleared, such as bUseControllerRotationYaw on the Character.
 ---@field bOrientRotationToMovement boolean
 ---Whether or not the character should sweep for collision geometry while walking.
----@see USceneComponent::MoveComponent.
+---\@see USceneComponent::MoveComponent.
 ---@field bSweepWhileNavWalking boolean
 ---True during movement update.
 ---Used internally so that attempts to change CharacterOwner and UpdatedComponent are deferred until after an update.
----@see IsMovementInProgress()
+---\@see IsMovementInProgress()
 ---@field bMovementInProgress boolean
 ---If true, high-level movement updates will be wrapped in a movement scope that accumulates updates and defers a bulk of the work until the end.
 ---When enabled, touch and hit events will not be triggered until the end of multiple moves within an update, which can improve performance.
----@see FScopedMovementUpdate
+---\@see FScopedMovementUpdate
 ---@field bEnableScopedMovementUpdates boolean
 ---Optional scoped movement update to combine moves for cheaper performance on the server when the client sends two moves in one packet.
 ---Be warned that since this wraps a larger scope than is normally done with bEnableScopedMovementUpdates, this can result in subtle changes in behavior
 ---in regards to when overlap events are handled, when attached components are moved, etc.
----@see bEnableScopedMovementUpdates
+---\@see bEnableScopedMovementUpdates
 ---@field bEnableServerDualMoveScopedMovementUpdates boolean
 ---Ignores size of acceleration component, and forces max acceleration to drive character at full velocity.
 ---@field bForceMaxAccel boolean
 ---If true, movement will be performed even if there is no Controller for the Character owner.
 ---Normally without a Controller, movement will be aborted and velocity and acceleration are zeroed if the character is walking.
 ---Characters that are spawned without a Controller but with this flag enabled will initialize the movement mode to DefaultLandMovementMode or DefaultWaterMovementMode appropriately.
----@see DefaultLandMovementMode, DefaultWaterMovementMode
+---\@see DefaultLandMovementMode, DefaultWaterMovementMode
 ---@field bRunPhysicsWithNoController boolean
 ---Force the Character in MOVE_Walking to do a check for a valid floor even if it hasn't moved. Cleared after next floor check.
 ---Normally if bAlwaysCheckFloor is false we try to avoid the floor check unless some conditions are met, but this can be used to force the next check to always run.
@@ -235,31 +237,31 @@
 ---Used primarily in the the more advanced movement modes that break up larger time steps (usually those applying gravity such as falling and walking).
 ---Lowering this value can address issues with fast-moving objects or complex collision scenarios, at the cost of performance.
 ---WARNING: if (MaxSimulationTimeStep * MaxSimulationIterations) is too low for the min framerate, the last simulation step may exceed MaxSimulationTimeStep to complete the simulation.
----@see MaxSimulationIterations
+---\@see MaxSimulationIterations
 ---@field MaxSimulationTimeStep number
 ---Max number of iterations used for each discrete simulation step.
 ---Used primarily in the the more advanced movement modes that break up larger time steps (usually those applying gravity such as falling and walking).
 ---Increasing this value can address issues with fast-moving objects or complex collision scenarios, at the cost of performance.
 ---WARNING: if (MaxSimulationTimeStep * MaxSimulationIterations) is too low for the min framerate, the last simulation step may exceed MaxSimulationTimeStep to complete the simulation.
----@see MaxSimulationTimeStep
+---\@see MaxSimulationTimeStep
 ---@field MaxSimulationIterations integer
 ---Max number of attempts per simulation to attempt to exactly reach the jump apex when falling movement reaches the top of the arc.
 ---Limiting this prevents deep recursion when special cases cause collision or other conditions which reactivate the apex condition.
 ---@field MaxJumpApexAttemptsPerSimulation integer
 ---Max distance we allow simulated proxies to depenetrate when moving out of anything but Pawns.
 ---This is generally more tolerant than with Pawns, because other geometry is either not moving, or is moving predictably with a bit of delay compared to on the server.
----@see MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawn, MaxDepenetrationWithPawnAsProxy
+---\@see MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawn, MaxDepenetrationWithPawnAsProxy
 ---@field MaxDepenetrationWithGeometry number
 ---Max distance we allow simulated proxies to depenetrate when moving out of anything but Pawns.
 ---This is generally more tolerant than with Pawns, because other geometry is either not moving, or is moving predictably with a bit of delay compared to on the server.
----@see MaxDepenetrationWithGeometry, MaxDepenetrationWithPawn, MaxDepenetrationWithPawnAsProxy
+---\@see MaxDepenetrationWithGeometry, MaxDepenetrationWithPawn, MaxDepenetrationWithPawnAsProxy
 ---@field MaxDepenetrationWithGeometryAsProxy number
 ---Max distance we are allowed to depenetrate when moving out of other Pawns.
----@see MaxDepenetrationWithGeometry, MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawnAsProxy
+---\@see MaxDepenetrationWithGeometry, MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawnAsProxy
 ---@field MaxDepenetrationWithPawn number
 ---Max distance we allow simulated proxies to depenetrate when moving out of other Pawns.
 ---Typically we don't want a large value, because we receive a server authoritative position that we should not then ignore by pushing them out of the local player.
----@see MaxDepenetrationWithGeometry, MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawn
+---\@see MaxDepenetrationWithGeometry, MaxDepenetrationWithGeometryAsProxy, MaxDepenetrationWithPawn
 ---@field MaxDepenetrationWithPawnAsProxy number
 ---How long to take to smoothly interpolate from the old pawn position on the client to the corrected one sent by the server. Not used by Linear smoothing.
 ---@field NetworkSimulatedSmoothLocationTime number
@@ -270,10 +272,10 @@
 ---Similar setting as NetworkSimulatedSmoothRotationTime but only used on Listen servers.
 ---@field ListenServerNetworkSimulatedSmoothRotationTime number
 ---Shrink simulated proxy capsule radius by this amount, to account for network rounding that may cause encroachment. Changing during gameplay is not supported.
----@see AdjustProxyCapsuleSize()
+---\@see AdjustProxyCapsuleSize()
 ---@field NetProxyShrinkRadius number
 ---Shrink simulated proxy capsule half height by this amount, to account for network rounding that may cause encroachment. Changing during gameplay is not supported.
----@see AdjustProxyCapsuleSize()
+---\@see AdjustProxyCapsuleSize()
 ---@field NetProxyShrinkHalfHeight number
 ---Maximum distance character is allowed to lag behind server location when interpolating between updates.
 ---@field NetworkMaxSmoothUpdateDistance number
@@ -284,14 +286,14 @@
 ---Minimum time on the server between sending client adjustments when client has exceeded allowable position error.
 ---Should be >= NetworkMinTimeBetweenClientAdjustmentsLargeCorrection (the larger value is used regardless).
 ---This can save on bandwidth. Set to 0 to disable throttling.
----@see ServerLastClientAdjustmentTime
+---\@see ServerLastClientAdjustmentTime
 ---@field NetworkMinTimeBetweenClientAdjustments number
 ---Minimum time on the server between sending client adjustments when client has exceeded allowable position error by a large amount (NetworkLargeClientCorrectionDistance).
 ---Should be <= NetworkMinTimeBetweenClientAdjustments (the smaller value is used regardless).
----@see NetworkMinTimeBetweenClientAdjustments
+---\@see NetworkMinTimeBetweenClientAdjustments
 ---@field NetworkMinTimeBetweenClientAdjustmentsLargeCorrection number
 ---If client error is larger than this, sets bNetworkLargeClientCorrection to reduce delay between client adjustments.
----@see NetworkMinTimeBetweenClientAdjustments, NetworkMinTimeBetweenClientAdjustmentsLargeCorrection
+---\@see NetworkMinTimeBetweenClientAdjustments, NetworkMinTimeBetweenClientAdjustmentsLargeCorrection
 ---@field NetworkLargeClientCorrectionDistance number
 ---Used in determining if pawn is going off ledge.  If the ledge is "shorter" than this value then the pawn will be able to walk off it. *
 ---@field LedgeCheckThreshold number
@@ -300,12 +302,12 @@
 ---Information about the floor the Character is standing on (updated only during walking movement).
 ---@field CurrentFloor FindFloorResult
 ---Default movement mode when not in water. Used at player startup or when teleported.
----@see DefaultWaterMovementMode
----@see bRunPhysicsWithNoController
+---\@see DefaultWaterMovementMode
+---\@see bRunPhysicsWithNoController
 ---@field DefaultLandMovementMode integer
 ---Default movement mode when in water. Used at player startup or when teleported.
----@see DefaultLandMovementMode
----@see bRunPhysicsWithNoController
+---\@see DefaultLandMovementMode
+---\@see bRunPhysicsWithNoController
 ---@field DefaultWaterMovementMode integer
 ---If true, walking movement always maintains horizontal velocity when moving up ramps, which causes movement up ramps to be faster parallel to the ramp surface.
 ---If false, then walking movement maintains velocity magnitude parallel to the ramp surface.
@@ -318,7 +320,7 @@
 ---@field bImpartBaseVelocityZ boolean
 ---If true, impart the base component's tangential components of angular velocity when jumping or falling off it.
 ---Only those components of the velocity allowed by the separate component settings (bImpartBaseVelocityX etc) will be applied.
----@see bImpartBaseVelocityX, bImpartBaseVelocityY, bImpartBaseVelocityZ
+---\@see bImpartBaseVelocityX, bImpartBaseVelocityY, bImpartBaseVelocityZ
 ---@field bImpartBaseAngularVelocity boolean
 ---Used by movement code to determine if a change in position is based on normal movement or a teleport. If not a teleport, velocity can be recomputed based on the change in position.
 ---@field bJustTeleported boolean
@@ -332,13 +334,13 @@
 ---This can be useful when character is moving at extreme speeds for a duration and you need it to look
 ---smooth on clients without the server correcting the client. Make sure to disable when done, as this would
 ---break this character's server-client movement correction.
----@see bServerAcceptClientAuthoritativePosition, ServerCheckClientError()
+---\@see bServerAcceptClientAuthoritativePosition, ServerCheckClientError()
 ---@field bIgnoreClientMovementErrorChecksAndCorrection boolean
 ---If true, and server does not detect client position error, server will copy the client movement location/velocity/etc after simulating the move.
 ---This can be useful for short bursts of movement that are difficult to sync over the network.
 ---Note that if bIgnoreClientMovementErrorChecksAndCorrection is used, this means the server will not detect an error.
 ---Also see GameNetworkManager->ClientAuthorativePosition which permanently enables this behavior.
----@see bIgnoreClientMovementErrorChecksAndCorrection, ServerShouldUseAuthoritativePosition()
+---\@see bIgnoreClientMovementErrorChecksAndCorrection, ServerShouldUseAuthoritativePosition()
 ---@field bServerAcceptClientAuthoritativePosition boolean
 ---If true, event NotifyJumpApex() to CharacterOwner's controller when at apex of jump. Is cleared when event is triggered.
 ---By default this is off, and if you want the event to fire you typically set it to true when movement mode changes to "Falling" from another mode (see OnMovementModeChanged).
@@ -395,7 +397,7 @@
 ---@field bProjectNavMeshOnBothWorldChannels boolean
 ---@field AvoidanceConsiderationRadius number
 ---Velocity requested by path following.
----@see RequestDirectMove()
+---\@see RequestDirectMove()
 ---@field RequestedVelocity Vector
 ---Velocity requested by path following during last Update
 ---Updated when we consume the value

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SphereComponent : ShapeComponent
 ---A sphere generally used for simple collision. Bounds are rendered as lines in the editor.
 ---
 --- Properties
+---
 ---The radius of the sphere *
 ---@field SphereRadius number
 local SphereComponent = {}

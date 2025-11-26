@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Texture : StreamableRenderAsset
 ---Texture
 ---
 --- Properties
+---
 ---Dynamic textures will have ! Source.IsValid() ;
 ---      Also in UEFN , Textures from the cooked-only texture library.  Always check Source.IsValid before using Source.
 ---@field Source TextureSource

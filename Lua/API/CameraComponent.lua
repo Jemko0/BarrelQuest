@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CameraComponent : SceneComponent
 ---Represents a camera viewpoint and settings, such as projection type, field of view, and post-process overrides.
 ---The default behavior for an actor used as the camera view target is to look for an attached camera component and use its location, rotation, and settings.
 ---
 --- Properties
+---
 ---The horizontal field of view (in degrees) in perspective mode (ignored in Orthographic mode)
 ---If the aspect ratio axis constraint (from ULocalPlayer, ALevelSequenceActor, etc.) is set to maintain vertical FOV, the AspectRatio
 ---property will be used to convert this property's value to a vertical FOV.
@@ -62,7 +64,7 @@
 ---True if the camera's orientation and position should be locked to the HMD
 ---@field bLockToHmd boolean
 ---If this camera component is placed on a pawn, should it use the view/control rotation of the pawn where possible?
----@see APawn::GetViewRotation()
+---\@see APawn::GetViewRotation()
 ---@field bUsePawnControlRotation boolean
 ---True if the first person field of view should be used for primitives tagged as "IsFirstPerson".
 ---@field bEnableFirstPersonFieldOfView boolean

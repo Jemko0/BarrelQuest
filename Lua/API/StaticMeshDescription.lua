@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StaticMeshDescription : MeshDescriptionBase
 ---A wrapper for MeshDescription, customized for static meshes
 ---
 --- Properties
+---
 local StaticMeshDescription = {}
 
 --- Methods

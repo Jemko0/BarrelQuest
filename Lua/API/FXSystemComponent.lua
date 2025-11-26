@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FXSystemComponent : PrimitiveComponent
 ---FXSystem Component
 ---
 --- Properties
+---
 local FXSystemComponent = {}
 
 --- Methods
@@ -23,7 +25,7 @@ function FXSystemComponent.SetVectorParameter(ParameterName, Param) end
 ---This overrides any current attachment that may be present at the time of activation (deferring initial attachment until activation, if AutoAttachParent is null).
 ---When enabled, detachment occurs regardless of whether AutoAttachParent is assigned, and the relative transform from the time of activation is restored.
 ---This also disables attachment on dedicated servers, where we don't actually activate even if bAutoActivate is true.
----@see SetAutoAttachmentParameters()
+---\@see SetAutoAttachmentParameters()
 ---@param bAutoManage boolean
 ---@return nil
 function FXSystemComponent.SetUseAutoManageAttachment(bAutoManage) end
@@ -61,7 +63,7 @@ function FXSystemComponent.SetColorParameter(ParameterName, Param) end
 function FXSystemComponent.SetBoolParameter(ParameterName, Param) end
 
 ---Set AutoAttachParent, AutoAttachSocketName, AutoAttachLocationRule, AutoAttachRotationRule, AutoAttachScaleRule to the specified parameters. Does not change bAutoManageAttachment; that must be set separately.
----@see bAutoManageAttachment, AutoAttachParent, AutoAttachSocketName, AutoAttachLocationRule, AutoAttachRotationRule, AutoAttachScaleRule
+---\@see bAutoManageAttachment, AutoAttachParent, AutoAttachSocketName, AutoAttachLocationRule, AutoAttachRotationRule, AutoAttachScaleRule
 ---@param Parent SceneComponent
 ---@param SocketName string
 ---@param LocationRule EAttachmentRule

@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ActorComponent
 ---ActorComponent is the base class for components that define reusable behavior that can be added to different types of Actors.
 ---ActorComponents that have a transform are known as SceneComponents and those that can be rendered are PrimitiveComponents.
@@ -13,6 +14,7 @@
 ---@see UPrimitiveComponent
 ---
 --- Properties
+---
 ---Main tick function for the Component
 ---@field PrimaryComponentTick ActorComponentTickFunction
 ---Array of tags that can be used for grouping and categorizing. Can also be accessed from scripting.

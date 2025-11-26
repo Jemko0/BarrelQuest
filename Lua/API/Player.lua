@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Player
 ---Player
 ---
 --- Properties
+---
 ---The actor this player controls.
 ---@field PlayerController PlayerController
 ---the current speed of the connection

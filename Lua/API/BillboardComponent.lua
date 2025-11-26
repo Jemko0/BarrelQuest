@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BillboardComponent : PrimitiveComponent
 ---A 2d texture that will be rendered always facing the camera.
 ---
 --- Properties
+---
 ---@field Sprite Texture2D
 ---@field bIsScreenSizeScaled boolean
 ---@field ScreenSize number

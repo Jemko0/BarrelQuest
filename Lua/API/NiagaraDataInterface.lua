@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraDataInterface : NiagaraDataInterfaceBase
 ---Base class for all Niagara data interfaces.
 ---
 --- Properties
+---
 local NiagaraDataInterface = {}
 
 --- Methods

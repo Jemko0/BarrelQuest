@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshComponent : PrimitiveComponent
 ---MeshComponent is an abstract base for any component that is an instance of a renderable collection of triangles.
 ---@see UStaticMeshComponent
 ---@see USkeletalMeshComponent
 ---
 --- Properties
+---
 ---Material overrides.
 ---@field OverrideMaterials MaterialInterface[]
 ---Translucent material to blend on top of this mesh. Mesh will be rendered twice - once with a base material and once with overlay material

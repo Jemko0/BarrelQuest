@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicalMaterial
 ---Physical materials are used to define the response of a physical object when interacting dynamically with the world.
 ---
 --- Properties
+---
 ---Friction value of surface, controls how easily things can slide on this surface (0 is frictionless, higher values increase the amount of friction)
 ---@field Friction number
 ---Static Friction value of surface, controls how easily things can slide on this surface (0 is frictionless, higher values increase the amount of friction)

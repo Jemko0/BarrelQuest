@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PostProcessVolume : Volume
 ---for FPostprocessSettings
 ---
 --- Properties
+---
 ---Post process settings to use for this volume.
 ---@field Settings PostProcessSettings
 ---Priority of this volume. In the case of overlapping volumes the one with the highest priority

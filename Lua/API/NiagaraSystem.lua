@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraSystem : FXSystemAsset
 ---A Niagara System contains multiple Niagara Emitters to create various effects.
 ---Niagara Systems can be placed in the world, unlike Emitters, and expose User Parameters to configure an effect at runtime.
 ---
 --- Properties
+---
 ---Internal: The thumbnail image.
 ---@field ThumbnailImage Texture2D
 ---Deprecated library exposure bool. Use the LibraryVisibility enum instead. FNiagaraEditorUtilities has accessor functions that takes deprecation into account

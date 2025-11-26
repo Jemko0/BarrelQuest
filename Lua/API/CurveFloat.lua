@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CurveFloat : CurveBase
 ---Curve Float
 ---
 --- Properties
+---
 ---Keyframe data
 ---@field FloatCurve RichCurve
 ---Flag to represent event curve

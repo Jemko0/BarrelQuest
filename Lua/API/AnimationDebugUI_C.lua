@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimationDebugUI_C : UserWidget
 ---Animation Debug UI
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field VerticalBox_0 VerticalBox
 ---@field TextBlock_0 TextBlock

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SpotLightComponent : PointLightComponent
 ---A spot light component emits a directional cone shaped light (Eg a Torch).
 ---
 --- Properties
+---
 ---Degrees.
 ---@field InnerConeAngle number
 ---Degrees.

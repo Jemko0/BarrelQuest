@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TemperatureInvoker : ActorComponent
 ---Temperature Invoker
 ---
 --- Properties
+---
 ---@field targetTemperature number
 ---@field emit boolean
 local TemperatureInvoker = {}

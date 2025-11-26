@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshDeformerInstance
 ---Base class for mesh deformers instances.
 ---This contains the transient per instance state for a UMeshDeformer.
 ---
 --- Properties
+---
 local MeshDeformerInstance = {}
 
 --- Methods

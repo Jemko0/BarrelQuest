@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class FXSystemAsset
 ---FXSystem Asset
 ---
 --- Properties
+---
 ---Max number of components of this system to keep resident in the world component pool.
 ---@field MaxPoolSize integer
 ---How many instances we should use to initially prime the pool.

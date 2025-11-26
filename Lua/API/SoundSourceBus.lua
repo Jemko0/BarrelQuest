@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundSourceBus : SoundWave
 ---A source bus is a type of USoundBase and can be "played" like any sound.
 ---
 --- Properties
+---
 ---How many channels to use for the source bus if the audio bus is not specified, otherwise it will use the audio bus object's channel count.
 ---@field SourceBusChannels ESourceBusChannels
 ---The duration (in seconds) to use for the source bus. A duration of 0.0 indicates to play the source bus indefinitely.

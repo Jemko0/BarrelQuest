@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BodySetupCore
 ---Body Setup Core
 ---
 --- Properties
+---
 ---Used in the PhysicsAsset case. Associates this Body with Bone in a skeletal mesh.
 ---@field BoneName string
 ---If simulated it will use physics, if kinematic it will not be affected by physics, but can interact with physically simulated bodies. Default will inherit from OwnerComponent's behavior.

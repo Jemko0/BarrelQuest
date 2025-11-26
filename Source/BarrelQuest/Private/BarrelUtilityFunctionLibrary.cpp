@@ -48,7 +48,7 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
     
     if (suppressWarnings)
     {
-        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n"));
+        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n\n"));
     }
     
     if (bIsInterface)
@@ -84,8 +84,13 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
     // Skip properties for interfaces - they only have function declarations
     if (!bIsInterface)
     {
+        // Add blank line before properties section
+        LuaMetaContent += TEXT("---\n");
+        
         // Generate fields/properties
-        LuaMetaContent += TEXT("---\n--- Properties\n");
+        LuaMetaContent += TEXT("--- Properties\n");
+        LuaMetaContent += TEXT("---\n"); // Add blank line after section header
+        
         for (TFieldIterator<FProperty> PropIt(InClass, EFieldIteratorFlags::ExcludeSuper); PropIt; ++PropIt)
         {
             FProperty* Property = *PropIt;
@@ -128,7 +133,10 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
                 
                 for (const FString& Line : TooltipLines)
                 {
-                    LuaMetaContent += FString::Printf(TEXT("---%s\n"), *Line);
+                    FString ProcessedLine = Line;
+                    // Escape @see and other @ tags that shouldn't be LuaLS annotations
+                    ProcessedLine.ReplaceInline(TEXT("@see"), TEXT("\\@see"));
+                    LuaMetaContent += FString::Printf(TEXT("---%s\n"), *ProcessedLine);
                 }
             }
             
@@ -196,7 +204,10 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
                 FString TrimmedLine = Line.TrimStartAndEnd();
                 if (!TrimmedLine.StartsWith(TEXT("@param")) && !TrimmedLine.StartsWith(TEXT("@return")))
                 {
-                    LuaMetaContent += FString::Printf(TEXT("---%s\n"), *Line);
+                    FString ProcessedLine = Line;
+                    // Escape @see and other @ tags that shouldn't be LuaLS annotations
+                    ProcessedLine.ReplaceInline(TEXT("@see"), TEXT("\\@see"));
+                    LuaMetaContent += FString::Printf(TEXT("---%s\n"), *ProcessedLine);
                 }
             }
         }

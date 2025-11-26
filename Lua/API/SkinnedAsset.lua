@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkinnedAsset : StreamableRenderAsset
 ---Skinned Asset
 ---
 --- Properties
+---
 local SkinnedAsset = {}
 
 --- Methods

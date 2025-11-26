@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Level
 ---A Level is a collection of Actors (lights, volumes, mesh instances etc.).
 ---Multiple Levels can be loaded and unloaded into the World to create a streaming experience.
@@ -12,6 +13,7 @@
 ---@see UActor
 ---
 --- Properties
+---
 ---Use external actors, new actor spawned in this level will be external and existing external actors will be loaded on load.
 ---@field bUseExternalActors boolean
 ---The World that has this level in its Levels array.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlaceTileInfoUI_C : UserWidget
 ---Place Tile Info UI
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field TextBlock_95 TextBlock
 ---@field TextBlock_77 TextBlock

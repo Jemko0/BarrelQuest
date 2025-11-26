@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ClothingSimulationInteractor
 ---If a clothing simulation is able to be interacted with at runtime then a derived
 ---interactor should be created, and at least the basic API implemented for that
@@ -13,6 +14,7 @@
 ---guaranteed to be a safe place to access this data.
 ---
 --- Properties
+---
 ---Cloth interactors currently created.
 ---@field ClothingInteractors table<string, ClothingInteractor>
 local ClothingSimulationInteractor = {}

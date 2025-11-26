@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DebugSectionUI_C : UserWidget
 ---Debug Section UI
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field SinglePropertyView_137 SinglePropertyView
 ---@field New_Object Object -- Original name: "New Object"

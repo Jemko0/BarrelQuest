@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleModuleSpawnBase : ParticleModule
 ---Particle Module Spawn Base
 ---
 --- Properties
+---
 ---If true, the SpawnRate of the SpawnModule of the emitter will be processed.
 ---If mutliple Spawn modules are 'stacked' in an emitter, if ANY of them
 ---have this set to false, it will not process the SpawnModule SpawnRate.

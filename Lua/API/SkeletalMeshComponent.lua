@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshComponent : SkinnedMeshComponent
 ---SkeletalMeshComponent is used to create an instance of an animated SkeletalMesh asset.
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Content/Types/SkeletalMeshes/
 ---@see USkeletalMesh
 ---
 --- Properties
+---
 ---The blueprint for creating an AnimationScript.
 ---@field AnimationBlueprint AnimBlueprint
 ---@field AnimBlueprintGeneratedClass AnimBlueprintGeneratedClass

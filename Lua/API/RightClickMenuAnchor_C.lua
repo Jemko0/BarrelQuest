@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RightClickMenuAnchor_C : UserWidget
 ---Right Click Menu Anchor
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field MenuAnchor_19 MenuAnchor
 ---@field RCM RightClickMenu_C

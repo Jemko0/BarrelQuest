@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SparseVolumeTexture
 ---SparseVolumeTexture base interface to communicate with material graph and shader bindings.
 ---
 --- Properties
+---
 local SparseVolumeTexture = {}
 
 --- Methods

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkyLightComponent : LightComponentBase
 ---Sky Light Component
 ---
 --- Properties
+---
 ---When enabled, the sky will be captured and convolved to achieve dynamic diffuse and specular environment lighting.
 ---SkyAtmosphere, VolumetricCloud Components as well as sky domes with Sky materials are taken into account.
 ---@field bRealTimeCapture boolean

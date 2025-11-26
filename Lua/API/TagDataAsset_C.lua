@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TagDataAsset_C : PrimaryDataAsset
 ---Tag Data Asset
 ---
 --- Properties
+---
 ---@field Tag string
 local TagDataAsset_C = {}
 

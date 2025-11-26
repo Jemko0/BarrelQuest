@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimMontage : AnimCompositeBase
 ---Any property you're adding to AnimMontage and parent class has to be considered for Child Asset
 ---Child Asset is considered to be only asset mapping feature using everything else in the class
@@ -14,6 +15,7 @@
 ---If it does, please add the copy in the function RefreshParentAssetData
 ---
 --- Properties
+---
 ---@field BlendModeIn EMontageBlendMode
 ---@field BlendModeOut EMontageBlendMode
 ---Blend in option.

@@ -5,14 +5,16 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SceneComponent : ActorComponent
 ---A SceneComponent has a transform and supports attachment, but has no rendering or collision capabilities.
 ---Useful as a 'dummy' component in the hierarchy to offset others.
 ---@see [Scene Components](https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Actors/Components/index.html#scenecomponents)
 ---
 --- Properties
+---
 ---Velocity of the component.
----@see GetComponentVelocity()
+---\@see GetComponentVelocity()
 ---@field ComponentVelocity Vector
 ---Whether to hide the primitive in game, if the primitive is Visible.
 ---@field bHiddenInGame boolean

@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DebugCameraController : PlayerController
 ---Camera controller that allows you to fly around a level mostly unrestricted by normal movement rules.
 ---To turn it on, please press Alt+C or both (left and right) analogs on XBox pad,
@@ -12,6 +13,7 @@
 ---in DefaultPawn.cpp for the camera controls.
 ---
 --- Properties
+---
 ---Whether to show information about the selected actor on the debug camera HUD.
 ---@field bShowSelectedInfo boolean
 ---Saves whether the FreezeRendering console command is active

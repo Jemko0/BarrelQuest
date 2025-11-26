@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicsConstraintTemplate
 ---Physics Constraint Template
 ---
 --- Properties
+---
 ---@field DefaultInstance ConstraintInstance
 ---Handles to the constraint profiles applicable to this constraint
 ---@field ProfileHandles PhysicsConstraintProfileHandle[]

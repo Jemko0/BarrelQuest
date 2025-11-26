@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicalMaterialMask
 ---Physical material masks are used to map multiple physical materials to a single rendering material
 ---
 --- Properties
+---
 ---@field AssetImportData AssetImportData
 ---Mask input texture, square aspect ratio recommended. Recognized mask colors include: white, black, red, green, yellow, cyan, turquoise, and magenta.
 ---@field MaskTexture Texture

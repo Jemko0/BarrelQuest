@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavigationPath
 ---UObject wrapper for FNavigationPath
 ---
 --- Properties
+---
 ---@field PathUpdatedNotifier function
 ---@field PathPoints Vector[]
 ---@field RecalculateOnInvalidation ENavigationOptionFlag

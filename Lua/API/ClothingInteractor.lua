@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ClothingInteractor
 ---Abstract class to control clothing specific interaction.
 ---Must be cast to the end used clothing simulation object before use.
 ---
 --- Properties
+---
 local ClothingInteractor = {}
 
 --- Methods

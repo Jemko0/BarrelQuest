@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Actor
 ---Actor is the base class for an Object that can be placed or spawned in a level.
 ---Actors may contain a collection of ActorComponents, which can be used to control how actors move, how they are rendered, etc.
@@ -41,10 +42,11 @@
 ---@see UActorComponent
 ---
 --- Properties
+---
 ---Primary Actor tick function, which calls TickActor().
 ---Tick functions can be configured to control whether ticking is enabled, at what time during a frame the update occurs, and to set up tick dependencies.
----@see https://docs.unrealengine.com/API/Runtime/Engine/Engine/FTickFunction
----@see AddTickPrerequisiteActor(), AddTickPrerequisiteComponent()
+---\@see https://docs.unrealengine.com/API/Runtime/Engine/Engine/FTickFunction
+---\@see AddTickPrerequisiteActor(), AddTickPrerequisiteComponent()
 ---@field PrimaryActorTick ActorTickFunction
 ---If true, when the actor is spawned it will be sent to the client but receive no further replication updates from the server afterwards.
 ---@field bNetTemporary boolean
@@ -78,13 +80,13 @@
 ---@field bAllowTickBeforeBeginPlay boolean
 ---If true, all input on the stack below this actor will not be considered
 ---@field bBlockInput boolean
----This actor collides with the world when placing in the editor, even if RootComponent collision is disabled. Does not affect spawning, @see SpawnCollisionHandlingMethod
+---This actor collides with the world when placing in the editor, even if RootComponent collision is disabled. Does not affect spawning, \@see SpawnCollisionHandlingMethod
 ---@field bCollideWhenPlacing boolean
 ---If true, this actor should search for an owned camera component to view through when used as a view target.
 ---@field bFindCameraComponentWhenViewTarget boolean
 ---If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.
 ---You might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.
----@see UpdateOverlapsMethodDuringLevelStreaming
+---\@see UpdateOverlapsMethodDuringLevelStreaming
 ---@field bGenerateOverlapEventsDuringLevelStreaming boolean
 ---Whether this actor should not be affected by world origin shifting.
 ---@field bIgnoresOriginShifting boolean
@@ -93,12 +95,12 @@
 ---Whether this actor is editor-only. Use with care, as if this actor is referenced by anything else that reference will be NULL in cooked builds
 ---@field bIsEditorOnlyActor boolean
 ---If true, this actor will replicate to remote machines
----@see SetReplicates()
+---\@see SetReplicates()
 ---@field bReplicates boolean
 ---If true, this actor can be put inside of a GC Cluster to improve Garbage Collection performance
 ---@field bCanBeInCluster boolean
 ---If false, the Blueprint ReceiveTick() event will be disabled on dedicated servers.
----@see AllowReceiveTickEventOnDedicatedServer()
+---\@see AllowReceiveTickEventOnDedicatedServer()
 ---@field bAllowReceiveTickEventOnDedicatedServer boolean
 ---When true the replication system will only replicate the registered subobjects and the replicated actor components list
 ---When false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated.
@@ -114,7 +116,7 @@
 ---overlapping it do not need the overlap state because they will not trigger overlap notifications.
 ---Note that if 'bGenerateOverlapEventsDuringLevelStreaming' is true, overlaps are always updated in this case, but that flag
 ---determines whether the Begin/End overlap events are triggered.
----@see bGenerateOverlapEventsDuringLevelStreaming, DefaultUpdateOverlapsMethodDuringLevelStreaming, GetUpdateOverlapsMethodDuringLevelStreaming()
+---\@see bGenerateOverlapEventsDuringLevelStreaming, DefaultUpdateOverlapsMethodDuringLevelStreaming, GetUpdateOverlapsMethodDuringLevelStreaming()
 ---@field UpdateOverlapsMethodDuringLevelStreaming EActorUpdateOverlapsMethod
 ---How long this Actor lives before dying, 0=forever. Note this is the INITIAL value and should not be modified once play has begun.
 ---@field InitialLifeSpan number
@@ -128,7 +130,7 @@
 ---This is filled in via GatherCurrentMovement() when the RootComponent has an AttachParent.
 ---@field AttachmentReplication RepAttachment
 ---Owner of this Actor, used primarily for replication (bNetUseOwnerRelevancy & bOnlyRelevantToOwner) and visibility (PrimitiveComponent bOwnerNoSee and bOnlyOwnerSee)
----@see SetOwner(), GetOwner()
+---\@see SetOwner(), GetOwner()
 ---@field Owner Actor
 ---Used to specify the net driver to replicate on (NAME_None || NAME_GameNetDriver is the default net driver)
 ---@field NetDriverName string
@@ -158,12 +160,12 @@
 ---Layers the actor belongs to.  This is outside of the editoronly data to allow hiding of LD-specified layers at runtime for profiling.
 ---@field Layers string[]
 ---The GUID for this actor; this guid will be the same for actors from instanced streaming levels.
----@see         ActorInstanceGuid, FActorInstanceGuidMapper
+---\@see         ActorInstanceGuid, FActorInstanceGuidMapper
 ---@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.
 ---                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details.
 ---@field ActorGuid Guid
 ---The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.
----@see         ActorGuid
+---\@see         ActorGuid
 ---@note        This is not guaranteed to be valid during PostLoad, but safe to access from RegisterAllComponents.
 ---@field ActorInstanceGuid Guid
 ---The GUID for this actor's content bundle.
@@ -274,7 +276,7 @@ function Actor.SetTickableWhenPaused(bTickableWhenPaused) end
 ---Set whether this actor replicates to network clients. When this actor is spawned on the server it will be sent to clients as well.
 ---Properties flagged for replication will update on clients if they change on the server.
 ---Internally changes the RemoteRole property and handles the cases where the actor needs to be added to the network actor list.
----@see https://docs.unrealengine.com/InteractiveExperiences/Networking/Actors
+---\@see https://docs.unrealengine.com/InteractiveExperiences/Networking/Actors
 ---@param bInReplicates boolean
 ---@return nil
 function Actor.SetReplicates(bInReplicates) end
@@ -928,7 +930,7 @@ function Actor.FlushNetDormancy() end
 
 ---Completes the creation of a new actor component. Called either from blueprint after
 ---expose on spawn properties are set, or directly from AddComponent
----@see UK2Node_AddComponent    DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
+---\@see UK2Node_AddComponent    DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
 ---@param Component ActorComponent
 ---@param bManualAttachment boolean
 ---@return nil
@@ -980,7 +982,7 @@ function Actor.AddTickPrerequisiteActor(PrerequisiteActor) end
 ---root. When bManualAttachment is set, automatic attachment is
 ---skipped and it is up to the user to attach the resulting component (or
 ---set it up as the root) themselves.
----@see UK2Node_AddComponentByClass             DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
+---\@see UK2Node_AddComponentByClass             DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
 ---@param Class Class
 ---@param bManualAttachment boolean
 ---@param bDeferredFinish boolean
@@ -993,7 +995,7 @@ function Actor.AddComponentByClass(Class, bManualAttachment, bDeferredFinish) en
 ---root. When bManualAttachment is set, automatic attachment is
 ---skipped and it is up to the user to attach the resulting component (or
 ---set it up as the root) themselves.
----@see UK2Node_AddComponent    DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
+---\@see UK2Node_AddComponent    DO NOT CALL MANUALLY - BLUEPRINT INTERNAL USE ONLY (for Add Component nodes)
 ---@param TemplateName string
 ---@param bManualAttachment boolean
 ---@param ComponentTemplateContext Object

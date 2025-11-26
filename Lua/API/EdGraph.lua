@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraph
 ---Ed Graph
 ---
 --- Properties
+---
 ---The schema that this graph obeys
 ---@field Schema Class
 ---Set of all nodes in this graph

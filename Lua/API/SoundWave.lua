@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundWave : SoundBase
 ---Sound Wave
 ---
 --- Properties
+---
 ---@field StreamingPriority integer
 ---Determines the max sample rate to use if the platform enables "Resampling For Device" in project settings.
 ---     For example, if the platform enables Resampling For Device and specifies 32000 for High, then setting High here will

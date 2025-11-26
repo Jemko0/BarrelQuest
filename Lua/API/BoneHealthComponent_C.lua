@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BoneHealthComponent_C : ActorComponent
 ---Bone Health Component
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field Bones BoneHealthStruct[]
 ---@field FastLookup table<string, BoneHealthStruct>

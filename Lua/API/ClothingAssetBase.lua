@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ClothingAssetBase
 ---An interface object for any clothing asset the engine can use.
 ---Any clothing asset concrete object should derive from this.
 ---
 --- Properties
+---
 ---@field ImportedFilePath string
 ---Guid to identify this asset. Will be embedded into chunks that are created using this asset
 ---@field AssetGuid Guid

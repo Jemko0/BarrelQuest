@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CameraShakeSourceComponent : SceneComponent
 ---Camera Shake Source Component
 ---
 --- Properties
+---
 ---The attenuation profile for how camera shakes' intensity falls off with distance
 ---@field Attenuation ECameraShakeAttenuation
 ---Under this distance from the source, the camera shakes are at full intensity

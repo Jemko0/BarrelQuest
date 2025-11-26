@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BarrelPlayerController_C : PlayerController
 ---Barrel Player Controller
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field inBlockingUI boolean
 ---@field ConstructionMode boolean

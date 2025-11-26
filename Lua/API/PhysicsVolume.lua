@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PhysicsVolume : Volume
 ---PhysicsVolume: A bounding volume which affects actor physics.
 ---Each AActor is affected at any time by one PhysicsVolume.
 ---
 --- Properties
+---
 ---Terminal velocity of pawns using CharacterMovement when falling.
 ---@field TerminalVelocity number
 ---Determines which PhysicsVolume takes precedence if they overlap (higher number = higher priority).

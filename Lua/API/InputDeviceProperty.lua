@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class InputDeviceProperty
 ---Base class that represents a single Input Device Property. An Input Device Property
 ---represents a feature that can be set on an input device. Things like what color a
@@ -16,6 +17,7 @@
 ---example.
 ---
 --- Properties
+---
 ---The duration that this device property should last. Override this if your property has any dynamic curves
 ---to be the max time range.
 ---A duration of 0 means that the device property will be treated as a "One Shot" effect, being applied once

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavMovementComponent : MovementComponent
 ---NavMovementComponent defines base functionality for MovementComponents that move any 'agent' that may be involved in AI pathfinding.
 ---
 --- Properties
+---
 ---@field FixedPathBrakingDistance number
 ---@field bUpdateNavAgentWithOwnersCollision boolean
 ---@field bUseAccelerationForPaths boolean

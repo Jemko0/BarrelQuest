@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ItemSubcontainerCarrierBase_C : Item_C
 ---Item Subcontainer Carrier Base
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field ExternalSubcontainer ExternalSubcontainer_C
 ---@field HasExternal boolean

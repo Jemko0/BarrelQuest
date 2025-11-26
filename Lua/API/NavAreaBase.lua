@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavAreaBase
 ---a stub class. Actual implementation in NavigationSystem module.
 ---
 --- Properties
+---
 local NavAreaBase = {}
 
 --- Methods

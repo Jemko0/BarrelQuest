@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GameUserSettings
 ---Stores user settings for a game (for example graphics and sound settings), with the ability to save and load to and from a file.
 ---
 --- Properties
+---
 ---Whether to use VSync or not. (public to allow UI to connect to it)
 ---@field bUseVSync boolean
 ---Whether to use dynamic resolution or not. (public to allow UI to connect to it)

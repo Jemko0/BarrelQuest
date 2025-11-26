@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class InputComponent : ActorComponent
 ---Implement an Actor component for input bindings.
 ---An Input Component is a transient component that enables an Actor to bind various forms of input events to delegate functions.
@@ -13,6 +14,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Input/index.html
 ---
 --- Properties
+---
 local InputComponent = {}
 
 --- Methods

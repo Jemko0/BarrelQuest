@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleEmitter
 ---Particle Emitter
 ---
 --- Properties
+---
 ---The name of the emitter.
 ---@field EmitterName string
 ---@field SubUVDataOffset integer

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraphNode
 ---Ed Graph Node
 ---
 --- Properties
+---
 ---List of connector pins
 ---@field DeprecatedPins EdGraphPin_Deprecated[]
 ---X position of node in the editor

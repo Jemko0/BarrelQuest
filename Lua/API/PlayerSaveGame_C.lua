@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerSaveGame_C : SaveGame
 ---Player Save Game
 ---
 --- Properties
+---
 ---@field SavedPlayers table<string, PlayerSaveDataStruct>
 local PlayerSaveGame_C = {}
 

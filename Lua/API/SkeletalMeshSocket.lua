@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshSocket
 ---Skeletal Mesh Socket
 ---
 --- Properties
+---
 ---Defines a named attachment location on the USkeletalMesh.
 ---These are set up in editor and used as a shortcut instead of specifying
 ---everything explicitly to AttachComponent in the SkeletalMeshComponent.

@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NodeMappingContainer
 ---Node Mapping Container Class
 ---* This saves source items, and target items, and mapping between
 ---* Used by Retargeting, Control Rig mapping. Will need to improve interface better
 ---
 --- Properties
+---
 local NodeMappingContainer = {}
 
 --- Methods

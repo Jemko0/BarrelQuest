@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerNameTagUI_C : UserWidget
 ---Player Name Tag UI
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field TextBlock_32 TextBlock
 ---@field Player BarrelCharacter_C

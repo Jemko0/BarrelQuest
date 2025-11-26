@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Texture2D : Texture
 ---Texture 2D
 ---
 --- Properties
+---
 ---keep track of first mip level used for ResourceMem creation
 ---@field FirstResourceMemMip integer
 ---Whether the texture has been painted in the editor.

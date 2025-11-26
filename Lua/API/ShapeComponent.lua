@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ShapeComponent : PrimitiveComponent
 ---ShapeComponent is a PrimitiveComponent that is represented by a simple geometrical shape (sphere, capsule, box, etc).
 ---
 --- Properties
+---
 ---Description of collision
 ---@field ShapeBodySetup BodySetup
 ---@field AreaClass Class

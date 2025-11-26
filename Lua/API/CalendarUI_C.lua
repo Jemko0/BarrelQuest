@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CalendarUI_C : UserWidget
 ---Calendar UI
 ---
 --- Properties
+---
 ---@field CalendarInnerPanelUI CalendarInnerPanelUI_C
 local CalendarUI_C = {}
 

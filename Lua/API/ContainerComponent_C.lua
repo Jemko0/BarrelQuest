@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ContainerComponent_C : ActorComponent
 ---Container Component
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field ContainerSize integer
 ---@field Items InventoryItemStruct[]

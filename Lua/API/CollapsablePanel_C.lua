@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CollapsablePanel_C : UserWidget
 ---Collapsable Panel
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field UniversalButton_1 UniversalButton_C
 ---@field UniversalButton UniversalButton_C

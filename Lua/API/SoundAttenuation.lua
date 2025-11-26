@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SoundAttenuation
 ---Defines how a sound changes volume with distance to the listener
 ---
 --- Properties
+---
 ---@field Attenuation SoundAttenuationSettings
 local SoundAttenuation = {}
 

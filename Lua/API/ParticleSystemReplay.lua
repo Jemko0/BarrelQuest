@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleSystemReplay
 ---Particle System Replay
 ---
 --- Properties
+---
 ---Unique ID number for this replay clip
 ---@field ClipIDNumber integer
 local ParticleSystemReplay = {}

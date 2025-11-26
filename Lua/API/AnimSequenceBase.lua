@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimSequenceBase : AnimationAsset
 ---Anim Sequence Base
 ---
 --- Properties
+---
 ---Animation notifies, sorted by time (earliest notification first).
 ---@field Notifies AnimNotifyEvent[]
 ---@field SequenceLength number

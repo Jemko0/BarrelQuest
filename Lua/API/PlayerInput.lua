@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerInput
 ---Object within PlayerController that processes player input.
 ---Only exists on the client in network games.
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Input/index.html
 ---
 --- Properties
+---
 ---Generic bindings of keys to Exec()-compatible strings for development purposes only
 ---@field DebugExecBindings KeyBind[]
 ---List of Axis Mappings that have been inverted

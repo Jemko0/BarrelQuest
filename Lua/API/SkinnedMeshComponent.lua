@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkinnedMeshComponent : MeshComponent
 ---Skinned mesh component that supports bone skinned mesh rendering.
 ---This class does not support animation.
 ---@see USkeletalMeshComponent
 ---
 --- Properties
+---
 ---@field SkeletalMesh SkeletalMesh
 ---If set, this SkeletalMeshComponent will not use its SpaceBase for bone transform, but will
 ---use the component space transforms from the LeaderPoseComponent. This is used when constructing a character using multiple skeletal meshes sharing the same
@@ -349,7 +351,7 @@ function SkinnedMeshComponent.GetBoneTransform(InBoneName, TransformSpace) end
 function SkinnedMeshComponent.GetBoneName(BoneIndex) end
 
 ---Find the index of bone by name. Looks in the current SkeletalMesh being used by this SkeletalMeshComponent.
----@see USkeletalMesh::GetBoneIndex.
+---\@see USkeletalMesh::GetBoneIndex.
 ---@param BoneName string
 ---@return integer
 function SkinnedMeshComponent.GetBoneIndex(BoneName) end

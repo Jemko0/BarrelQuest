@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GameModeBase : Info
 ---The GameModeBase defines the game being played. It governs the game rules, scoring, what actors
 ---are allowed to exist in this game type, and who may enter the game.
@@ -17,6 +18,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/GameMode/index.html
 ---
 --- Properties
+---
 ---Save options string and parse it when needed
 ---@field OptionsString string
 ---Class of GameSession, which handles login approval and online game interface

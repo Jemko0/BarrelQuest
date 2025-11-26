@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraParameterCollection
 ---Asset containing a collection of global parameters usable by Niagara. Similar to Material parameter collections,
 ---any number of Niagara assets may reference attributes from this parameter collection and will get new values when they are changed.
@@ -12,6 +13,7 @@
 ---To use a value from a parameter collection in a Niagara system or emitter, add a reference to it from the Parameters panel (in the Niagara Parameter Collection section).
 ---
 --- Properties
+---
 ---Namespace for this parameter collection. Is enforced to be unique across all parameter collections.
 ---@field Namespace string
 ---@field Parameters NiagaraVariable[]

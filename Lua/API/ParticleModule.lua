@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleModule
 ---Particle Module
 ---
 --- Properties
+---
 ---If true, the module performs operations on particles during Spawning
 ---@field bSpawnModule boolean
 ---If true, the module performs operations on particles during Updating

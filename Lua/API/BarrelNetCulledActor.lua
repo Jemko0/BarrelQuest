@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BarrelNetCulledActor : Actor
 ---Barrel Net Culled Actor
 ---
 --- Properties
+---
 ---@field bUseBarrelCustomNetCulling boolean
 local BarrelNetCulledActor = {}
 

@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkyAtmosphereComponent : SceneComponent
 ---A component that represents a planet atmosphere material and simulates sky and light scattering within it.
 ---@see https://docs.unrealengine.com/en-US/Engine/Actors/FogEffects/SkyAtmosphere/index.html
 ---
 --- Properties
+---
 ---The ground albedo that will tint the atmosphere when the sun light will bounce on it. Only taken into account when MultiScattering>0.0.
 ---@field TransformMode ESkyAtmosphereTransformMode
 ---The radius in kilometers from the center of the planet to the ground level.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerStatComponent_C : StatsComponent_C
 ---Player Stat Component
 ---
 --- Properties
+---
 local PlayerStatComponent_C = {}
 
 --- Methods

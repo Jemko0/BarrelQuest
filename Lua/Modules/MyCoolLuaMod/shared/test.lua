@@ -1,4 +1,6 @@
 local ply = barrel.getLocalPlayer()
 
-local item = InventoryItemStruct.new("base", 5, {}, nil)
-ply.ContainerComponentNew.AddItem(item)
+
+local i = InventoryItemStruct.new("isofjiosaj", 4, {}, nil)
+
+ply.ContainerComponentNew.AddItem(i)

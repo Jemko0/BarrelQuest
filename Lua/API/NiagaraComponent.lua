@@ -5,20 +5,22 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraComponent : FXSystemComponent
 ---UNiagaraComponent is the primitive component for a Niagara System.
 ---@see ANiagaraActor
 ---@see UNiagaraSystem
 ---
 --- Properties
+---
 ---True if we should automatically attach to AutoAttachParent when activated, and detach from our parent when completed.
 ---This overrides any current attachment that may be present at the time of activation (deferring initial attachment until activation, if AutoAttachParent is null).
 ---When enabled, detachment occurs regardless of whether AutoAttachParent is assigned, and the relative transform from the time of activation is restored.
 ---This also disables attachment on dedicated servers, where we don't actually activate even if bAutoActivate is true.
----@see AutoAttachParent, AutoAttachSocketName, AutoAttachLocationType
+---\@see AutoAttachParent, AutoAttachSocketName, AutoAttachLocationType
 ---@field bAutoManageAttachment boolean
 ---Option for how we handle bWeldSimulatedBodies when we attach to the AutoAttachParent, if bAutoManageAttachment is true.
----@see bAutoManageAttachment
+---\@see bAutoManageAttachment
 ---@field bAutoAttachWeldSimulatedBodies boolean
 ---Time between forced UpdateTransforms for systems that use dynamically calculated bounds,
 ---Which is effectively how often the bounds are shrunk.
@@ -28,19 +30,19 @@
 ---@field OnSystemFinished function
 ---Component we automatically attach to when activated, if bAutoManageAttachment is true.
 ---If null during registration, we assign the existing AttachParent and defer attachment until we activate.
----@see bAutoManageAttachment
+---\@see bAutoManageAttachment
 ---@field AutoAttachParent any
 ---Socket we automatically attach to on the AutoAttachParent, if bAutoManageAttachment is true.
----@see bAutoManageAttachment
+---\@see bAutoManageAttachment
 ---@field AutoAttachSocketName string
 ---Options for how we handle our location when we attach to the AutoAttachParent, if bAutoManageAttachment is true.
----@see bAutoManageAttachment, EAttachmentRule
+---\@see bAutoManageAttachment, EAttachmentRule
 ---@field AutoAttachLocationRule EAttachmentRule
 ---Options for how we handle our rotation when we attach to the AutoAttachParent, if bAutoManageAttachment is true.
----@see bAutoManageAttachment, EAttachmentRule
+---\@see bAutoManageAttachment, EAttachmentRule
 ---@field AutoAttachRotationRule EAttachmentRule
 ---Options for how we handle our scale when we attach to the AutoAttachParent, if bAutoManageAttachment is true.
----@see bAutoManageAttachment, EAttachmentRule
+---\@see bAutoManageAttachment, EAttachmentRule
 ---@field AutoAttachScaleRule EAttachmentRule
 ---@field bWaitForCompilationOnActivate boolean
 local NiagaraComponent = {}

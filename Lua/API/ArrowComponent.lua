@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ArrowComponent : PrimitiveComponent
 ---A simple arrow rendered using lines. Useful for indicating which way an object is facing.
 ---
 --- Properties
+---
 ---Color to draw arrow
 ---@field ArrowColor Color
 ---Relative size to scale drawn arrow by

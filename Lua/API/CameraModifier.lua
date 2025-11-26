@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CameraModifier
 ---A CameraModifier is a base class for objects that may adjust the final camera properties after
 ---being computed by the APlayerCameraManager (@see ModifyCamera). A CameraModifier
 ---can be stateful, and is associated uniquely with a specific APlayerCameraManager.
 ---
 --- Properties
+---
 ---If true, enables certain debug visualization features.
 ---@field bDebug boolean
 ---If true, no other modifiers of same priority allowed.

@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Font
 ---A font object, for use by Slate, UMG, and Canvas.
 ---A font can either be:
@@ -12,6 +13,7 @@
 ---  * Offline cached - The font contains a series of textures containing pre-baked cached glyphs and their associated texture coordinates.
 ---
 --- Properties
+---
 ---What kind of font caching should we use? This controls which options we see
 ---@field FontCacheType EFontCacheType
 ---List of characters in the font.  For a MultiFont, this will include all characters in all sub-fonts!  Thus,

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ViewConeActorCPP_C : ViewConeActor
 ---View Cone Actor CPP
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field VisibleActors table<Object, boolean>
 ---@field Visible table<Actor, boolean>

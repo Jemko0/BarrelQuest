@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class InteractUIComponent_C : ActorComponent
 ---Interact UIComponent
 ---
 --- Properties
+---
 ---@field InteractionName string
 ---@field InteractionTexture Texture2D
 local InteractUIComponent_C = {}

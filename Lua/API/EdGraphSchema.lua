@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraphSchema
 ---Ed Graph Schema
 ---
 --- Properties
+---
 local EdGraphSchema = {}
 
 --- Methods

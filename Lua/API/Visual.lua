@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Visual
 ---The base class for elements in UMG: slots and widgets.
 ---
 --- Properties
+---
 local Visual = {}
 
 --- Methods

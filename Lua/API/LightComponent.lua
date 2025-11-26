@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LightComponent : LightComponentBase
 ---Light Component
 ---
 --- Properties
+---
 ---Color temperature in Kelvin of the blackbody illuminant.
 ---White (D65) is 6500K.
 ---@field Temperature number

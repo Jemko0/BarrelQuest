@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerController : Controller
 ---PlayerControllers are used by human players to control Pawns.
 ---ControlRotation (accessed via GetControlRotation()), determines the aiming
@@ -15,6 +16,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/Controller/PlayerController/
 ---
 --- Properties
+---
 ---UPlayer associated with this PlayerController.  Could be a local player or a net connection.
 ---@field Player Player
 ---Used in net games so client can acknowledge it possessed a specific pawn.
@@ -53,7 +55,7 @@
 ---This behavior can be changed either by overriding APlayerController::EnableCheats or AGameModeBase::AllowCheats.
 ---@field CheatManager CheatManager
 ---Class of my CheatManager.
----@see CheatManager for more information about when it will be instantiated.
+---\@see CheatManager for more information about when it will be instantiated.
 ---@field CheatClass Class
 ---Object that manages player input.
 ---@field PlayerInput PlayerInput
@@ -67,7 +69,7 @@
 ---This is set on the OLD PlayerController when performing a swap over a network connection
 ---so we know what connection we're waiting on acknowledgment from to finish destroying this PC
 ---(or when the connection is closed)
----@see GameModeBase::SwapPlayerControllers()
+---\@see GameModeBase::SwapPlayerControllers()
 ---@field PendingSwapConnection NetConnection
 ---The net connection this controller is communicating on, nullptr for local players on server
 ---@field NetConnection NetConnection

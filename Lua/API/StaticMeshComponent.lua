@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class StaticMeshComponent : MeshComponent
 ---StaticMeshComponent is used to create an instance of a UStaticMesh.
 ---A static mesh is a piece of geometry that consists of a static set of polygons.
@@ -12,6 +13,7 @@
 ---@see UStaticMesh
 ---
 --- Properties
+---
 ---If 0, auto-select LOD level. if >0, force to (ForcedLodModel-1).
 ---@field ForcedLodModel integer
 ---Specifies the smallest LOD that will be used for this component.

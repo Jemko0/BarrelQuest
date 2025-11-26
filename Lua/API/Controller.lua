@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Controller : Actor
 ---Controllers are non-physical actors that can possess a Pawn to control
 ---its actions.  PlayerControllers are used by human players to control pawns, while
@@ -20,6 +21,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/Controller/
 ---
 --- Properties
+---
 ---PlayerState containing replicated information about the player using this controller (only exists for players, not NPCs).
 ---@field PlayerState PlayerState
 ---Called when the controller has instigated damage in any way
@@ -81,7 +83,7 @@ function Controller.ResetIgnoreInputFlags() end
 ---Derived native classes can override OnPossess to filter the specified pawn.
 ---When possessed pawn changed, blueprint class gets notified by ReceivePossess
 ---and OnNewPawn delegate is broadcasted.
----@see HasAuthority, OnPossess, ReceivePossess
+---\@see HasAuthority, OnPossess, ReceivePossess
 ---@param InPawn Pawn
 ---@return nil
 function Controller.Possess(InPawn) end

@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PrimaryDataAsset : DataAsset
 ---A DataAsset that implements GetPrimaryAssetId and has asset bundle support, which allows it to be manually loaded/unloaded from the AssetManager.
 ---Instances of native subclasses can be created directly as Data Assets in the editor and will use the name of the native class as the PrimaryAssetType.
@@ -16,6 +17,7 @@
 ---To change this behavior, override GetPrimaryAssetId in your native class or copy those functions into a different native base class.
 ---
 --- Properties
+---
 ---Asset Bundle data computed at save time. In cooked builds this is accessible from AssetRegistry
 ---@field AssetBundleData AssetBundleData
 local PrimaryDataAsset = {}

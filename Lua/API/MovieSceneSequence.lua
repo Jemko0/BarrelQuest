@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MovieSceneSequence : MovieSceneSignedObject
 ---Abstract base class for movie scene animations (C++ version).
 ---
 --- Properties
+---
 ---The default completion mode for this movie scene when a section's completion mode is set to project default
 ---@field DefaultCompletionMode EMovieSceneCompletionMode
 ---true if the result of GetParentObject is significant in object resolution for LocateBoundObjects.

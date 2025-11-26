@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimationAsset
 ---Animation Asset
 ---
 --- Properties
+---
 ---Parent Asset, if set, you won't be able to edit any data in here but just mapping table
 ---During cooking, this data will be used to bake out to normal asset
 ---@field ParentAsset AnimationAsset

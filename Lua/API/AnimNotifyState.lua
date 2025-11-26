@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimNotifyState
 ---Anim Notify State
 ---
 --- Properties
+---
 ---Color of Notify in editor
 ---@field NotifyColor Color
 ---Whether this notify state instance should fire in animation editors

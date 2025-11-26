@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ParticleLODLevel
 ---Particle LODLevel
 ---
 --- Properties
+---
 ---The index value of the LOD level
 ---@field Level integer
 ---True if the LOD level is enabled, meaning it should be updated and rendered.

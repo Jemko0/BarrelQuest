@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Widget : Visual
 ---This is the base class for all wrapped Slate controls that are exposed to UObjects.
 ---
 --- Properties
+---
 ---The parent slot of the UWidget.  Allows us to easily inline edit the layout controlling this widget.
 ---@field Slot PanelSlot
 ---A bindable delegate for bIsEnabled

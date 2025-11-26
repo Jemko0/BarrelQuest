@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraConvertInPlaceUtilityBase
 ---Niagara Convert in Place Utility Base
 ---
 --- Properties
+---
 local NiagaraConvertInPlaceUtilityBase = {}
 
 --- Methods

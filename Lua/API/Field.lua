@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Field
 ---Field
 ---
 --- Properties
+---
 local Field = {}
 
 --- Methods

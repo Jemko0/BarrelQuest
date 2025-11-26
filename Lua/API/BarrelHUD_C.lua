@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BarrelHUD_C : HUD
 ---Barrel HUD
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field DefaultSceneRoot SceneComponent
 ---@field MainUI MainUI_C

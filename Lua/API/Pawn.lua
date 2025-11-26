@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Pawn : Actor
 ---Pawn is the base class of all actors that can be possessed by players or AI.
 ---They are the physical representations of players and creatures in a level.
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/Pawn/
 ---
 --- Properties
+---
 ---If true, this Pawn's pitch will be updated to match the Controller's ControlRotation pitch, if controlled by a PlayerController.
 ---@field bUseControllerRotationPitch boolean
 ---If true, this Pawn's yaw will be updated to match the Controller's ControlRotation yaw, if controlled by a PlayerController.
@@ -23,17 +25,17 @@
 ---@note Use SetCanAffectNavigationGeneration() to change this value at runtime.
 ---@note Modifying this value at runtime will result in any navigation change only if runtime navigation generation is enabled.
 ---@note Override UpdateNavigationRelevance() to propagate the flag to the desired components.
----@see SetCanAffectNavigationGeneration(), UpdateNavigationRelevance()
+---\@see SetCanAffectNavigationGeneration(), UpdateNavigationRelevance()
 ---@field bCanAffectNavigationGeneration boolean
 ---@field bIsLocalViewTarget boolean
 ---Base eye height above collision center.
 ---@field BaseEyeHeight number
 ---Determines which PlayerController, if any, should automatically possess the pawn when the level starts or when the pawn is spawned.
----@see AutoPossessAI
+---\@see AutoPossessAI
 ---@field AutoPossessPlayer integer
 ---Determines when the Pawn creates and is possessed by an AI Controller (on level start, when spawned, etc).
 ---Only possible if AIControllerClassRef is set, and ignored if AutoPossessPlayer is enabled.
----@see AutoPossessPlayer
+---\@see AutoPossessPlayer
 ---@field AutoPossessAI EAutoPossessAI
 ---Replicated so we can see where remote clients are looking.
 ---@field RemoteViewPitch16 any
@@ -51,10 +53,10 @@
 ---Event called after a pawn has been restarted, usually by a possession change. This is called on the server for all pawns and the owning client for player pawns
 ---@field ReceiveRestartedDelegate function
 ---Accumulated control input vector, stored in world space. This is the pending input, which is cleared (zeroed) once consumed.
----@see GetPendingMovementInputVector(), AddMovementInput()
+---\@see GetPendingMovementInputVector(), AddMovementInput()
 ---@field ControlInputVector Vector
 ---The last control input vector that was processed by ConsumeMovementInputVector().
----@see GetLastMovementInputVector()
+---\@see GetLastMovementInputVector()
 ---@field LastControlInputVector Vector
 ---If set, then this InputComponent class will be used instead of the Input Settings' DefaultInputComponentClass
 ---@field OverrideInputComponentClass Class
@@ -119,7 +121,7 @@ function Pawn.GetPlatformUserId() end
 
 ---Return the pending input vector in world space. This is the most up-to-date value of the input vector, pending ConsumeMovementInputVector() which clears it,
 ---Usually only a PawnMovementComponent will want to read this value, or the Pawn itself if it is responsible for movement.
----@see AddMovementInput(), GetLastMovementInputVector(), ConsumeMovementInputVector()
+---\@see AddMovementInput(), GetLastMovementInputVector(), ConsumeMovementInputVector()
 ---@return Vector
 function Pawn.GetPendingMovementInputVector() end
 
@@ -148,7 +150,7 @@ function Pawn.GetLocalViewingPlayerController() end
 ---Any user that needs to know about the input that last affected movement should use this function.
 ---For example an animation update would want to use this, since by default the order of updates in a frame is:
 ---PlayerController (device input) -> MovementComponent -> Pawn -> Mesh (animations)
----@see AddMovementInput(), GetPendingMovementInputVector(), ConsumeMovementInputVector()
+---\@see AddMovementInput(), GetPendingMovementInputVector(), ConsumeMovementInputVector()
 ---@return Vector
 function Pawn.GetLastMovementInputVector() end
 
@@ -178,7 +180,7 @@ function Pawn.ConsumeMovementInputVector() end
 
 ---Add movement input along the given world direction vector (usually normalized) scaled by 'ScaleValue'. If ScaleValue < 0, movement will be in the opposite direction.
 ---Base Pawn classes won't automatically apply movement, it's up to the user to do so in a Tick event. Subclasses such as Character and DefaultPawn automatically handle this input and move.
----@see GetPendingMovementInputVector(), GetLastMovementInputVector(), ConsumeMovementInputVector()
+---\@see GetPendingMovementInputVector(), GetLastMovementInputVector(), ConsumeMovementInputVector()
 ---@param WorldDirection Vector
 ---@param ScaleValue number
 ---@param bForce boolean
@@ -187,21 +189,21 @@ function Pawn.AddMovementInput(WorldDirection, ScaleValue, bForce) end
 
 ---Add input (affecting Yaw) to the Controller's ControlRotation, if it is a local PlayerController.
 ---This value is multiplied by the PlayerController's InputYawScale value.
----@see PlayerController::InputYawScale
+---\@see PlayerController::InputYawScale
 ---@param Val number
 ---@return nil
 function Pawn.AddControllerYawInput(Val) end
 
 ---Add input (affecting Roll) to the Controller's ControlRotation, if it is a local PlayerController.
 ---This value is multiplied by the PlayerController's InputRollScale value.
----@see PlayerController::InputRollScale
+---\@see PlayerController::InputRollScale
 ---@param Val number
 ---@return nil
 function Pawn.AddControllerRollInput(Val) end
 
 ---Add input (affecting Pitch) to the Controller's ControlRotation, if it is a local PlayerController.
 ---This value is multiplied by the PlayerController's InputPitchScale value.
----@see PlayerController::InputPitchScale
+---\@see PlayerController::InputPitchScale
 ---@param Val number
 ---@return nil
 function Pawn.AddControllerPitchInput(Val) end

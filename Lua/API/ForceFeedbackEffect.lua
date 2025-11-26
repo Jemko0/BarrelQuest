@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ForceFeedbackEffect
 ---A predefined force-feedback effect to be played on a controller
 ---
 --- Properties
+---
 ---@field ChannelDetails ForceFeedbackChannelDetails[]
 ---A map of platform name -> ForceFeedback channel details
 ---@field PerDeviceOverrides table<string, ForceFeedbackEffectOverridenChannelDetails>

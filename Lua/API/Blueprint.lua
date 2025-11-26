@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Blueprint : BlueprintCore
 ---Blueprints are special assets that provide an intuitive, node-based interface that can be used to create new types of Actors
 ---and script level events; giving designers and gameplay programmers the tools to quickly create and iterate gameplay from
 ---within Unreal Editor without ever needing to write a line of code.
 ---
 --- Properties
+---
 ---Pointer to the parent class that the generated class should derive from. This *can* be null under rare circumstances,
 ---one such case can be created by creating a blueprint (A) based on another blueprint (B), shutting down the editor, and
 ---deleting the parent blueprint. Exported as Alphabetical in GetAssetRegistryTags

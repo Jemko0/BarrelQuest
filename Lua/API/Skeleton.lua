@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Skeleton
 ---USkeleton : that links between mesh and animation
 ---        - Bone hierarchy for animations
@@ -12,6 +13,7 @@
 ---        - Retargetting related
 ---
 --- Properties
+---
 ---Skeleton bone tree - each contains name and parent index*
 ---@field BoneTree BoneNode[]
 ---Reference skeleton poses in local space

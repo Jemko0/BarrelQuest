@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CapsuleComponent : ShapeComponent
 ---A capsule generally used for simple collision. Bounds are rendered as lines in the editor.
 ---
 --- Properties
+---
 ---Half-height, from center of capsule to the end of top or bottom hemisphere.
 ---This cannot be less than CapsuleRadius.
 ---@field CapsuleHalfHeight number

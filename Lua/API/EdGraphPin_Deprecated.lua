@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class EdGraphPin_Deprecated
 ---Ed Graph Pin Deprecated
 ---
 --- Properties
+---
 ---Name of this pin
 ---@field PinName string
 ---Used as the display name if set

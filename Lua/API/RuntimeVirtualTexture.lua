@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class RuntimeVirtualTexture
 ---Runtime virtual texture UObject
 ---
 --- Properties
+---
 ---Size of virtual texture in tiles. (Actual values increase in powers of 2).
 ---This is applied to the largest axis in world space and the size for any shorter axis is chosen to maintain aspect ratio.
 ---@field TileCount integer

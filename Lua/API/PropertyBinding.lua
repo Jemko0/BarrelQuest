@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PropertyBinding
 ---Property Binding
 ---
 --- Properties
+---
 ---The source object to use as the initial container to resolve the Source Property Path on.
 ---@field SourceObject any
 ---The property path to trace to resolve this binding on the Source Object

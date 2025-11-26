@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MorphTarget
 ---Morph Target
 ---
 --- Properties
+---
 ---USkeletalMesh that this vertex animation works on.
 ---@field BaseSkelMesh SkeletalMesh
 local MorphTarget = {}

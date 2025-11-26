@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CurveBase
 ---Defines a curve of interpolated points to evaluate over a given range
 ---
 --- Properties
+---
 ---@field AssetImportData AssetImportData
 ---The filename imported to create this object. Relative to this object's package, BaseDir() or absolute
 ---@field ImportPath string

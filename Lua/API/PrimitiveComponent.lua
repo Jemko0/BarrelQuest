@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PrimitiveComponent : SceneComponent
 ---PrimitiveComponents are SceneComponents that contain or generate some sort of geometry, generally to be rendered or used as collision data.
 ---There are several subclasses for the various types of geometry, but the most common by far are the ShapeComponents (Capsule, Sphere, Box), StaticMeshComponent, and SkeletalMeshComponent.
 ---ShapeComponents generate geometry that is used for collision detection but are not rendered, while StaticMeshComponents and SkeletalMeshComponents contain pre-built geometry that is rendered, but can also be used for collision detection.
 ---
 --- Properties
+---
 ---The minimum distance at which the primitive should be rendered,
 ---measured in world space units from the center of the primitive's bounding sphere to the camera position.
 ---@field MinDrawDistance number
@@ -48,10 +50,10 @@
 ---@field bMultiBodyOverlap boolean
 ---If true, component sweeps with this component should trace against complex collision during movement (for example, each triangle of a mesh).
 ---If false, collision will be resolved against simple collision bounds instead.
----@see MoveComponent()
+---\@see MoveComponent()
 ---@field bTraceComplexOnMove boolean
 ---If true, component sweeps will return the material in their hit result.
----@see MoveComponent(), FHitResult
+---\@see MoveComponent(), FHitResult
 ---@field bReturnMaterialOnMove boolean
 ---True if the primitive should be rendered using ViewOwnerDepthPriorityGroup if viewed by its owner.
 ---@field bUseViewOwnerDepthPriorityGroup boolean
@@ -188,7 +190,7 @@
 ---@field ExcludeForSpecificHLODLevels integer[]
 ---Determine whether a Character can step up onto this component.
 ---This controls whether they can try to step up on it when they bump in to it, not whether they can walk on it after landing on it.
----@see FWalkableSlopeOverride
+---\@see FWalkableSlopeOverride
 ---@field CanCharacterStepUpOn integer
 ---Channels that this component should be in.  Lights with matching channels will affect the component.
 ---These channels only apply to opaque materials, direct lighting, and dynamic lighting and shadowing.
@@ -240,13 +242,13 @@
 ---All components owned by these actors will be ignored when this component moves or updates overlaps.
 ---Components on the other Actor may also need to be told to do the same when they move.
 ---Does not affect movement of this component when simulating physics.
----@see IgnoreActorWhenMoving()
+---\@see IgnoreActorWhenMoving()
 ---@field MoveIgnoreActors Actor[]
 ---Set of components to ignore during component sweeps in MoveComponent().
 ---These components will be ignored when this component moves or updates overlaps.
 ---The other components may also need to be told to do the same when they move.
 ---Does not affect movement of this component when simulating physics.
----@see IgnoreComponentWhenMoving()
+---\@see IgnoreComponentWhenMoving()
 ---@field MoveIgnoreComponents PrimitiveComponent[]
 ---Physics scene information for this component, holds a single rigid body with multiple shapes.
 ---@field BodyInstance BodyInstance
@@ -993,8 +995,8 @@ function PrimitiveComponent.GetGyroscopicTorqueEnabled() end
 
 ---If true, this component will generate overlap events when it is overlapping other components (eg Begin Overlap).
 ---Both components (this and the other) must have this enabled for overlap events to occur.
----@see [Overlap Events](https://docs.unrealengine.com/InteractiveExperiences/Physics/Collision/Overview#overlapandgenerateoverlapevents)
----@see UpdateOverlaps(), BeginComponentOverlap(), EndComponentOverlap()
+---\@see [Overlap Events](https://docs.unrealengine.com/InteractiveExperiences/Physics/Collision/Overview#overlapandgenerateoverlapevents)
+---\@see UpdateOverlaps(), BeginComponentOverlap(), EndComponentOverlap()
 ---@return boolean
 function PrimitiveComponent.GetGenerateOverlapEvents() end
 
@@ -1094,7 +1096,7 @@ function PrimitiveComponent.ClearMoveIgnoreActors() end
 
 ---Return true if the given Pawn can step up onto this component.
 ---This controls whether they can try to step up on it when they bump in to it, not whether they can walk on it after landing on it.
----@see CanCharacterStepUpOn
+---\@see CanCharacterStepUpOn
 ---@param Pawn Pawn
 ---@return boolean
 function PrimitiveComponent.CanCharacterStepUp(Pawn) end

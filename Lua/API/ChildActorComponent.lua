@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ChildActorComponent : SceneComponent
 ---A component that spawns an Actor when registered, and destroys it when unregistered.
 ---
 --- Properties
+---
 local ChildActorComponent = {}
 
 --- Methods

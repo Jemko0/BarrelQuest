@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PlayerState : Info
 ---A PlayerState is created for every player on a server (or in a standalone game).
 ---PlayerStates are replicated to all clients, and contain network game relevant information about the player, such as playername, score, etc.
 ---
 --- Properties
+---
 ---This is used for sending game agnostic messages that can be localized
 ---@field EngineMessageClass Class
 ---Used to match up InactivePlayerState with rejoining playercontroller.

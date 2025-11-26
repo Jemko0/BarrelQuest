@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ProceduralMeshComponent : MeshComponent
 ---Component that allows you to specify custom triangle mesh geometry
 ---Beware! This feature is experimental and may be substantially changed in future releases.
 ---
 --- Properties
+---
 ---Controls whether the complex (Per poly) geometry should be treated as 'simple' collision.
 ---Should be set to false if this component is going to be given simple collision and simulated.
 ---@field bUseComplexAsSimpleCollision boolean

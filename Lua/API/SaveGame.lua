@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SaveGame
 ---This class acts as a base class for a save game object that can be used to save state about the game.
 ---When you create your own save game subclass, you would add member variables for the information that you want to save.
@@ -13,6 +14,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/SaveGame
 ---
 --- Properties
+---
 local SaveGame = {}
 
 --- Methods

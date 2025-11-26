@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DecalComponent : SceneComponent
 ---A material that is rendered onto the surface of a mesh. A kind of 'bumper sticker' for a model.
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Actors/DecalActor
 ---@see UDecalActor
 ---
 --- Properties
+---
 ---Decal material.
 ---@field DecalMaterial MaterialInterface
 ---Controls the order in which decal elements are rendered.  Higher values draw later (on top).

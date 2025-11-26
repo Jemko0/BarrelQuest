@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BoxComponent : ShapeComponent
 ---A box generally used for simple collision. Bounds are rendered as lines in the editor.
 ---
 --- Properties
+---
 ---The extents (radii dimensions) of the box *
 ---@field BoxExtent Vector
 local BoxComponent = {}

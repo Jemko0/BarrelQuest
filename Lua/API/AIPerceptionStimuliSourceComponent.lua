@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AIPerceptionStimuliSourceComponent : ActorComponent
 ---Gives owning actor a way to auto-register as perception system's sense stimuli source
 ---
 --- Properties
+---
 ---@field bAutoRegisterAsSource boolean
 ---@field RegisterAsSourceForSenses Class[]
 local AIPerceptionStimuliSourceComponent = {}

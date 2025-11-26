@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AnimInstance
 ---Anim Instance
 ---
 --- Properties
+---
 ---This is used to extract animation. If Mesh exists, this will be overwritten by Mesh->Skeleton
 ---@field CurrentSkeleton Skeleton
 ---Sets where this blueprint pulls Root Motion from

@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureRenderTarget2D : TextureRenderTarget
 ---TextureRenderTarget2D
 ---2D render target texture resource. This can be used as a target
 ---for rendering as well as rendered as a regular 2D texture resource.
 ---
 --- Properties
+---
 ---The width of the texture.
 ---@field SizeX integer
 ---The height of the texture.

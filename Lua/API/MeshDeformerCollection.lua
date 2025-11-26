@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MeshDeformerCollection : DataAsset
 ---A simple collection of Mesh Deformers
 ---
 --- Properties
+---
 ---@field Description string
 ---@field MeshDeformers any[]
 ---@field MeshDeformerCollections MeshDeformerCollection[]

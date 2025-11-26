@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class QuartzClockHandle
 ---This class is a BP / Game thread wrapper around FQuartzClockProxy
 ---   (to talk to the underlying clock)
@@ -14,6 +15,7 @@
 ---gameplay & VFX to Quartz events fired from the Audio Engine
 ---
 --- Properties
+---
 local QuartzClockHandle = {}
 
 --- Methods

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AutoThumbnail_C : Actor
 ---Auto Thumbnail
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field SpotLight SpotLightComponent
 ---@field Cube StaticMeshComponent

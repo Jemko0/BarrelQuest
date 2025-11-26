@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraScript : NiagaraScriptBase
 ---Scripts are function graphs that define the runtime execution for a Niagara system (similar to a Blueprint).
 ---There are three types of scripts:
@@ -13,6 +14,7 @@
 ---3) Function: usually reserved for helper functions; can only be called from within modules or dynamic inputs
 ---
 --- Properties
+---
 ---A set of rules to apply when this script is used in the stack. To create your own rules, write a custom class that extends UNiagaraValidationRule.
 ---@field ValidationRules NiagaraValidationRule[]
 ---how this script is to be used. cannot be private due to use of GET_MEMBER_NAME_CHECKED

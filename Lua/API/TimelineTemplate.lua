@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TimelineTemplate
 ---Timeline Template
 ---
 --- Properties
+---
 ---Length of this timeline
 ---@field TimelineLength number
 ---How we want the timeline to determine its own length (e.g. specified length, last keyframe)

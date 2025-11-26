@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BodySetup : BodySetupCore
 ---BodySetup contains all collision information that is associated with a single asset.
 ---A single BodySetup instance is shared among many BodyInstances so that geometry data is not duplicated.
@@ -13,6 +14,7 @@
 ---@see FBodyInstance
 ---
 --- Properties
+---
 ---Simplified collision representation of this
 ---@field AggGeom KAggregateGeom
 ---If true (and bEnableFullAnimWeightBodies in SkelMeshComp is true), the physics of this bone will always be blended into the skeletal mesh, regardless of what PhysicsWeight of the SkelMeshComp is.

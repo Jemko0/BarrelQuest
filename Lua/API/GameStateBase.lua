@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GameStateBase : Info
 ---GameStateBase is a class that manages the game's global state, and is spawned by GameModeBase.
 ---It exists on both the client and the server and is fully replicated.
 ---
 --- Properties
+---
 ---Class of the server's game mode, assigned by GameModeBase.
 ---@field GameModeClass Class
 ---Instance of the current game mode, exists only on the server. For non-authority clients, this will be NULL.

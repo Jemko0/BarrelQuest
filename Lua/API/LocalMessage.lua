@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class LocalMessage
 ---Local Message
 ---
 --- Properties
+---
 local LocalMessage = {}
 
 --- Methods

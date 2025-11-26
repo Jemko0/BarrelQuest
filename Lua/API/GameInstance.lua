@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class GameInstance
 ---GameInstance: high-level manager object for an instance of the running game.
 ---Spawned at game creation and not destroyed until game instance is shut down.
@@ -12,6 +13,7 @@
 ---Running in PIE (play-in-editor) will generate one of these per PIE instance.
 ---
 --- Properties
+---
 ---List of locally participating players in this game instance
 ---@field LocalPlayers LocalPlayer[]
 ---Class to manage online services

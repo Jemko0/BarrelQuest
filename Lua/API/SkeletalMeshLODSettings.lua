@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMeshLODSettings : DataAsset
 ---Skeletal Mesh LODSettings
 ---
 --- Properties
+---
 ---Minimum Quality Level LOD to render. Can be overridden per mesh as well as set here for all mesh instances
 ---@field MinQualityLevelLod PerQualityLevelInt
 ---Minimum LOD to render. Can be overridden per mesh as well as set here for all mesh instances

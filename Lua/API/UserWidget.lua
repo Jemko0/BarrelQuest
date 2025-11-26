@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class UserWidget : Widget
 ---A widget that enables UI extensibility through WidgetBlueprint.
 ---
 --- Properties
+---
 ---The color and opacity of this widget.  Tints all child widgets.
 ---@field ColorAndOpacity LinearColor
 ---@field ColorAndOpacityDelegate function

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SpectatorPawn : DefaultPawn
 ---Spectator Pawn
 ---
 --- Properties
+---
 local SpectatorPawn = {}
 
 --- Methods

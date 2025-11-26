@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DirectionalLightComponent : LightComponent
 ---A light component that has parallel rays. Will provide a uniform lighting across any affected surface (eg. The Sun). This will affect all objects in the defined light-mass importance volume.
 ---
 --- Properties
+---
 ---Controls the depth bias scaling across cascades. This allows to mitigage the shadow acne difference on shadow cascades transition.
 ---A value of 1 scales shadow bias based on each cascade size (Default).
 ---A value of 0 scales shadow bias uniformly accross all cacascade.

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PointLightComponent : LocalLightComponent
 ---A light component which emits light from a single point equally in all directions.
 ---
 --- Properties
+---
 ---Whether to use physically based inverse squared distance falloff, where AttenuationRadius is only clamping the light's contribution.
 ---Disabling inverse squared falloff can be useful when placing fill lights (don't want a super bright spot near the light).
 ---When enabled, the light's Intensity is in units of lumens, where 1700 lumens is a 100W lightbulb.

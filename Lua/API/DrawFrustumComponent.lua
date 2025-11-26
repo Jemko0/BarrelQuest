@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DrawFrustumComponent : PrimitiveComponent
 ---Utility component for drawing a view frustum. Origin is at the component location, frustum points down position X axis.
 ---
 --- Properties
+---
 ---Enable or disable frustum visualization for this camera
 ---@field bFrustumEnabled boolean
 ---Color to draw the wireframe frustum.

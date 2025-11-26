@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Material : MaterialInterface
 ---A Material is an asset which can be applied to a mesh to control the visual look of the scene.
 ---When light from the scene hits the surface, the shading model of the material is used to calculate how that light interacts with the surface.
 ---Warning: Creating new materials directly increases shader compile times!  Consider creating a Material Instance off of an existing material instead.
 ---
 --- Properties
+---
 ---Physical material to use for this graphics material. Used for sounds, effects etc.
 ---@field PhysMaterial PhysicalMaterial
 ---Physical material mask to use for this graphics material. Used for sounds, effects etc.

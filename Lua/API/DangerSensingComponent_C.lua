@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DangerSensingComponent_C : ActorComponent
 ---Danger Sensing Component
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field DangerLevel number
 local DangerSensingComponent_C = {}

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialInstance : MaterialInterface
 ---Material Instance
 ---
 --- Properties
+---
 ---Physical material to use for this graphics material. Used for sounds, effects etc.
 ---@field PhysMaterial PhysicalMaterial
 ---Physical material map used with physical material mask, when it exists.

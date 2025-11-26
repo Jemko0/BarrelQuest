@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TextureRenderTarget : Texture
 ---Texture Render Target
 ---
 --- Properties
+---
 ---Will override FTextureRenderTarget2DResource::GetDisplayGamma if > 0.
 ---@field TargetGamma number
 local TextureRenderTarget = {}

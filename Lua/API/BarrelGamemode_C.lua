@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class BarrelGamemode_C : GameModeBase
 ---Barrel Gamemode
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field DefaultSceneRoot SceneComponent
 ---@field SpawnedPlayers table<string, Pawn>

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialFunctionInterface
 ---A Material Function is a collection of material expressions that can be reused in different materials
 ---
 --- Properties
+---
 ---@field EditorOnlyData MaterialFunctionInterfaceEditorOnlyData
 ---Used by materials using this function to know when to recompile.
 ---@field StateId Guid

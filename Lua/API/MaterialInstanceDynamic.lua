@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialInstanceDynamic : MaterialInstance
 ---Material Instance Dynamic
 ---
 --- Properties
+---
 local MaterialInstanceDynamic = {}
 
 --- Methods

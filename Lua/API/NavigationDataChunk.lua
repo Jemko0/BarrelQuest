@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NavigationDataChunk
 ---Navigation Data Chunk
 ---
 --- Properties
+---
 ---Name of NavigationData actor that owns this chunk
 ---@field NavigationDataName string
 local NavigationDataChunk = {}

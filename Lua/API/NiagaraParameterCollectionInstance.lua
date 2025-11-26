@@ -5,11 +5,13 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class NiagaraParameterCollectionInstance
 ---Can be used to override selected parameters from a Niagara parameter collection with another value.
 ---The values in the parameter collection instance can be set from Blueprint or C++, same as the regular parameter collection.
 ---
 --- Properties
+---
 ---TODO: Abstract to some interface to allow a hierarchy like UMaterialInstance?
 ---@field Collection NiagaraParameterCollection
 ---When editing instances, we must track which parameters are overridden so we can pull in any changes to the default.

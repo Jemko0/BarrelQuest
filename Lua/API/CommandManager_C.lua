@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CommandManager_C : ActorComponent
 ---Command Manager
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field CommandStack table<string, PlayerController>
 ---@field CurrentStackItem string

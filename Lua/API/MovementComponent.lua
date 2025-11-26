@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MovementComponent : ActorComponent
 ---MovementComponent is an abstract component class that defines functionality for moving a PrimitiveComponent (our UpdatedComponent) each tick.
 ---Base functionality includes:
@@ -16,9 +17,10 @@
 ---During swept (non-teleporting) movement only collision of UpdatedComponent is considered, attached components will teleport to the end location ignoring collision.
 ---
 --- Properties
+---
 ---The component we move and update.
 ---If this is null at startup and bAutoRegisterUpdatedComponent is true, the owning Actor's root component will automatically be set as our UpdatedComponent at startup.
----@see bAutoRegisterUpdatedComponent, SetUpdatedComponent(), UpdatedPrimitive
+---\@see bAutoRegisterUpdatedComponent, SetUpdatedComponent(), UpdatedPrimitive
 ---@field UpdatedComponent SceneComponent
 ---UpdatedComponent, cast as a UPrimitiveComponent. May be invalid if UpdatedComponent was null or not a UPrimitiveComponent.
 ---@field UpdatedPrimitive PrimitiveComponent
@@ -27,11 +29,11 @@
 ---The normal or axis of the plane that constrains movement, if bConstrainToPlane is enabled.
 ---If for example you wanted to constrain movement to the X-Z plane (so that Y cannot change), the normal would be set to X=0 Y=1 Z=0.
 ---This is recalculated whenever PlaneConstraintAxisSetting changes. It is normalized once the component is registered with the game world.
----@see bConstrainToPlane, SetPlaneConstraintNormal(), SetPlaneConstraintFromVectors()
+---\@see bConstrainToPlane, SetPlaneConstraintNormal(), SetPlaneConstraintFromVectors()
 ---@field PlaneConstraintNormal Vector
 ---The origin of the plane that constrains movement, if plane constraint is enabled.
 ---This defines the behavior of snapping a position to the plane, such as by SnapUpdatedComponentToPlane().
----@see bConstrainToPlane, SetPlaneConstraintOrigin().
+---\@see bConstrainToPlane, SetPlaneConstraintOrigin().
 ---@field PlaneConstraintOrigin Vector
 ---If true, skips TickComponent() if UpdatedComponent was not recently rendered.
 ---@field bUpdateOnlyIfRendered boolean
@@ -45,12 +47,12 @@
 ---If true, registers the owner's Root component as the UpdatedComponent if there is not one currently assigned.
 ---@field bAutoRegisterUpdatedComponent boolean
 ---If true, movement will be constrained to a plane.
----@see PlaneConstraintNormal, PlaneConstraintOrigin, PlaneConstraintAxisSetting
+---\@see PlaneConstraintNormal, PlaneConstraintOrigin, PlaneConstraintAxisSetting
 ---@field bConstrainToPlane boolean
 ---If true and plane constraints are enabled, then the updated component will be snapped to the plane when first attached.
 ---@field bSnapToPlaneAtStart boolean
 ---If true, then applies the value of bComponentShouldUpdatePhysicsVolume to the UpdatedComponent. If false, will not change bShouldUpdatePhysicsVolume on the UpdatedComponent at all.
----@see bComponentShouldUpdatePhysicsVolume
+---\@see bComponentShouldUpdatePhysicsVolume
 ---@field bAutoRegisterPhysicsVolumeUpdates boolean
 ---If true, enables bShouldUpdatePhysicsVolume on the UpdatedComponent during initialization from SetUpdatedComponent(), otherwise disables such updates.
 ---Only enabled if bAutoRegisterPhysicsVolumeUpdates is true.
@@ -151,7 +153,7 @@ function MovementComponent.ConstrainNormalToPlane(Normal) end
 function MovementComponent.ConstrainLocationToPlane(Location) end
 
 ---Constrain a direction vector to the plane constraint, if enabled.
----@see SetPlaneConstraint
+---\@see SetPlaneConstraint
 ---@param Direction Vector
 ---@return Vector
 function MovementComponent.ConstrainDirectionToPlane(Direction) end

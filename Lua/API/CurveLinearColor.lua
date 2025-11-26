@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class CurveLinearColor : CurveBase
 ---Curve Linear Color
 ---
 --- Properties
+---
 ---Keyframe data, one curve for red, green, blue, and alpha
 ---@field FloatCurves RichCurve
 ---Properties for adjusting the color of the gradient

@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class PanelWidget : Widget
 ---The base class for all UMG panel widgets.  Panel widgets layout a collection of child widgets.
 ---
 --- Properties
+---
 ---The slots in the widget holding the child widgets of this panel.
 ---@field Slots PanelSlot[]
 local PanelWidget = {}

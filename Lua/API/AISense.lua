@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class AISense
 ---AISense
 ---
 --- Properties
+---
 ---@field NotifyType EAISenseNotifyType
 ---whether this sense is interested in getting notified about new Pawns being spawned
 ---    this can be used for example for automated sense sources registration

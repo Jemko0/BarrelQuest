@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SkeletalMesh : SkinnedAsset
 ---SkeletalMesh is geometry bound to a hierarchical skeleton of bones which can be animated for the purpose of deforming the mesh.
 ---Skeletal Meshes are built up of two parts; a set of polygons composed to make up the surface of the mesh, and a hierarchical skeleton which can be used to animate the polygons.
@@ -12,6 +13,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Content/Types/SkeletalMeshes/
 ---
 --- Properties
+---
 ---@field Skeleton Skeleton
 ---@field PositiveBoundsExtension Vector
 ---@field NegativeBoundsExtension Vector

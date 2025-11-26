@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class Character : Pawn
 ---Characters are Pawns that have a mesh, collision, and built-in movement logic.
 ---They are responsible for all physical interaction between the player or AI and the world, and also implement basic networking and input models.
@@ -13,6 +14,7 @@
 ---@see https://docs.unrealengine.com/latest/INT/Gameplay/Framework/Pawn/Character/
 ---
 --- Properties
+---
 ---Info about our current movement base (object we are standing on).
 ---@field BasedMovement BasedMovementInfo
 ---Replicated version of relative movement. Read-only on simulated proxies!
@@ -89,7 +91,7 @@
 ---Note that movement mode is still "Falling" during this event. Current Velocity value is the velocity at the time of landing.
 ---Consider OnMovementModeChanged() as well, as that can be used once the movement mode changes to the new mode (most likely Walking).
 ---@param Hit Result describing the landing that resulted in a valid landing spot.
----@see OnMovementModeChanged()
+---\@see OnMovementModeChanged()
 ---@field LandedDelegate function
 ---Multicast delegate for MovementMode changing.
 ---@field MovementModeChangedDelegate function
@@ -117,9 +119,9 @@ local Character = {}
 
 --- Methods
 ---Request the character to stop crouching. The request is processed on the next update of the CharacterMovementComponent.
----@see OnEndCrouch
----@see IsCrouched
----@see CharacterMovement->WantsToCrouch
+---\@see OnEndCrouch
+---\@see IsCrouched
+---\@see CharacterMovement->WantsToCrouch
 ---@param bClientSimulation boolean
 ---@return nil
 function Character.UnCrouch(bClientSimulation) end
@@ -170,7 +172,7 @@ function Character.IsPlayingRootMotion() end
 function Character.IsPlayingNetworkedRootMotionMontage() end
 
 ---True if jump is actively providing a force, such as when the jump key is held and the time it has been held is less than JumpMaxHoldTime.
----@see CharacterMovement->IsFalling
+---\@see CharacterMovement->IsFalling
 ---@return boolean
 function Character.IsJumpProvidingForce() end
 
@@ -195,9 +197,9 @@ function Character.GetBaseRotationOffsetRotator() end
 function Character.GetAnimRootMotionTranslationScale() end
 
 ---Request the character to start crouching. The request is processed on the next update of the CharacterMovementComponent.
----@see OnStartCrouch
----@see IsCrouched
----@see CharacterMovement->WantsToCrouch
+---\@see OnStartCrouch
+---\@see IsCrouched
+---\@see CharacterMovement->WantsToCrouch
 ---@param bClientSimulation boolean
 ---@return nil
 function Character.Crouch(bClientSimulation) end
@@ -212,7 +214,7 @@ function Character.CanCrouch() end
 
 ---Cache mesh offset from capsule. This is used as the target for network smoothing interpolation, when the mesh is offset with lagged smoothing.
 ---This is automatically called during initialization; call this at runtime if you intend to change the default mesh offset from the capsule.
----@see GetBaseTranslationOffset(), GetBaseRotationOffset()
+---\@see GetBaseTranslationOffset(), GetBaseRotationOffset()
 ---@param MeshRelativeLocation Vector
 ---@param MeshRelativeRotation Rotator
 ---@return nil

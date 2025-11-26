@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WidgetAnimation : MovieSceneSequence
 ---Widget Animation
 ---
 --- Properties
+---
 ---Pointer to the movie scene that controls this animation.
 ---@field MovieScene MovieScene
 ---@field AnimationBindings WidgetAnimationBinding[]
@@ -38,12 +40,12 @@ function WidgetAnimation.UnbindAllFromAnimationStarted(Widget) end
 function WidgetAnimation.UnbindAllFromAnimationFinished(Widget) end
 
 ---Get the start time of this animation.
----@see GetEndTime
+---\@see GetEndTime
 ---@return number
 function WidgetAnimation.GetStartTime() end
 
 ---Get the end time of this animation.
----@see GetStartTime
+---\@see GetStartTime
 ---@return number
 function WidgetAnimation.GetEndTime() end
 

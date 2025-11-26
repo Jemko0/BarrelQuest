@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class ExternalSubcontainer_C : Actor
 ---External Subcontainer
 ---
 --- Properties
+---
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field Subcontainer ContainerComponentNew_C
 ---@field DefaultSceneRoot SceneComponent

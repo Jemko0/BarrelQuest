@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class DamageType
 ---A DamageType is intended to define and describe a particular form of damage and to provide an avenue
 ---for customizing responses to damage from various sources.
@@ -13,6 +14,7 @@
 ---functionality.  They should never be stateful.
 ---
 --- Properties
+---
 ---True if this damagetype is caused by the world (falling off level, into lava, etc).
 ---@field bCausedByWorld boolean
 ---True to scale imparted momentum by the receiving pawn's mass for pawns using character movement

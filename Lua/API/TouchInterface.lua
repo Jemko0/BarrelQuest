@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TouchInterface
 ---Defines an interface by which touch input can be controlled using any number of buttons and virtual joysticks
 ---
 --- Properties
+---
 ---@field Controls TouchInputControl[]
 ---Opacity (0.0 - 1.0) of all controls while any control is active
 ---@field ActiveOpacity number

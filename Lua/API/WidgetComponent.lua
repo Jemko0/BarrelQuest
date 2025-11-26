@@ -5,6 +5,7 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class WidgetComponent : MeshComponent
 ---The widget component provides a surface in the 3D environment on which to render widgets normally rendered to the screen.
 ---Widgets are first rendered to a render target, then that render target is displayed in the world.
@@ -15,6 +16,7 @@
 ---OpacityFromTexture [Scalar]
 ---
 --- Properties
+---
 ---The coordinate space in which to render the widget
 ---@field Space EWidgetSpace
 ---How this widget should deal with timing, pausing, etc.
@@ -112,7 +114,7 @@ local WidgetComponent = {}
 ---@return nil
 function WidgetComponent.SetWindowVisibility(InVisibility) end
 
----@see bWindowFocusable
+---\@see bWindowFocusable
 ---@param bInWindowFocusable boolean
 ---@return nil
 function WidgetComponent.SetWindowFocusable(bInWindowFocusable) end
@@ -164,7 +166,7 @@ function WidgetComponent.SetPivot() end
 ---@return nil
 function WidgetComponent.SetOwnerPlayer(LocalPlayer) end
 
----@see bManuallyRedraw
+---\@see bManuallyRedraw
 ---@param bUseManualRedraw boolean
 ---@return nil
 function WidgetComponent.SetManuallyRedraw(bUseManualRedraw) end
@@ -210,7 +212,7 @@ function WidgetComponent.IsWidgetVisible() end
 ---@return EWindowVisibility
 function WidgetComponent.GetWindowVisiblility() end
 
----@see bWindowFocusable
+---\@see bWindowFocusable
 ---@return boolean
 function WidgetComponent.GetWindowFocusable() end
 
@@ -254,11 +256,11 @@ function WidgetComponent.GetOwnerPlayer() end
 ---@return MaterialInstanceDynamic
 function WidgetComponent.GetMaterialInstance() end
 
----@see bManuallyRedraw
+---\@see bManuallyRedraw
 ---@return boolean
 function WidgetComponent.GetManuallyRedraw() end
 
----@see EWidgetGeometryMode, @see GetCylinderArcAngle()
+---\@see EWidgetGeometryMode, \@see GetCylinderArcAngle()
 ---@return EWidgetGeometryMode
 function WidgetComponent.GetGeometryMode() end
 

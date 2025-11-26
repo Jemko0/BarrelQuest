@@ -5,12 +5,14 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class TimelineComponent : ActorComponent
 ---TimelineComponent holds a series of events, floats, vectors or colors with associated keyframes.
 ---Events can be triggered at keyframes along the timeline.
 ---Floats, vectors, and colors are interpolated between keyframes along the timeline.
 ---
 --- Properties
+---
 local TimelineComponent = {}
 
 --- Methods

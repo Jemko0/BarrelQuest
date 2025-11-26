@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class MaterialInterface
 ---Material Interface
 ---
 --- Properties
+---
 ---@field EditorOnlyData MaterialInterfaceEditorOnlyData
 ---SubsurfaceProfile, for Screen Space Subsurface Scattering..
 ---@field SubsurfaceProfile SubsurfaceProfile

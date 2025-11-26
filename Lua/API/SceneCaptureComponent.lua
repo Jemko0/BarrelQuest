@@ -5,10 +5,12 @@
 --- Access these using bracket notation: object["Apply Damage"]
 
 ---@diagnostic disable: undefined-doc-name
+
 ---@class SceneCaptureComponent : SceneComponent
 ----> will be exported to EngineDecalClasses.h
 ---
 --- Properties
+---
 ---Controls what primitives get rendered into the scene capture.
 ---@field PrimitiveRenderMode ESceneCapturePrimitiveRenderMode
 ---@field CaptureSource integer
