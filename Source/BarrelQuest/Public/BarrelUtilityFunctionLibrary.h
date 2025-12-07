@@ -28,6 +28,9 @@ class BARRELQUEST_API UBarrelUtilityFunctionLibrary : public UBlueprintFunctionL
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FLinearColor HexStringToLinearColor(FString hexString);
+	
+	UFUNCTION(BlueprintCallable)
+	static void GenerateAssetPathFile();
 
 	UFUNCTION(BlueprintCallable)
 	static void GenerateLuaMetaFileFromClass(UClass* InClass, bool suppressWarnings);
@@ -35,7 +38,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings);
 	
+	UFUNCTION(BlueprintCallable)
 	static void GenerateBaseMetaFiles(bool suppressWarnings);
+	
+	UFUNCTION(BlueprintCallable)
+	static UClass* GetClassFromBlueprintPackage(FString PackagePath);
 	
 	static FString GetLuaTypeFromProperty(FProperty* Property);
 	static bool IsValidLuaIdentifier(const FString& Name);

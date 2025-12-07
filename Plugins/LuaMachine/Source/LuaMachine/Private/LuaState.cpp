@@ -2050,7 +2050,14 @@ ULuaState::~ULuaState()
 #define LUAVALUE_PROP_SET(Type, Value) F##Type* __##Type##__ = CastField<F##Type>(Property);\
 	if (__##Type##__)\
 	{\
-		__##Type##__->SetPropertyValue_InContainer(Buffer, Value, Index);\
+		if (Index == -1)\
+		{\
+			__##Type##__->SetPropertyValue(Buffer, Value);\
+		}\
+		else\
+		{\
+			__##Type##__->SetPropertyValue_InContainer(Buffer, Value, Index);\
+		}\
 		return;\
 	}
 #else
@@ -2429,13 +2436,29 @@ void ULuaState::ToUProperty(void* Buffer, UProperty * Property, FLuaValue Value,
 		TArray<FLuaValue> TableKeys = ULuaBlueprintFunctionLibrary::LuaTableGetKeys(Value);
 		for (FLuaValue TableKey : TableKeys)
 		{
-			int32 NewIndex = Helper.AddUninitializedValue();
+			FLuaValue TableValue;
+			
+			if (TableKey.String != "")
+			{
+				TableValue = ULuaBlueprintFunctionLibrary::LuaTableGetField(Value, TableKey.String);
+			}
+			else
+			{
+				TableValue = ULuaBlueprintFunctionLibrary::LuaTableGetByIndex(Value, TableKey.Integer);
+			}
+			
+			int32 NewIndex = Helper.AddDefaultValue_Invalid_NeedsRehash();
 			uint8* KeyBuffer = Helper.GetKeyPtr(NewIndex);
 			uint8* ValueBuffer = Helper.GetValuePtr(NewIndex);
+			
+			UE_LOG(LogTemp, Warning, TEXT("Key: %d, Value: %d"), TableKey.Integer, TableValue.Integer);
+			
 			bool bTableItemSuccess = false;
-			ToProperty(KeyBuffer, Helper.GetKeyProperty(), TableKey, bTableItemSuccess, 0);
-			ToProperty(ValueBuffer, Helper.GetValueProperty(), TableKey, bTableItemSuccess, 0);
+			ToProperty(KeyBuffer, Helper.GetKeyProperty(), TableKey, bTableItemSuccess, -1);
+			ToProperty(ValueBuffer, Helper.GetValueProperty(), TableValue, bTableItemSuccess, -1);
 		}
+		
+		Helper.Rehash();
 		return;
 	}
 
@@ -2446,14 +2469,20 @@ void ULuaState::ToUProperty(void* Buffer, UProperty * Property, FLuaValue Value,
 #endif
 	{
 		FScriptSetHelper_InContainer Helper(SetProperty, Buffer, Index);
+		Helper.EmptyElements();  // Empty first, don't pass size
+       
 		TArray<FLuaValue> ArrayValues = ULuaBlueprintFunctionLibrary::LuaTableGetValues(Value);
-		Helper.EmptyElements(ArrayValues.Num());
-		for (int32 ArrayIndex = 0; ArrayIndex < Helper.Num(); ArrayIndex++)
+       
+		for (int32 ArrayIndex = 0; ArrayIndex < ArrayValues.Num(); ArrayIndex++)  // Iterate ArrayValues, not Helper
 		{
-			uint8* SetItemPtr = Helper.GetElementPtr(ArrayIndex);
+			int32 NewIndex = Helper.AddDefaultValue_Invalid_NeedsRehash();  // Add new element
+			uint8* SetItemPtr = Helper.GetElementPtr(NewIndex);
+          
 			bool bArrayItemSuccess = false;
-			ToProperty(SetItemPtr, SetProperty->ElementProp, ArrayValues[ArrayIndex], bArrayItemSuccess, 0);
+			ToProperty(SetItemPtr, SetProperty->ElementProp, ArrayValues[ArrayIndex], bArrayItemSuccess, -1);  // Use -1 for direct pointer
 		}
+       
+		Helper.Rehash();
 		return;
 	}
 

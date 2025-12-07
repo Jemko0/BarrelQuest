@@ -2,7 +2,9 @@
 #include "Temperature/PlayerBody/BodyTemperatureComponent.h"
 #include "BarrelWornClothingInterface.h"
 #include "BarrelUtilityLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Temperature/TemperatureManager.h"
 
 // Sets default values for this component's properties
 UBodyTemperatureComponent::UBodyTemperatureComponent()
@@ -55,7 +57,14 @@ void UBodyTemperatureComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 void UBodyTemperatureComponent::UpdateBodyTemperature(float delta)
 {
-	const float insulation = UpdateClothingInsulation();
+	const float insulation = IsObject? 0.0f : UpdateClothingInsulation();
+	
+	ATemperatureManager* mgr = Cast<ATemperatureManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATemperatureManager::StaticClass()));
+
+	if(mgr)
+	{
+		OutsideTemperature = mgr->GetInterpTemperature(GetOwner()->GetActorLocation());
+	}
 	
 	float driftRate = OutsideInfluence / (1.0f + insulation * ClothingInsulationInfluence);
 	BodyTemp = UKismetMathLibrary::FInterpTo(BodyTemp, OutsideTemperature, delta, driftRate);
@@ -77,6 +86,8 @@ float UBodyTemperatureComponent::UpdateClothingInsulation()
 {
 	TArray<FWearingClothingData> clothingData = GetClothingData();
 
+	if(clothingData.IsEmpty()) return 0.0f;
+	
 	float totalWeightedIns = 0.0f;
 
 	for (const FWearingClothingData& clothing : clothingData)

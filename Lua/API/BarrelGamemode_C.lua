@@ -15,9 +15,14 @@
 ---@field DefaultSceneRoot SceneComponent
 ---@field SpawnedPlayers table<string, Pawn>
 ---@field NetLoadClientLuaFiles string[]
+---@field LuaNetActor BarrelLuaNetworkActor_C
 local BarrelGamemode_C = {}
 
 --- Methods
+---Spawn Lua Net Actor
+---@return nil
+function BarrelGamemode_C.SpawnLuaNetActor() end
+
 ---Save Players
 ---@return nil
 function BarrelGamemode_C.SavePlayers() end

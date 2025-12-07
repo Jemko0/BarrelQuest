@@ -21,6 +21,7 @@
 ---@field Settings CollapsablePanel_C
 ---@field DeathUI DeathUI_C
 ---@field ClientJoinLoading ClientJoinLoadingScreenUI_C
+---@field luaMenu CollapsablePanel_C
 local BarrelHUD_C = {}
 
 --- Methods
@@ -71,5 +72,13 @@ function BarrelHUD_C.OnESCClosed() end
 ---Create Death
 ---@return nil
 function BarrelHUD_C.CreateDeath() end
+
+---Create Lua Menu
+---@return nil
+function BarrelHUD_C.CreateLuaMenu() end
+
+---On Lua Panel Closed
+---@return nil
+function BarrelHUD_C.OnLuaPanelClosed() end
 
 return BarrelHUD_C

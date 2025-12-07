@@ -1,22 +1,53 @@
-local ply = barrel.getLocalPlayer()
+-- local ply = barrel.getLocalPlayer()
 
-local classname = '/Game/BarrelContent/Lua/BPBarrelLuaState.BPBarrelLuaState_C'
-local c = barrel.getClassByName(classname)
-print("-------CLASS-------")
-print(c)
-print("-------------------")
+-- local objPath = "/Game/BarrelContent/Meshes/Tiles/Props/Radiator/1299_Radiator.1299_Radiator"
+-- local mesh = barrel.loadAssetByObjectPath(objPath)
 
-local objPath = "/Game/BarrelContent/Meshes/Foliage/foliage_billboard_twoSide.foliage_billboard_twoSide"
-local mesh = barrel.getAssetByObjectPath(objPath)
-print("-------MESH-------")
-printTable(mesh)
-print("-------------------")
+-- local iconPath = "/Game/BarrelContent/UI/UISprites/items/small_pebble.small_pebble"
+-- local icon = barrel.loadAssetByObjectPath(iconPath)
 
-local net = barrel.getNetActor()
+-- local tagp = "/Game/BarrelContent/Tags/MedicalTag.MedicalTag"
 
-local itemdata = barrel.Item.new("Lua Test Item", "TOOLTIP", nil, nil, true, nil, 99, {}, {}, nil, "bg.default", 0.1, "Hand_L", "None", {})
-net.RegisterItem("luaItem", itemdata:GetRaw())
+-- ---@type TagDataAsset_C
+-- local tag = barrel.loadAssetByObjectPath(tagp)
 
-local i = barrel.InventoryItem.new("luaItem", 12, {}, nil)
+-- local net = barrel.getNetActor()
 
-ply.ContainerComponentNew.AddItem(i:GetRaw())
+-- local d = {
+--     "lua=true",
+--     "color=#000000FF"
+-- }
+
+-- local defaultData = {
+--     ["right_click_menu_options"] = "Drop Item,btn.menu.opt,drop_item"
+-- }
+
+-- local tags = {
+--     tag
+-- }
+
+-- local toolClass = barrel.getClassByName("/Game/BarrelContent/Items/Items/Tools/ItemTool.ItemTool_C")
+
+-- local args = {
+--     Name = "Lua test Item",
+--     Tooltip = "Item tooltip",
+--     Icon = icon,
+--     IconMaterial = nil,
+--     isBillboard = false,
+--     Mesh = mesh,
+--     MaxStack = 99,
+--     DefaultData = defaultData,
+--     Class = toolClass,
+--     SlotUIColor = "bg.default",
+--     Weight = 0.1,
+--     HeldSocketName = "Hand_L",
+--     TilePlacingID = "None",
+--     Tags = tags
+-- }
+
+-- local itemdata = barrel.Item.new(args)
+-- net.RegisterItem("luaItem", itemdata:GetRaw())
+
+-- local i = barrel.InventoryItem.new("luaItem", 12, {}, nil)
+
+-- ply.ContainerComponentNew.AddItem(i:GetRaw())

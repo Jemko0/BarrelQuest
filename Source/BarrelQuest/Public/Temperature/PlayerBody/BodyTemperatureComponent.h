@@ -5,6 +5,8 @@
 #include "BarrelUtilityLibrary.h"
 #include "BodyTemperatureComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTemperatureChanged, float, NewTemperature);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BARRELQUEST_API UBodyTemperatureComponent : public UActorComponent
 {
@@ -13,7 +15,6 @@ class BARRELQUEST_API UBodyTemperatureComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UBodyTemperatureComponent();
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -60,6 +61,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
 	float BaseBodyTemp = 37.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
+    bool IsObject = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Outside Factors")
 	float OutsideTemperature = 0.0f;
@@ -72,4 +76,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Body")
 	float InternalHeatProduction = 0.0f;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnTemperatureChanged OnTemperatureChanged;
 };

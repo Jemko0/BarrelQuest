@@ -319,12 +319,11 @@ function BarrelCharacter_C.SVFinalizePlaceTile() end
 function BarrelCharacter_C.CanPlace(Location) end
 
 ---Server Try Place Tile
----Original name: "Server TryPlaceTile"
 ---@param Location Vector
 ---@param Rotation Rotator
 ---@param ID string
 ---@return nil
-function BarrelCharacter_C.Server_TryPlaceTile(Location, Rotation, ID) end
+function BarrelCharacter_C.ServerTryPlaceTile(Location, Rotation, ID) end
 
 ---Try Place Tile
 ---@return nil
@@ -601,33 +600,28 @@ function BarrelCharacter_C.MarkSlotDirty() end
 ---@return nil
 function BarrelCharacter_C.PickUp(Source) end
 
----SV Interact
----Original name: "SV Interact"
+---SVInteract
 ---@return nil
-function BarrelCharacter_C.SV_Interact() end
+function BarrelCharacter_C.SVInteract() end
 
----CL Interact
----Original name: "CL Interact"
+---CLInteract
 ---@return nil
-function BarrelCharacter_C.CL_Interact() end
+function BarrelCharacter_C.CLInteract() end
 
----CL Sprint
----Original name: "CL Sprint"
+---CLSprint
 ---@param Sprint boolean
 ---@return nil
-function BarrelCharacter_C.CL_Sprint(Sprint) end
+function BarrelCharacter_C.CLSprint(Sprint) end
 
----SV Sprint
----Original name: "SV Sprint"
+---SVSprint
 ---@param Sprint boolean
 ---@return nil
-function BarrelCharacter_C.SV_Sprint(Sprint) end
+function BarrelCharacter_C.SVSprint(Sprint) end
 
----SV Drink
----Original name: "SV Drink"
+---SVDrink
 ---@param DrinkType integer
 ---@return nil
-function BarrelCharacter_C.SV_Drink(DrinkType) end
+function BarrelCharacter_C.SVDrink(DrinkType) end
 
 ---Drink
 ---@param Type integer
@@ -635,9 +629,8 @@ function BarrelCharacter_C.SV_Drink(DrinkType) end
 function BarrelCharacter_C.Drink(Type) end
 
 ---Shared Stats Ticked
----Original name: "Shared Stats Ticked"
 ---@return nil
-function BarrelCharacter_C.Shared_Stats_Ticked() end
+function BarrelCharacter_C.SharedStatsTicked() end
 
 ---Bind Inside Change
 ---@param Target Object
@@ -657,8 +650,8 @@ function BarrelCharacter_C.FindRoom() end
 ---@return nil
 function BarrelCharacter_C.ClearRoomBrightness() end
 
----SV Perform Timed Action
----Original name: "SV Perform Timed Action"
+---SVPerform Timed Action
+---Original name: "SVPerformTimed Action"
 ---@param CallbackObject Object
 ---@param CallbackFunctionName string
 ---@param CallbackTime number
@@ -666,7 +659,7 @@ function BarrelCharacter_C.ClearRoomBrightness() end
 ---@param ActionFunctionName string
 ---@param CallbackActionData TimedActionData
 ---@return nil
-function BarrelCharacter_C.SV_Perform_Timed_Action(CallbackObject, CallbackFunctionName, CallbackTime, ActionObject, ActionFunctionName, CallbackActionData) end
+function BarrelCharacter_C.SVPerformTimed_Action(CallbackObject, CallbackFunctionName, CallbackTime, ActionObject, ActionFunctionName, CallbackActionData) end
 
 ---Start Timed Action
 ---@param CallbackObject Object
@@ -682,33 +675,28 @@ function BarrelCharacter_C.StartTimedAction(CallbackObject, CallbackFunctionName
 ---@return nil
 function BarrelCharacter_C.CancelTimedAction() end
 
----SV Cancel Current Timed Action
----Original name: "SV Cancel Current Timed Action"
+---SVCancel Current Timed Action
 ---@return nil
-function BarrelCharacter_C.SV_Cancel_Current_Timed_Action() end
+function BarrelCharacter_C.SVCancelCurrentTimedAction() end
 
----SV Death
----Original name: "SV Death"
+---SVDeath
 ---@param Last_Damage_Type Class
 ---@return nil
-function BarrelCharacter_C.SV_Death(Last_Damage_Type) end
+function BarrelCharacter_C.SVDeath(Last_Damage_Type) end
 
----SV Set Selected Item Index
----Original name: "SV Set Selected Item Index"
+---SVSet Selected Item Index
 ---@param newIndex integer
 ---@return nil
-function BarrelCharacter_C.SV_Set_Selected_Item_Index(newIndex) end
+function BarrelCharacter_C.SVSetSelectedItemIndex(newIndex) end
 
----SV Char Start Aim
----Original name: "SV CharStartAim"
+---SVChar Start Aim
 ---@param New_Aim_State integer
 ---@return nil
-function BarrelCharacter_C.SV_CharStartAim(New_Aim_State) end
+function BarrelCharacter_C.SVCharStartAim(New_Aim_State) end
 
----SV Char Stop Aim
----Original name: "SV CharStopAim"
+---SVChar Stop Aim
 ---@return nil
-function BarrelCharacter_C.SV_CharStopAim() end
+function BarrelCharacter_C.SVCharStopAim() end
 
 ---Set Can Use Items
 ---@param NewState boolean
@@ -724,43 +712,38 @@ function BarrelCharacter_C.SetUseItemCooldown(Seconds) end
 ---@return nil
 function BarrelCharacter_C.ResetCanUseItems() end
 
----MUL Spawn Particles
----Original name: "MUL SpawnParticles"
+---MULSpawn Particles
 ---@param EmitterTemplate ParticleSystem
 ---@param Location Vector
 ---@param Rotation Rotator
 ---@return nil
-function BarrelCharacter_C.MUL_SpawnParticles(EmitterTemplate, Location, Rotation) end
+function BarrelCharacter_C.MULSpawnParticles(EmitterTemplate, Location, Rotation) end
 
----MUL Play Montage
----Original name: "MUL PlayMontage"
+---MULPlay Montage
 ---@param MontageToPlay AnimMontage
 ---@return nil
-function BarrelCharacter_C.MUL_PlayMontage(MontageToPlay) end
+function BarrelCharacter_C.MULPlayMontage(MontageToPlay) end
 
----SV Play Montage
----Original name: "SV Play Montage"
+---SVPlay Montage
 ---@param MontageToPlay AnimMontage
 ---@return nil
-function BarrelCharacter_C.SV_Play_Montage(MontageToPlay) end
+function BarrelCharacter_C.SVPlayMontage(MontageToPlay) end
 
----SV Try Place Tile
----Original name: "SV Try Place Tile"
+---SVTry Place Tile
 ---@param Location Vector
 ---@param TileID string
 ---@param Rotation Rotator
 ---@return nil
-function BarrelCharacter_C.SV_Try_Place_Tile(Location, TileID, Rotation) end
+function BarrelCharacter_C.SVTryPlaceTile(Location, TileID, Rotation) end
 
 ---On Client Posess
 ---@param Target Object
 ---@return nil
 function BarrelCharacter_C.OnClientPosess(Target) end
 
----SV Turn Into Corpse
----Original name: "SV Turn into Corpse"
+---SVTurn Into Corpse
 ---@return nil
-function BarrelCharacter_C.SV_Turn_into_Corpse() end
+function BarrelCharacter_C.SVTurnIntoCorpse() end
 
 ---Knock
 ---@return nil
@@ -774,10 +757,9 @@ function BarrelCharacter_C.Trip() end
 ---@return nil
 function BarrelCharacter_C.StoodUp() end
 
----CL Death
----Original name: "CL Death"
+---CLDeath
 ---@return nil
-function BarrelCharacter_C.CL_Death() end
+function BarrelCharacter_C.CLDeath() end
 
 ---MULClimb Through Window
 ---@param Window WindowActor_C

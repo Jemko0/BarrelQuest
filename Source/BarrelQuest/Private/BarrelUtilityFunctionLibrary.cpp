@@ -11,6 +11,12 @@ FLinearColor UBarrelUtilityFunctionLibrary::HexStringToLinearColor(FString hexSt
     return FLinearColor();
 }
 
+void UBarrelUtilityFunctionLibrary::GenerateAssetPathFile()
+{
+    FString filePath = GetLuaMetaOutputDirectory();
+    
+}
+
 FString UBarrelUtilityFunctionLibrary::GetLuaMetaOutputDirectory()
 {
     static FString MetaOutputDir = TEXT("Lua/API");
@@ -26,7 +32,6 @@ void UBarrelUtilityFunctionLibrary::SetLuaMetaOutputDirectory(const FString& Rel
 
 void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass, bool suppressWarnings)
 {
-    GenerateBaseMetaFiles(suppressWarnings);
     
     if (!InClass)
     {
@@ -823,7 +828,7 @@ void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
     WrapperContent += FString::Printf(TEXT("local %s = {}\n"), *WrapperName);
     WrapperContent += FString::Printf(TEXT("%s.__index = %s\n\n"), *WrapperName, *WrapperName);
     
-    // Constructor (Unchanged)
+// Constructor - Support both positional and table-based initialization
     TArray<FString> ConstructorParamNames;
     FString ParamAnnotations;
 
@@ -834,16 +839,40 @@ void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
         ParamAnnotations += FString::Printf(TEXT("---@param %s %s\n"), *ParamName, *Field.Type);
     }
 
-    WrapperContent += TEXT("--- Constructor\n");
+    // Generate constructor with overload support
+    WrapperContent += TEXT("--- Constructor (supports both positional arguments and table initialization)\n");
+    WrapperContent += TEXT("---@overload fun(data: table): ") + WrapperName + TEXT("\n");
     WrapperContent += ParamAnnotations;
     WrapperContent += FString::Printf(TEXT("---@return %s\n"), *WrapperName);
     
+    // Build full parameter list for function signature
     FString ParamListString = FString::Join(ConstructorParamNames, TEXT(", "));
+    FString FirstParamName = ConstructorParamNames.Num() > 0 ? ConstructorParamNames[0] : TEXT("arg1");
     
     WrapperContent += FString::Printf(TEXT("function %s.new(%s)\n"), *WrapperName, *ParamListString);
-    WrapperContent += FString::Printf(TEXT("    local raw = %s.new(%s)\n\n"), *StructName, *ParamListString);
+    WrapperContent += TEXT("    local raw\n");
+    WrapperContent += TEXT("    \n");
+    WrapperContent += TEXT("    -- Check if first argument is a table (table-based initialization)\n");
+    WrapperContent += FString::Printf(TEXT("    if type(%s) == \"table\" then\n"), *FirstParamName);
+    WrapperContent += TEXT("        local data = ") + FirstParamName + TEXT("\n");
+    WrapperContent += TEXT("        raw = ") + StructName + TEXT(".new(\n");
+    
+    // Generate field extraction from table for raw struct constructor
+    for (int32 i = 0; i < ConstructorParamNames.Num(); i++)
+    {
+        const FString& ParamName = ConstructorParamNames[i];
+        FString Comma = (i < ConstructorParamNames.Num() - 1) ? TEXT(",") : TEXT("");
+        WrapperContent += FString::Printf(TEXT("            data[\"%s\"] or data.%s%s\n"), *ParamName, *ParamName, *Comma);
+    }
+    
+    WrapperContent += TEXT("        )\n");
+    WrapperContent += TEXT("    else\n");
+    WrapperContent += TEXT("        -- Positional arguments\n");
+    WrapperContent += FString::Printf(TEXT("        raw = %s.new(%s)\n"), *StructName, *ParamListString);
+    WrapperContent += TEXT("    end\n");
+    WrapperContent += TEXT("    \n");
     WrapperContent += FString::Printf(TEXT("    local self = setmetatable({}, %s)\n"), *WrapperName);
-    WrapperContent += TEXT("    rawset(self, \"_raw\", raw)\n"); // Use rawset for consistency and safety
+    WrapperContent += TEXT("    rawset(self, \"_raw\", raw)\n");
     WrapperContent += TEXT("    return self\n");
     WrapperContent += TEXT("end\n\n");
 
@@ -931,8 +960,6 @@ void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
 
 void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings)
 {
-    GenerateBaseMetaFiles(suppressWarnings);
-    
     if (!InClass)
     {
         UE_LOG(LogTemp, Error, TEXT("GenerateLuaMetaFilesRecursive: Invalid class provided"));
@@ -1022,4 +1049,9 @@ void UBarrelUtilityFunctionLibrary::GenerateBaseMetaFiles(bool suppressWarnings)
     GenerateLuaMetaFileFromStruct(TBaseStructure<FVector>::Get(), suppressWarnings);
     GenerateLuaMetaFileFromStruct(TBaseStructure<FVector2D>::Get(), suppressWarnings);
     GenerateLuaMetaFileFromStruct(TBaseStructure<FQuat>::Get(), suppressWarnings);
+}
+
+UClass* UBarrelUtilityFunctionLibrary::GetClassFromBlueprintPackage(FString PackagePath)
+{
+    return ConstructorHelpersInternal::FindOrLoadClass(PackagePath, UObject::StaticClass());;
 }

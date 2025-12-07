@@ -20,14 +20,45 @@ barrel.getNetActor = function()
   return __getNetActor()
 end
 
+
+---Usually the class name is just the Asset Path with _C as a suffix, 
+---only append _C on Blueprint Classes
 ---@return Class
 barrel.getClassByName = function(className)
   return __getCBN(className)
 end
 
----@return AssetData
-barrel.getAssetByObjectPath = function(objPath)
+-- ---@generic T
+-- ---@param type T
+-- ---@param objPath string  
+-- ---@return T
+-- barrel.loadAssetByObjectPathTyped = function(type, objPath)
+--   return __getAsset(objPath)
+-- end
+
+---@param objPath string
+---@return any
+barrel.loadAssetByObjectPath = function(objPath)
   return __getAsset(objPath)
+end
+
+---@return string
+barrel.registerLuaClass = function(baseClassPath, classTable)
+  return __registerLuaClass(baseClassPath, classTable)
+end
+
+---@return Object
+barrel.spawnLuaActor = function(luaClass, location, rotation)
+  return __spawnLuaActor(luaClass, location, rotation)
+end
+
+---@return BarrelGamemode_C
+barrel.getGamemode = function()
+  return __getGM()
+end
+
+barrel.spawnActor = function(class, location, owner)
+  return __spawnActor(class, location, owner)
 end
 
 _G.barrel = barrel
