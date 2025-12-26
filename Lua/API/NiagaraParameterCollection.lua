@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraParameterCollection
 ---Asset containing a collection of global parameters usable by Niagara. Similar to Material parameter collections,
 ---any number of Niagara assets may reference attributes from this parameter collection and will get new values when they are changed.

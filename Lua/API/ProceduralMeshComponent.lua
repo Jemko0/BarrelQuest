@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ProceduralMeshComponent : MeshComponent
 ---Component that allows you to specify custom triangle mesh geometry
 ---Beware! This feature is experimental and may be substantially changed in future releases.

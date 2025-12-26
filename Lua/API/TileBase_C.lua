@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TileBase_C : BarrelNetCulledActor
 ---Tile Base
 ---
@@ -197,5 +199,9 @@ function TileBase_C.TileDeath() end
 ---@param Blocked boolean
 ---@return nil
 function TileBase_C.OnViewBlocked(Blocked) end
+
+---On Tile Death
+---@return nil
+function TileBase_C.OnTileDeath() end
 
 return TileBase_C

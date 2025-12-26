@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class InputDeviceProperty
 ---Base class that represents a single Input Device Property. An Input Device Property
 ---represents a feature that can be set on an input device. Things like what color a

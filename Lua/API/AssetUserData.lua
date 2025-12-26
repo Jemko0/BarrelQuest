@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AssetUserData
 ---Object that can be subclassed to store custom data on Unreal asset objects.
 ---

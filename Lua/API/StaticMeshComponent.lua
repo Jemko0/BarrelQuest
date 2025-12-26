@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class StaticMeshComponent : MeshComponent
 ---StaticMeshComponent is used to create an instance of a UStaticMesh.
 ---A static mesh is a piece of geometry that consists of a static set of polygons.

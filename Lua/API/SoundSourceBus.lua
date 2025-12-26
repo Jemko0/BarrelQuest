@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SoundSourceBus : SoundWave
 ---A source bus is a type of USoundBase and can be "played" like any sound.
 ---

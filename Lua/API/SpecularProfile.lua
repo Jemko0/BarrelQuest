@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SpecularProfile
 ---Specular profile asset, can be specified at a material.
 ---Don't change at runtime. All properties in here are per material.

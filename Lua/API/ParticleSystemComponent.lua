@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ParticleSystemComponent : FXSystemComponent
 ---A particle emitter.
 ---
@@ -45,10 +47,10 @@
 ---Array holding name instance parameters for this ParticleSystemComponent.
 ---Parameters can be used in Cascade using DistributionFloat/VectorParticleParameters.
 ---@field InstanceParameters ParticleSysParam[]
----@field OnParticleSpawn function
----@field OnParticleBurst function
----@field OnParticleDeath function
----@field OnParticleCollide function
+---@field OnParticleSpawn OnParticleSpawnDelegate
+---@field OnParticleBurst OnParticleBurstDelegate
+---@field OnParticleDeath OnParticleDeathDelegate
+---@field OnParticleCollide OnParticleCollideDelegate
 ---@field bOldPositionValid boolean
 ---@field OldPosition Vector
 ---@field PartSysVelocity Vector
@@ -90,7 +92,7 @@
 ---\@see bAutoManageAttachment, EAttachmentRule
 ---@field AutoAttachScaleRule EAttachmentRule
 ---Called when the particle system is done
----@field OnSystemFinished function
+---@field OnSystemFinished OnSystemFinishedDelegate
 local ParticleSystemComponent = {}
 
 --- Methods

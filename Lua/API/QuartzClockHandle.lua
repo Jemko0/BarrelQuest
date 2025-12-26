@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class QuartzClockHandle
 ---This class is a BP / Game thread wrapper around FQuartzClockProxy
 ---   (to talk to the underlying clock)

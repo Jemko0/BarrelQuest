@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Material : MaterialInterface
 ---A Material is an asset which can be applied to a mesh to control the visual look of the scene.
 ---When light from the scene hits the surface, the shading model of the material is used to calculate how that light interacts with the surface.

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BoneHealthComponent_C : ActorComponent
 ---Bone Health Component
 ---
@@ -21,7 +23,7 @@
 ---@field FatalBones table<string, boolean>
 ---@field bone_index integer
 ---@field ExtraOverallDamage number
----@field HC_Death function -- Original name: "HC Death"
+---@field HC_Death HC_DeathDelegate -- Original name: "HC Death"
 ---@field TickTimerHandle TimerHandle
 ---@field BonesClientCache BoneHealthStruct[]
 local BoneHealthComponent_C = {}

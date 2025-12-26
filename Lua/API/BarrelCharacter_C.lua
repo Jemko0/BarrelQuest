@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BarrelCharacter_C : Character
 ---Barrel Character
 ---
@@ -156,6 +158,11 @@ function BarrelCharacter_C.GetItemData() end
 ---Get Container
 ---@return nil, ContainerComponentNew_C
 function BarrelCharacter_C.GetContainer() end
+
+---Hook Player Tick
+---@param Value number
+---@return LuaValue[], boolean
+function BarrelCharacter_C.hookPlayerTick(Value) end
 
 ---Is Moving
 ---@return boolean

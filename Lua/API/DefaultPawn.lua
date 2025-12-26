@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DefaultPawn : Pawn
 ---DefaultPawn implements a simple Pawn with spherical collision and built-in flying movement.
 ---@see UFloatingPawnMovement

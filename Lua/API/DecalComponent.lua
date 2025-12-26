@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DecalComponent : SceneComponent
 ---A material that is rendered onto the surface of a mesh. A kind of 'bumper sticker' for a model.
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Actors/DecalActor

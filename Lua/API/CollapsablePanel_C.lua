@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CollapsablePanel_C : UserWidget
 ---Collapsable Panel
 ---
@@ -22,7 +24,7 @@
 ---@field In WidgetAnimation
 ---@field panelTitle string
 ---@field collapsed boolean
----@field OnClose function
+---@field OnClose OnCloseDelegate
 local CollapsablePanel_C = {}
 
 --- Methods

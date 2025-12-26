@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlayerState : Info
 ---A PlayerState is created for every player on a server (or in a standalone game).
 ---PlayerStates are replicated to all clients, and contain network game relevant information about the player, such as playername, score, etc.
@@ -17,7 +19,7 @@
 ---Used to match up InactivePlayerState with rejoining playercontroller.
 ---@field SavedNetworkAddress string
 ---Broadcast whenever this player's possessed pawn is set
----@field OnPawnSet function
+---@field OnPawnSet OnPawnSetDelegate
 local PlayerState = {}
 
 --- Methods

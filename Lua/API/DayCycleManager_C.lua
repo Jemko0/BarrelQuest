@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DayCycleManager_C : Actor
 ---Day Cycle Manager
 ---
@@ -34,9 +36,9 @@
 ---@field TodaysPositiveVariation number
 ---@field TodaysLowestTemp number
 ---@field TodaysHighestTemp number
----@field OnNewDay function
+---@field OnNewDay OnNewDayDelegate
 ---@field CurrentTemperature number
----@field TemperatureManager BPTemperatureManager_C
+---@field TemperatureManager TemperatureManager
 ---@field RainOffset number
 ---@field RainFactor number
 ---@field DrynessLevel number

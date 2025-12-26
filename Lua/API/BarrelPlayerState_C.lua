@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BarrelPlayerState_C : PlayerState
 ---Barrel Player State
 ---

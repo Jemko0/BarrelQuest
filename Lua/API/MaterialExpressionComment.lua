@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MaterialExpressionComment : MaterialExpression
 ---Material Expression Comment
 ---

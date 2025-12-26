@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlaceTileInfoUI_C : UserWidget
 ---Place Tile Info UI
 ---

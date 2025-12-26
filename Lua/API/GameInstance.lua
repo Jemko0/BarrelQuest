@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class GameInstance
 ---GameInstance: high-level manager object for an instance of the running game.
 ---Spawned at game creation and not destroyed until game instance is shut down.
@@ -24,11 +26,11 @@
 ---    it signals that the Controller has changed but in edge cases (like during
 ---    replication) it might end up broadcasting the same pawn-controller pair
 ---    more than once
----@field OnPawnControllerChangedDelegates function
+---@field OnPawnControllerChangedDelegates OnPawnControllerChangedDelegatesDelegate
 ---Callback for when an input device connection state has changed (a new gamepad was connected or disconnected)
----@field OnInputDeviceConnectionChange function
+---@field OnInputDeviceConnectionChange OnInputDeviceConnectionChangeDelegate
 ---Callback when an input device has changed pairings (the owning platform user has changed for that device)
----@field OnUserInputDevicePairingChange function
+---@field OnUserInputDevicePairingChange OnUserInputDevicePairingChangeDelegate
 local GameInstance = {}
 
 --- Methods

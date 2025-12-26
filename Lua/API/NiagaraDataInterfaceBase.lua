@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraDataInterfaceBase : NiagaraMergeable
 ---Base class for all Niagara data interfaces.
 ---

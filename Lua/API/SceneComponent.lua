@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SceneComponent : ActorComponent
 ---A SceneComponent has a transform and supports attachment, but has no rendering or collision capabilities.
 ---Useful as a 'dummy' component in the hierarchy to offset others.
@@ -38,7 +40,7 @@
 ---If detail mode is >= system detail mode, primitive won't be rendered.
 ---@field DetailMode integer
 ---Delegate that will be called when PhysicsVolume has been changed *
----@field PhysicsVolumeChangedDelegate function
+---@field PhysicsVolumeChangedDelegate PhysicsVolumeChangedDelegateDelegate
 local SceneComponent = {}
 
 --- Methods

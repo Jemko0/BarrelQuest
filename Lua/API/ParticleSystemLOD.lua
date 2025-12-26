@@ -12,12 +12,4 @@
 --- Properties
 ---
 local ParticleSystemLOD = {}
-
---- Constructor
----@return ParticleSystemLOD
-function ParticleSystemLOD.new()
-    local self = {}
-    return self
-end
-
 return ParticleSystemLOD

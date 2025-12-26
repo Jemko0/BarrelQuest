@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Actor
 ---Actor is the base class for an Object that can be placed or spawned in a level.
 ---Actors may contain a collection of ActorComponents, which can be used to control how actors move, how they are rendered, etc.
@@ -208,42 +210,42 @@
 ---Array of tags that can be used for grouping and categorizing.
 ---@field Tags string[]
 ---Called when the actor is damaged in any way.
----@field OnTakeAnyDamage function
+---@field OnTakeAnyDamage OnTakeAnyDamageDelegate
 ---Called when the actor is damaged by point damage.
----@field OnTakePointDamage function
+---@field OnTakePointDamage OnTakePointDamageDelegate
 ---Called when the actor is damaged by radial damage.
----@field OnTakeRadialDamage function
+---@field OnTakeRadialDamage OnTakeRadialDamageDelegate
 ---Called when another actor begins to overlap this actor, for example a player walking into a trigger.
 ---For events when objects have a blocking collision, for example a player hitting a wall, see 'Hit' events.
 ---@note Components on both this and the other Actor must have bGenerateOverlapEvents set to true to generate overlap events.
----@field OnActorBeginOverlap function
+---@field OnActorBeginOverlap OnActorBeginOverlapDelegate
 ---Called when another actor stops overlapping this actor.
 ---@note Components on both this and the other Actor must have bGenerateOverlapEvents set to true to generate overlap events.
----@field OnActorEndOverlap function
+---@field OnActorEndOverlap OnActorEndOverlapDelegate
 ---Called when the mouse cursor is moved over this actor if mouse over events are enabled in the player controller.
----@field OnBeginCursorOver function
+---@field OnBeginCursorOver OnBeginCursorOverDelegate
 ---Called when the mouse cursor is moved off this actor if mouse over events are enabled in the player controller.
----@field OnEndCursorOver function
+---@field OnEndCursorOver OnEndCursorOverDelegate
 ---Called when the left mouse button is clicked while the mouse is over this actor and click events are enabled in the player controller.
----@field OnClicked function
+---@field OnClicked OnClickedDelegate
 ---Called when the left mouse button is released while the mouse is over this actor and click events are enabled in the player controller.
----@field OnReleased function
+---@field OnReleased OnReleasedDelegate
 ---Called when a touch input is received over this actor when touch events are enabled in the player controller.
----@field OnInputTouchBegin function
+---@field OnInputTouchBegin OnInputTouchBeginDelegate
 ---Called when a touch input is received over this component when touch events are enabled in the player controller.
----@field OnInputTouchEnd function
+---@field OnInputTouchEnd OnInputTouchEndDelegate
 ---Called when a finger is moved over this actor when touch over events are enabled in the player controller.
----@field OnInputTouchEnter function
+---@field OnInputTouchEnter OnInputTouchEnterDelegate
 ---Called when a finger is moved off this actor when touch over events are enabled in the player controller.
----@field OnInputTouchLeave function
+---@field OnInputTouchLeave OnInputTouchLeaveDelegate
 ---Called when this Actor hits (or is hit by) something solid. This could happen due to things like Character movement, using Set Location with 'sweep' enabled, or physics simulation.
 ---For events when objects overlap (e.g. walking into a trigger) see the 'Overlap' event.
 ---@note For collisions during physics simulation to generate hit events, 'Simulation Generates Hit Events' must be enabled.
----@field OnActorHit function
+---@field OnActorHit OnActorHitDelegate
 ---Event triggered when the actor has been explicitly destroyed.
----@field OnDestroyed function
+---@field OnDestroyed OnDestroyedDelegate
 ---Event triggered when the actor is being deleted or removed from a level.
----@field OnEndPlay function
+---@field OnEndPlay OnEndPlayDelegate
 ---Array of ActorComponents that are created by blueprints and serialized per-instance.
 ---@field BlueprintCreatedComponents ActorComponent[]
 local Actor = {}

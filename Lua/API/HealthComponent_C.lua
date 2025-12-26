@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class HealthComponent_C : ActorComponent
 ---Health Component
 ---
@@ -15,7 +17,7 @@
 ---@field Health number
 ---@field MaxHealth number
 ---@field Defense number
----@field HC_Death function -- Original name: "HC Death"
+---@field HC_Death HC_DeathDelegate -- Original name: "HC Death"
 local HealthComponent_C = {}
 
 --- Methods

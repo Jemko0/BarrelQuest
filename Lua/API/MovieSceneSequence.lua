@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MovieSceneSequence : MovieSceneSignedObject
 ---Abstract base class for movie scene animations (C++ version).
 ---

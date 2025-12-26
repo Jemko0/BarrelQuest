@@ -14,7 +14,7 @@
 ---The animation to look for.
 ---@field Animation WidgetAnimation
 ---The callback.
----@field Delegate function
+---@field Delegate any
 ---The type of animation event.
 ---@field AnimationEvent EWidgetAnimationEvent
 ---A user tag used to only get callbacks for specific runs of the animation.
@@ -24,7 +24,7 @@ local AnimationEventBinding = {}
 --- Constructor
 ---@return AnimationEventBinding
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@param AnimationEvent EWidgetAnimationEvent
 ---@param UserTag string
 function AnimationEventBinding.new(Animation, Delegate, AnimationEvent, UserTag)

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SpotLightComponent : PointLightComponent
 ---A spot light component emits a directional cone shaped light (Eg a Torch).
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ContainerComponent_C : ActorComponent
 ---Container Component
 ---
@@ -14,7 +16,7 @@
 ---@field UberGraphFrame PointerToUberGraphFrame
 ---@field ContainerSize integer
 ---@field Items InventoryItemStruct[]
----@field SlotChanged function
+---@field SlotChanged SlotChangedDelegate
 local ContainerComponent_C = {}
 
 --- Methods

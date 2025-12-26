@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AnimSequenceBase : AnimationAsset
 ---Anim Sequence Base
 ---

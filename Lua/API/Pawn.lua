@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Pawn : Actor
 ---Pawn is the base class of all actors that can be possessed by players or AI.
 ---They are the physical representations of players and creatures in a level.
@@ -49,9 +51,9 @@
 ---Previous controller that was controlling this pawn since the last controller change notification
 ---@field PreviousController Controller
 ---Event called after a pawn's controller has changed, on the server and owning client. This will happen at the same time as the delegate on GameInstance
----@field ReceiveControllerChangedDelegate function
+---@field ReceiveControllerChangedDelegate ReceiveControllerChangedDelegateDelegate
 ---Event called after a pawn has been restarted, usually by a possession change. This is called on the server for all pawns and the owning client for player pawns
----@field ReceiveRestartedDelegate function
+---@field ReceiveRestartedDelegate ReceiveRestartedDelegateDelegate
 ---Accumulated control input vector, stored in world space. This is the pending input, which is cleared (zeroed) once consumed.
 ---\@see GetPendingMovementInputVector(), AddMovementInput()
 ---@field ControlInputVector Vector

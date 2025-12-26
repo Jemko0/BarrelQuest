@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Level
 ---A Level is a collection of Actors (lights, volumes, mesh instances etc.).
 ---Multiple Levels can be loaded and unloaded into the World to create a streaming experience.

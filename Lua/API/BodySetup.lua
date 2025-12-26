@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BodySetup : BodySetupCore
 ---BodySetup contains all collision information that is associated with a single asset.
 ---A single BodySetup instance is shared among many BodyInstances so that geometry data is not duplicated.

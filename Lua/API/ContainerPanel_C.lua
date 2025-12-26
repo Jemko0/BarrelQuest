@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ContainerPanel_C : CollapsablePanelChild_C
 ---Container Panel
 ---

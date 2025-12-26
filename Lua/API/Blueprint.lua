@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Blueprint : BlueprintCore
 ---Blueprints are special assets that provide an intuitive, node-based interface that can be used to create new types of Actors
 ---and script level events; giving designers and gameplay programmers the tools to quickly create and iterate gameplay from

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SkyAtmosphereComponent : SceneComponent
 ---A component that represents a planet atmosphere material and simulates sky and light scattering within it.
 ---@see https://docs.unrealengine.com/en-US/Engine/Actors/FogEffects/SkyAtmosphere/index.html

@@ -38,6 +38,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings);
 	
+	static FString GenerateDelegateTypeDefinition(FMulticastDelegateProperty* DelegateProperty);
+
 	UFUNCTION(BlueprintCallable)
 	static void GenerateBaseMetaFiles(bool suppressWarnings);
 	

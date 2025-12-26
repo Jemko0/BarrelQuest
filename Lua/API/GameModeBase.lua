@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class GameModeBase : Info
 ---The GameModeBase defines the game being played. It governs the game rules, scoring, what actors
 ---are allowed to exist in this game type, and who may enter the game.

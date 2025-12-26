@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BodyTemperatureComponent : ActorComponent
 ---Body Temperature Component
 ---
@@ -17,10 +19,12 @@
 ---@field BaseHeatLossFactor number
 ---@field SafeBodyTempRange number
 ---@field BaseBodyTemp number
+---@field IsObject boolean
 ---@field OutsideTemperature number
 ---@field OutsideInfluence number
 ---@field ClothingInsulationInfluence number
 ---@field InternalHeatProduction number
+---@field OnTemperatureChanged OnTemperatureChangedDelegate
 local BodyTemperatureComponent = {}
 
 --- Methods

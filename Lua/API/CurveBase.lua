@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CurveBase
 ---Defines a curve of interpolated points to evaluate over a given range
 ---

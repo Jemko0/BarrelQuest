@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class StaticMeshDescription : MeshDescriptionBase
 ---A wrapper for MeshDescription, customized for static meshes
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BPTemperatureManager_C : TemperatureManager
 ---BPTemperature Manager
 ---

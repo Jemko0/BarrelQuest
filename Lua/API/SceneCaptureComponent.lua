@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SceneCaptureComponent : SceneComponent
 ----> will be exported to EngineDecalClasses.h
 ---

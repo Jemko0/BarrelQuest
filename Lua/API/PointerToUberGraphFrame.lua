@@ -12,12 +12,4 @@
 --- Properties
 ---
 local PointerToUberGraphFrame = {}
-
---- Constructor
----@return PointerToUberGraphFrame
-function PointerToUberGraphFrame.new()
-    local self = {}
-    return self
-end
-
 return PointerToUberGraphFrame

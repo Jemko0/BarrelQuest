@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CameraShakeBase
 ---Base class for a camera shake. A camera shake contains a root shake "pattern" which is
 ---the object that contains the actual logic driving how the camera is shaken. Keeping the two

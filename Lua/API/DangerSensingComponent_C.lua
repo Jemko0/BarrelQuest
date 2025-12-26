@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DangerSensingComponent_C : ActorComponent
 ---Danger Sensing Component
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CameraComponent : SceneComponent
 ---Represents a camera viewpoint and settings, such as projection type, field of view, and post-process overrides.
 ---The default behavior for an actor used as the camera view target is to look for an attached camera component and use its location, rotation, and settings.

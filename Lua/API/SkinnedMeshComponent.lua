@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SkinnedMeshComponent : MeshComponent
 ---Skinned mesh component that supports bone skinned mesh rendering.
 ---This class does not support animation.

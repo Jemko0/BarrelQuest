@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ForceFeedbackEffect
 ---A predefined force-feedback effect to be played on a controller
 ---

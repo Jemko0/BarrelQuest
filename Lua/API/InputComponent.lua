@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class InputComponent : ActorComponent
 ---Implement an Actor component for input bindings.
 ---An Input Component is a transient component that enables an Actor to bind various forms of input events to delegate functions.

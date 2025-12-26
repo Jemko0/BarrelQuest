@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AutoThumbnail_C : Actor
 ---Auto Thumbnail
 ---
@@ -17,7 +19,7 @@
 ---@field SceneCaptureComponent2D SceneCaptureComponent2D
 ---@field SpringArm SpringArmComponent
 ---@field DefaultSceneRoot SceneComponent
----@field FinishedLoading function
+---@field FinishedLoading FinishedLoadingDelegate
 local AutoThumbnail_C = {}
 
 --- Methods

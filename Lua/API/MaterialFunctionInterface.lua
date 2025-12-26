@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MaterialFunctionInterface
 ---A Material Function is a collection of material expressions that can be reused in different materials
 ---

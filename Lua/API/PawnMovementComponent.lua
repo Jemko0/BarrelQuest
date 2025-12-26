@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PawnMovementComponent : NavMovementComponent
 ---PawnMovementComponent can be used to update movement for an associated Pawn.
 ---It also provides ways to accumulate and read directional input in a generic way (with AddInputVector(), ConsumeInputVector(), etc).

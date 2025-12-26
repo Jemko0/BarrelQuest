@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class UserWidget : Widget
 ---A widget that enables UI extensibility through WidgetBlueprint.
 ---
@@ -13,13 +15,13 @@
 ---
 ---The color and opacity of this widget.  Tints all child widgets.
 ---@field ColorAndOpacity LinearColor
----@field ColorAndOpacityDelegate function
+---@field ColorAndOpacityDelegate any
 ---The foreground color of the widget, this is inherited by sub widgets.  Any color property
 ---that is marked as inherit will use this color.
 ---@field ForegroundColor SlateColor
----@field ForegroundColorDelegate function
+---@field ForegroundColorDelegate any
 ---Called when the visibility has changed
----@field OnVisibilityChanged function
+---@field OnVisibilityChanged OnVisibilityChangedDelegate
 ---The padding area around the content.
 ---@field Padding Margin
 ---@field Priority integer
@@ -63,13 +65,13 @@ function UserWidget.UnregisterInputComponent() end
 
 ---Unbind an animation started delegate.
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function UserWidget.UnbindFromAnimationStarted(Animation, Delegate) end
 
 ---Unbind an animation finished delegate.
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function UserWidget.UnbindFromAnimationFinished(Animation, Delegate) end
 
@@ -315,7 +317,7 @@ function UserWidget.PauseAnimation(InAnimation) end
 ---@param ActionName string
 ---@param EventType integer
 ---@param bConsume boolean
----@param Callback function
+---@param Callback any
 ---@return nil
 function UserWidget.ListenForInputAction(ActionName, EventType, bConsume, Callback) end
 
@@ -386,19 +388,19 @@ function UserWidget.CancelLatentActions() end
 
 ---Bind an animation started delegate.
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function UserWidget.BindToAnimationStarted(Animation, Delegate) end
 
 ---Bind an animation finished delegate.
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function UserWidget.BindToAnimationFinished(Animation, Delegate) end
 
 ---Allows binding to a specific animation's event.
 ---@param Animation WidgetAnimation
----@param Delegate function
+---@param Delegate any
 ---@param AnimationEvent EWidgetAnimationEvent
 ---@param UserTag string
 ---@return nil

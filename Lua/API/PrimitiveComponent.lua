@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PrimitiveComponent : SceneComponent
 ---PrimitiveComponents are SceneComponents that contain or generate some sort of geometry, generally to be rendered or used as collision data.
 ---There are several subclasses for the various types of geometry, but the most common by far are the ShapeComponents (Capsule, Sphere, Box), StaticMeshComponent, and SkeletalMeshComponent.
@@ -258,38 +260,38 @@
 ---@note When receiving a hit from another object's movement, the directions of 'Hit.Normal' and 'Hit.ImpactNormal'
 ---will be adjusted to indicate force from the other object against this object.
 ---@note NormalImpulse will be filled in for physics-simulating bodies, but will be zero for swept-component blocking collisions.
----@field OnComponentHit function
+---@field OnComponentHit OnComponentHitDelegate
 ---Event called when something starts to overlaps this component, for example a player walking into a trigger.
 ---For events when objects have a blocking collision, for example a player hitting a wall, see 'Hit' events.
 ---@note Both this component and the other one must have GetGenerateOverlapEvents() set to true to generate overlap events.
 ---@note When receiving an overlap from another object's movement, the directions of 'Hit.Normal' and 'Hit.ImpactNormal'
 ---will be adjusted to indicate force from the other object against this object.
----@field OnComponentBeginOverlap function
+---@field OnComponentBeginOverlap OnComponentBeginOverlapDelegate
 ---Event called when something stops overlapping this component
 ---@note Both this component and the other one must have GetGenerateOverlapEvents() set to true to generate overlap events.
----@field OnComponentEndOverlap function
+---@field OnComponentEndOverlap OnComponentEndOverlapDelegate
 ---Event called when the underlying physics objects is woken up
----@field OnComponentWake function
+---@field OnComponentWake OnComponentWakeDelegate
 ---Event called when the underlying physics objects is put to sleep
----@field OnComponentSleep function
+---@field OnComponentSleep OnComponentSleepDelegate
 ---Event called when physics state is created or destroyed for this component
----@field OnComponentPhysicsStateChanged function
+---@field OnComponentPhysicsStateChanged OnComponentPhysicsStateChangedDelegate
 ---Event called when the mouse cursor is moved over this component and mouse over events are enabled in the player controller
----@field OnBeginCursorOver function
+---@field OnBeginCursorOver OnBeginCursorOverDelegate
 ---Event called when the mouse cursor is moved off this component and mouse over events are enabled in the player controller
----@field OnEndCursorOver function
+---@field OnEndCursorOver OnEndCursorOverDelegate
 ---Event called when the left mouse button is clicked while the mouse is over this component and click events are enabled in the player controller
----@field OnClicked function
+---@field OnClicked OnClickedDelegate
 ---Event called when the left mouse button is released while the mouse is over this component click events are enabled in the player controller
----@field OnReleased function
+---@field OnReleased OnReleasedDelegate
 ---Event called when a touch input is received over this component when touch events are enabled in the player controller
----@field OnInputTouchBegin function
+---@field OnInputTouchBegin OnInputTouchBeginDelegate
 ---Event called when a touch input is released over this component when touch events are enabled in the player controller
----@field OnInputTouchEnd function
+---@field OnInputTouchEnd OnInputTouchEndDelegate
 ---Event called when a finger is moved over this component when touch over events are enabled in the player controller
----@field OnInputTouchEnter function
+---@field OnInputTouchEnter OnInputTouchEnterDelegate
 ---Event called when a finger is moved off this component when touch over events are enabled in the player controller
----@field OnInputTouchLeave function
+---@field OnInputTouchLeave OnInputTouchLeaveDelegate
 local PrimitiveComponent = {}
 
 --- Methods

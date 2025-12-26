@@ -13,7 +13,6 @@
 ---
 ---@field EditorOnly StaticParameterSetEditorOnlyData
 ---@field MaterialLayersParameters StaticMaterialLayersParameter[]
----@field StaticSwitchParameters StaticSwitchParameter[]
 ---@field StaticComponentMaskParameters StaticComponentMaskParameter[]
 ---@field TerrainLayerWeightParameters StaticTerrainLayerWeightParameter[]
 ---An array of static switch parameters in this set
@@ -27,7 +26,6 @@ local StaticParameterSet = {}
 ---@return StaticParameterSet
 ---@param EditorOnly StaticParameterSetEditorOnlyData
 ---@param MaterialLayersParameters StaticMaterialLayersParameter[]
----@param StaticSwitchParameters StaticSwitchParameter[]
 ---@param StaticComponentMaskParameters StaticComponentMaskParameter[]
 ---@param TerrainLayerWeightParameters StaticTerrainLayerWeightParameter[]
 ---@param StaticSwitchParameters StaticSwitchParameter[]

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PhysicsVolume : Volume
 ---PhysicsVolume: A bounding volume which affects actor physics.
 ---Each AActor is affected at any time by one PhysicsVolume.

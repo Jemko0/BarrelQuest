@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class LocalPlayer : Player
 ---Each player that is active on the current client/listen server has a LocalPlayer.
 ---It stays active across maps, and there may be several spawned in the case of splitscreen/coop.

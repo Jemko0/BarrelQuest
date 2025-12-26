@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BillboardComponent : PrimitiveComponent
 ---A 2d texture that will be rendered always facing the camera.
 ---

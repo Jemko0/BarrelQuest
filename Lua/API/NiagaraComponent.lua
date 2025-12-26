@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraComponent : FXSystemComponent
 ---UNiagaraComponent is the primitive component for a Niagara System.
 ---@see ANiagaraActor
@@ -27,7 +29,7 @@
 ---@field MaxTimeBeforeForceUpdateTransform number
 ---@field OcclusionQueryMode ENiagaraOcclusionQueryMode
 ---Called when the particle system is done
----@field OnSystemFinished function
+---@field OnSystemFinished OnSystemFinishedDelegate
 ---Component we automatically attach to when activated, if bAutoManageAttachment is true.
 ---If null during registration, we assign the existing AttachParent and defer attachment until we activate.
 ---\@see bAutoManageAttachment

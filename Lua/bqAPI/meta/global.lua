@@ -47,3 +47,6 @@ function addPackage(path) end
 function __hookCall(eventName, ...) end
 function __hookRemove(eventName, identifier) end
 function __hookAdd(eventName, identifier, func) end
+
+-- Engine Internal
+---@class UInterface

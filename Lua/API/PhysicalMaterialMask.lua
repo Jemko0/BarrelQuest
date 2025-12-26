@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PhysicalMaterialMask
 ---Physical material masks are used to map multiple physical materials to a single rendering material
 ---

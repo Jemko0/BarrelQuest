@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ClothingSimulationInteractor
 ---If a clothing simulation is able to be interacted with at runtime then a derived
 ---interactor should be created, and at least the basic API implemented for that

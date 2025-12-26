@@ -60,7 +60,7 @@ protected:
 	FLuaValue PopLuaValue();
 	
 	UFUNCTION(BlueprintCallable, Category = "Lua|Hooks")
-	FLuaValue HookCall(const FString& EventName, const TArray<FLuaValue>& Arguments);
+	TArray<FLuaValue> HookCall(const FString& EventName, const TArray<FLuaValue>& Arguments);
 	
 	// __index(object, key) -> returning 1 value
 	LUACFUNCTION(UBarrelLuaState, MetaMethodIndex, 1, 2);

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Font
 ---A font object, for use by Slate, UMG, and Canvas.
 ---A font can either be:

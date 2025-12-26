@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PanelWidget : Widget
 ---The base class for all UMG panel widgets.  Panel widgets layout a collection of child widgets.
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlayerInput
 ---Object within PlayerController that processes player input.
 ---Only exists on the client in network games.

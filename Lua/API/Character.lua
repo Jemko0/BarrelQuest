@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Character : Pawn
 ---Characters are Pawns that have a mesh, collision, and built-in movement logic.
 ---They are responsible for all physical interaction between the player or AI and the world, and also implement basic networking and input models.
@@ -86,23 +88,19 @@
 ---set this value, or call the Super:: method.
 ---@field JumpCurrentCountPreJump integer
 ---Broadcast when Character's jump reaches its apex. Needs CharacterMovement->bNotifyApex = true
----@field OnReachedJumpApex function
+---@field OnReachedJumpApex OnReachedJumpApexDelegate
 ---Called upon landing when falling, to perform actions based on the Hit result.
 ---Note that movement mode is still "Falling" during this event. Current Velocity value is the velocity at the time of landing.
 ---Consider OnMovementModeChanged() as well, as that can be used once the movement mode changes to the new mode (most likely Walking).
----@param Hit Result describing the landing that resulted in a valid landing spot.
 ---\@see OnMovementModeChanged()
----@field LandedDelegate function
+---@field LandedDelegate LandedDelegateDelegate
 ---Multicast delegate for MovementMode changing.
----@field MovementModeChangedDelegate function
+---@field MovementModeChangedDelegate MovementModeChangedDelegateDelegate
 ---Event triggered at the end of a CharacterMovementComponent movement update.
 ---This is the preferred event to use rather than the Tick event when performing custom updates to CharacterMovement properties based on the current state.
 ---This is mainly due to the nature of network updates, where client corrections in position from the server can cause multiple iterations of a movement update,
 ---which allows this event to update as well, while a Tick event would not.
----@param       DeltaSeconds            Delta time in seconds for this update
----@param       InitialLocation         Location at the start of the update. May be different than the current location if movement occurred.
----@param       InitialVelocity         Velocity at the start of the update. May be different than the current velocity.
----@field OnCharacterMovementUpdated function
+---@field OnCharacterMovementUpdated OnCharacterMovementUpdatedDelegate
 ---For LocallyControlled Autonomous clients.
 ---During a PerformMovement() after root motion is prepared, we save it off into this and
 ---then record it into our SavedMoves.

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class GameStateBase : Info
 ---GameStateBase is a class that manages the game's global state, and is spawned by GameModeBase.
 ---It exists on both the client and the server and is fully replicated.

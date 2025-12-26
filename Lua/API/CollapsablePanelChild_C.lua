@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CollapsablePanelChild_C : UserWidget
 ---Collapsable Panel Child
 ---
@@ -16,7 +18,7 @@
 ---@field Parent CollapsablePanel_C
 ---@field HAlignment integer
 ---@field VAlignment integer
----@field OnChildPanelClosed function
+---@field OnChildPanelClosed OnChildPanelClosedDelegate
 local CollapsablePanelChild_C = {}
 
 --- Methods

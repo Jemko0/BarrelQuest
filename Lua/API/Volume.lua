@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Volume : Brush
 ---An editable 3D volume placed in a level. Different types of volumes perform different functions
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Actors/Volumes

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraConvertInPlaceUtilityBase
 ---Niagara Convert in Place Utility Base
 ---

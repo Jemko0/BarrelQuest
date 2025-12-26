@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Widget : Visual
 ---This is the base class for all wrapped Slate controls that are exposed to UObjects.
 ---
@@ -14,17 +16,17 @@
 ---The parent slot of the UWidget.  Allows us to easily inline edit the layout controlling this widget.
 ---@field Slot PanelSlot
 ---A bindable delegate for bIsEnabled
----@field bIsEnabledDelegate function
+---@field bIsEnabledDelegate any
 ---A bindable delegate for ToolTipText
----@field ToolTipTextDelegate function
+---@field ToolTipTextDelegate any
 ---Tooltip text to show when the user hovers over the widget with the mouse
 ---@field ToolTipText string
 ---Tooltip widget to show when the user hovers over the widget with the mouse
 ---@field ToolTipWidget Widget
 ---A bindable delegate for ToolTipWidget
----@field ToolTipWidgetDelegate function
+---@field ToolTipWidgetDelegate any
 ---A bindable delegate for Visibility
----@field VisibilityDelegate function
+---@field VisibilityDelegate any
 ---The render transform of the widget allows for arbitrary 2D transforms to be applied to the widget.
 ---@field RenderTransform WidgetTransform
 ---The render transform pivot controls the location about which transforms are applied.
@@ -51,11 +53,11 @@
 ---When AccessibleBehavior is set to Custom, this is the text that will be used to describe the widget.
 ---@field AccessibleText string
 ---An optional delegate that may be assigned in place of AccessibleText for creating a TAttribute
----@field AccessibleTextDelegate function
+---@field AccessibleTextDelegate any
 ---When AccessibleSummaryBehavior is set to Custom, this is the text that will be used to describe the widget.
 ---@field AccessibleSummaryText string
 ---An optional delegate that may be assigned in place of AccessibleSummaryText for creating a TAttribute
----@field AccessibleSummaryTextDelegate function
+---@field AccessibleSummaryTextDelegate any
 ---If true prevents the widget or its child's geometry or layout information from being cached.  If this widget
 ---changes every frame, but you want it to still be in an invalidation panel you should make it as volatile
 ---instead of invalidating it every frame, which would prevent the invalidation panel from actually
@@ -151,13 +153,13 @@ function Widget.SetNavigationRuleExplicit(Direction, InWidget) end
 
 ---Sets the widget navigation rules for a specific direction. This can only be called on widgets that are in a widget tree. This works only for CustomBoundary Rule.
 ---@param Direction EUINavigation
----@param InCustomDelegate function
+---@param InCustomDelegate any
 ---@return nil
 function Widget.SetNavigationRuleCustomBoundary(Direction, InCustomDelegate) end
 
 ---Sets the widget navigation rules for a specific direction. This can only be called on widgets that are in a widget tree. This works only for Custom Rule.
 ---@param Direction EUINavigation
----@param InCustomDelegate function
+---@param InCustomDelegate any
 ---@return nil
 function Widget.SetNavigationRuleCustom(Direction, InCustomDelegate) end
 
@@ -214,7 +216,7 @@ function Widget.RemoveFromParent() end
 
 ---K2 Remove Field Value Changed Delegate
 ---@param FieldId FieldNotificationId
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function Widget.K2_RemoveFieldValueChangedDelegate(FieldId, Delegate) end
 
@@ -225,7 +227,7 @@ function Widget.K2_BroadcastFieldValueChanged(FieldId) end
 
 ---K2 Add Field Value Changed Delegate
 ---@param FieldId FieldNotificationId
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function Widget.K2_AddFieldValueChangedDelegate(FieldId, Delegate) end
 

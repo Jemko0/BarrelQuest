@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CameraShakeSourceComponent : SceneComponent
 ---Camera Shake Source Component
 ---

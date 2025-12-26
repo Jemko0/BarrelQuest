@@ -12,12 +12,4 @@
 --- Properties
 ---
 local StaticMeshComponentLODInfo = {}
-
---- Constructor
----@return StaticMeshComponentLODInfo
-function StaticMeshComponentLODInfo.new()
-    local self = {}
-    return self
-end
-
 return StaticMeshComponentLODInfo

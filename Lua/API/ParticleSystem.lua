@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ParticleSystem : FXSystemAsset
 ---A ParticleSystem is a complete particle effect that contains any number of ParticleEmitters. By allowing multiple emitters
 ---in a system, the designer can create elaborate particle effects that are held in a single system. Once created using
@@ -127,7 +129,6 @@ local ParticleSystem = {}
 
 --- Methods
 ---Returns true if this system contains an emitter of the pasesd type.
----@ param TypeData - The emitter type to check for. Must be a child class of UParticleModuleTypeDataBase
 ---@param TypeData Class
 ---@return boolean
 function ParticleSystem.ContainsEmitterType(TypeData) end

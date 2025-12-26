@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlayerStatComponent_C : StatsComponent_C
 ---Player Stat Component
 ---

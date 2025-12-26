@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CapsuleComponent : ShapeComponent
 ---A capsule generally used for simple collision. Bounds are rendered as lines in the editor.
 ---

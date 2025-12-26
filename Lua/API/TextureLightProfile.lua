@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TextureLightProfile : Texture2D
 ---Texture Light Profile
 ---

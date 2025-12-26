@@ -6,12 +6,14 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NavigationPath
 ---UObject wrapper for FNavigationPath
 ---
 --- Properties
 ---
----@field PathUpdatedNotifier function
+---@field PathUpdatedNotifier PathUpdatedNotifierDelegate
 ---@field PathPoints Vector[]
 ---@field RecalculateOnInvalidation ENavigationOptionFlag
 local NavigationPath = {}

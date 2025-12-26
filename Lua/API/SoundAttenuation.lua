@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SoundAttenuation
 ---Defines how a sound changes volume with distance to the listener
 ---

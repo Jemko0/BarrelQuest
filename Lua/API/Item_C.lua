@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Item_C : Actor
 ---Item
 ---
@@ -185,15 +187,13 @@ function Item_C.PickUp(Source) end
 ---@return nil
 function Item_C.ActorUse(User) end
 
----SV Use
----Original name: "SV Use"
+---SVUse
 ---@param User Character
 ---@return nil
-function Item_C.SV_Use(User) end
+function Item_C.SVUse(User) end
 
 ---Local Use
----Original name: "Local Use"
 ---@return nil
-function Item_C.Local_Use() end
+function Item_C.LocalUse() end
 
 return Item_C

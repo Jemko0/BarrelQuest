@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AutoLogSaveGame_C : SaveGame
 ---Auto Log Save Game
 ---

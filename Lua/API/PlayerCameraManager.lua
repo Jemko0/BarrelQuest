@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlayerCameraManager : Actor
 ---A PlayerCameraManager is responsible for managing the camera for a particular
 ---player. It defines the final view properties used by other systems (e.g. the renderer),
@@ -46,7 +48,7 @@
 ---Offset to view target (used in certain CameraStyles)
 ---@field ViewTargetOffset Vector
 ---If bound, broadcast on fade start (with fade time) instead of manually altering audio device's primary volume directly
----@field OnAudioFadeChangeEvent function
+---@field OnAudioFadeChangeEvent OnAudioFadeChangeEventDelegate
 ---CameraBlood emitter attached to this camera
 ---@field CameraLensEffects any[]
 ---Cached ref to modifier for code-driven screen shakes

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DrawFrustumComponent : PrimitiveComponent
 ---Utility component for drawing a view frustum. Origin is at the component location, frustum points down position X axis.
 ---

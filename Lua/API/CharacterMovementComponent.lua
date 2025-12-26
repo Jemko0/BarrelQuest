@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CharacterMovementComponent : PawnMovementComponent
 ---CharacterMovementComponent handles movement logic for the associated Character owner.
 ---It supports various movement modes including: walking, falling, swimming, flying, custom.

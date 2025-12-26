@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ParticleModuleEventReceiverBase : ParticleModuleEventBase
 ---Particle Module Event Receiver Base
 ---

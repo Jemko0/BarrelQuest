@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class StaticMesh : StreamableRenderAsset
 ---A StaticMesh is a piece of geometry that consists of a static set of polygons.
 ---Static Meshes can be translated, rotated, and scaled, but they cannot have their vertices animated in any way. As such, they are more efficient

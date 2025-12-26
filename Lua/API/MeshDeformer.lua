@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MeshDeformer
 ---Base class for mesh deformer assets.
 ---Mesh deformers can be added to mesh components to implement flexible deformation systems.

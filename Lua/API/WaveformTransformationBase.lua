@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class WaveformTransformationBase
 ---Base class to hold editor configurable properties for an arbitrary transformation of audio waveform data
 ---

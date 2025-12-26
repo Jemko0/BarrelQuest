@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class WidgetAnimation : MovieSceneSequence
 ---Widget Animation
 ---
@@ -19,13 +21,13 @@ local WidgetAnimation = {}
 --- Methods
 ---Unbind from Animation Started
 ---@param Widget UserWidget
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function WidgetAnimation.UnbindFromAnimationStarted(Widget, Delegate) end
 
 ---Unbind from Animation Finished
 ---@param Widget UserWidget
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function WidgetAnimation.UnbindFromAnimationFinished(Widget, Delegate) end
 
@@ -55,13 +57,13 @@ function WidgetAnimation.GetEndTime() end
 ---difficult to upgrade users who were taking advantage of the Many-To-1, blueprint having
 ---many animations binding to the same delegate.
 ---@param Widget UserWidget
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function WidgetAnimation.BindToAnimationStarted(Widget, Delegate) end
 
 ---Bind to Animation Finished
 ---@param Widget UserWidget
----@param Delegate function
+---@param Delegate any
 ---@return nil
 function WidgetAnimation.BindToAnimationFinished(Widget, Delegate) end
 

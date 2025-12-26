@@ -18,12 +18,4 @@
 --- Properties
 ---
 local Geometry = {}
-
---- Constructor
----@return Geometry
-function Geometry.new()
-    local self = {}
-    return self
-end
-
 return Geometry

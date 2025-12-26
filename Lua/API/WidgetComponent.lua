@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class WidgetComponent : MeshComponent
 ---The widget component provides a surface in the 3D environment on which to render widgets normally rendered to the screen.
 ---Widgets are first rendered to a render target, then that render target is displayed in the world.

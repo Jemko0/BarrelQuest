@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AnimInstance
 ---Anim Instance
 ---
@@ -30,17 +32,17 @@
 ---If true, linked instances will use the main instance's montage data. (i.e. playing a montage on a main instance will play it on the linked layer too.)
 ---@field bUseMainInstanceMontageEvaluationData boolean
 ---Called when a montage starts blending out, whether interrupted or finished
----@field OnMontageBlendingOut function
+---@field OnMontageBlendingOut OnMontageBlendingOutDelegate
 ---Called when a montage finishes blending in
----@field OnMontageBlendedIn function
+---@field OnMontageBlendedIn OnMontageBlendedInDelegate
 ---Called when a montage has started
----@field OnMontageStarted function
+---@field OnMontageStarted OnMontageStartedDelegate
 ---Called when a montage has ended, whether interrupted or finished
----@field OnMontageEnded function
+---@field OnMontageEnded OnMontageEndedDelegate
 ---Called when all Montage instances have ended.
----@field OnAllMontageInstancesEnded function
+---@field OnAllMontageInstancesEnded OnAllMontageInstancesEndedDelegate
 ---Called when a montage section changes
----@field OnMontageSectionChanged function
+---@field OnMontageSectionChanged OnMontageSectionChangedDelegate
 ---Inertialization requests gathered this frame. Gets reset in UpdateMontageEvaluationData
 ---@field SlotGroupInertializationRequestDataMap table<string, InertializationRequest>
 ---Name of Class to do Post Compile Validation.

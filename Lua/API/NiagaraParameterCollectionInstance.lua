@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraParameterCollectionInstance
 ---Can be used to override selected parameters from a Niagara parameter collection with another value.
 ---The values in the parameter collection instance can be set from Blueprint or C++, same as the regular parameter collection.

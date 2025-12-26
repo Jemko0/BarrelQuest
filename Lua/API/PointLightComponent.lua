@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PointLightComponent : LocalLightComponent
 ---A light component which emits light from a single point equally in all directions.
 ---

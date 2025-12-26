@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PlayerController : Controller
 ---PlayerControllers are used by human players to control Pawns.
 ---ControlRotation (accessed via GetControlRotation()), determines the aiming

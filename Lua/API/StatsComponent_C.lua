@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class StatsComponent_C : ActorComponent
 ---Stats Component
 ---
@@ -15,7 +17,7 @@
 ---@field StatTickTimer TimerHandle
 ---@field Stats StatDefinitionStruct[]
 ---@field InitialStats StatDefinitionStruct[]
----@field StatsTicked function
+---@field StatsTicked StatsTickedDelegate
 local StatsComponent_C = {}
 
 --- Methods

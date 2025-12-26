@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ItemSubcontainerCarrierBase_C : Item_C
 ---Item Subcontainer Carrier Base
 ---

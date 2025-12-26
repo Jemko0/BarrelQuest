@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CheatManager
 ---Cheat Manager is a central blueprint to implement test and debug code and actions that are not to ship with the game.
 ---As the Cheat Manager is not instanced in shipping builds, it is for debugging purposes only

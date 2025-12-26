@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TouchInterface
 ---Defines an interface by which touch input can be controlled using any number of buttons and virtual joysticks
 ---

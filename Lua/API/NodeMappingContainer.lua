@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NodeMappingContainer
 ---Node Mapping Container Class
 ---* This saves source items, and target items, and mapping between

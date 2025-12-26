@@ -1,12 +1,32 @@
 local barrel = {}
 
-barrel.InventoryItem = require("API.wrappers.InventoryItem")
-barrel.Item = require("API.wrappers.ItemData")
-barrel.BoneHealth = require("API.wrappers.BoneHealth")
-barrel.StatDefinition = require("API.wrappers.StatDefinition")
-barrel.TileDefinition = require("API.wrappers.TileDefinition")
-barrel.CraftingRecipe = require("API.wrappers.CraftingRecipe")
-barrel.CraftingResult = require("API.wrappers.CraftingResult")
+barrel.Action = require("API.wrappers.Action_W")
+barrel.BoneHealth = require("API.wrappers.BoneHealth_W")
+barrel.InventoryItem = require("API.wrappers.InventoryItem_W")
+barrel.Item = require("API.wrappers.ItemData_W")
+barrel.TimedActionData = require("API.wrappers.TimedActionData_W")
+barrel.DropTableEntry = require("API.wrappers.DropTableEntry_W")
+barrel.DropTableItem = require("API.wrappers.DropTableItem_W")
+barrel.DamageTypeData = require("API.wrappers.DamageTypeData_W")
+barrel.GameCommand = require("API.wrappers.GameCommand_W")
+barrel.RightClickMenuOption = require("API.wrappers.RightClickMenuOption_W")
+barrel.ProjectileData = require("API.wrappers.ProjectileData_W")
+
+barrel.StatNotificationDefinition = require("API.wrappers.StatNotificationDefinition_W")
+barrel.StatNotificationDefinitionArray = require("API.wrappers.StatNotificationDefinitionArray_W")
+barrel.StatDefinition = require("API.wrappers.StatDefinition_W")
+barrel.TileDefinition = require("API.wrappers.TileDefinition_W")
+
+barrel.CraftingQueueItem = require("API.wrappers.CraftingQueueItem_W")
+barrel.CraftingQueueQuickAmountLookupMapValue = require("API.wrappers.CraftingQueueQuickAmountLookupMapValue_W")
+barrel.CraftingRecipe = require("API.wrappers.CraftingRecipe_W")
+barrel.CraftingResult = require("API.wrappers.CraftingResult_W")
+barrel.CraftingRecipeIngredient = require("API.wrappers.CraftingRecipeIngredient_W")
+
+barrel.Button = require("API.wrappers.Button_W")
+
+barrel.CharacterClothing = require("API.wrappers.CharacterClothing_W")
+barrel.ClothingItemData = require("API.wrappers.ClothingItemData_W")
 
 ---@return BarrelCharacter_C
 ---gets the local player, nil on dedicated server

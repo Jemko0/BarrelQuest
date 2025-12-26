@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SparseVolumeTexture
 ---SparseVolumeTexture base interface to communicate with material graph and shader bindings.
 ---

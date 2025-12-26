@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ViewConeActor : Actor
 ---An actor that generates a procedural mesh representing a cone of vision.
 ---It uses asynchronous line traces to detect obstacles and builds the mesh based on hit results.

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AnimMontage : AnimCompositeBase
 ---Any property you're adding to AnimMontage and parent class has to be considered for Child Asset
 ---Child Asset is considered to be only asset mapping feature using everything else in the class

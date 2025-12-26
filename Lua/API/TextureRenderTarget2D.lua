@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TextureRenderTarget2D : TextureRenderTarget
 ---TextureRenderTarget2D
 ---2D render target texture resource. This can be used as a target

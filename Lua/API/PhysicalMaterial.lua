@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PhysicalMaterial
 ---Physical materials are used to define the response of a physical object when interacting dynamically with the world.
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class RightClickMenuAnchor_C : UserWidget
 ---Right Click Menu Anchor
 ---

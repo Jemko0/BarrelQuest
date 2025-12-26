@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class HUD : Actor
 ---Base class of the heads-up display. This has a canvas and a debug canvas on which primitives can be drawn.
 ---It also contains a list of simple hit boxes that can be used for simple item click detection.

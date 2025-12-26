@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class AIPerceptionStimuliSourceComponent : ActorComponent
 ---Gives owning actor a way to auto-register as perception system's sense stimuli source
 ---

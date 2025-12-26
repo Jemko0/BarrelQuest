@@ -239,63 +239,85 @@ void UBarrelLuaState::RemoveHook(const FString& EventName, const FString& Identi
 	ReceiveLuaError(TEXT("HookRemove: Hook not found"));
 }
 
-FLuaValue UBarrelLuaState::HookCall(const FString& EventName, const TArray<FLuaValue>& Arguments)
+TArray<FLuaValue> UBarrelLuaState::HookCall(const FString& EventName, const TArray<FLuaValue>& Arguments)
 {
-	if (!L)
-	{
-		return FLuaValue();
-	}
+    // Return empty array if no state
+    if (!L) return {};
 
-	const TArray<FHookEntry>* HookList = HookRegistry.Find(EventName);
-	if (!HookList)
-	{
-		return FLuaValue();
-	}
+    const TArray<FHookEntry>* HookList = HookRegistry.Find(EventName);
+    if (!HookList) return {};
 
-	FLuaValue LastReturn;
+    // This will hold the results of the *last* valid hook execution
+    TArray<FLuaValue> LastReturnValues;
 
-	for (const FHookEntry& Hook : *HookList)
-	{
-		if (!Hook.bValid || Hook.LuaFunction.Type != ELuaValueType::Function ||
-			Hook.LuaFunction.LuaRef == LUA_NOREF || Hook.LuaFunction.LuaRef == LUA_REFNIL)
-		{
-			continue;
-		}
+    for (const FHookEntry& Hook : *HookList)
+    {
+        if (!Hook.bValid || Hook.LuaFunction.Type != ELuaValueType::Function ||
+            Hook.LuaFunction.LuaRef == LUA_NOREF || Hook.LuaFunction.LuaRef == LUA_REFNIL)
+        {
+            continue;
+        }
 
-		int32 StackTop = lua_gettop(L);
+        // Record the stack position before we push the function
+        int32 StackTop = lua_gettop(L);
 
-		lua_rawgeti(L, LUA_REGISTRYINDEX, Hook.LuaFunction.LuaRef);
+        lua_rawgeti(L, LUA_REGISTRYINDEX, Hook.LuaFunction.LuaRef);
 
-		if (!lua_isfunction(L, -1))
-		{
-			ReceiveLuaError(TEXT("Hook %s is not a function"));
-			lua_settop(L, StackTop);
-			continue;
-		}
+        if (!lua_isfunction(L, -1))
+        {
+            // Error handling...
+            lua_settop(L, StackTop);
+            continue;
+        }
 
-		// Push arguments
-		for (const FLuaValue& Arg : Arguments)
-		{
-			PushLuaValue(Arg);
-		}
+        // Push arguments
+        for (const FLuaValue& Arg : Arguments)
+        {
+            PushLuaValue(Arg);
+        }
 
-		int32 Result = lua_pcall(L, Arguments.Num(), 1, 0);
-		if (Result != LUA_OK)
-		{
-			const char* Error = lua_tostring(L, -1);
-			UE_LOG(LogTemp, Error, TEXT("Lua hook error in %s: %s"), *Hook.Identifier,
-				Error ? UTF8_TO_TCHAR(Error) : TEXT("Unknown error"));
-			lua_settop(L, StackTop);
-			continue;
-		}
+        // 2. Change '1' to LUA_MULTRET to allow multiple returns
+        int32 Result = lua_pcall(L, Arguments.Num(), LUA_MULTRET, 0);
+        
+        if (Result != LUA_OK)
+        {
+            const char* Error = lua_tostring(L, -1);
+            UE_LOG(LogTemp, Error, TEXT("Lua hook error in %s: %s"), *Hook.Identifier,
+                Error ? UTF8_TO_TCHAR(Error) : TEXT("Unknown error"));
+            
+            lua_settop(L, StackTop);
+            continue;
+        }
 
-		// Store return value (could be extended to return all if needed)
-		LastReturn = PopLuaValue();
+        // 3. Calculate how many values were returned
+        // The new top minus the old top equals the number of return values
+        int32 CurrentTop = lua_gettop(L);
+        int32 NumReturns = CurrentTop - StackTop;
 
-		lua_settop(L, StackTop); // clean stack
-	}
+        // Clear results from previous hooks (if any) to match original behavior
+        LastReturnValues.Reset();
 
-	return LastReturn;
+        if (NumReturns > 0)
+        {
+            LastReturnValues.Reserve(NumReturns);
+
+            // Pop values off the stack.
+            // IMPORTANT: The stack is LIFO (Last In, First Out).
+            // If Lua returns "A, B", B is at the top. Pop gives us B, then A.
+            for (int32 i = 0; i < NumReturns; i++)
+            {
+                LastReturnValues.Add(PopLuaValue());
+            }
+
+            // Reverse the array so the order matches Lua (A, B)
+            Algo::Reverse(LastReturnValues);
+        }
+
+        // Ensure stack is clean (though the pops above should have cleared it)
+        lua_settop(L, StackTop); 
+    }
+
+    return LastReturnValues;
 }
 
 

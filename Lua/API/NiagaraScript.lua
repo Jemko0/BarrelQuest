@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraScript : NiagaraScriptBase
 ---Scripts are function graphs that define the runtime execution for a Niagara system (similar to a Blueprint).
 ---There are three types of scripts:

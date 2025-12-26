@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BarrelGameInstance_C : GameInstance
 ---Barrel Game Instance
 ---
@@ -17,9 +19,9 @@
 ---@field DebugVars DebugVariablesStruct
 ---@field UserSettings UserSettingsStruct
 ---@field ThumbnailPaths table<string, string>
----@field OnSettingsUpdated function
----@field OnSettingsApplied function
----@field OnUpdateDebugVar function
+---@field OnSettingsUpdated OnSettingsUpdatedDelegate
+---@field OnSettingsApplied OnSettingsAppliedDelegate
+---@field OnUpdateDebugVar OnUpdateDebugVarDelegate
 ---@field ThumbnailsLoaded boolean
 ---@field LogTimestamp string
 local BarrelGameInstance_C = {}

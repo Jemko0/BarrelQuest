@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NiagaraSystem : FXSystemAsset
 ---A Niagara System contains multiple Niagara Emitters to create various effects.
 ---Niagara Systems can be placed in the world, unlike Emitters, and expose User Parameters to configure an effect at runtime.

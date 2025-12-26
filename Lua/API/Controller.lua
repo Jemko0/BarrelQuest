@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class Controller : Actor
 ---Controllers are non-physical actors that can possess a Pawn to control
 ---its actions.  PlayerControllers are used by human players to control pawns, while
@@ -25,9 +27,9 @@
 ---PlayerState containing replicated information about the player using this controller (only exists for players, not NPCs).
 ---@field PlayerState PlayerState
 ---Called when the controller has instigated damage in any way
----@field OnInstigatedAnyDamage function
+---@field OnInstigatedAnyDamage OnInstigatedAnyDamageDelegate
 ---Called on both authorities and clients when the possessed pawn changes (either OldPawn or NewPawn might be nullptr)
----@field OnPossessedPawnChanged function
+---@field OnPossessedPawnChanged OnPossessedPawnChangedDelegate
 ---Current gameplay state this controller is in
 ---@field StateName string
 ---The control rotation of the Controller. See GetControlRotation.

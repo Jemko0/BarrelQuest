@@ -40,9 +40,9 @@
 ---Array of linear color interpolations performed during the timeline
 ---@field InterpLinearColors TimelineLinearColorTrack[]
 ---Called whenever this timeline is playing and updates - done after all delegates are executed and variables updated
----@field TimelinePostUpdateFunc function
+---@field TimelinePostUpdateFunc any
 ---Called whenever this timeline is finished. Is not called if 'stop' is used to terminate timeline early
----@field TimelineFinishedFunc function
+---@field TimelineFinishedFunc any
 ---Optional. If set, Timeline will also set float/vector properties on this object using the PropertyName set in the tracks.
 ---@field PropertySetObject any
 ---Optional. If set, Timeline will also set ETimelineDirection property on PropertySetObject using the name.
@@ -63,8 +63,8 @@ local Timeline = {}
 ---@param InterpVectors TimelineVectorTrack[]
 ---@param InterpFloats TimelineFloatTrack[]
 ---@param InterpLinearColors TimelineLinearColorTrack[]
----@param TimelinePostUpdateFunc function
----@param TimelineFinishedFunc function
+---@param TimelinePostUpdateFunc any
+---@param TimelineFinishedFunc any
 ---@param PropertySetObject any
 ---@param DirectionPropertyName string
 function Timeline.new(LengthMode, bLooping, bReversePlayback, bPlaying, PlayingStateTracker, Length, PlayRate, Position, Events, InterpVectors, InterpFloats, InterpLinearColors, TimelinePostUpdateFunc, TimelineFinishedFunc, PropertySetObject, DirectionPropertyName)

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ParticleModuleSpawnBase : ParticleModule
 ---Particle Module Spawn Base
 ---

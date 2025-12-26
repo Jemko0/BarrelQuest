@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class BarrelPlayerController_C : PlayerController
 ---Barrel Player Controller
 ---
@@ -19,8 +21,8 @@
 ---@field ReachDistance number
 ---@field ObscurringActors Actor[]
 ---@field IsInterior boolean
----@field OnInsideChanged function
----@field OnFloorChanged function
+---@field OnInsideChanged OnInsideChangedDelegate
+---@field OnFloorChanged OnFloorChangedDelegate
 ---@field IsViewBlocked boolean
 ---@field LastFloorZ number
 ---@field DragMouseStart Vector2D
@@ -31,13 +33,13 @@
 ---@field DragAllow boolean
 ---@field Mouse_Delta_X number -- Original name: "Mouse Delta X"
 ---@field moveCamera boolean
----@field OnWalkToSuccess function
----@field OnWalkToFailed function
+---@field OnWalkToSuccess OnWalkToSuccessDelegate
+---@field OnWalkToFailed OnWalkToFailedDelegate
 ---@field CurrentWalkToPath NavigationPath
 ---@field CurrentPathPointIndex integer
 ---@field CurrentPathPoint Vector
 ---@field AutoWalking boolean
----@field OnViewBlocked function
+---@field OnViewBlocked OnViewBlockedDelegate
 ---@field AutoWalkAcceptableRange number
 local BarrelPlayerController_C = {}
 

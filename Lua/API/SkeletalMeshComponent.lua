@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SkeletalMeshComponent : SkinnedMeshComponent
 ---SkeletalMeshComponent is used to create an instance of an animated SkeletalMesh asset.
 ---@see https://docs.unrealengine.com/latest/INT/Engine/Content/Types/SkeletalMeshes/
@@ -137,13 +139,13 @@
 ---This property is currently only read by the cloth solver when creating cloth actors, but may become animatable in the future.
 ---@field ClothGeometryScale number
 ---Notification when constraint is broken.
----@field OnConstraintBroken function
+---@field OnConstraintBroken OnConstraintBrokenDelegate
 ---Notification when constraint plasticity drive target changes.
----@field OnPlasticDeformation function
+---@field OnPlasticDeformation OnPlasticDeformationDelegate
 ---Class of the object responsible for
 ---@field ClothingSimulationFactory Class
 ---Broadcast when the components anim instance is initialized
----@field OnAnimInitialized function
+---@field OnAnimInitialized OnAnimInitializedDelegate
 local SkeletalMeshComponent = {}
 
 --- Methods

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SphereComponent : ShapeComponent
 ---A sphere generally used for simple collision. Bounds are rendered as lines in the editor.
 ---

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MeshDeformerCollection : DataAsset
 ---A simple collection of Mesh Deformers
 ---

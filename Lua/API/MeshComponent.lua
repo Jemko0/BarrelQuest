@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MeshComponent : PrimitiveComponent
 ---MeshComponent is an abstract base for any component that is an instance of a renderable collection of triangles.
 ---@see UStaticMeshComponent

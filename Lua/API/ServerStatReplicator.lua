@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ServerStatReplicator : Info
 ---Class used to replicate server "stat net" data over. For server only values, the client data is
 ---is overwritten when bUpdateStatNet == true. For data that both the client and server set, the server

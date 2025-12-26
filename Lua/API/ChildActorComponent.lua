@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ChildActorComponent : SceneComponent
 ---A component that spawns an Actor when registered, and destroys it when unregistered.
 ---

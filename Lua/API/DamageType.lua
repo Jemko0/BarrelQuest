@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DamageType
 ---A DamageType is intended to define and describe a particular form of damage and to provide an avenue
 ---for customizing responses to damage from various sources.

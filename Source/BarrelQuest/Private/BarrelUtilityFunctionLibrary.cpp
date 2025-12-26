@@ -54,6 +54,7 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
     if (suppressWarnings)
     {
         LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n\n"));
+        LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: redundant-parameter\n\n"));
     }
     
     if (bIsInterface)
@@ -118,29 +119,38 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass
             FString PropTooltip = Property->GetToolTipText().ToString();
             if (!PropTooltip.IsEmpty())
             {
-                // Split tooltip into lines and prefix each with ---
                 TArray<FString> TooltipLines;
                 PropTooltip.ParseIntoArray(TooltipLines, TEXT("\n"), true);
-                
-                // Check if first line is @deprecated
+    
                 bool bStartsWithDeprecated = false;
                 if (TooltipLines.Num() > 0)
                 {
                     FString FirstLine = TooltipLines[0].TrimStartAndEnd();
                     bStartsWithDeprecated = FirstLine.StartsWith(TEXT("@deprecated"));
                 }
-                
-                // Add extra newline before @deprecated for spacing
+    
                 if (bStartsWithDeprecated)
                 {
                     LuaMetaContent += TEXT("---\n");
                 }
-                
+    
+                bool bIsDelegate = Property->IsA<FMulticastDelegateProperty>();
+    
                 for (const FString& Line : TooltipLines)
                 {
                     FString ProcessedLine = Line;
-                    // Escape @see and other @ tags that shouldn't be LuaLS annotations
                     ProcessedLine.ReplaceInline(TEXT("@see"), TEXT("\\@see"));
+        
+                    // Skip @param lines for delegates as they're now in the type definition
+                    if (bIsDelegate)
+                    {
+                        FString TrimmedLine = ProcessedLine.TrimStart();
+                        if (TrimmedLine.StartsWith(TEXT("@param")))
+                        {
+                            continue;
+                        }
+                    }
+        
                     LuaMetaContent += FString::Printf(TEXT("---%s\n"), *ProcessedLine);
                 }
             }
@@ -403,10 +413,11 @@ FString UBarrelUtilityFunctionLibrary::GetLuaTypeFromProperty(FProperty* Propert
         return TEXT("integer");
     }
 
-    // Delegate types
-    if (Property->IsA<FDelegateProperty>() || Property->IsA<FMulticastDelegateProperty>())
+    if (FMulticastDelegateProperty* DelegateProperty = CastField<FMulticastDelegateProperty>(Property))
     {
-        return TEXT("function");
+        FString DelegateName = Property->GetName();
+        DelegateName.ReplaceInline(TEXT(" "), TEXT("_"));
+        return FString::Printf(TEXT("%sDelegate"), *DelegateName);
     }
 
     // Fallback
@@ -620,6 +631,28 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
         LuaMetaContent += FString::Printf(TEXT("---@diagnostic disable: undefined-doc-name\n\n"));
     }
     
+    // Collect delegate types first (before main class declaration)
+    TArray<FString> DelegateTypeDefinitions;
+    for (TFieldIterator<FProperty> PropIt(InStruct); PropIt; ++PropIt)
+    {
+        FProperty* Property = *PropIt;
+        
+        if (FMulticastDelegateProperty* DelegateProperty = CastField<FMulticastDelegateProperty>(Property))
+        {
+            FString DelegateTypeDef = GenerateDelegateTypeDefinition(DelegateProperty);
+            if (!DelegateTypeDef.IsEmpty())
+            {
+                DelegateTypeDefinitions.Add(DelegateTypeDef);
+            }
+        }
+    }
+    
+    // Add delegate type definitions before the main class
+    for (const FString& DelegateTypeDef : DelegateTypeDefinitions)
+    {
+        LuaMetaContent += DelegateTypeDef + TEXT("\n");
+    }
+    
     LuaMetaContent += FString::Printf(TEXT("---@class %s\n"), *StructName);
     
     // Document struct description if available
@@ -690,8 +723,11 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
             FieldTypes.Add(CleanName, LuaType);
         }
         
-        // Store for constructor generation
-        CollectedFields.Add({PropName, PropNameDisplay, LuaType, CleanName});
+        // Store for constructor generation (skip delegates in constructor)
+        if (!Property->IsA<FMulticastDelegateProperty>())
+        {
+            CollectedFields.Add({PropName, PropNameDisplay, LuaType, CleanName});
+        }
 
         // Add property documentation
         FString PropTooltip = Property->GetToolTipText().ToString();
@@ -716,6 +752,13 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
             {
                 FString ProcessedLine = Line;
                 ProcessedLine.ReplaceInline(TEXT("@see"), TEXT("\\@see"));
+                
+                // Skip @param lines for delegates as they're now in the type definition
+                if (Property->IsA<FMulticastDelegateProperty>() && ProcessedLine.TrimStart().StartsWith(TEXT("@param")))
+                {
+                    continue;
+                }
+                
                 LuaMetaContent += FString::Printf(TEXT("---%s\n"), *ProcessedLine);
             }
         }
@@ -736,32 +779,35 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromStruct(UStruct* InStr
 
     LuaMetaContent += FString::Printf(TEXT("local %s = {}\n"), *StructName);
 
-    // Constructor
-    LuaMetaContent += TEXT("\n--- Constructor\n");
-    LuaMetaContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
-
-    for (const FLuaStructField& Field : CollectedFields)
+    // Constructor (only for non-delegate fields)
+    if (CollectedFields.Num() > 0)
     {
-        LuaMetaContent += FString::Printf(TEXT("---@param %s %s\n"), *Field.DisplayName, *Field.Type);
-    }
+        LuaMetaContent += TEXT("\n--- Constructor\n");
+        LuaMetaContent += FString::Printf(TEXT("---@return %s\n"), *StructName);
 
-    TArray<FString> ParamNames;
-    for (const FLuaStructField& Field : CollectedFields)
-    {
-        ParamNames.Add(Field.DisplayName);
-    }
-    FString ParamList = FString::Join(ParamNames, TEXT(", "));
+        for (const FLuaStructField& Field : CollectedFields)
+        {
+            LuaMetaContent += FString::Printf(TEXT("---@param %s %s\n"), *Field.DisplayName, *Field.Type);
+        }
 
-    LuaMetaContent += FString::Printf(TEXT("function %s.new(%s)\n"), *StructName, *ParamList);
-    LuaMetaContent += TEXT("    local self = {}\n");
-    
-    for (const FLuaStructField& Field : CollectedFields)
-    {
-        LuaMetaContent += FString::Printf(TEXT("    self.%s = %s\n"), *Field.DisplayName, *Field.DisplayName);
-    }
+        TArray<FString> ParamNames;
+        for (const FLuaStructField& Field : CollectedFields)
+        {
+            ParamNames.Add(Field.DisplayName);
+        }
+        FString ParamList = FString::Join(ParamNames, TEXT(", "));
 
-    LuaMetaContent += TEXT("    return self\n");
-    LuaMetaContent += TEXT("end\n\n");
+        LuaMetaContent += FString::Printf(TEXT("function %s.new(%s)\n"), *StructName, *ParamList);
+        LuaMetaContent += TEXT("    local self = {}\n");
+        
+        for (const FLuaStructField& Field : CollectedFields)
+        {
+            LuaMetaContent += FString::Printf(TEXT("    self.%s = %s\n"), *Field.DisplayName, *Field.DisplayName);
+        }
+
+        LuaMetaContent += TEXT("    return self\n");
+        LuaMetaContent += TEXT("end\n\n");
+    }
 
     LuaMetaContent += FString::Printf(TEXT("return %s\n"), *StructName);
 
@@ -814,6 +860,8 @@ void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
         WrapperName = WrapperName.LeftChop(6);
     }
     
+    WrapperName += TEXT("_W");
+    
     FString WrapperContent;
     
     // Header & Class Definitions (Unchanged)
@@ -854,6 +902,7 @@ void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
     WrapperContent += TEXT("    \n");
     WrapperContent += TEXT("    -- Check if first argument is a table (table-based initialization)\n");
     WrapperContent += FString::Printf(TEXT("    if type(%s) == \"table\" then\n"), *FirstParamName);
+    WrapperContent += TEXT("    ---@type table\n");
     WrapperContent += TEXT("        local data = ") + FirstParamName + TEXT("\n");
     WrapperContent += TEXT("        raw = ") + StructName + TEXT(".new(\n");
     
@@ -1040,6 +1089,57 @@ void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClas
     UE_LOG(LogTemp, Log, TEXT("Generated meta file for class: %s"), *InClass->GetName());
     
     RecursionDepth--;
+}
+
+FString UBarrelUtilityFunctionLibrary::GenerateDelegateTypeDefinition(FMulticastDelegateProperty* DelegateProperty)
+{
+    if (!DelegateProperty)
+    {
+        return FString();
+    }
+    
+    FString DelegateName = DelegateProperty->GetName();
+    DelegateName.ReplaceInline(TEXT(" "), TEXT("_"));
+    FString DelegateTypeName = FString::Printf(TEXT("%sDelegate"), *DelegateName);
+    
+    // Get the signature function
+    UFunction* SignatureFunction = DelegateProperty->SignatureFunction;
+    if (!SignatureFunction)
+    {
+        return FString();
+    }
+    
+    // Build parameter list for the callback function
+    TArray<FString> ParamList;
+    for (TFieldIterator<FProperty> ParamIt(SignatureFunction); ParamIt; ++ParamIt)
+    {
+        FProperty* Param = *ParamIt;
+        
+        // Skip return parameters
+        if (Param->HasAnyPropertyFlags(CPF_ReturnParm))
+        {
+            continue;
+        }
+        
+        FString ParamName = Param->GetName();
+        FString ParamType = GetLuaTypeFromProperty(Param);
+        
+        ParamList.Add(FString::Printf(TEXT("%s: %s"), *ParamName, *ParamType));
+    }
+    
+    FString ParamSignature = FString::Join(ParamList, TEXT(", "));
+    
+    // Generate the delegate type definition
+    FString TypeDef;
+    TypeDef += FString::Printf(TEXT("---@class %s\n"), *DelegateTypeName);
+    TypeDef += FString::Printf(TEXT("---@field Add fun(self: %s, callback: fun(%s))\n"), 
+        *DelegateTypeName, *ParamSignature);
+    TypeDef += FString::Printf(TEXT("---@field Remove fun(self: %s, callback: fun(%s))\n"), 
+        *DelegateTypeName, *ParamSignature);
+    TypeDef += FString::Printf(TEXT("---@field Broadcast fun(self: %s, %s)\n"), 
+        *DelegateTypeName, *ParamSignature);
+    
+    return TypeDef;
 }
 
 void UBarrelUtilityFunctionLibrary::GenerateBaseMetaFiles(bool suppressWarnings)

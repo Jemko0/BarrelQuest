@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class NavAreaBase
 ---a stub class. Actual implementation in NavigationSystem module.
 ---

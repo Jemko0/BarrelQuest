@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PanelSlot : Visual
 ---The base class for all Slots in UMG.
 ---

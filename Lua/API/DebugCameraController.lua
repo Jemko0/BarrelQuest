@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class DebugCameraController : PlayerController
 ---Camera controller that allows you to fly around a level mostly unrestricted by normal movement rules.
 ---To turn it on, please press Alt+C or both (left and right) analogs on XBox pad,

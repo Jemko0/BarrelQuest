@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ContainerComponentNew_C : ActorComponent
 ---Container Component New
 ---
@@ -17,7 +19,7 @@
 ---@field MaxWeight number
 ---@field CurrentWeight number
 ---@field WeightReductionPercent number
----@field WeightUpdated function
+---@field WeightUpdated WeightUpdatedDelegate
 local ContainerComponentNew_C = {}
 
 --- Methods

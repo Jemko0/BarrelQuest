@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SceneCaptureComponent2D : SceneCaptureComponent
 ---Used to capture a 'snapshot' of the scene from a single plane and feed it to a render target.
 ---

@@ -6,10 +6,12 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ActorComponent
 ---ActorComponent is the base class for components that define reusable behavior that can be added to different types of Actors.
 ---ActorComponents that have a transform are known as SceneComponents and those that can be rendered are PrimitiveComponents.
----@see [ActorComponent](https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Actors/Components/index.html#actorcomponents)
+---@see ActorComponent(https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Actors/Components/index.html#actorcomponents)
 ---@see USceneComponent
 ---@see UPrimitiveComponent
 ---
@@ -45,9 +47,9 @@
 ---Describes how a component instance will be created
 ---@field CreationMethod EComponentCreationMethod
 ---Called when the component has been activated, with parameter indicating if it was from a reset
----@field OnComponentActivated function
+---@field OnComponentActivated OnComponentActivatedDelegate
 ---Called when the component has been deactivated
----@field OnComponentDeactivated function
+---@field OnComponentDeactivated OnComponentDeactivatedDelegate
 local ActorComponent = {}
 
 --- Methods

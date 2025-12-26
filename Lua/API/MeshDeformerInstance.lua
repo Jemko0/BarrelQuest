@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class MeshDeformerInstance
 ---Base class for mesh deformers instances.
 ---This contains the transient per instance state for a UMeshDeformer.

@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ExternalSubcontainer_C : Actor
 ---External Subcontainer
 ---

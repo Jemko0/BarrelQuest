@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TimelineComponent : ActorComponent
 ---TimelineComponent holds a series of events, floats, vectors or colors with associated keyframes.
 ---Events can be triggered at keyframes along the timeline.
@@ -27,7 +29,7 @@ function TimelineComponent.Stop() end
 function TimelineComponent.SetVectorCurve(NewVectorCurve, VectorTrackName) end
 
 ---Set the delegate to call after each timeline tick
----@param NewTimelinePostUpdateFunc function
+---@param NewTimelinePostUpdateFunc any
 ---@return nil
 function TimelineComponent.SetTimelinePostUpdateFunc(NewTimelinePostUpdateFunc) end
 
@@ -42,7 +44,7 @@ function TimelineComponent.SetTimelineLengthMode(NewLengthMode) end
 function TimelineComponent.SetTimelineLength(NewLength) end
 
 ---Set the delegate to call when timeline is finished
----@param NewTimelineFinishedFunc function
+---@param NewTimelineFinishedFunc any
 ---@return nil
 function TimelineComponent.SetTimelineFinishedFunc(NewTimelineFinishedFunc) end
 
@@ -135,7 +137,7 @@ function TimelineComponent.GetIgnoreTimeDilation() end
 
 ---Add a vector interpolation to the timeline
 ---@param VectorCurve CurveVector
----@param InterpFunc function
+---@param InterpFunc any
 ---@param PropertyName string
 ---@param TrackName string
 ---@return nil
@@ -143,7 +145,7 @@ function TimelineComponent.AddInterpVector(VectorCurve, InterpFunc, PropertyName
 
 ---Add a linear color interpolation to the timeline
 ---@param LinearColorCurve CurveLinearColor
----@param InterpFunc function
+---@param InterpFunc any
 ---@param PropertyName string
 ---@param TrackName string
 ---@return nil
@@ -151,7 +153,7 @@ function TimelineComponent.AddInterpLinearColor(LinearColorCurve, InterpFunc, Pr
 
 ---Add a float interpolation to the timeline
 ---@param FloatCurve CurveFloat
----@param InterpFunc function
+---@param InterpFunc any
 ---@param PropertyName string
 ---@param TrackName string
 ---@return nil
@@ -159,7 +161,7 @@ function TimelineComponent.AddInterpFloat(FloatCurve, InterpFunc, PropertyName, 
 
 ---Add a callback event to the timeline
 ---@param Time number
----@param EventFunc function
+---@param EventFunc any
 ---@return nil
 function TimelineComponent.AddEvent(Time, EventFunc) end
 

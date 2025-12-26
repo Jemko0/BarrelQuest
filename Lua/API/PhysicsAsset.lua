@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class PhysicsAsset
 ---PhysicsAsset contains a set of rigid bodies and constraints that make up a single ragdoll.
 ---The asset is not limited to human ragdolls, and can be used for any physical simulation using bodies and constraints.

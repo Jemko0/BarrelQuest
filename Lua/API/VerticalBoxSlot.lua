@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class VerticalBoxSlot : PanelSlot
 ---The Slot for the UVerticalBox, contains the widget that is flowed vertically
 ---

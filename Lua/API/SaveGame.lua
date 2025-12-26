@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SaveGame
 ---This class acts as a base class for a save game object that can be used to save state about the game.
 ---When you create your own save game subclass, you would add member variables for the information that you want to save.

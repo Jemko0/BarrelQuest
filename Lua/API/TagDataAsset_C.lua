@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class TagDataAsset_C : PrimaryDataAsset
 ---Tag Data Asset
 ---

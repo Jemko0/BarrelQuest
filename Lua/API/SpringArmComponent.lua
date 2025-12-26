@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class SpringArmComponent : SceneComponent
 ---This component tries to maintain its children at a fixed distance from the parent,
 ---but will retract the children if there is a collision, and spring back when there is no collision.

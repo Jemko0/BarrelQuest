@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class ArrowComponent : PrimitiveComponent
 ---A simple arrow rendered using lines. Useful for indicating which way an object is facing.
 ---

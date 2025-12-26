@@ -6,6 +6,8 @@
 
 ---@diagnostic disable: undefined-doc-name
 
+---@diagnostic disable: redundant-parameter
+
 ---@class CameraModifier
 ---A CameraModifier is a base class for objects that may adjust the final camera properties after
 ---being computed by the APlayerCameraManager (@see ModifyCamera). A CameraModifier
