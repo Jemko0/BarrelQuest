@@ -1,8 +1,7 @@
 #include "Tiles/TileLibrary.h"
-
-#include "BarrelUtilityLibrary.h"
-#include "Developer/NaniteUtilities/Public/VectorUtil.h"
 #include "Tiles/TileManager.h"
+#include "Tiles/TileChunk.h"
+#include "BarrelUtilityLibrary.h"
 
 bool FSquareTile::HasObjectOfCategory(ETileCategory category, ATileManager* mgr) const
 {
@@ -28,181 +27,6 @@ bool FSquareTile::HasObjectOfDirection(ETileDirection direction) const
 		}
 	}
 	return false;
-}
-
-ATileChunk::ATileChunk()
-{
-	TileSize = UTileLibrary::GetTileSize();
-}
-
-FIntVector ATileChunk::ChunkSize = FIntVector(96, 96, 7);
-
-void ATileChunk::OnRep_ReplicatedTiles()
-{
-	Tiles.Empty();
-	for (auto& entry : ReplicatedTiles)
-	{
-		Tiles.Add(entry.Location, entry.Tile);
-	}
-		
-	BuildChunk();
-}
-
-void ATileChunk::PrepareForReplication()
-{
-	ReplicatedTiles.Empty();
-	for (auto& Pair : Tiles)
-	{
-		FTileEntry Entry;
-		Entry.Location = Pair.Key;
-		Entry.Tile = Pair.Value;
-		ReplicatedTiles.Add(Entry);
-	}
-}
-
-void ATileChunk::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(ATileChunk, ReplicatedTiles);
-}
-
-void ATileChunk::BuildChunk()
-{
-	ATileManager* mgr = GetOwningTileManager();
-	
-	if (!mgr)
-	{
-		UE_LOG(LogBarrelQuest, Warning, TEXT("TileManager was null!"));
-		return;
-	}
-	
-	for (auto& Pair : HISMMap)
-	{
-		Pair.Value->ClearInstances();
-	}
-	
-	for (auto& [Position, Square] : Tiles)
-	{
-		FVector InstanceLoc = FVector(
-		   Position.X * TileSize.X,
-		   Position.Y * TileSize.Y,
-		   Position.Z * TileSize.Z 
-		);
-		
-		for (auto& o : Square.GetObjectsOnSquare())
-		{
-			const FTileDefinition& tile = mgr->GetTileByID(o.ID);
-			
-			FTileRenderKey Key { tile.Mesh, tile.ParentMaterial };
-			UHierarchicalInstancedStaticMeshComponent* HISM = nullptr;
-
-			if (!HISMMap.Contains(Key))
-			{
-				HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-				HISM->SetStaticMesh(tile.Mesh);
-				HISM->SetMaterial(0, tile.ParentMaterial);
-				HISM->SetNumCustomDataFloats(6);
-				HISM->RegisterComponent();
-				HISMMap.Add(Key, HISM);
-			}
-			else
-			{
-				HISM = HISMMap[Key];
-			}
-			
-			FRotator Rotation = FRotator(0.f, static_cast<float>(o.Direction) * 90.f, 0.f);
-			FTransform InstanceTransform = FTransform(Rotation, InstanceLoc, FVector(1.0f));
-			
-			int32 instanceIndex = HISM->AddInstance(InstanceTransform, false);
-			
-			TArray<float> instanceData = TArray<float>();
-			
-			instanceData.Add(static_cast<float>(tile.Albedo));
-			instanceData.Add(static_cast<float>(tile.Metallic));
-			instanceData.Add(static_cast<float>(tile.Normal));
-			instanceData.Add(static_cast<float>(tile.Specular));
-			
-			instanceData.Add(tile.BaseMetallic);
-			instanceData.Add(tile.BaseRoughness);
-			
-			HISM->SetCustomData(instanceIndex, instanceData, false);
-		}
-	}
-	
-	for (auto& Pair : HISMMap)
-	{
-		Pair.Value->MarkRenderStateDirty();
-	}
-}
-
-ATileManager* ATileChunk::GetOwningTileManager() const
-{
-	return Cast<ATileManager>(GetOwner());
-}
-
-FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
-{
-	FSquareTile* Tile = Tiles.Find(Position);
-	if (Tile)
-	{
-		return *Tile;
-	}
-	
-	//tile is nullptr
-	FSquareTile& newTile = AddSquare(Position, FSquareTile());
-	BuildChunk();
-	
-	return newTile;
-}
-
-FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSquare)
-{
-	FSquareTile& AddedTile = Tiles.Add(Position, newSquare);
-	BuildChunk();
-	
-	return AddedTile;
-}
-
-void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
-{
-	FSquareTile& Tile = GetOrCreateSquareTile(Position);
-	Tile.GetObjectsOnSquare().Add(Object);
-	
-	BuildChunk();
-}
-
-TArray<FTileObject>& ATileChunk::GetObjectsOnSquare(FIntVector Position, bool& success)
-{
-	static TArray<FTileObject> EmptyArray; // fallback
-	success = true;
-	
-	FSquareTile* Tile = Tiles.Find(Position);
-	if (!Tile)
-	{
-		success = false;
-		return EmptyArray;
-	}
-	return Tile->GetObjectsOnSquare();
-}
-
-const FSquareTile& ATileChunk::GetSquareTile(FIntVector Position)
-{
-	static FSquareTile fallback = FSquareTile();
-	
-	FSquareTile* Tile = Tiles.Find(Position);
-	if (Tile)
-	{
-		return *Tile;
-	}
-	
-	//tile is nullptr
-	return fallback;
-}
-
-bool ATileChunk::HasSquare(FIntVector Position)
-{
-	FSquareTile* Tile = Tiles.Find(Position);
-	return Tile != nullptr;
 }
 
 void UTileLibrary::SetRuntimeBoolProperty(FName prop, bool v, FTileRuntimeData& runtimeData)
@@ -325,6 +149,13 @@ FIntVector UTileLibrary::WorldToTilePosition(FVector WorldPosition)
 	return TilePos;
 }
 
+FVector UTileLibrary::ChunkToWorldPosition(FIntVector2 chunkPosition)
+{
+	FIntVector chunkSize = ATileChunk::ChunkSize;
+	FVector tileSize = GetTileSize();
+	return FVector(chunkPosition.X * (float)chunkSize.X * tileSize.X, chunkPosition.Y * (float)chunkSize.Y * tileSize.Y, 0);
+}
+
 FVector UTileLibrary::TileToWorldPosition(FIntVector tilePosition)
 {
 	const FVector TileSize = GetTileSize();
@@ -352,6 +183,11 @@ TArray<FTileObject>& UTileLibrary::GetObjectsOnSquare(UPARAM(Ref) FSquareTile& s
 FVector UTileLibrary::GetTileSize()
 {
 	return FVector(200.0f, 200.0f, 400.0f);
+}
+
+FIntVector UTileLibrary::GetChunkSize()
+{
+	return ATileChunk::ChunkSize;
 }
 
 

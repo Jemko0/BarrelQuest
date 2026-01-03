@@ -1,11 +1,11 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Tiles/TileLibrary.h"
 #include "TileManager.generated.h"
+
+class ATileChunk;
 
 UCLASS()
 class BARRELQUEST_API ATileManager : public AActor
@@ -29,24 +29,42 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* TileDataTable;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FIntVector, int> Rooms;
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	const FSquareTile fallbackSquareTile = FSquareTile();
+	const FSquareTile constFallbackSquareTile = FSquareTile();
+	FSquareTile fallbackSquareTile = FSquareTile();
 
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* GetChunkAt(FIntVector2 Position);
 	
+	void FindRoom(FVector worldPosition);
+	
+	UFUNCTION(BlueprintCallable)
+	int GetRoomAt(FVector worldPosition);
+	
 	UFUNCTION(BlueprintCallable)
 	const FSquareTile& GetSquareTile(FVector WorldPosition, bool& success);
+	
+	UFUNCTION(BlueprintCallable)
+	const FSquareTile& GetSquareTileByTileIndex(FIntVector tileIndex, bool& success);
+	
+	UFUNCTION(BlueprintCallable)
+	FSquareTile& GetSquareTileRefByIndex(FIntVector tileIndex, bool& success);
 	
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* GetChunkAtWorld(FVector WorldPosition);
 	
 	UFUNCTION()
 	void OnRep_Chunks();
+	
+	UFUNCTION(BlueprintCallable)
+	bool HasCeilingAt(FIntVector pos);
 	
 	///Places a TileObject at the world position, if the square doesn't exist, it will create it.
 	/// If the chunk doesn't exist, it will create it. If it cant be placed, will return false

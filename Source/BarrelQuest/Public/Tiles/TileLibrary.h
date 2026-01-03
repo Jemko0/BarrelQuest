@@ -148,7 +148,7 @@ enum class ETileDirection : uint8
 	NORTH,
 	SOUTH,
 	EAST,
-	WEST
+	WEST,
 };
 
 USTRUCT(BlueprintType)
@@ -200,6 +200,24 @@ public:
 		return objects;
 	}
 	
+	void SetWall(ETileDirection direction, bool wallState)
+	{
+		uint8 bit = 1 << (uint8)direction;
+		if (wallState)
+		{
+			wallMask |= bit;
+		}
+		else
+		{
+			wallMask &= ~bit;
+		}
+	}
+
+	bool HasWall(ETileDirection direction) const
+	{
+		return (wallMask & (1 << (uint8)direction)) != 0;
+	}
+	
 	int AddObject(const FTileObject& Object)
 	{
 		return objects.Add(Object);
@@ -214,6 +232,7 @@ public:
 	bool HasObjectOfDirection(ETileDirection direction) const;
 	
 	static constexpr uint16 FLAG_WALKABLE = 1 << 0; // bit 0 reserved for walkable
+	static constexpr uint16 FLAG_HAS_CEILING = 1 << 1; // bit 1 reserved for hasCeiling
 	
 	void SetWalkable(bool walkable)
 	{
@@ -227,6 +246,19 @@ public:
 	{
 		return (flags & FLAG_WALKABLE) != 0;
 	}
+	
+	void SetHasCeiling(bool hasCeiling)
+	{
+		if (hasCeiling)
+			flags |= FLAG_HAS_CEILING;
+		else
+			flags &= ~FLAG_HAS_CEILING;
+	}
+	
+	bool HasCeiling() const
+	{
+		return (flags & FLAG_HAS_CEILING) != 0;
+	}
 };
 
 
@@ -238,71 +270,6 @@ struct FTileEntry
 public:
 	FIntVector Location;
 	FSquareTile Tile;
-};
-
-UCLASS()
-class BARRELQUEST_API ATileChunk : public AActor
-{
-	GENERATED_BODY()
-	
-public:
-	
-	ATileChunk();
-	
-	struct FObjectReference
-	{
-		FIntVector TilePosition;
-		int32 ObjectArrayIndex; // Index in FSquareTile::objects
-	};
-	
-	UPROPERTY(EditAnywhere)
-	TMap<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*> HISMMap;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TMap<FIntVector, FSquareTile> Tiles;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FIntVector2 ChunkPosition;
-	
-	UPROPERTY(BlueprintReadOnly)
-	FVector TileSize = FVector(0, 0, 0);
-	
-	static FIntVector ChunkSize;
-	
-	UPROPERTY(ReplicatedUsing=OnRep_ReplicatedTiles)
-	TArray<FTileEntry> ReplicatedTiles;
-	
-	// Called on clients when Tiles is updated
-	UFUNCTION()
-	void OnRep_ReplicatedTiles();
-	
-	void PrepareForReplication();
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-protected:
-	ATileManager* GetOwningTileManager() const;
-public:
-	
-	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
-	void BuildChunk();
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FSquareTile& GetOrCreateSquareTile(FIntVector Position);
-	
-	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
-	FSquareTile& AddSquare(FIntVector Position, const FSquareTile& newSquare);
-	
-	UFUNCTION(BlueprintCallable)
-	void AddObject(FIntVector Position, const FTileObject& Object);
-	
-	UFUNCTION(BlueprintCallable)
-	TArray<FTileObject>& GetObjectsOnSquare(FIntVector Position, bool& success);
-	
-	UFUNCTION(BlueprintCallable)
-	const FSquareTile& GetSquareTile(FIntVector Position);
-	
-	UFUNCTION(BlueprintCallable)
-	bool HasSquare(FIntVector Position);
 };
 
 UCLASS()
@@ -350,6 +317,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FIntVector WorldToTilePosition(FVector worldPosition);
 	
+	///Returns the world position of a chunk. Z is always 0
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static FVector ChunkToWorldPosition(FIntVector2 chunkPosition);
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FVector TileToWorldPosition(FIntVector tilePosition);
 	
@@ -361,4 +332,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FVector GetTileSize();
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static FIntVector GetChunkSize();
 };
