@@ -190,4 +190,9 @@ FIntVector UTileLibrary::GetChunkSize()
 	return ATileChunk::ChunkSize;
 }
 
+bool UTileLibrary::CountsAsWall(ETileCategory cat)
+{
+	return cat == ETileCategory::WALL || cat == ETileCategory::DOORFRAME;
+}
+
 

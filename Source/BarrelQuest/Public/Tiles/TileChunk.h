@@ -20,7 +20,7 @@ public:
 	
 	TMap<FTileRenderKey, TArray<FObjectReference>> HISMReverseLookup;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*> HISMMap;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

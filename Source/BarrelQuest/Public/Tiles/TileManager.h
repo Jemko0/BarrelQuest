@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntVector, int> Rooms;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<int, FRoomValue> RoomsLookup;
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	// Called every frame
@@ -46,7 +49,7 @@ public:
 	void FindRoom(FVector worldPosition);
 	
 	UFUNCTION(BlueprintCallable)
-	int GetRoomAt(FVector worldPosition);
+	int GetRoomAt(FVector worldPosition, FRoomValue& room);
 	
 	UFUNCTION(BlueprintCallable)
 	const FSquareTile& GetSquareTile(FVector WorldPosition, bool& success);
@@ -60,8 +63,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* GetChunkAtWorld(FVector WorldPosition);
 	
+	UFUNCTION(BlueprintCallable)
+	void AddRoomTile(FIntVector tilePosition, int roomID);
+	
 	UFUNCTION()
 	void OnRep_Chunks();
+	
+	///Sets the instance data property for all objects on a square, returns true if succeeded
+	UFUNCTION(BlueprintCallable)
+	bool SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue);
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasCeilingAt(FIntVector pos);

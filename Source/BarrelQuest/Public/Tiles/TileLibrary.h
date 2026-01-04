@@ -35,6 +35,21 @@ enum class ETileTextureIndex : uint8
 	BRICK,
 };
 
+UENUM(BlueprintType)
+enum class ETileInstanceDataIndex : uint8
+{
+	ALBEDO_TEX = 0,
+	METALLIC_TEX,
+	NORMAL_TEX,
+	SPECULAR_TEX,
+	BASE_METALLIC,
+	BASE_ROUGHNESS,
+	OBJ_DIRECTION,
+	SHOULD_CUT,
+	FORCE_CUT,
+	MAX
+};
+
 USTRUCT(BlueprintType)
 struct FTileRenderKey
 {
@@ -146,9 +161,35 @@ UENUM(BlueprintType)
 enum class ETileDirection : uint8
 {
 	NORTH,
-	SOUTH,
 	EAST,
+	SOUTH,
 	WEST,
+};
+
+USTRUCT(BlueprintType)
+struct FRoomValue
+{
+	GENERATED_BODY()
+public:
+	FRoomValue() = default;
+	
+	FRoomValue(FIntVector tile)
+	{
+		AddRoomTile(tile);
+	}
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FIntVector> tiles;
+	
+	void AddRoomTile(FIntVector tile)
+	{
+		tiles.AddUnique(tile);
+	}
+	
+	void RemoveRoomTile(FIntVector tile)
+	{
+		tiles.Remove(tile);
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -170,7 +211,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FTileRuntimeData runtimeData;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 RenderInstanceIndex = -1;
 };
 
@@ -335,4 +376,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FIntVector GetChunkSize();
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static bool CountsAsWall(ETileCategory cat);
 };

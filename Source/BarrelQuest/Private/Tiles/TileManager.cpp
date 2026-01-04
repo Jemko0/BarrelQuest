@@ -15,7 +15,18 @@ ATileManager::ATileManager()
 void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ATileManager::AddRoomTile(FIntVector tilePosition, int roomID)
+{
+	FRoomValue* foundRoom = RoomsLookup.Find(roomID);
+	if (!foundRoom)
+	{
+		RoomsLookup.Add(roomID, FRoomValue(tilePosition));
+		return;
+	}
 	
+	foundRoom->AddRoomTile(tilePosition);
 }
 
 void ATileManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -56,10 +67,10 @@ void ATileManager::FindRoom(FVector worldPosition)
     };
 
     TArray<FDirCheck> Checks = {
-        { FIntVector(1, 0, 0), TEXT("EAST") },
-        { FIntVector(-1, 0, 0), TEXT("WEST") },
-        { FIntVector(0, 1, 0), TEXT("NORTH") },
-        { FIntVector(0, -1, 0), TEXT("SOUTH") },
+        { FIntVector(1, 0, 0), TEXT("NORTH") },
+        { FIntVector(-1, 0, 0), TEXT("SOUTH") },
+        { FIntVector(0, 1, 0), TEXT("EAST") },
+        { FIntVector(0, -1, 0), TEXT("WEST") },
         { FIntVector(0, 0, 1), TEXT("UP") },
         { FIntVector(0, 0, -1), TEXT("DOWN") }
     };
@@ -72,8 +83,7 @@ void ATileManager::FindRoom(FVector worldPosition)
     {
        if (Visited.Num() > MAX_ROOM_SIZE)
        {
-          UE_LOG(LogTemp, Error, TEXT("LEAK: Room expanded beyond max size - %d tiles visited, Z range: %d to %d"), 
-                 Visited.Num(), minZ, maxZ);
+          UE_LOG(LogTemp, Error, TEXT("LEAK: Room expanded beyond max size - %d tiles visited, Z range: %d to %d"), Visited.Num(), minZ, maxZ);
           bLeaked = true;
           break;
        }
@@ -89,7 +99,6 @@ void ATileManager::FindRoom(FVector worldPosition)
        
        if (!currentFound)
        {
-           UE_LOG(LogTemp, Error, TEXT("ERROR: Current tile not found at %s but was in queue!"), *current.ToString());
            continue;
        }
 
@@ -123,46 +132,32 @@ void ATileManager::FindRoom(FVector worldPosition)
                  
               if (!neighborFound)
               {
-              	UE_LOG(LogTemp, Warning, TEXT("  %s BLOCKED: neighbor tile doesn't exist"), *neighborCoord.ToString());
-              	continue;
+	              continue;
               }
-                 
+          	
               bool hasOutWall = currentFound && currentSquare.HasWall(outDir);
               bool hasInWall = neighborFound && neighborSquare.HasWall(inDir);
-                 
-              if (hasOutWall)
-              {
-              	UE_LOG(LogTemp, Warning, TEXT("  %s BLOCKED: current tile has outward wall"), *neighborCoord.ToString());
-              }
-              if (hasInWall)
-              {
-              	UE_LOG(LogTemp, Warning, TEXT("  %s BLOCKED: neighbor tile has inward wall"), *neighborCoord.ToString());
-              }
-              if (!hasOutWall && !hasInWall && Visited.Num() < 20)
-              {
-              	UE_LOG(LogTemp, Log, TEXT("  %s ADDED to queue"), *neighborCoord.ToString());
-              }
       
           	  canTraverse = !hasOutWall && !hasInWall;
           }
 			// Vertical movement UP
           else if (check.Offset.Z == 1)
           {
-          	// First check: can we go up through current tile?
           	bool hasCeiling = currentSquare.HasCeiling();
           	if (hasCeiling)
           	{
-          		canTraverse = false; // Blocked by ceiling
+          		FIntVector ceilingTile = current + FIntVector(0, 0, 1);
+          		Visited.Add(ceilingTile); // add as part of room but never traverse it directly
+          		
+          		canTraverse = false; // blocked by ceiling
           	}
           	else
           	{
-          		// Second check: does the tile above actually exist?
           		bool neighborFound = false;
           		GetSquareTileByTileIndex(neighborCoord, neighborFound);
           		canTraverse = neighborFound; // Only traverse if destination exists
           	}
           }
-       	// Vertical movement DOWN
           else if (check.Offset.Z == -1)
           {
           	FIntVector tileBelow = current + FIntVector(0, 0, -1);
@@ -210,6 +205,7 @@ void ATileManager::FindRoom(FVector worldPosition)
     for (const FIntVector& pos : Visited)
     {
         Rooms.Add(pos, roomIDToAssign);
+    	AddRoomTile(pos, roomIDToAssign);
     }
 
     if (!bLeaked) nextRoomID++;
@@ -217,18 +213,26 @@ void ATileManager::FindRoom(FVector worldPosition)
     UE_LOG(LogTemp, Warning, TEXT("=== Room assigned ID: %d ==="), roomIDToAssign);
 }
 
-int ATileManager::GetRoomAt(FVector worldPosition)
+int ATileManager::GetRoomAt(FVector worldPosition, FRoomValue& room)
 {
 	FIntVector tilePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 	int* currentRoom = Rooms.Find(tilePosition);
-    
+    FRoomValue* currentRoomValue = nullptr;
 	if (!currentRoom)
 	{
 		FindRoom(worldPosition);
 		
 		//re check
 		currentRoom = Rooms.Find(tilePosition);
-		return currentRoom ? *currentRoom : 0; //wont crash because of SCE
+		
+		if (!currentRoom)
+		{
+			return 0;
+		}
+		
+		currentRoomValue = RoomsLookup.Find(*currentRoom);
+		
+		return *currentRoom;
 	}
     
 	return *currentRoom;
@@ -322,6 +326,55 @@ void ATileManager::OnRep_Chunks()
 	{
 		ChunkLookup.Add(Chunk->ChunkPosition, Chunk);
 	}
+}
+
+bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue)
+{
+	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePosition);
+	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(tileWorld);
+	ATileChunk* chunkPtr = GetChunkAt(chunkPos);
+	
+	if (!chunkPtr)
+	{
+		return false;
+	}
+	
+	FIntVector tileLocalPos = UTileLibrary::WorldToLocalChunkTilePosition(tileWorld, chunkPtr);
+	
+	bool found = false;
+	const TArray<FTileObject>& objects = chunkPtr->GetObjectsOnSquare(tileLocalPos, found);
+	
+	if (!found)
+	{
+		return false;
+	}
+	
+	for (const auto& Object : objects)
+	{
+		//If was never rendered, ignore
+		if (Object.RenderInstanceIndex == -1)
+		{
+			continue;
+		}
+		
+		const FTileDefinition def = GetTileByID(Object.ID);
+		const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
+		
+		UHierarchicalInstancedStaticMeshComponent** HISMMapResult = chunkPtr->HISMMap.Find(renderKey);
+			
+		if (!HISMMapResult)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Didnt find HISM for: %s"), *Object.ID.ToString());
+			continue;
+		}
+		
+		UHierarchicalInstancedStaticMeshComponent* HISM = *HISMMapResult;
+		
+		const bool s = HISM->SetCustomDataValue(Object.RenderInstanceIndex, (int)propertyIndex, newPropValue, true);
+		UE_LOG(LogTemp, Log, TEXT("On Tile: %s, Object %s set Property %i on %s with value %f ; SUCCESS = %i"), *tilePosition.ToString(), *Object.ID.ToString(), (int)propertyIndex, *HISM->GetName(), newPropValue, s);
+	}
+	
+	return true;
 }
 
 bool ATileManager::HasCeilingAt(FIntVector pos)

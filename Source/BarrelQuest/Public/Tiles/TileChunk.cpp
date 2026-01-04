@@ -136,6 +136,8 @@ void ATileChunk::BuildChunk()
 
 void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex, FTileObject& ObjectDef)
 {
+	static constexpr int customDataFloats = (int)ETileInstanceDataIndex::MAX;
+	
     ATileManager* mgr = GetOwningTileManager();
     if (!mgr) return;
 
@@ -151,7 +153,7 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
         UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
         HISM->SetStaticMesh(tile.Mesh);
         HISM->SetMaterial(0, tile.ParentMaterial);
-        HISM->SetNumCustomDataFloats(6);
+        HISM->SetNumCustomDataFloats(customDataFloats);
         HISM->RegisterComponent();
         HISMMap.Add(Key, HISM);
         HISMReverseLookup.Add(Key, TArray<FObjectReference>());
@@ -181,14 +183,18 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     Lookup[NewIndex] = { Position, ObjectIndex };
 
     // Set Data
-    TArray<float> instanceData;
-    instanceData.Add(static_cast<float>(tile.Albedo));
-    instanceData.Add(static_cast<float>(tile.Metallic));
-    instanceData.Add(static_cast<float>(tile.Normal));
-    instanceData.Add(static_cast<float>(tile.Specular));
-    instanceData.Add(tile.BaseMetallic);
-    instanceData.Add(tile.BaseRoughness);
-    
+    TStaticArray<float, customDataFloats> instanceData;
+	
+    instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tile.Albedo;
+    instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tile.Metallic;
+    instanceData[(int)ETileInstanceDataIndex::NORMAL_TEX] = (float)tile.Normal;
+    instanceData[(int)ETileInstanceDataIndex::SPECULAR_TEX] = (float)tile.Specular;
+    instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tile.BaseMetallic;
+    instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tile.BaseRoughness;
+    instanceData[(int)ETileInstanceDataIndex::OBJ_DIRECTION] = (float)ObjectDef.Direction;
+    instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f; //should cut
+    instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f; //force cut
+	
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
@@ -210,22 +216,19 @@ void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
 
     int32 IndexToRemove = ObjectDef.RenderInstanceIndex;
     int32 LastIndex = HISM->GetInstanceCount() - 1;
-
-    // 1. Remove from HISM
-    // Unreal moves the Last Instance into the 'IndexToRemove' slot
+	
     HISM->RemoveInstance(IndexToRemove);
-
-    // 2. Handle the Swap in our Data
+	
     if (IndexToRemove != LastIndex)
     {
-        // An instance was moved. We must update its owner.
-        // Who was at the end?
+        // an instance was moved. We must update its owner.
+        // who was at the end?
         FObjectReference SwappedOwnerRef = Lookup[LastIndex];
         
-        // Update Lookup Table
+        // update Lookup Table
         Lookup[IndexToRemove] = SwappedOwnerRef;
 
-        // Update the actual Object in the Grid
+        // update the actual obj in the grid
         if (Tiles.Contains(SwappedOwnerRef.TilePosition))
         {
              FSquareTile& Square = Tiles[SwappedOwnerRef.TilePosition];
@@ -293,7 +296,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 
 	ETileCategory cat = mgr->GetTileByID(Object.ID).Category;
     
-	if (cat == ETileCategory::WALL)
+	if (UTileLibrary::CountsAsWall(cat))
 	{
 		tile.SetWall(Object.Direction, true);
        
