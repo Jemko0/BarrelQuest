@@ -20,39 +20,56 @@ public:
 	UTileCuttingComponent();
 	ATileManager* TileManager;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
+	int32 CameraOcclusionThickness = 4;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	FVector CurrentFocusPoint;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	bool isTargetObstructed = false;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	bool isTargetInBuilding = false;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY()
+	int32 lastZLevel = 0;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
+	float tileBehindThreshold = -0.25f;
+	
+	FRoomValue LastRoom;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	FRoomValue CurrentRoom;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	int CurrentRoomID = -1;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TEnumAsByte<ETraceTypeQuery> TraceType;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
+	TEnumAsByte<ECollisionChannel> DirectTraceCollisionChannel;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TSet<FIntVector> obstructingNonRoomTiles;
+	TSet<FIntVector> hitTilesLastFrame;
+	TSet<FIntVector> hiddenRoomTilesLastFrame;
+	TSet<FIntVector> hiddenRoomTilesThisFrame;
 	
-	UPROPERTY()
-	TSet<FIntVector> hiddenTiles;
+	TSet<FIntVector> tilesToUndoForceCut;
+	TSet<FIntVector> tilesToForceCut;
+	
+	TSet<FIntVector> tilesThatUndoShouldCut;
+	TSet<FIntVector> tilesThatShouldCut;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void PreUpdate();
 	void Update();
 	
 	void ClearBuilding();
+	void RestoreLastRoom();
 	bool CheckBuilding();
 	
-	void ClearObstructingTiles();
 	void CheckObstructingTiles();
+	
+	void UpdateTileVisibility();
 	
 protected:
 	// Called when the game starts

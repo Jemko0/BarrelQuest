@@ -18,6 +18,8 @@ public:
 		int32 ObjectArrayIndex; // Index in FSquareTile::objects
 	};
 	
+	static constexpr int customDataFloats = (int)ETileInstanceDataIndex::MAX;
+	
 	TMap<FTileRenderKey, TArray<FObjectReference>> HISMReverseLookup;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -74,4 +76,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
+	
+	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef,const FTileObject& tileObject);
 };

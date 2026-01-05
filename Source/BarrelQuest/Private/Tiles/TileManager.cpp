@@ -19,14 +19,55 @@ void ATileManager::BeginPlay()
 
 void ATileManager::AddRoomTile(FIntVector tilePosition, int roomID)
 {
-	FRoomValue* foundRoom = RoomsLookup.Find(roomID);
+	FRoomValue* foundRoom = RoomIDToTiles.Find(roomID);
 	if (!foundRoom)
 	{
-		RoomsLookup.Add(roomID, FRoomValue(tilePosition));
+		RoomIDToTiles.Add(roomID, FRoomValue(tilePosition));
 		return;
 	}
 	
 	foundRoom->AddRoomTile(tilePosition);
+}
+
+void ATileManager::InvalidateRoomAt(FIntVector tilePosition)
+{
+	int* roomIdPtr = RoomTilesToID.Find(tilePosition);
+	
+	if (!roomIdPtr)
+	{
+		//wasnt part of a room anyway
+		return;
+	}
+	
+	int roomId = *roomIdPtr;
+	
+	FRoomValue* room = RoomIDToTiles.Find(roomId);
+	
+	if (!room)
+	{
+		ensureMsgf(false, TEXT("RoomTilesToID had roomId %d but RoomIDToTiles did not"), roomId);
+		return;
+	}
+	
+	for (const FIntVector& tile : room->tiles)
+	{
+		RoomTilesToID.Remove(tile);			
+	}
+	RoomIDToTiles.Remove(roomId);
+	
+	UE_LOG(LogBarrelQuest, Verbose, TEXT("Invalidated Room with ID: %i"), roomId);
+}
+
+void ATileManager::ResetCurrentState()
+{
+	for (auto*& chunk : Chunks)
+	{
+		chunk->Destroy();
+	}
+	Chunks.Empty();
+	ChunkLookup.Empty();
+	RoomIDToTiles.Empty();
+	RoomTilesToID.Empty();
 }
 
 void ATileManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -146,8 +187,8 @@ void ATileManager::FindRoom(FVector worldPosition)
           	bool hasCeiling = currentSquare.HasCeiling();
           	if (hasCeiling)
           	{
-          		FIntVector ceilingTile = current + FIntVector(0, 0, 1);
-          		Visited.Add(ceilingTile); // add as part of room but never traverse it directly
+          		//FIntVector ceilingTile = current + FIntVector(0, 0, 1);
+          		//Visited.Add(ceilingTile); // add as part of room but never traverse it directly
           		
           		canTraverse = false; // blocked by ceiling
           	}
@@ -193,7 +234,7 @@ void ATileManager::FindRoom(FVector worldPosition)
         {
             if (pos.Z == maxZ && !HasCeilingAt(pos))
             {
-                UE_LOG(LogTemp, Error, TEXT("LEAK AT TOP: %s - No ceiling!"), *pos.ToString());
+                UE_LOG(LogTemp, Warning, TEXT("LEAK AT TOP: %s - No ceiling!"), *pos.ToString());
                 bLeaked = true;
                 break;
             }
@@ -201,10 +242,16 @@ void ATileManager::FindRoom(FVector worldPosition)
     }
 
     int roomIDToAssign = bLeaked ? -1 : nextRoomID;
-
+	
+	if (roomIDToAssign == -1)
+	{
+		//dont assign -1
+		return;
+	}
+	
     for (const FIntVector& pos : Visited)
     {
-        Rooms.Add(pos, roomIDToAssign);
+        RoomTilesToID.Add(pos, roomIDToAssign);
     	AddRoomTile(pos, roomIDToAssign);
     }
 
@@ -216,27 +263,47 @@ void ATileManager::FindRoom(FVector worldPosition)
 int ATileManager::GetRoomAt(FVector worldPosition, FRoomValue& room)
 {
 	FIntVector tilePosition = UTileLibrary::WorldToTilePosition(worldPosition);
-	int* currentRoom = Rooms.Find(tilePosition);
-    FRoomValue* currentRoomValue = nullptr;
-	if (!currentRoom)
+
+	//if we are standing on a tile that doesnt have a ceiling then we are not inside a room
+	bool hasCeilingAbove = false;
+	for (int zOffset = 0; zOffset < 31; zOffset++)
+	{
+		if (HasCeilingAt(tilePosition + FIntVector(0, 0, zOffset)))
+		{
+			hasCeilingAbove = true;
+			break;
+		}
+	}
+
+	if (!hasCeilingAbove)
+	{
+		return -1; //not inside a room
+	}
+	
+	int* roomId = RoomTilesToID.Find(tilePosition);
+	
+	if (!roomId)
 	{
 		FindRoom(worldPosition);
 		
 		//re check
-		currentRoom = Rooms.Find(tilePosition);
-		
-		if (!currentRoom)
+		roomId = RoomTilesToID.Find(tilePosition);
+		if (!roomId)
 		{
-			return 0;
+			return -1;
 		}
-		
-		currentRoomValue = RoomsLookup.Find(*currentRoom);
-		
-		return *currentRoom;
 	}
-    
-	return *currentRoom;
+
+	FRoomValue* roomValue = RoomIDToTiles.Find(*roomId);
+	if (!roomValue)
+	{
+		return -1;
+	}
+
+	room = *roomValue;
+	return *roomId;
 }
+
 
 const FSquareTile& ATileManager::GetSquareTile(FVector WorldPosition, bool& success)
 {
@@ -328,7 +395,8 @@ void ATileManager::OnRep_Chunks()
 	}
 }
 
-bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue)
+bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue,
+	FTileSearchFilter searchFilter)
 {
 	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePosition);
 	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(tileWorld);
@@ -336,6 +404,7 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 	
 	if (!chunkPtr)
 	{
+		//UE_LOG(LogBarrelQuest, Warning, TEXT("ChunkPtr was null"))
 		return false;
 	}
 	
@@ -346,6 +415,7 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 	
 	if (!found)
 	{
+		//UE_LOG(LogBarrelQuest, Warning, TEXT("Tile %s was not found"), *tileLocalPos.ToString())
 		return false;
 	}
 	
@@ -358,6 +428,38 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 		}
 		
 		const FTileDefinition def = GetTileByID(Object.ID);
+		
+		// apply filters
+		if (searchFilter.minZLevel != -1)
+		{
+			if (tilePosition.Z < searchFilter.minZLevel)
+			{
+				// tile is below minZLevel ignore it
+				continue;
+			}
+			else if (tilePosition.Z == searchFilter.minZLevel)
+			{
+				// tile is at minZLevel check category
+				if (!searchFilter.IsIncludedCategory(def))
+				{
+					continue;
+				}
+			}
+			else  // tilePosition.Z > searchFilter.minZLevel
+			{
+				// tile is aobve minZLevel always process, ignore category
+			}
+		}
+		else
+		{
+			// no z filter was applied
+			if (!searchFilter.IsIncludedCategory(def))
+			{
+				continue;
+			}
+		}
+
+		
 		const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
 		
 		UHierarchicalInstancedStaticMeshComponent** HISMMapResult = chunkPtr->HISMMap.Find(renderKey);
@@ -369,6 +471,13 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 		}
 		
 		UHierarchicalInstancedStaticMeshComponent* HISM = *HISMMapResult;
+		
+		float currentData = HISM->PerInstanceSMCustomData[Object.RenderInstanceIndex * ATileChunk::customDataFloats + (int)propertyIndex];
+		
+		if (currentData == newPropValue)
+		{
+			return false;
+		}
 		
 		const bool s = HISM->SetCustomDataValue(Object.RenderInstanceIndex, (int)propertyIndex, newPropValue, true);
 		UE_LOG(LogTemp, Log, TEXT("On Tile: %s, Object %s set Property %i on %s with value %f ; SUCCESS = %i"), *tilePosition.ToString(), *Object.ID.ToString(), (int)propertyIndex, *HISM->GetName(), newPropValue, s);
@@ -476,5 +585,85 @@ bool ATileManager::SquareHasObjectOfCategoryAndRotation(FVector worldPosition, E
 	bool hasDirection = square.HasObjectOfDirection(rotation);
 	
 	return hasCategory && hasDirection;
+}
+
+TArray<FIntVector> ATileManager::Raycast(FIntVector start, FIntVector end)
+{
+	TArray<FIntVector> tiles;
+
+	// Current position in the grid
+	FIntVector current = start;
+
+	// Ray direction in integer space
+	FIntVector delta = end - start;
+
+	// Step: +1 if end > start, -1 if end < start
+	int32 stepX = (delta.X >= 0) ? 1 : -1;
+	int32 stepY = (delta.Y >= 0) ? 1 : -1;
+	int32 stepZ = (delta.Z >= 0) ? 1 : -1;
+
+	// Avoid division by zero
+	float tMaxX = (delta.X != 0) ? 0.0f : FLT_MAX;
+	float tMaxY = (delta.Y != 0) ? 0.0f : FLT_MAX;
+	float tMaxZ = (delta.Z != 0) ? 0.0f : FLT_MAX;
+
+	float tDeltaX = (delta.X != 0) ? FMath::Abs(1.0f / delta.X) : FLT_MAX;
+	float tDeltaY = (delta.Y != 0) ? FMath::Abs(1.0f / delta.Y) : FLT_MAX;
+	float tDeltaZ = (delta.Z != 0) ? FMath::Abs(1.0f / delta.Z) : FLT_MAX;
+
+	tiles.Add(current);
+
+	// Loop until we reach the end tile
+	while (current != end)
+	{
+		// Determine which axis to step next
+		if (tMaxX <= tMaxY && tMaxX <= tMaxZ)
+		{
+			current.X += stepX;
+			tMaxX += tDeltaX;
+		}
+		else if (tMaxY <= tMaxX && tMaxY <= tMaxZ)
+		{
+			current.Y += stepY;
+			tMaxY += tDeltaY;
+		}
+		else
+		{
+			current.Z += stepZ;
+			tMaxZ += tDeltaZ;
+		}
+
+		tiles.Add(current);
+	}
+
+	return tiles;
+}
+
+TArray<FIntVector> ATileManager::ThickRaycast(FIntVector start, FIntVector end, int32 thickness)
+{
+	TSet<FIntVector> allTiles;
+    
+	// get the main line
+	TArray<FIntVector> centerLine = Raycast(start, end);
+    
+	// for each point on the line, add neighboring tiles based on thickness
+	for (const FIntVector& tile : centerLine)
+	{
+		allTiles.Add(tile);
+        
+		// Add tiles in a cube around this point
+		for (int32 x = -thickness; x <= thickness; x++)
+		{
+			for (int32 y = -thickness; y <= thickness; y++)
+			{
+				for (int32 z = -thickness; z <= thickness; z++)
+				{
+					allTiles.Add(tile + FIntVector(x, y, z));
+				}
+			}
+		}
+	}
+    
+	return allTiles.Array();
 }
 

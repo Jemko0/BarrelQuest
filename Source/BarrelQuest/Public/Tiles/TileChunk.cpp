@@ -16,8 +16,8 @@ void ATileChunk::OnRep_ReplicatedTiles()
 	{
 		Tiles.Add(entry.Location, entry.Tile);
 	}
-		
-	BuildChunk();
+	
+	//BuildChunk();
 }
 
 void ATileChunk::PrepareForReplication()
@@ -43,116 +43,106 @@ void ATileChunk::BuildChunk()
     ATileManager* mgr = GetOwningTileManager();
     if (!mgr)
     {
-       UE_LOG(LogBarrelQuest, Warning, TEXT("TileManager was null!"));
-       return;
+        UE_LOG(LogBarrelQuest, Warning, TEXT("TileManager was null!"));
+        return;
     }
-    
-    // 1. Clear old state
+
+    // Clear existing HISM components
     for (auto& Pair : HISMMap)
     {
-       Pair.Value->ClearInstances();
+        if (Pair.Value)
+        {
+            Pair.Value->ClearInstances();
+        }
     }
+    HISMMap.Empty();
     HISMReverseLookup.Empty();
-    
-    // 2. Iterate and Rebuild
-    for (auto& [Position, Square] : Tiles)
+
+    // Iterate all tiles in this chunk
+    for (auto& TilePair : Tiles)
     {
-       TArray<FTileObject>& Objects = Square.GetObjectsOnSquare();
-       
-       for (int32 i = 0; i < Objects.Num(); ++i)
-       {
-          FTileObject& o = Objects[i];
-          
-          // Reset index initially
-          o.RenderInstanceIndex = -1;
+        const FIntVector& Position = TilePair.Key;
+        FSquareTile& Square = TilePair.Value;
 
-          const FTileDefinition& tile = mgr->GetTileByID(o.ID);
-          
-          // Skip if no mesh (logic-only objects)
-          if (!tile.Mesh) continue;
+        TArray<FTileObject>& Objects = Square.GetObjectsOnSquare();
+        for (int32 i = 0; i < Objects.Num(); i++)
+        {
+            FTileObject& ObjectDef = Objects[i];
+            const FTileDefinition& TileDef = mgr->GetTileByID(ObjectDef.ID);
 
-          FTileRenderKey Key { tile.Mesh, tile.ParentMaterial };
-          UHierarchicalInstancedStaticMeshComponent* HISM = nullptr;
+            // Skip logic-only objects (no mesh)
+            if (!TileDef.Mesh)
+            {
+                ObjectDef.RenderInstanceIndex = -1;
+                continue;
+            }
 
-          if (!HISMMap.Contains(Key))
-          {
-             HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-             HISM->SetStaticMesh(tile.Mesh);
-             HISM->SetMaterial(0, tile.ParentMaterial);
-             HISM->SetNumCustomDataFloats(6);
-             HISM->RegisterComponent();
-             HISMMap.Add(Key, HISM);
-             
-             // Init Lookup Array
-             HISMReverseLookup.Add(Key, TArray<FObjectReference>());
-          }
-          else
-          {
-             HISM = HISMMap[Key];
-          }
-          
-          // Calculate Transform
-          FVector InstanceLoc = FVector(
-             Position.X * TileSize.X,
-             Position.Y * TileSize.Y,
-             Position.Z * TileSize.Z 
-          );
-          
-          FRotator Rotation = FRotator(0.f, static_cast<float>(o.Direction) * 90.f, 0.f);
-          FTransform InstanceTransform = FTransform(Rotation, InstanceLoc, FVector(1.0f));
-          
-          // Add Instance
-          int32 instanceIndex = HISM->AddInstance(InstanceTransform, false);
-          
-          // Store ID in the object so we can find this instance later
-          o.RenderInstanceIndex = instanceIndex;
+            // Build key for HISM map
+            FTileRenderKey Key { TileDef.Mesh, TileDef.ParentMaterial };
 
-          // Track in Reverse Lookup
-          TArray<FObjectReference>& Lookup = HISMReverseLookup[Key];
-          if (Lookup.Num() <= instanceIndex)
-          {
-              Lookup.SetNum(instanceIndex + 1);
-          }
-          Lookup[instanceIndex] = { Position, i };
+            // Lazily create HISM component
+            if (!HISMMap.Contains(Key))
+            {
+                UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
+                HISM->SetStaticMesh(TileDef.Mesh);
+                HISM->SetMaterial(0, TileDef.ParentMaterial);
+                HISM->SetNumCustomDataFloats(customDataFloats);
+                HISM->RegisterComponent();
+                HISMMap.Add(Key, HISM);
+                HISMReverseLookup.Add(Key, TArray<FObjectReference>());
+            }
 
-          // Set Custom Data
-          TArray<float> instanceData;
-          instanceData.Add(static_cast<float>(tile.Albedo));
-          instanceData.Add(static_cast<float>(tile.Metallic));
-          instanceData.Add(static_cast<float>(tile.Normal));
-          instanceData.Add(static_cast<float>(tile.Specular));
-          instanceData.Add(tile.BaseMetallic);
-          instanceData.Add(tile.BaseRoughness);
-          
-          HISM->SetCustomData(instanceIndex, instanceData, false);
-       }
+            UHierarchicalInstancedStaticMeshComponent* HISM = HISMMap[Key];
+            TArray<FObjectReference>& Lookup = HISMReverseLookup[Key];
+
+            // Compute instance transform
+            FVector InstanceLoc = FVector(
+                Position.X * TileSize.X,
+                Position.Y * TileSize.Y,
+                Position.Z * TileSize.Z
+            );
+            FRotator Rotation = FRotator(0.f, static_cast<float>(ObjectDef.Direction) * 90.f, 0.f);
+            FTransform InstanceTransform(Rotation, InstanceLoc, FVector(1.f));
+
+            // Add instance
+            int32 InstanceIndex = HISM->AddInstance(InstanceTransform, false);
+            ObjectDef.RenderInstanceIndex = InstanceIndex;
+
+            // Ensure Lookup array is large enough
+            if (Lookup.Num() <= InstanceIndex)
+            {
+                Lookup.SetNum(InstanceIndex + 1);
+            }
+            Lookup[InstanceIndex] = { Position, i };
+        	
+            TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef);
+            HISM->SetCustomData(InstanceIndex, InstanceData, true);
+        }
     }
-    
-    for (auto& Pair : HISMMap)
-    {
-       Pair.Value->MarkRenderStateDirty();
-    }
+	
+	for (auto& HISM : HISMMap)
+	{
+		HISM.Value->MarkRenderStateDirty();
+	}
 }
 
 void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex, FTileObject& ObjectDef)
 {
-	static constexpr int customDataFloats = (int)ETileInstanceDataIndex::MAX;
-	
     ATileManager* mgr = GetOwningTileManager();
     if (!mgr) return;
 
-    const FTileDefinition& tile = mgr->GetTileByID(ObjectDef.ID);
-    if (!tile.Mesh) return; // Logic object only
+    const FTileDefinition& TileDef = mgr->GetTileByID(ObjectDef.ID);
+    if (!TileDef.Mesh) return; // Logic object only
 
-    FTileRenderKey Key { tile.Mesh, tile.ParentMaterial };
+    FTileRenderKey Key { TileDef.Mesh, TileDef.ParentMaterial };
     
     // Ensure Component Exists
     if (!HISMMap.Contains(Key))
     {
         // If HISM doesn't exist, lazily Create it
         UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-        HISM->SetStaticMesh(tile.Mesh);
-        HISM->SetMaterial(0, tile.ParentMaterial);
+        HISM->SetStaticMesh(TileDef.Mesh);
+        HISM->SetMaterial(0, TileDef.ParentMaterial);
         HISM->SetNumCustomDataFloats(customDataFloats);
         HISM->RegisterComponent();
         HISMMap.Add(Key, HISM);
@@ -183,18 +173,7 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     Lookup[NewIndex] = { Position, ObjectIndex };
 
     // Set Data
-    TStaticArray<float, customDataFloats> instanceData;
-	
-    instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tile.Albedo;
-    instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tile.Metallic;
-    instanceData[(int)ETileInstanceDataIndex::NORMAL_TEX] = (float)tile.Normal;
-    instanceData[(int)ETileInstanceDataIndex::SPECULAR_TEX] = (float)tile.Specular;
-    instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tile.BaseMetallic;
-    instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tile.BaseRoughness;
-    instanceData[(int)ETileInstanceDataIndex::OBJ_DIRECTION] = (float)ObjectDef.Direction;
-    instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f; //should cut
-    instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f; //force cut
-	
+    TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef);
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
@@ -280,8 +259,7 @@ FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSq
 	{
 		AddObjectInstance(Position, i, Objects[i]);
 	}
-    
-	// BuildChunk();
+	
 	return AddedTile;
 }
 void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
@@ -293,6 +271,8 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
     
 	ATileManager* mgr = GetOwningTileManager();
 	if (!mgr) return;
+	
+	mgr->InvalidateRoomAt(Position);
 
 	ETileCategory cat = mgr->GetTileByID(Object.ID).Category;
     
@@ -367,4 +347,21 @@ bool ATileChunk::HasSquare(FIntVector Position)
 {
 	FSquareTile* Tile = Tiles.Find(Position);
 	return Tile != nullptr;
+}
+
+TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject)
+{
+	TStaticArray<float, customDataFloats> instanceData;
+	
+	instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tileDef.Albedo;
+	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tileDef.Metallic;
+	instanceData[(int)ETileInstanceDataIndex::NORMAL_TEX] = (float)tileDef.Normal;
+	instanceData[(int)ETileInstanceDataIndex::SPECULAR_TEX] = (float)tileDef.Specular;
+	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tileDef.BaseMetallic;
+	instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tileDef.BaseRoughness;
+	instanceData[(int)ETileInstanceDataIndex::OBJ_DIRECTION] = (float)tileObject.Direction;
+	instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f; //should cut
+	instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f; //force cut
+	
+	return instanceData;
 }

@@ -19,10 +19,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	UPROPERTY(EditAnywhere, ReplicatedUsing=OnRep_Chunks)
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_Chunks)
 	TArray<ATileChunk*> Chunks;
-
+	
+protected:
 	UPROPERTY(EditAnywhere)
 	TMap<FIntVector2, ATileChunk*> ChunkLookup;
 	
@@ -30,10 +31,10 @@ protected:
 	UDataTable* TileDataTable;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FIntVector, int> Rooms;
+	TMap<FIntVector, int> RoomTilesToID;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<int, FRoomValue> RoomsLookup;
+	TMap<int, FRoomValue> RoomIDToTiles;
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
@@ -66,12 +67,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddRoomTile(FIntVector tilePosition, int roomID);
 	
+	UFUNCTION(BlueprintCallable)
+	void InvalidateRoomAt(FIntVector tilePosition);
+	
+	UFUNCTION(BlueprintCallable)
+	void ResetCurrentState();
+	
 	UFUNCTION()
 	void OnRep_Chunks();
 	
-	///Sets the instance data property for all objects on a square, returns true if succeeded
+	///Sets the instance data property for all objects on a square, returns true if succeeded,
+	///can be filtered using FTileSearchFilter
 	UFUNCTION(BlueprintCallable)
-	bool SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue);
+	bool SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue, 
+		FTileSearchFilter searchFilter = FTileSearchFilter());
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasCeilingAt(FIntVector pos);
@@ -92,4 +101,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool SquareHasObjectOfCategoryAndRotation(FVector worldPosition, ETileCategory category, ETileDirection rotation);
+	
+	UFUNCTION(BlueprintCallable)
+	TArray<FIntVector> Raycast(FIntVector start, FIntVector end);
+	
+	UFUNCTION(BlueprintCallable)
+	TArray<FIntVector> ThickRaycast(FIntVector start, FIntVector end, int32 thickness);
 };

@@ -179,15 +179,17 @@ public:
 	}
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FIntVector> tiles;
+	TSet<FIntVector> tiles;
 	
 	void AddRoomTile(FIntVector tile)
 	{
-		tiles.AddUnique(tile);
+		if (tiles.Contains(tile)) return;
+		tiles.Add(tile);
 	}
 	
 	void RemoveRoomTile(FIntVector tile)
 	{
+		if (!tiles.Contains(tile)) return;
 		tiles.Remove(tile);
 	}
 };
@@ -311,6 +313,31 @@ struct FTileEntry
 public:
 	FIntVector Location;
 	FSquareTile Tile;
+};
+
+USTRUCT(BlueprintType)
+struct FTileSearchFilter
+{
+	GENERATED_BODY()
+	
+public:
+	TSet<ETileCategory> IncludeCategories;
+	int32 minZLevel = -1;
+	
+	void IncludeCategory(ETileCategory Category)
+	{
+		IncludeCategories.Add(Category);
+	}
+	
+	bool IsIncludedCategory(const FTileDefinition& TileDef)
+	{
+		return IncludeCategories.Contains(TileDef.Category) || IncludeCategories.Num() < 1;
+	}
+	
+	void SetMinZLevel(int32 Z)
+	{
+		minZLevel = Z;
+	}
 };
 
 UCLASS()
