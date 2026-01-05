@@ -107,4 +107,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<FIntVector> ThickRaycast(FIntVector start, FIntVector end, int32 thickness);
+	
+	UFUNCTION(BlueprintCallable)
+	static TSet<FIntVector> GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea);
 };

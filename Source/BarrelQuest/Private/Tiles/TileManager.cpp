@@ -667,3 +667,74 @@ TArray<FIntVector> ATileManager::ThickRaycast(FIntVector start, FIntVector end, 
 	return allTiles.Array();
 }
 
+TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea)
+{
+    TSet<FIntVector> Results;
+    if (TargetArea.Num() == 0) return Results;
+
+    // 1. Get Room Bounds
+    int32 MinX = INT_MAX, MaxX = INT_MIN, MinY = INT_MAX, MaxY = INT_MIN;
+    int32 RoomMinZ = INT_MAX;
+    
+    for (const FIntVector& T : TargetArea)
+    {
+        MinX = FMath::Min(MinX, T.X); MaxX = FMath::Max(MaxX, T.X);
+        MinY = FMath::Min(MinY, T.Y); MaxY = FMath::Max(MaxY, T.Y);
+        RoomMinZ = FMath::Min(RoomMinZ, T.Z);
+    }
+
+    // Determine the vertical range to clear
+    int32 LowerZ = FMath::Min(CameraIdx.Z, RoomMinZ);
+    int32 UpperZ = FMath::Max(CameraIdx.Z, RoomMinZ);
+
+    // 2. Define the Vision Cone (using 4 corners of the room)
+    FVector2D Cam2D(CameraIdx.X, CameraIdx.Y);
+    FVector2D LeftRay(0, 0), RightRay(0, 0);
+    bool bInitialized = false;
+
+    FVector2D Corners[4] = { FVector2D(MinX, MinY), FVector2D(MaxX, MinY), FVector2D(MaxX, MaxY), FVector2D(MinX, MaxY) };
+    
+    for (const FVector2D& Corner : Corners)
+    {
+        FVector2D Dir = Corner - Cam2D;
+        if (Dir.IsNearlyZero()) continue;
+
+        if (!bInitialized) { LeftRay = RightRay = Dir; bInitialized = true; continue; }
+        
+        float CrossL = LeftRay.X * Dir.Y - LeftRay.Y * Dir.X;
+        float CrossR = RightRay.X * Dir.Y - RightRay.Y * Dir.X;
+        
+        if (CrossL < 0) LeftRay = Dir;
+        if (CrossR > 0) RightRay = Dir;
+    }
+
+    // 3. Scan the "Shadow" Rectangle
+    int32 ScanMinX = FMath::Min(CameraIdx.X, MinX);
+    int32 ScanMaxX = FMath::Max(CameraIdx.X, MaxX);
+    int32 ScanMinY = FMath::Min(CameraIdx.Y, MinY);
+    int32 ScanMaxY = FMath::Max(CameraIdx.Y, MaxY);
+
+    for (int32 x = ScanMinX; x <= ScanMaxX; ++x)
+    {
+        for (int32 y = ScanMinY; y <= ScanMaxY; ++y)
+        {
+            FVector2D Rel(x - CameraIdx.X, y - CameraIdx.Y);
+            if (Rel.IsNearlyZero()) continue;
+
+            bool bRightOfLeft = (LeftRay.X * Rel.Y - LeftRay.Y * Rel.X) >= -0.01f;
+            bool bLeftOfRight = (RightRay.X * Rel.Y - RightRay.Y * Rel.X) <= 0.01f;
+
+            if (bRightOfLeft && bLeftOfRight)
+            {
+                // ADD THE ENTIRE VERTICAL PILLAR
+                // This is the "magic" fix for high cameras.
+                // It ensures that even if a wall is on Z=2 and the room is Z=1, it gets hidden.
+                for (int32 z = LowerZ; z <= UpperZ; ++z)
+                {
+                    Results.Add(FIntVector(x, y, z));
+                }
+            }
+        }
+    }
+    return Results;
+}

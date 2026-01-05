@@ -33,6 +33,15 @@ enum class ETileTextureIndex : uint8
 	DEBUG,
 	WOOD,
 	BRICK,
+	STONE,
+	METAL,
+	ASPHALT_TIRE_LINES,
+	ASPHALT_SMOOTHED,
+	ASPHALT_NO_TIRE_LINES,
+	SIDEWALK,
+	CARPET,
+	
+	MESH_FENCE,
 };
 
 UENUM(BlueprintType)
@@ -178,7 +187,7 @@ public:
 		AddRoomTile(tile);
 	}
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	TSet<FIntVector> tiles;
 	
 	void AddRoomTile(FIntVector tile)
@@ -204,13 +213,13 @@ public:
 	FTileObject(const FTileObject& Other) = default;
 	FTileObject& operator=(const FTileObject& Other) = default;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, SaveGame)
 	FName ID;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, SaveGame)
 	ETileDirection Direction;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, SaveGame)
 	FTileRuntimeData runtimeData;
 	
 	UPROPERTY(BlueprintReadOnly)
@@ -228,13 +237,14 @@ struct FSquareTile
 	
 protected:
 	///DONT USE THIS TO SET VALUES
+	UPROPERTY(EditAnywhere, SaveGame)
 	TArray<FTileObject> objects;
 	
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	uint8 wallMask = 0x0;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	uint8 flags = 0x0;
 	
 	///Returns a copy of the objects array

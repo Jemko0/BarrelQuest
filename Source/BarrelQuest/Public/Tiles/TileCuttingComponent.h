@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
 #include "Tiles/TileLibrary.h"
 #include "Tiles/TileManager.h"
@@ -32,8 +33,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
 	bool isTargetInBuilding = false;
 	
+	UCameraComponent* ownerCamera;
+	
 	UPROPERTY()
-	int32 lastZLevel = 0;
+	int32 lastZ = 0;
+	
+	UPROPERTY()
+	int32 currentZ = 0;
+	
+	UPROPERTY()
+	bool zChanged = false;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
 	float tileBehindThreshold = -0.25f;
@@ -59,6 +68,12 @@ public:
 	TSet<FIntVector> tilesThatUndoShouldCut;
 	TSet<FIntVector> tilesThatShouldCut;
 	
+	TSet<FIntVector> importantVisibilityTiles;
+	//temp
+	TSet<FIntVector> TilesBlockingFocus;
+	TSet<FIntVector> TilesBlockingImportant;
+	TSet<FIntVector> hitTilesThisFrame;
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void PreUpdate();
 	void Update();
@@ -68,7 +83,7 @@ public:
 	bool CheckBuilding();
 	
 	void CheckObstructingTiles();
-	
+	void UpdateImportantVisibilityTiles();
 	void UpdateTileVisibility();
 	
 protected:

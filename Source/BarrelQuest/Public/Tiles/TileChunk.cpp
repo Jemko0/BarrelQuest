@@ -57,7 +57,8 @@ void ATileChunk::BuildChunk()
     }
     HISMMap.Empty();
     HISMReverseLookup.Empty();
-
+	UE_LOG(LogBarrelQuest, Warning, TEXT("BuildChunk called, Tiles count: %d"), Tiles.Num());
+	
     // Iterate all tiles in this chunk
     for (auto& TilePair : Tiles)
     {
@@ -117,12 +118,17 @@ void ATileChunk::BuildChunk()
         	
             TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef);
             HISM->SetCustomData(InstanceIndex, InstanceData, true);
+        	
+        	UE_LOG(LogBarrelQuest, Warning, TEXT("HISM %s has %d instances"), *Key.Mesh->GetName(), HISM->GetInstanceCount());
         }
     }
 	
 	for (auto& HISM : HISMMap)
 	{
+		HISM.Value->BuildTreeIfOutdated(true, false);  // Rebuild the HISM tree
 		HISM.Value->MarkRenderStateDirty();
+		
+		
 	}
 }
 
