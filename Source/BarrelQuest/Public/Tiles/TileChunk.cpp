@@ -38,6 +38,7 @@ void ATileChunk::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ATileChunk, ReplicatedTiles);
 }
 
+///Builds the chunk using the tile data and creates HISM + Instances
 void ATileChunk::BuildChunk()
 {
     ATileManager* mgr = GetOwningTileManager();
@@ -84,13 +85,7 @@ void ATileChunk::BuildChunk()
             // Lazily create HISM component
             if (!HISMMap.Contains(Key))
             {
-                UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-                HISM->SetStaticMesh(TileDef.Mesh);
-                HISM->SetMaterial(0, TileDef.ParentMaterial);
-                HISM->SetNumCustomDataFloats(customDataFloats);
-                HISM->RegisterComponent();
-                HISMMap.Add(Key, HISM);
-                HISMReverseLookup.Add(Key, TArray<FObjectReference>());
+				UHierarchicalInstancedStaticMeshComponent* HISM = LazyCreateHISM(Key, TileDef);
             }
 
             UHierarchicalInstancedStaticMeshComponent* HISM = HISMMap[Key];
@@ -127,11 +122,11 @@ void ATileChunk::BuildChunk()
 	{
 		HISM.Value->BuildTreeIfOutdated(true, false);  // Rebuild the HISM tree
 		HISM.Value->MarkRenderStateDirty();
-		
-		
 	}
 }
 
+///Adds an object instance, does NOT add object data! Only adds an instance to the corresponding HISM 
+///(or creates a new HISM if it has to)
 void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex, FTileObject& ObjectDef)
 {
     ATileManager* mgr = GetOwningTileManager();
@@ -146,13 +141,7 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     if (!HISMMap.Contains(Key))
     {
         // If HISM doesn't exist, lazily Create it
-        UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-        HISM->SetStaticMesh(TileDef.Mesh);
-        HISM->SetMaterial(0, TileDef.ParentMaterial);
-        HISM->SetNumCustomDataFloats(customDataFloats);
-        HISM->RegisterComponent();
-        HISMMap.Add(Key, HISM);
-        HISMReverseLookup.Add(Key, TArray<FObjectReference>());
+        UHierarchicalInstancedStaticMeshComponent* HISM = LazyCreateHISM(Key, TileDef);
     }
 
     UHierarchicalInstancedStaticMeshComponent* HISM = HISMMap[Key];
@@ -183,6 +172,7 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
+///Removes an object instance, does NOT remove its data, only the visual instance that lives in the HISM
 void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
 {
     // If it was never rendered (e.g. logic block), ignore
@@ -242,6 +232,7 @@ ATileManager* ATileChunk::GetOwningTileManager() const
 	return Cast<ATileManager>(GetOwner());
 }
 
+///Tries to get a tile, if not found will create one and return a mutable reference to it
 FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 {
 	FSquareTile* Tile = Tiles.Find(Position);
@@ -256,6 +247,7 @@ FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 	return newTile;
 }
 
+///Adds a square, will automatically add the objects as well.
 FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSquare)
 {
 	FSquareTile& AddedTile = Tiles.Add(Position, newSquare);
@@ -268,6 +260,8 @@ FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSq
 	
 	return AddedTile;
 }
+
+///Adds a new object at the positions square, adds data and instance visual. Use this to create new tiles
 void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 {
 	FSquareTile& tile = GetOrCreateSquareTile(Position);
@@ -293,13 +287,9 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 		else if (Object.Direction == ETileDirection::SOUTH) { neighborGlobal.Y -= 1; oppDir = ETileDirection::NORTH; }
 		else if (Object.Direction == ETileDirection::EAST)  { neighborGlobal.X += 1; oppDir = ETileDirection::WEST;  }
 		else if (Object.Direction == ETileDirection::WEST)  { neighborGlobal.X -= 1; oppDir = ETileDirection::EAST;  }
-       
-		bool found = false;
+		
 		FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborGlobal);
-		if (found)
-		{
-			NeighborTile.SetWall(oppDir, true);
-		}
+		NeighborTile.SetWall(oppDir, true);
 	}
 	else if (cat == ETileCategory::FLOOR)
 	{
@@ -310,6 +300,74 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 	}
 }
 
+///Removes an object instance and its underlying data representation. Use this to remove objects when modifying
+///tiles.
+void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
+{
+	bool found = false;
+    FSquareTile* tile = GetSquareTilePtr(Position, found);
+    
+    if (!found) return;
+
+    RemoveObjectInstance(Object);
+
+    ATileManager* mgr = GetOwningTileManager();
+    if (mgr)
+    {
+        mgr->InvalidateRoomAt(Position);
+        const FTileDefinition& TileDef = mgr->GetTileByID(Object.ID);
+        
+        if (UTileLibrary::CountsAsWall(TileDef.Category))
+        {
+           tile->SetWall(Object.Direction, false);
+           
+           FIntVector neighborPos = Position;
+           ETileDirection oppDir = Object.Direction;
+
+           if (Object.Direction == ETileDirection::NORTH) { neighborPos.Y += 1; oppDir = ETileDirection::SOUTH; }
+           else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.Y -= 1; oppDir = ETileDirection::NORTH; }
+           else if (Object.Direction == ETileDirection::EAST)  { neighborPos.X += 1; oppDir = ETileDirection::WEST;  }
+           else if (Object.Direction == ETileDirection::WEST)  { neighborPos.X -= 1; oppDir = ETileDirection::EAST;  }
+        	
+           FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
+		   NeighborTile.SetWall(oppDir, false);
+        }
+        else if (TileDef.Category == ETileCategory::FLOOR)
+        {
+           FIntVector belowPos = Position - FIntVector(0, 0, 1);
+           FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
+		   belowTile.SetHasCeiling(false);
+        }
+    }
+
+    TArray<FTileObject>& Objs = tile->GetObjectsOnSquare();
+    for (int32 i = 0; i < Objs.Num(); i++)
+    {
+        if (Objs[i].RenderInstanceIndex == Object.RenderInstanceIndex && Objs[i].ID == Object.ID)
+        {
+        	tile->RemoveObjectByIndex(i);
+            
+        	//fix the shifting indices
+        	for (int32 j = i; j < Objs.Num(); j++)
+        	{
+        		const FTileDefinition& Def = mgr->GetTileByID(Objs[j].ID);
+        		FTileRenderKey Key { Def.Mesh, Def.ParentMaterial };
+            
+        		if (HISMReverseLookup.Contains(Key))
+        		{
+        			int32 RenderIdx = Objs[j].RenderInstanceIndex;
+        			if (HISMReverseLookup[Key].IsValidIndex(RenderIdx))
+        			{
+        				HISMReverseLookup[Key][RenderIdx].ObjectArrayIndex = j;
+        			}
+        		}
+        	}
+        	break;
+        }
+    }
+}
+
+///Returns a mutable array reference of the objects living on the positions square
 TArray<FTileObject>& ATileChunk::GetObjectsOnSquare(FIntVector Position, bool& success)
 {
 	static TArray<FTileObject> EmptyArray; // fallback
@@ -324,6 +382,7 @@ TArray<FTileObject>& ATileChunk::GetObjectsOnSquare(FIntVector Position, bool& s
 	return Tile->GetObjectsOnSquare();
 }
 
+///Converts a local tile coordinate into a global tile
 FIntVector ATileChunk::LocalToGlobalTileIndex(FIntVector LocalPosition)
 {
 	int x = (ChunkPosition.X * ChunkSize.X) + LocalPosition.X;
@@ -333,6 +392,7 @@ FIntVector ATileChunk::LocalToGlobalTileIndex(FIntVector LocalPosition)
 	return FIntVector(x, y, z);
 }
 
+///Gets a immutable reference to the square at the position
 const FSquareTile& ATileChunk::GetSquareTile(FIntVector Position, bool& success)
 {
 	success = true;
@@ -349,6 +409,35 @@ const FSquareTile& ATileChunk::GetSquareTile(FIntVector Position, bool& success)
 	return fallback;
 }
 
+///Gets a pointer to the square at the position. Cannot be called from blueprint
+FSquareTile* ATileChunk::GetSquareTilePtr(FIntVector Position, bool& success)
+{
+	FSquareTile* ptr = Tiles.Find(Position);
+	success = ptr != nullptr;
+	return ptr;
+}
+
+void ATileChunk::RemoveSquareAt(FIntVector Position)
+{
+	bool success;
+	FSquareTile* square = GetSquareTilePtr(Position, success);
+    
+	if (!success || !square)
+	{
+		return;
+	}
+    
+	TArray<FTileObject>& objects = square->GetObjectsOnSquare();
+	
+	for (int32 i = objects.Num() - 1; i >= 0; --i)
+	{
+		RemoveObject(Position, objects[i]);
+	}
+	
+	Tiles.Remove(Position);
+}
+
+//Returns true if a square exists at the tile position
 bool ATileChunk::HasSquare(FIntVector Position)
 {
 	FSquareTile* Tile = Tiles.Find(Position);
@@ -370,4 +459,18 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f; //force cut
 	
 	return instanceData;
+}
+
+UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef)
+{
+	UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
+	HISM->SetStaticMesh(tileDef.Mesh);
+	HISM->SetMaterial(0, tileDef.ParentMaterial);
+	HISM->SetNumCustomDataFloats(customDataFloats);
+	HISM->RuntimeVirtualTextures = RVTOutputs;
+	HISM->RegisterComponent();
+	HISMMap.Add(key, HISM);
+	HISMReverseLookup.Add(key, TArray<FObjectReference>());
+	
+	return HISM;
 }

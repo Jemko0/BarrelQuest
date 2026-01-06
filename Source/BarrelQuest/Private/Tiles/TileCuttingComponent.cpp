@@ -58,6 +58,11 @@ void UTileCuttingComponent::RestoreLastRoom()
 		tilesToUndoForceCut.Add(tile);
 	}
 	
+	for (auto& tile : hitTilesLastFrame)
+	{
+		tilesToUndoForceCut.Add(tile);
+	}
+	
 	hitTilesLastFrame.Empty();
 }
 
@@ -93,14 +98,7 @@ bool UTileCuttingComponent::CheckBuilding()
 		roomWithCeilings.Add(roomTile + FIntVector(0, 0, 1));
 	}
 	
-	if (CurrentRoomID == -1)
-	{
-		isTargetInBuilding = false;
-	}
-	else
-	{
-		isTargetInBuilding = true;
-	}
+	isTargetInBuilding = CurrentRoomID != -1;
 	
 	FIntVector targetTilePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 	
@@ -162,7 +160,7 @@ void UTileCuttingComponent::CheckObstructingTiles()
 	
 	hitTilesThisFrame.Empty();
 	//only mark tiles as obstructed if we are actually obstructed and z didnt change
-	if (!zChanged && isTargetObstructed) 
+	if (!zChanged && isTargetObstructed)
 	{
 		TilesBlockingImportant = ATileManager::GetObstructingAreaIndices(cameraTile, importantVisibilityTiles);
 		TilesBlockingImportant.Append(TileManager->ThickRaycast(focusTile, cameraTile, CameraOcclusionThickness));

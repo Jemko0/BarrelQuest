@@ -253,6 +253,11 @@ public:
 		return objects;
 	}
 	
+	const TArray<FTileObject>& GetReadOnlyObjects() const
+	{
+		return objects;
+	}
+	
 	void SetWall(ETileDirection direction, bool wallState)
 	{
 		uint8 bit = 1 << (uint8)direction;

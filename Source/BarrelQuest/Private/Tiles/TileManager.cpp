@@ -517,6 +517,70 @@ bool ATileManager::PlaceObjectAtWorld(FVector WorldPosition, FTileObject NewObje
 	return true;
 }
 
+///Removes the first object found on the square with the corresponding ID
+bool ATileManager::RemoveObjectAtWorldByID(FVector worldPosition, FName ID)
+{
+	ATileChunk* chunkPtr = GetChunkAtWorld(worldPosition);
+	if (!chunkPtr)
+	{
+		return false;
+	}
+	
+	FIntVector tilePos = UTileLibrary::WorldToTilePosition(worldPosition);
+	bool found = false;
+	FSquareTile* square = chunkPtr->GetSquareTilePtr(tilePos, found);
+	
+	if (!found)
+	{
+		return false;
+	}
+	
+	TArray<FTileObject>& squareObjects = square->GetObjectsOnSquare();
+	
+	for (int32 i = 0; i < squareObjects.Num(); i++)
+	{
+		if (squareObjects[i].ID == ID)
+		{
+			// Capture a COPY of the object data
+			// This way, when the array shifts, our 'TargetObj' is still valid
+			FTileObject TargetObj = squareObjects[i];
+
+			// Use the logic function to clean up HISM and the array
+			chunkPtr->RemoveObject(tilePos, TargetObj);
+          
+			return true; // Exit immediately once found and removed
+		}
+	}
+	
+	return false;
+}
+
+bool ATileManager::HasSquareAtWorld(FVector worldPosition)
+{
+	ATileChunk* chunkPtr = GetChunkAtWorld(worldPosition);
+	FIntVector tilePos = UTileLibrary::WorldToTilePosition(worldPosition);
+	if (!chunkPtr)
+	{
+		return false;
+	}
+	return chunkPtr->HasSquare(tilePos);
+}
+
+bool ATileManager::RemoveSquareAtWorld(FVector worldPosition)
+{
+	if (!HasSquareAtWorld(worldPosition))
+	{
+		return false;
+	}
+	
+	ATileChunk* chunkPtr = GetChunkAtWorld(worldPosition);
+	FIntVector tilePos = UTileLibrary::WorldToTilePosition(worldPosition);
+	
+	chunkPtr->RemoveSquareAt(tilePos);
+	
+	return true;
+}
+
 ATileChunk* ATileManager::SpawnChunk(FIntVector2 Position)
 {
 	const FVector TileSize = UTileLibrary::GetTileSize();
@@ -538,7 +602,8 @@ ATileChunk* ATileManager::SpawnChunk(FIntVector2 Position)
 	);
     
 	newChunk->ChunkPosition = Position;
-
+	newChunk->RVTOutputs = ChunkRVTs;
+	
 	ChunkLookup.Add(newChunk->ChunkPosition, newChunk);
 	Chunks.Add(newChunk);
     
@@ -575,16 +640,25 @@ bool ATileManager::SquareHasObjectOfCategoryAndRotation(FVector worldPosition, E
 {
 	bool found = false;
 	const FSquareTile& square = GetSquareTile(worldPosition, found);
-	
+    
 	if (!found)
 	{
 		return false;
 	}
+
+	//iterate through the actual objects on this tile
+	const TArray<FTileObject>& objects = square.GetReadOnlyObjects();
 	
-	bool hasCategory = square.HasObjectOfCategory(category, this);
-	bool hasDirection = square.HasObjectOfDirection(rotation);
-	
-	return hasCategory && hasDirection;
+	for (const FTileObject& o : objects)
+	{
+		FTileDefinition def = GetTileByID(o.ID);
+		if (def.Category == category && o.Direction == rotation)
+		{
+			return true;
+		}
+	}
+    
+	return false;
 }
 
 TArray<FIntVector> ATileManager::Raycast(FIntVector start, FIntVector end)
@@ -672,7 +746,7 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
     TSet<FIntVector> Results;
     if (TargetArea.Num() == 0) return Results;
 
-    // 1. Get Room Bounds
+    //get Room Bounds
     int32 MinX = INT_MAX, MaxX = INT_MIN, MinY = INT_MAX, MaxY = INT_MIN;
     int32 RoomMinZ = INT_MAX;
     
@@ -683,16 +757,21 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
         RoomMinZ = FMath::Min(RoomMinZ, T.Z);
     }
 
-    // Determine the vertical range to clear
+    //determine the vertical range to clear
     int32 LowerZ = FMath::Min(CameraIdx.Z, RoomMinZ);
     int32 UpperZ = FMath::Max(CameraIdx.Z, RoomMinZ);
 
-    // 2. Define the Vision Cone (using 4 corners of the room)
+    // vision cone
     FVector2D Cam2D(CameraIdx.X, CameraIdx.Y);
     FVector2D LeftRay(0, 0), RightRay(0, 0);
     bool bInitialized = false;
 
-    FVector2D Corners[4] = { FVector2D(MinX, MinY), FVector2D(MaxX, MinY), FVector2D(MaxX, MaxY), FVector2D(MinX, MaxY) };
+	constexpr int padding = 1;
+	
+	FVector2D Corners[4] = { 
+		FVector2D(MinX - padding, MinY - padding), FVector2D(MaxX + padding, MinY - padding),
+		FVector2D(MaxX + padding, MaxY + padding), FVector2D(MinX - padding, MaxY + padding) 
+	};
     
     for (const FVector2D& Corner : Corners)
     {
@@ -708,7 +787,7 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
         if (CrossR > 0) RightRay = Dir;
     }
 
-    // 3. Scan the "Shadow" Rectangle
+    //scan the shadow Rectangle
     int32 ScanMinX = FMath::Min(CameraIdx.X, MinX);
     int32 ScanMaxX = FMath::Max(CameraIdx.X, MaxX);
     int32 ScanMinY = FMath::Min(CameraIdx.Y, MinY);

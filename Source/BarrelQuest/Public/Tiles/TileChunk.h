@@ -39,6 +39,10 @@ public:
 	UPROPERTY(ReplicatedUsing=OnRep_ReplicatedTiles)
 	TArray<FTileEntry> ReplicatedTiles;
 	
+	///MUST be initialized please
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<TObjectPtr<URuntimeVirtualTexture>> RVTOutputs;
+	
 	// Called on clients when Tiles is updated
 	UFUNCTION()
 	void OnRep_ReplicatedTiles();
@@ -66,6 +70,9 @@ public:
 	void AddObject(FIntVector Position, const FTileObject& Object);
 	
 	UFUNCTION(BlueprintCallable)
+	void RemoveObject(FIntVector Position, const FTileObject& Object);
+	
+	UFUNCTION(BlueprintCallable)
 	TArray<FTileObject>& GetObjectsOnSquare(FIntVector Position, bool& success);
 	
 	UFUNCTION(BlueprintCallable)
@@ -74,8 +81,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const FSquareTile& GetSquareTile(FIntVector Position, bool& success);
 	
+	FSquareTile* GetSquareTilePtr(FIntVector Position, bool& success);
+	
+	UFUNCTION(BlueprintCallable)
+	void RemoveSquareAt(FIntVector Position);
+	
 	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
 	
 	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef,const FTileObject& tileObject);
+	
+	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
 };

@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<int, FRoomValue> RoomIDToTiles;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<TObjectPtr<URuntimeVirtualTexture>> ChunkRVTs;
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	// Called every frame
@@ -89,6 +92,15 @@ public:
 	/// If the chunk doesn't exist, it will create it. If it cant be placed, will return false
 	UFUNCTION(BlueprintCallable)
 	bool PlaceObjectAtWorld(FVector worldPosition, FTileObject newObject);
+	
+	UFUNCTION(BlueprintCallable)
+	bool RemoveObjectAtWorldByID(FVector worldPosition, FName ID);
+	
+	UFUNCTION(BlueprintCallable)
+	bool HasSquareAtWorld(FVector worldPosition);
+	
+	UFUNCTION(BlueprintCallable)
+	bool RemoveSquareAtWorld(FVector worldPosition);
 	
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* SpawnChunk(FIntVector2 Position);
