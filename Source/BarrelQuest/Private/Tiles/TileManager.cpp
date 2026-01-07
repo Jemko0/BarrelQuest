@@ -142,7 +142,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 		{FIntVector(0, 0, 1), TEXT("UP")},
 		{FIntVector(0, 0, -1), TEXT("DOWN")}};
 
-	const int MAX_ROOM_SIZE = 1000;
+	const int MAX_ROOM_SIZE = 5000;
 	int maxZ = startCoord.Z;
 	int minZ = startCoord.Z;
 
@@ -239,12 +239,15 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 					
 					if (!neighborFound)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("LEAK UP: %s has no ceiling and no neighbor above!"), *current.ToString());
-						bLeaked = true;
-						break;
+						if (!HasCeilingAbove(current))
+						{
+							UE_LOG(LogTemp, Warning, TEXT("LEAK UP: %s has no ceiling at any level above!"), *current.ToString());
+							bLeaked = true;
+							break;
+						}
 					}
 					
-					canTraverse = neighborFound; // Only traverse if destination exists
+					canTraverse = true; // Traverse to neighbor or through air if ceiling exists above
 				}
 			}
 			else if (check.Offset.Z == -1)
@@ -264,12 +267,15 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 					
 					if (!neighborFound)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("LEAK DOWN: %s has no floor and no neighbor below!"), *current.ToString());
-						bLeaked = true;
-						break;
+						if (!HasFloorBelow(current))
+						{
+							UE_LOG(LogTemp, Warning, TEXT("LEAK DOWN: %s has no floor at any level below!"), *current.ToString());
+							bLeaked = true;
+							break;
+						}
 					}
 					
-					canTraverse = neighborFound; // Only traverse if destination exists
+					canTraverse = true; // Traverse to neighbor or through air if floor exists below
 				}
 			}
 
@@ -345,17 +351,7 @@ int ATileManager::GetRoomAt(FVector worldPosition, FRoomValue& room)
 	FIntVector tilePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 
 	//if we are standing on a tile that doesnt have a ceiling then we are not inside a room
-	bool hasCeilingAbove = false;
-	for (int zOffset = 0; zOffset < 31; zOffset++)
-	{
-		if (HasCeilingAt(tilePosition + FIntVector(0, 0, zOffset)))
-		{
-			hasCeilingAbove = true;
-			break;
-		}
-	}
-
-	if (!hasCeilingAbove)
+	if (!HasCeilingAbove(tilePosition))
 	{
 		return -1; //not inside a room
 	}
@@ -572,6 +568,32 @@ bool ATileManager::HasCeilingAt(FIntVector pos)
 	const FSquareTile& tile = GetSquareTileByTileIndex(pos, found);
 	
 	return found && tile.HasCeiling();
+}
+
+bool ATileManager::HasCeilingAbove(FIntVector pos)
+{
+	// Check up to the max height of the chunk system (ATileChunk::ChunkSize.Z)
+	for (int z = pos.Z; z < ATileChunk::ChunkSize.Z * 4; ++z)
+	{
+		if (HasCeilingAt(FIntVector(pos.X, pos.Y, z)))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ATileManager::HasFloorBelow(FIntVector pos)
+{
+	// In this system, a floor at Z is represented by HasCeiling at Z-1
+	for (int z = pos.Z; z >= 0; --z)
+	{
+		if (HasCeilingAt(FIntVector(pos.X, pos.Y, z - 1)))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 int ATileManager::GetRoomIDAt(FIntVector tilePosition)

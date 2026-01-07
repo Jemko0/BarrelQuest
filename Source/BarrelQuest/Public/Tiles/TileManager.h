@@ -97,6 +97,12 @@ public:
 	int GetRoomIDAt(FIntVector tilePosition);
 	
 	UFUNCTION(BlueprintCallable)
+	bool HasCeilingAbove(FIntVector pos);
+
+	UFUNCTION(BlueprintCallable)
+	bool HasFloorBelow(FIntVector pos);
+	
+	UFUNCTION(BlueprintCallable)
 	FRoomValue GetRoomByID(int id);
 	
 	///Places a TileObject at the world position, if the square doesn't exist, it will create it.
