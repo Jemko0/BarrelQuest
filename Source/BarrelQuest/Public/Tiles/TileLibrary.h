@@ -187,8 +187,31 @@ public:
 		AddRoomTile(tile);
 	}
 	
+	FRoomValue(FIntVector tile, bool exit)
+	{
+		AddRoomTile(tile);
+		if (exit)
+		{
+			AddExitTile(tile);
+		}
+	}
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	TSet<FIntVector> tiles;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	TSet<FIntVector> exits;
+	
+	void AddExitTile(const FIntVector& tile)
+	{
+		AddRoomTile(tile);
+		exits.Add(tile);
+	}
+	
+	void RemoveExitTile(const FIntVector& tile)
+	{
+		exits.Remove(tile);
+	}
 	
 	void AddRoomTile(FIntVector tile)
 	{
@@ -232,6 +255,12 @@ struct FSquareTile
 	GENERATED_BODY()
 	
 	FSquareTile() = default;
+	
+	FSquareTile(FIntVector globalPos)
+	{
+		globalPosition = globalPos;
+	}
+	
 	FSquareTile(const FSquareTile& Other) = default;
 	FSquareTile& operator=(const FSquareTile& Other) = default;
 	
@@ -246,6 +275,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	uint8 flags = 0x0;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	FIntVector globalPosition;
 	
 	///Returns a copy of the objects array
 	TArray<FTileObject>& GetObjectsOnSquare()
@@ -326,6 +358,11 @@ struct FTileEntry
 	GENERATED_BODY()
 	
 public:
+	FTileEntry() : Tile(FIntVector(0, 0, 0))
+	{
+		Location = FIntVector(0, 0, 0);
+	}
+
 	FIntVector Location;
 	FSquareTile Tile;
 };
@@ -421,4 +458,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static bool CountsAsWall(ETileCategory cat);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static ETileDirection GetOppositeDirection(const ETileDirection& inDir);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static FIntVector GetTileIndexOffsetFromDirection(const ETileDirection& inDir);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static bool IsSquareExitSquare(ATileManager* mgr, const FSquareTile& square, FIntVector squarePos, int currentRoomID);
 };

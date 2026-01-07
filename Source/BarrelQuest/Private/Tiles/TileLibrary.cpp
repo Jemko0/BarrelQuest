@@ -195,4 +195,90 @@ bool UTileLibrary::CountsAsWall(ETileCategory cat)
 	return cat == ETileCategory::WALL || cat == ETileCategory::DOORFRAME;
 }
 
+ETileDirection UTileLibrary::GetOppositeDirection(const ETileDirection& inDir)
+{
+	switch (inDir)
+	{
+		case ETileDirection::NORTH:
+		return ETileDirection::SOUTH;
+	
+		case ETileDirection::SOUTH:
+		return ETileDirection::NORTH;
+		
+		case ETileDirection::EAST:
+		return ETileDirection::WEST;
+		
+		case ETileDirection::WEST:
+		return ETileDirection::EAST;
+	}
+	
+	return ETileDirection::NORTH;
+}
+
+FIntVector UTileLibrary::GetTileIndexOffsetFromDirection(const ETileDirection& inDir)
+{
+	switch (inDir)
+	{
+		case ETileDirection::NORTH:
+		return FIntVector(1, 0, 0);
+		
+		case ETileDirection::EAST:
+		return FIntVector(0, 1, 0);
+		
+		case ETileDirection::SOUTH:
+		return FIntVector(-1, 0, 0);
+		
+		case ETileDirection::WEST:
+		return FIntVector(0, -1, 0);
+	}
+	
+	return FIntVector(0, 0, 0);
+}
+
+bool UTileLibrary::IsSquareExitSquare(ATileManager* mgr, const FSquareTile& square, FIntVector squarePos, int currentRoomID)
+{
+	// Check if this square has a doorframe leading out to a different room
+	auto& objects = square.GetReadOnlyObjects();
+	for (auto& object : objects)
+	{
+		const FTileDefinition& def = mgr->GetTileByID(object.ID);
+		if (def.Category == ETileCategory::DOORFRAME)
+		{
+			FIntVector neighborPos = squarePos + GetTileIndexOffsetFromDirection(object.Direction);
+			if (mgr->GetRoomIDAt(neighborPos) != currentRoomID)
+			{
+				return true;
+			}
+		}
+	}
+
+	// Check if a neighbor has a doorframe leading into this square from a different room
+	TArray<ETileDirection> Dirs = { ETileDirection::NORTH, ETileDirection::EAST, ETileDirection::SOUTH, ETileDirection::WEST };
+	for (ETileDirection dir : Dirs)
+	{
+		FIntVector neighborPos = squarePos + GetTileIndexOffsetFromDirection(dir);
+		bool found = false;
+		const FSquareTile& neighborSquare = mgr->GetSquareTileByTileIndex(neighborPos, found);
+		
+		if (found)
+		{
+			ETileDirection opposite = GetOppositeDirection(dir);
+			for (auto& nObject : neighborSquare.GetReadOnlyObjects())
+			{
+				const FTileDefinition& nDef = mgr->GetTileByID(nObject.ID);
+				if (nDef.Category == ETileCategory::DOORFRAME && nObject.Direction == opposite)
+				{
+					// Neighbor has a door pointing at us. Is it from a different room?
+					if (mgr->GetRoomIDAt(neighborPos) != currentRoomID)
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	
+	return false;
+}
+
 

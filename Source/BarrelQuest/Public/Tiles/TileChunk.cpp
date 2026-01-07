@@ -25,7 +25,7 @@ void ATileChunk::PrepareForReplication()
 	ReplicatedTiles.Empty();
 	for (auto& Pair : Tiles)
 	{
-		FTileEntry Entry;
+		FTileEntry Entry = FTileEntry();
 		Entry.Location = Pair.Key;
 		Entry.Tile = Pair.Value;
 		ReplicatedTiles.Add(Entry);
@@ -242,7 +242,7 @@ FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 	}
 	
 	//tile is nullptr
-	FSquareTile& newTile = AddSquare(Position, FSquareTile());
+	FSquareTile& newTile = AddSquare(Position, FSquareTile(Position));
 	
 	return newTile;
 }
@@ -283,10 +283,10 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 		FIntVector neighborGlobal = LocalToGlobalTileIndex(Position);
 		ETileDirection oppDir = Object.Direction;
 
-		if (Object.Direction == ETileDirection::NORTH) { neighborGlobal.Y += 1; oppDir = ETileDirection::SOUTH; }
-		else if (Object.Direction == ETileDirection::SOUTH) { neighborGlobal.Y -= 1; oppDir = ETileDirection::NORTH; }
-		else if (Object.Direction == ETileDirection::EAST)  { neighborGlobal.X += 1; oppDir = ETileDirection::WEST;  }
-		else if (Object.Direction == ETileDirection::WEST)  { neighborGlobal.X -= 1; oppDir = ETileDirection::EAST;  }
+		if (Object.Direction == ETileDirection::NORTH) { neighborGlobal.X += 1; oppDir = ETileDirection::SOUTH; }
+		else if (Object.Direction == ETileDirection::SOUTH) { neighborGlobal.X -= 1; oppDir = ETileDirection::NORTH; }
+		else if (Object.Direction == ETileDirection::EAST)  { neighborGlobal.Y += 1; oppDir = ETileDirection::WEST;  }
+		else if (Object.Direction == ETileDirection::WEST)  { neighborGlobal.Y -= 1; oppDir = ETileDirection::EAST;  }
 		
 		FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborGlobal);
 		NeighborTile.SetWall(oppDir, true);
@@ -324,10 +324,10 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
            FIntVector neighborPos = Position;
            ETileDirection oppDir = Object.Direction;
 
-           if (Object.Direction == ETileDirection::NORTH) { neighborPos.Y += 1; oppDir = ETileDirection::SOUTH; }
-           else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.Y -= 1; oppDir = ETileDirection::NORTH; }
-           else if (Object.Direction == ETileDirection::EAST)  { neighborPos.X += 1; oppDir = ETileDirection::WEST;  }
-           else if (Object.Direction == ETileDirection::WEST)  { neighborPos.X -= 1; oppDir = ETileDirection::EAST;  }
+           if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
+           else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
+           else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
+           else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
         	
            FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
 		   NeighborTile.SetWall(oppDir, false);
@@ -396,7 +396,7 @@ FIntVector ATileChunk::LocalToGlobalTileIndex(FIntVector LocalPosition)
 const FSquareTile& ATileChunk::GetSquareTile(FIntVector Position, bool& success)
 {
 	success = true;
-	static FSquareTile fallback = FSquareTile();
+	static FSquareTile fallback = FSquareTile(FIntVector(0,0,0));
 	
 	FSquareTile* Tile = Tiles.Find(Position);
 	if (Tile)

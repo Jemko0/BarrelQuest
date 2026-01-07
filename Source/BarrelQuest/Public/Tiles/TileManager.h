@@ -23,12 +23,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_Chunks)
 	TArray<ATileChunk*> Chunks;
 	
+	static UDataTable* TileDataTable;
+	
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<FIntVector2, ATileChunk*> ChunkLookup;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UDataTable* TileDataTable;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntVector, int> RoomTilesToID;
@@ -44,13 +43,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	const FSquareTile constFallbackSquareTile = FSquareTile();
-	FSquareTile fallbackSquareTile = FSquareTile();
+	const FSquareTile constFallbackSquareTile = FSquareTile(FIntVector(0,0,0));
+	FSquareTile fallbackSquareTile = FSquareTile(FIntVector(0,0,0));
+	
+	FRoomValue fallbackRoomValue = FRoomValue();
 
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* GetChunkAt(FIntVector2 Position);
 	
-	void FindRoom(FVector worldPosition);
+	void FindNewRoom(FVector worldPosition);
 	
 	UFUNCTION(BlueprintCallable)
 	int GetRoomAt(FVector worldPosition, FRoomValue& room);
@@ -68,7 +69,11 @@ public:
 	ATileChunk* GetChunkAtWorld(FVector WorldPosition);
 	
 	UFUNCTION(BlueprintCallable)
-	void AddRoomTile(FIntVector tilePosition, int roomID);
+	void AddRoomTile(FIntVector tilePosition, int roomID, bool isExit);
+	
+	UFUNCTION(BlueprintCallable)
+	FRoomValue& GetRoomRefByID(int roomID, bool& found);
+	
 	
 	UFUNCTION(BlueprintCallable)
 	void InvalidateRoomAt(FIntVector tilePosition);
@@ -88,6 +93,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasCeilingAt(FIntVector pos);
 	
+	UFUNCTION(BlueprintCallable)
+	int GetRoomIDAt(FIntVector tilePosition);
+	
+	UFUNCTION(BlueprintCallable)
+	FRoomValue GetRoomByID(int id);
+	
 	///Places a TileObject at the world position, if the square doesn't exist, it will create it.
 	/// If the chunk doesn't exist, it will create it. If it cant be placed, will return false
 	UFUNCTION(BlueprintCallable)
@@ -106,7 +117,7 @@ public:
 	ATileChunk* SpawnChunk(FIntVector2 Position);
 	
 	UFUNCTION(BlueprintCallable)
-	FTileDefinition GetTileByID(FName ID);
+	static FTileDefinition GetTileByID(FName ID);
 	
 	UFUNCTION(BlueprintCallable)
 	bool SquareHasObjectOfCategory(FVector worldPosition, ETileCategory category);

@@ -171,6 +171,9 @@ void UTileCuttingComponent::CheckObstructingTiles()
 		{
 			if (CurrentRoom.tiles.Contains(tile)) continue;
 			
+			int roomID = TileManager->GetRoomIDAt(tile);
+			FRoomValue room = TileManager->GetRoomByID(roomID);
+			
 			FVector tileWorld = UTileLibrary::TileToWorldPosition(tile);
 			FVector toObject = tileWorld - CurrentFocusPoint;
 			toObject.Z = 0.0f;
@@ -179,6 +182,7 @@ void UTileCuttingComponent::CheckObstructingTiles()
 			if (dot > tileBehindThreshold) continue;
 			
 			hitTilesThisFrame.Add(tile);
+			hitTilesThisFrame.Append(room.tiles);
 		}
 	}
 	
@@ -243,6 +247,12 @@ void UTileCuttingComponent::BeginPlay()
 void UTileCuttingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (!TileManager)
+	{
+		UE_LOG(LogBarrelQuest, Error, TEXT("ERROR: TileManager is nullptr!"));
+		return;
+	}
+	
 	PreUpdate();
 	Update();
 }

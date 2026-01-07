@@ -2,6 +2,8 @@
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
 
+UDataTable* ATileManager::TileDataTable = nullptr;
+
 // Sets default values
 ATileManager::ATileManager()
 {
@@ -9,6 +11,9 @@ ATileManager::ATileManager()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	bAlwaysRelevant = true;
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable> DTRef(TEXT("/Game/BarrelContent/Tiles/Data/New/MainTileDefinitions.MainTileDefinitions"));
+	ATileManager::TileDataTable = DTRef.Object;
 }
 
 // Called when the game starts or when spawned
@@ -17,16 +22,36 @@ void ATileManager::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATileManager::AddRoomTile(FIntVector tilePosition, int roomID)
+void ATileManager::AddRoomTile(FIntVector tilePosition, int roomID, bool isExit)
 {
 	FRoomValue* foundRoom = RoomIDToTiles.Find(roomID);
 	if (!foundRoom)
 	{
-		RoomIDToTiles.Add(roomID, FRoomValue(tilePosition));
+		RoomIDToTiles.Add(roomID, FRoomValue(tilePosition, isExit));
+		return;
+	}
+	
+	if (isExit)
+	{
+		foundRoom->AddExitTile(tilePosition);
 		return;
 	}
 	
 	foundRoom->AddRoomTile(tilePosition);
+}
+
+FRoomValue& ATileManager::GetRoomRefByID(int roomID, bool& found)
+{
+	found = true;
+	FRoomValue* roomPtr = RoomIDToTiles.Find(roomID);
+	
+	if (!roomPtr)
+	{
+		found = false;
+		return fallbackRoomValue;
+	}
+	
+	return *roomPtr;
 }
 
 void ATileManager::InvalidateRoomAt(FIntVector tilePosition)
@@ -87,145 +112,179 @@ ATileChunk* ATileManager::GetChunkAt(FIntVector2 Position)
 	return ChunkLookup.FindRef(Position);
 }
 
-void ATileManager::FindRoom(FVector worldPosition)
+void ATileManager::FindNewRoom(FVector worldPosition)
 {
-    static int nextRoomID = 1;
-    bool bLeaked = false;
-    
-    FIntVector startCoord = UTileLibrary::WorldToTilePosition(worldPosition);
-    
-    UE_LOG(LogTemp, Warning, TEXT("=== Starting FindRoom at %s ==="), *startCoord.ToString());
-    
-    TArray<FIntVector> Queue;
-    TSet<FIntVector> Visited;
-    
-    Queue.Add(startCoord);
-    Visited.Add(startCoord);
+	static int nextRoomID = 1;
+	bool bLeaked = false;
 
-    struct FDirCheck {
-        FIntVector Offset;
-        FString DirName;
-    };
+	FIntVector startCoord = UTileLibrary::WorldToTilePosition(worldPosition);
 
-    TArray<FDirCheck> Checks = {
-        { FIntVector(1, 0, 0), TEXT("NORTH") },
-        { FIntVector(-1, 0, 0), TEXT("SOUTH") },
-        { FIntVector(0, 1, 0), TEXT("EAST") },
-        { FIntVector(0, -1, 0), TEXT("WEST") },
-        { FIntVector(0, 0, 1), TEXT("UP") },
-        { FIntVector(0, 0, -1), TEXT("DOWN") }
-    };
-    
-    const int MAX_ROOM_SIZE = 1000;
-    int maxZ = startCoord.Z;
-    int minZ = startCoord.Z;
-    
-    while (Queue.Num() > 0)
-    {
-       if (Visited.Num() > MAX_ROOM_SIZE)
-       {
-          UE_LOG(LogTemp, Error, TEXT("LEAK: Room expanded beyond max size - %d tiles visited, Z range: %d to %d"), Visited.Num(), minZ, maxZ);
-          bLeaked = true;
-          break;
-       }
-    
-       FIntVector current = Queue[0];
-       Queue.RemoveAt(0);
-       
-       if (current.Z > maxZ) maxZ = current.Z;
-       if (current.Z < minZ) minZ = current.Z;
+	UE_LOG(LogTemp, Warning, TEXT("=== Starting FindRoom at %s ==="), *startCoord.ToString());
 
-       bool currentFound = false;
-       const FSquareTile& currentSquare = GetSquareTileByTileIndex(current, currentFound);
-       
-       if (!currentFound)
-       {
-           continue;
-       }
+	TArray<FIntVector> Queue;
+	TSet<FIntVector> Visited;
+	TSet<FIntVector> Exits;
 
-       for (const FDirCheck& check : Checks)
-       {
-          FIntVector neighborCoord = current + check.Offset;
-          if (Visited.Contains(neighborCoord)) continue;
+	Queue.Add(startCoord);
+	Visited.Add(startCoord);
 
-          bool canTraverse = false;
-          
-          // Horizontal movement (Z unchanged)
-          if (check.Offset.Z == 0)
-          {
-              ETileDirection outDir, inDir;
-          	  if (check.Offset.X == 1) {
-          	  	  outDir = ETileDirection::NORTH;  // X+ -> NORTH in your system
-          	  	  inDir = ETileDirection::SOUTH;
-          	  } else if (check.Offset.X == -1) {
-          	  	  outDir = ETileDirection::SOUTH;  // X- -> SOUTH in your system
-          	  	  inDir = ETileDirection::NORTH;
-          	  } else if (check.Offset.Y == 1) {
-          	  	  outDir = ETileDirection::EAST;   // Y+ -> EAST in your system
-          	  	  inDir = ETileDirection::WEST;
-          	  } else {
-          	  	  outDir = ETileDirection::WEST;   // Y- -> WEST in your system
-          	  	  inDir = ETileDirection::EAST;
-          	  }
-               
-              bool neighborFound = false;
-              const FSquareTile& neighborSquare = GetSquareTileByTileIndex(neighborCoord, neighborFound);
-                 
-              if (!neighborFound)
-              {
-	              continue;
-              }
-          	
-              bool hasOutWall = currentFound && currentSquare.HasWall(outDir);
-              bool hasInWall = neighborFound && neighborSquare.HasWall(inDir);
-      
-          	  canTraverse = !hasOutWall && !hasInWall;
-          }
+	struct FDirCheck
+	{
+		FIntVector Offset;
+		FString DirName;
+	};
+
+	TArray<FDirCheck> Checks = {
+		{FIntVector(1, 0, 0), TEXT("NORTH")},
+		{FIntVector(-1, 0, 0), TEXT("SOUTH")},
+		{FIntVector(0, 1, 0), TEXT("EAST")},
+		{FIntVector(0, -1, 0), TEXT("WEST")},
+		{FIntVector(0, 0, 1), TEXT("UP")},
+		{FIntVector(0, 0, -1), TEXT("DOWN")}};
+
+	const int MAX_ROOM_SIZE = 1000;
+	int maxZ = startCoord.Z;
+	int minZ = startCoord.Z;
+
+	while (Queue.Num() > 0)
+	{
+		if (Visited.Num() > MAX_ROOM_SIZE)
+		{
+			UE_LOG(LogTemp, Error, TEXT("LEAK: Room expanded beyond max size - %d tiles visited, Z range: %d to %d"), Visited.Num(), minZ, maxZ);
+			bLeaked = true;
+			break;
+		}
+
+		FIntVector current = Queue[0];
+		Queue.RemoveAt(0);
+
+		if (current.Z > maxZ)
+			maxZ = current.Z;
+		if (current.Z < minZ)
+			minZ = current.Z;
+
+		bool currentFound = false;
+		const FSquareTile &currentSquare = GetSquareTileByTileIndex(current, currentFound);
+
+		if (!currentFound)
+		{
+			continue;
+		}
+
+		for (const FDirCheck &check : Checks)
+		{
+			FIntVector neighborCoord = current + check.Offset;
+			if (Visited.Contains(neighborCoord))
+				continue;
+
+			bool canTraverse = false;
+
+			// Horizontal movement (Z unchanged)
+			if (check.Offset.Z == 0)
+			{
+				ETileDirection outDir, inDir;
+				if (check.Offset.X == 1)
+				{
+					outDir = ETileDirection::NORTH; // X+ -> NORTH
+					inDir = ETileDirection::SOUTH;
+				}
+				else if (check.Offset.X == -1)
+				{
+					outDir = ETileDirection::SOUTH; // X- -> SOUTH
+					inDir = ETileDirection::NORTH;
+				}
+				else if (check.Offset.Y == 1)
+				{
+					outDir = ETileDirection::EAST; // Y+ -> EAST
+					inDir = ETileDirection::WEST;
+				}
+				else
+				{
+					outDir = ETileDirection::WEST; // Y- -> WEST
+					inDir = ETileDirection::EAST;
+				}
+
+				bool neighborFound = false;
+				const FSquareTile &neighborSquare = GetSquareTileByTileIndex(neighborCoord, neighborFound);
+
+				bool hasOutWall = currentFound && currentSquare.HasWall(outDir);
+				
+				if (!neighborFound)
+				{
+					if (!hasOutWall)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("LEAK HORIZONTAL: %s has no %s wall and no neighbor!"), *current.ToString(), *check.DirName);
+						bLeaked = true;
+						break;
+					}
+					continue;
+				}
+
+				bool hasInWall = neighborFound && neighborSquare.HasWall(inDir);
+				
+				canTraverse = !hasOutWall && !hasInWall;
+			}
 			// Vertical movement UP
-          else if (check.Offset.Z == 1)
-          {
-          	bool hasCeiling = currentSquare.HasCeiling();
-          	if (hasCeiling)
-          	{
-          		//FIntVector ceilingTile = current + FIntVector(0, 0, 1);
-          		//Visited.Add(ceilingTile); // add as part of room but never traverse it directly
-          		
-          		canTraverse = false; // blocked by ceiling
-          	}
-          	else
-          	{
-          		bool neighborFound = false;
-          		GetSquareTileByTileIndex(neighborCoord, neighborFound);
-          		canTraverse = neighborFound; // Only traverse if destination exists
-          	}
-          }
-          else if (check.Offset.Z == -1)
-          {
-          	FIntVector tileBelow = current + FIntVector(0, 0, -1);
-          	bool belowHasCeiling = HasCeilingAt(tileBelow);
-    
-          	if (belowHasCeiling)
-          	{
-          		canTraverse = false; // Blocked by floor
-          	}
-          	else
-          	{
-          		// Check if destination tile exists
-          		bool neighborFound = false;
-          		GetSquareTileByTileIndex(neighborCoord, neighborFound);
-          		canTraverse = neighborFound; // Only traverse if destination exists
-          	}
-          }
+			else if (check.Offset.Z == 1)
+			{
+				bool hasCeiling = currentSquare.HasCeiling();
+				if (hasCeiling)
+				{
+					canTraverse = false; // blocked by ceiling
+				}
+				else
+				{
+					bool neighborFound = false;
+					GetSquareTileByTileIndex(neighborCoord, neighborFound);
+					
+					if (!neighborFound)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("LEAK UP: %s has no ceiling and no neighbor above!"), *current.ToString());
+						bLeaked = true;
+						break;
+					}
+					
+					canTraverse = neighborFound; // Only traverse if destination exists
+				}
+			}
+			else if (check.Offset.Z == -1)
+			{
+				FIntVector tileBelow = current + FIntVector(0, 0, -1);
+				bool belowHasCeiling = HasCeilingAt(tileBelow);
 
-          if (canTraverse)
-          {
-              Visited.Add(neighborCoord);
-              Queue.Add(neighborCoord);
-          }
-       }
-    }
+				if (belowHasCeiling)
+				{
+					canTraverse = false; // Blocked by floor
+				}
+				else
+				{
+					// Check if destination tile exists
+					bool neighborFound = false;
+					GetSquareTileByTileIndex(neighborCoord, neighborFound);
+					
+					if (!neighborFound)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("LEAK DOWN: %s has no floor and no neighbor below!"), *current.ToString());
+						bLeaked = true;
+						break;
+					}
+					
+					canTraverse = neighborFound; // Only traverse if destination exists
+				}
+			}
 
-    UE_LOG(LogTemp, Warning, TEXT("Flood fill complete: %d tiles, Z range: %d to %d"), Visited.Num(), minZ, maxZ);
+			if (bLeaked) break;
+
+			if (canTraverse)
+			{
+				Visited.Add(neighborCoord);
+				Queue.Add(neighborCoord);
+			}
+		}
+		if (bLeaked) break;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Flood fill complete: %d tiles, Z range: %d to %d"), Visited.Num(), minZ, maxZ);
 
     // Check if the topmost level has complete ceiling coverage
     if (!bLeaked)
@@ -249,11 +308,32 @@ void ATileManager::FindRoom(FVector worldPosition)
 		return;
 	}
 	
+	//pass 1 -> assign rooms
     for (const FIntVector& pos : Visited)
     {
         RoomTilesToID.Add(pos, roomIDToAssign);
-    	AddRoomTile(pos, roomIDToAssign);
+    	AddRoomTile(pos, roomIDToAssign, false);
     }
+	
+	//pass 2 -> find exit squares
+	
+	for (const FIntVector& pos : Visited)
+	{
+		bool found = false;
+		FSquareTile& square = GetSquareTileRefByIndex(pos, found);
+		bool isExit = UTileLibrary::IsSquareExitSquare(this, square, pos, roomIDToAssign);
+		
+		if (!found)
+		{
+			//idk how that would be possible
+			continue; 
+		}
+		
+		if (isExit)
+		{
+			AddRoomTile(pos, roomIDToAssign, true);
+		}
+	}
 
     if (!bLeaked) nextRoomID++;
     
@@ -284,7 +364,7 @@ int ATileManager::GetRoomAt(FVector worldPosition, FRoomValue& room)
 	
 	if (!roomId)
 	{
-		FindRoom(worldPosition);
+		FindNewRoom(worldPosition);
 		
 		//re check
 		roomId = RoomTilesToID.Find(tilePosition);
@@ -494,6 +574,30 @@ bool ATileManager::HasCeilingAt(FIntVector pos)
 	return found && tile.HasCeiling();
 }
 
+int ATileManager::GetRoomIDAt(FIntVector tilePosition)
+{
+	int* idPtr = RoomTilesToID.Find(tilePosition);
+	
+	if (!idPtr)
+	{
+		return -1;
+	}
+	
+	return *idPtr;
+}
+
+FRoomValue ATileManager::GetRoomByID(int id)
+{
+	FRoomValue* roomPtr = RoomIDToTiles.Find(id);
+	
+	if (!roomPtr)
+	{
+		return FRoomValue();
+	}
+	
+	return *roomPtr;
+}
+
 bool ATileManager::PlaceObjectAtWorld(FVector WorldPosition, FTileObject NewObject)
 {
 	FIntVector2 ChunkPosition = UTileLibrary::WorldToChunkPosition(WorldPosition);
@@ -612,7 +716,7 @@ ATileChunk* ATileManager::SpawnChunk(FIntVector2 Position)
 
 FTileDefinition ATileManager::GetTileByID(FName ID)
 {
-	FTileDefinition* def = TileDataTable->FindRow<FTileDefinition>(ID, TEXT("Tile Manager"), true);
+	FTileDefinition* def = ATileManager::TileDataTable->FindRow<FTileDefinition>(ID, TEXT("Tile Manager"), true);
 	if (!def)
 	{
 		const wchar_t* w = *ID.ToString();
