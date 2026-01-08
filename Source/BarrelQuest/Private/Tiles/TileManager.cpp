@@ -957,3 +957,14 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
     }
     return Results;
 }
+
+FSquareTile* ATileManager::GetSquareTilePtr(FIntVector tilePos)
+{
+	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePos);
+	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(tileWorld);
+	ATileChunk* chunkPtr = GetChunkAt(chunkPos);
+	
+	if (!chunkPtr) return nullptr;
+	bool found = false;
+	return chunkPtr->GetSquareTilePtr(tilePos, found);
+}

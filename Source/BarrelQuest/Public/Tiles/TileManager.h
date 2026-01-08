@@ -74,7 +74,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FRoomValue& GetRoomRefByID(int roomID, bool& found);
 	
-	
 	UFUNCTION(BlueprintCallable)
 	void InvalidateRoomAt(FIntVector tilePosition);
 	
@@ -142,4 +141,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static TSet<FIntVector> GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea);
+	
+	FSquareTile* GetSquareTilePtr(FIntVector tilePos);
 };
