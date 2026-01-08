@@ -3,6 +3,44 @@
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
 
+void FBuildingValue::CalculateBounds(ATileManager* mgr)
+{
+	BoundingBoxes.Empty();
+	MainBounds = FBox(ForceInit);
+
+	const FVector TileSize = UTileLibrary::GetTileSize();
+
+	for (auto& roomID : RoomIDs)
+	{
+		FRoomValue room = mgr->GetRoomByID(roomID);
+		FBox RoomBox(ForceInit);
+
+		auto AddTileToBox = [&](const FIntVector& tilePos)
+		{
+			FVector Min((tilePos.X - 0.5f) * TileSize.X, (tilePos.Y - 0.5f) * TileSize.Y, tilePos.Z * TileSize.Z);
+			FVector Max((tilePos.X + 0.5f) * TileSize.X, (tilePos.Y + 0.5f) * TileSize.Y, (tilePos.Z + 1.0f) * TileSize.Z);
+			RoomBox += Min;
+			RoomBox += Max;
+		};
+
+		for (const FIntVector& tilePos : room.tiles)
+		{
+			AddTileToBox(tilePos);
+		}
+
+		for (const FIntVector& ceilPos : room.ceilings)
+		{
+			AddTileToBox(ceilPos);
+		}
+
+		if (RoomBox.IsValid)
+		{
+			BoundingBoxes.Add(RoomBox);
+			MainBounds += RoomBox;
+		}
+	}
+}
+
 bool FSquareTile::HasObjectOfCategory(ETileCategory category, ATileManager* mgr) const
 {
 	for (auto& object : objects)

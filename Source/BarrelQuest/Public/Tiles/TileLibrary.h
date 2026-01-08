@@ -176,6 +176,31 @@ enum class ETileDirection : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FBuildingValue
+{
+	GENERATED_BODY()
+	
+public:
+	FBuildingValue() = default;
+	
+	TSet<int> RoomIDs;
+	TArray<FBox> BoundingBoxes;
+	FBox MainBounds;
+	
+	void AddRoomID(const int& roomID)
+	{
+		RoomIDs.Add(roomID);
+	}
+	
+	void RemoveRoomID(const int& roomID)
+	{
+		RoomIDs.Remove(roomID);
+	}
+	
+	void CalculateBounds(ATileManager* mgr);
+};
+
+USTRUCT(BlueprintType)
 struct FRoomValue
 {
 	GENERATED_BODY()
@@ -201,6 +226,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	TSet<FIntVector> exits;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	TSet<FIntVector> ceilings;
 	
 	void AddExitTile(const FIntVector& tile)
 	{
@@ -431,9 +459,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FIntVector2 WorldToChunkPosition(FVector worldPosition);
 	
+	///Wraps world coords into a chunk local coordinate
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FIntVector WorldToLocalChunkTilePosition(FVector worldPosition, ATileChunk* chunk);
 	
+	///Returns the tile position of a world position
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FIntVector WorldToTilePosition(FVector worldPosition);
 	
@@ -441,6 +471,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FVector ChunkToWorldPosition(FIntVector2 chunkPosition);
 	
+	///Returns the world position of a tile
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FVector TileToWorldPosition(FIntVector tilePosition);
 	

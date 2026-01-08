@@ -124,6 +124,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 	TArray<FIntVector> Queue;
 	TSet<FIntVector> Visited;
 	TSet<FIntVector> Exits;
+	TSet<FIntVector> Ceilings;
 
 	Queue.Add(startCoord);
 	Visited.Add(startCoord);
@@ -230,6 +231,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 				bool hasCeiling = currentSquare.HasCeiling();
 				if (hasCeiling)
 				{
+					Ceilings.Add(current + FIntVector(0, 0, 1));
 					canTraverse = false; // blocked by ceiling
 				}
 				else
@@ -319,6 +321,13 @@ void ATileManager::FindNewRoom(FVector worldPosition)
         RoomTilesToID.Add(pos, roomIDToAssign);
     	AddRoomTile(pos, roomIDToAssign, false);
     }
+	
+	//pass 2 -> add ceilings
+	for (const FIntVector& pos : Ceilings)
+	{
+		FRoomValue* room = RoomIDToTiles.Find(roomIDToAssign);
+		room->ceilings.Add(pos);
+	}
 	
 	//pass 2 -> find exit squares
 	

@@ -183,6 +183,7 @@ void UTileCuttingComponent::CheckObstructingTiles()
 			
 			hitTilesThisFrame.Add(tile);
 			hitTilesThisFrame.Append(room.tiles);
+			hitTilesThisFrame.Append(room.ceilings);
 		}
 	}
 	

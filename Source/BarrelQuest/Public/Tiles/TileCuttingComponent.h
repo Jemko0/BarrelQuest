@@ -69,6 +69,7 @@ public:
 	TSet<FIntVector> tilesThatShouldCut;
 	
 	TSet<FIntVector> importantVisibilityTiles;
+	
 	//temp
 	TSet<FIntVector> TilesBlockingFocus;
 	TSet<FIntVector> TilesBlockingImportant;
