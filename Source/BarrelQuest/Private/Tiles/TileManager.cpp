@@ -262,8 +262,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 				else
 				{
 					// Check if destination tile exists
-					bool neighborFound = false;
-					GetSquareTileByTileIndex(neighborCoord, neighborFound);
+					bool neighborFound = HasSquareAtTileIndex(neighborCoord);
 					
 					if (!neighborFound)
 					{
@@ -378,6 +377,12 @@ int ATileManager::GetRoomAt(FVector worldPosition, FRoomValue& room)
 
 	room = *roomValue;
 	return *roomId;
+}
+
+bool ATileManager::HasSquareAtTileIndex(const FIntVector& tilePos)
+{
+	FSquareTile* squarePtr = GetSquareTilePtr(tilePos);
+	return squarePtr != nullptr;
 }
 
 

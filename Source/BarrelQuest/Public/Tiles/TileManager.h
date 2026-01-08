@@ -115,6 +115,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasSquareAtWorld(FVector worldPosition);
+
+	UFUNCTION(BlueprintCallable)
+	bool HasSquareAtTileIndex(const FIntVector& tilePos);
 	
 	UFUNCTION(BlueprintCallable)
 	bool RemoveSquareAtWorld(FVector worldPosition);

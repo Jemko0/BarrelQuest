@@ -6,7 +6,6 @@
 #include "ProceduralMeshComponent.h"
 #include "ViewConeActor.generated.h"
 
-// Structure to hold the result data for a single trace.
 USTRUCT(BlueprintType)
 struct FVisionTraceResult
 {
@@ -21,7 +20,6 @@ struct FVisionTraceResult
 	UPROPERTY(BlueprintReadOnly)
 	float Distance;
 
-	// The index of the trace to maintain order during async processing.
 	int32 TraceIndex;
 
 	FVisionTraceResult()
@@ -33,7 +31,6 @@ struct FVisionTraceResult
 	}
 };
 
-// Async task for performing a batch of line traces on a worker thread.
 class FVisionConeTraceTask : public FNonAbandonableTask
 {
 	friend class FAutoDeleteAsyncTask<FVisionConeTraceTask>;
@@ -58,16 +55,14 @@ public:
 	{
 	}
 
-	// Required by FNonAbandonableTask for profiling.
+	// profilingsss
 	FORCEINLINE TStatId GetStatId() const
 	{
 		RETURN_QUICK_DECLARE_CYCLE_STAT(FVisionConeTraceTask, STATGROUP_ThreadPoolAsyncTasks);
 	}
 
-	// Main work function that runs on the worker thread.
 	void DoWork();
 
-	// Accessor for the results of the trace task.
 	const TArray<FVisionTraceResult>& GetResults() const { return Results; }
 
 protected:
@@ -115,9 +110,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Cone", meta = (ToolTip = "The material to apply to the generated vision mesh."))
 	UMaterialInterface* VisionMaterial = nullptr;
-	//~ End Configuration Properties
 
-	// The procedural mesh component that will render the vision cone.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vision Cone")
 	UProceduralMeshComponent* VisionMesh;
 
@@ -125,7 +118,6 @@ protected:
 	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
 
 private:
-	// Core functions for generating the vision cone
 	void StartVisionTrace();
 	void GenerateTraceDirs(TArray<FVector>& OutDirections);
 	void CheckTasksComplete();
