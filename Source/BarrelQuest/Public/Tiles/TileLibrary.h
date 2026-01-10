@@ -133,7 +133,7 @@ public:
 	float PlaceTime = 3.0f; //Base time in seconds to place tile when building
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TEnumAsByte<ECollisionChannel> ObjectType = ECC_GameTraceChannel3;
+	TEnumAsByte<ECollisionChannel> ObjectType = ECC_GameTraceChannel6;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FCraftingRecipeIngredient> CraftingRecipe;
@@ -364,6 +364,7 @@ public:
 	
 	static constexpr uint16 FLAG_WALKABLE = 1 << 0; // bit 0 reserved for walkable
 	static constexpr uint16 FLAG_HAS_CEILING = 1 << 1; // bit 1 reserved for hasCeiling
+	static constexpr uint16 FLAG_INSIDE_SQUARE = 1 << 2; // bit 2 reserved for insideSquare
 	
 	void SetWalkable(bool walkable)
 	{
@@ -389,6 +390,19 @@ public:
 	bool HasCeiling() const
 	{
 		return (flags & FLAG_HAS_CEILING) != 0;
+	}
+	
+	void SetInsideSquare(bool insideSquare)
+	{
+		if (insideSquare)
+			flags |= FLAG_INSIDE_SQUARE;
+		else
+			flags &= ~FLAG_INSIDE_SQUARE;
+	}
+	
+	bool IsInsideSquare() const
+	{
+		return (flags & FLAG_INSIDE_SQUARE) != 0;
 	}
 };
 

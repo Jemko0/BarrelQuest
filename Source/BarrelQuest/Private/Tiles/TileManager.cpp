@@ -169,12 +169,14 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 			minZ = current.Z;
 
 		bool currentFound = false;
-		const FSquareTile &currentSquare = GetSquareTileByTileIndex(current, currentFound);
+		FSquareTile* currentSquare = GetSquareTilePtr(current);
 
-		if (!currentFound)
+		if (!currentSquare)
 		{
 			continue;
 		}
+		
+		currentFound = true;
 
 		for (const FDirCheck &check : Checks)
 		{
@@ -212,7 +214,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 				bool neighborFound = false;
 				const FSquareTile &neighborSquare = GetSquareTileByTileIndex(neighborCoord, neighborFound);
 
-				bool hasOutWall = currentFound && currentSquare.HasWall(outDir);
+				bool hasOutWall = currentFound && currentSquare->HasWall(outDir);
 				
 				if (!neighborFound)
 				{
@@ -232,7 +234,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 			// Vertical movement UP
 			else if (check.Offset.Z == 1)
 			{
-				bool hasCeiling = currentSquare.HasCeiling();
+				bool hasCeiling = currentSquare->HasCeiling();
 				if (hasCeiling)
 				{
 					Ceilings.Add(current + FIntVector(0, 0, 1));

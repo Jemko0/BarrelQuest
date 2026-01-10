@@ -90,7 +90,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
 	
-	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef,const FTileObject& tileObject);
+	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare);
 	
 	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
 };

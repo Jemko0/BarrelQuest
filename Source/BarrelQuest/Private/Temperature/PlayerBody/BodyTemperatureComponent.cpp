@@ -74,7 +74,7 @@ void UBodyTemperatureComponent::UpdateBodyTemperature(float delta)
 	BodyTemp += heatProduction;
 	InternalHeatProduction -= heatProduction;
     
-	LogVars(delta);
+	//LogVars(delta);
 }
 
 float UBodyTemperatureComponent::GetHeatLossMultiplier(float insulation)

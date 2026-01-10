@@ -112,7 +112,7 @@ void ATileChunk::BuildChunk()
             }
             Lookup[InstanceIndex] = { Position, i };
         	
-            TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef);
+            TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef, Square);
             HISM->SetCustomData(InstanceIndex, InstanceData, true);
         	
         	UE_LOG(LogBarrelQuest, Warning, TEXT("HISM %s has %d instances"), *Key.Mesh->GetName(), HISM->GetInstanceCount());
@@ -132,6 +132,14 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
 {
     ATileManager* mgr = GetOwningTileManager();
     if (!mgr) return;
+	
+	bool found;
+	FSquareTile* square = GetSquareTilePtr(Position, found);
+	
+	if (!found)
+	{
+		return;
+	}
 
     const FTileDefinition& TileDef = mgr->GetTileByID(ObjectDef.ID);
     if (!TileDef.Mesh) return; // Logic object only
@@ -167,9 +175,9 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
         Lookup.SetNum(NewIndex + 1);
     }
     Lookup[NewIndex] = { Position, ObjectIndex };
-
+	
     // Set Data
-    TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef);
+    TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef, *square);
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
@@ -298,6 +306,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 		
 		FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
 		belowTile.SetHasCeiling(true);
+		belowTile.SetInsideSquare(true);
 	}
 }
 
@@ -320,24 +329,25 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         
         if (UTileLibrary::CountsAsWall(TileDef.Category))
         {
-           tile->SetWall(Object.Direction, false);
+            tile->SetWall(Object.Direction, false);
            
-           FIntVector neighborPos = Position;
-           ETileDirection oppDir = Object.Direction;
+            FIntVector neighborPos = Position;
+        	ETileDirection oppDir = Object.Direction;
 
-           if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
-           else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
-           else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
-           else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
+            if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
+            else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
+            else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
+            else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
         	
-           FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
-		   NeighborTile.SetWall(oppDir, false);
+            FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
+		    NeighborTile.SetWall(oppDir, false);
         }
         else if (TileDef.Category == ETileCategory::FLOOR)
         {
-           FIntVector belowPos = Position - FIntVector(0, 0, 1);
-           FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
-		   belowTile.SetHasCeiling(false);
+            FIntVector belowPos = Position - FIntVector(0, 0, 1);
+            FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
+		    belowTile.SetHasCeiling(false);
+        	belowTile.SetInsideSquare(false);
         }
     }
 
@@ -445,7 +455,7 @@ bool ATileChunk::HasSquare(FIntVector Position)
 	return Tile != nullptr;
 }
 
-TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject)
+TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare)
 {
 	TStaticArray<float, customDataFloats> instanceData;
 	
