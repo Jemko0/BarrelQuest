@@ -7,8 +7,31 @@
 
 FLinearColor UBarrelUtilityFunctionLibrary::HexStringToLinearColor(FString hexString)
 {
-    // Your existing implementation
-    return FLinearColor();
+    // Remove leading #
+    hexString = hexString.Replace(TEXT("#"), TEXT(""));
+
+    // Must be either 6 (RGB) or 8 (RGBA) characters
+    if (hexString.Len() != 6 && hexString.Len() != 8)
+    {
+        return FLinearColor::Black;
+    }
+
+    auto HexToFloat = [](const FString& Hex)
+    {
+        return static_cast<float>(FParse::HexNumber(*Hex)) / 255.0f;
+    };
+
+    float R = HexToFloat(hexString.Mid(0, 2));
+    float G = HexToFloat(hexString.Mid(2, 2));
+    float B = HexToFloat(hexString.Mid(4, 2));
+    float A = 1.0f;
+
+    if (hexString.Len() == 8)
+    {
+        A = HexToFloat(hexString.Mid(6, 2));
+    }
+
+    return FLinearColor(R, G, B, A);
 }
 
 void UBarrelUtilityFunctionLibrary::GenerateAssetPathFile()

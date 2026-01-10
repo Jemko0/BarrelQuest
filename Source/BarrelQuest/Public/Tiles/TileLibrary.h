@@ -1,11 +1,8 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "Crafting/CraftingLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Net/UnrealNetwork.h"
 #include "TileLibrary.generated.h"
 
 /**
@@ -32,7 +29,7 @@ enum class ETileTextureIndex : uint8
 {
 	DEBUG,
 	WOOD,
-	BRICK,
+	BRICK_TINTABLE,
 	STONE,
 	METAL,
 	ASPHALT_TIRE_LINES,
@@ -40,8 +37,10 @@ enum class ETileTextureIndex : uint8
 	ASPHALT_NO_TIRE_LINES,
 	SIDEWALK,
 	CARPET,
-	
 	MESH_FENCE,
+	WOOD_PLANKS_TINTABLE,
+	
+	ROOF_RED,
 };
 
 UENUM(BlueprintType)
@@ -56,6 +55,10 @@ enum class ETileInstanceDataIndex : uint8
 	OBJ_DIRECTION,
 	SHOULD_CUT,
 	FORCE_CUT,
+	TINT_R,
+	TINT_G,
+	TINT_B,
+	HUE_SHIFT,
 	MAX
 };
 
@@ -115,55 +118,65 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float BaseMetallic = 0.5f;
 	
-	//skipping specular because UE Recommends it to be unchanged.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FLinearColor tint = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	//skipping specular because UE docs recommend it to be unchanged.
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ETileCategory Category = ETileCategory::FLOOR;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float Insulation = 0.2f; //20% Insulation
+	float Insulation = 0.2f; //20%
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float PlaceTime = 3.0f; //Base time to place tile when building
+	float PlaceTime = 3.0f; //Base time in seconds to place tile when building
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TEnumAsByte<ECollisionChannel> ObjectType = ECC_GameTraceChannel3;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, FCraftingRecipeIngredient> CraftingRecipe;
+};
+
+USTRUCT(BlueprintType)
+struct FRuntimeDataQueryResult
+{
+	GENERATED_BODY()
+	
+public:
+	FRuntimeDataQueryResult() : data(FString(TEXT("null"))), index(-1), valid(false) {};
+	FRuntimeDataQueryResult(const int32& newIdx, const FString& newData) : data(newData), index(newIdx), valid(true) {};
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString data;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int32 index;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool valid;
 };
 
 USTRUCT(BlueprintType)
 struct FTileRuntimeData
 {
 	GENERATED_BODY()
+protected:
+	TMap<FName, int32> indexLookup;
 	
 public:
-	FTileRuntimeData() = default;
-	FTileRuntimeData(const FTileRuntimeData& Other) = default;
-	FTileRuntimeData& operator=(const FTileRuntimeData& Other) = default;
+	UPROPERTY(VisibleAnywhere)
+	TArray<FString> runtimeData;
 	
-	TMap<FName, bool> boolData;
-
-	TMap<FName, float> floatData;
-
-	TMap<FName, int32> intData;
+	///Sets a runtime value, if key doesnt exist, it gets added
+	void SetValue(FName Key, FString Value);
 	
-	TMap<FName, FString> stringData;
+	///Removes a runtime value, if key doesnt exist, returns false
+	bool RemoveValue(FName Key);
 	
-	void SetBoolData(FName name, bool b)
-	{
-		boolData.Add(name, b);
-	}
-	
-	void SetFloatData(FName name, float f)
-	{
-		floatData.Add(name, f);
-	}
-	
-	void SetIntData(FName name, int32 i)
-	{
-		intData.Add(name, i);
-	}
-	
-	void SetStringData(FName name, const FString& s)
-	{
-		stringData.Add(name, s);
-	}
+	///Gets a runtime value, if key doesnt exist, returns query result with valid == false
+	FRuntimeDataQueryResult GetValue(FName Key);
 };
 
 UENUM(BlueprintType)
@@ -426,30 +439,6 @@ class BARRELQUEST_API UTileLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable)
-	static void SetRuntimeBoolProperty(FName prop, bool v, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static void SetRuntimeFloatProperty(FName prop, float v, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static void SetRuntimeIntProperty(FName prop, int32 v, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static void SetRuntimeStringProperty(FName prop, FString v, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static bool GetRuntimeBoolProperty(FName Key, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static float GetRuntimeFloatProperty(FName Key, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static int GetRuntimeIntProperty(FName Key, FTileRuntimeData& runtimeData);
-	
-	UFUNCTION(BlueprintCallable)
-	static FString GetRuntimeStringProperty(FName Key, FTileRuntimeData& runtimeData);
-	
 	UFUNCTION(BlueprintCallable)
 	static void SetSquareWalkable(FSquareTile& sq, bool newWalkable);
 	

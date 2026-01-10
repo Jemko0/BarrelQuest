@@ -142,5 +142,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static TSet<FIntVector> GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea);
 	
+	UFUNCTION(BlueprintCallable)
+	void SetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key, FString& Value);
+	
+	UFUNCTION(BlueprintCallable)
+	FRuntimeDataQueryResult GetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key);
+	
+	UFUNCTION(BlueprintCallable)
+	bool RemoveObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key);
+	
 	FSquareTile* GetSquareTilePtr(FIntVector tilePos);
+	
+	void ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int32 objectIdx);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	AActor* CreateNewChunk(FVector chunkLocation);
 };

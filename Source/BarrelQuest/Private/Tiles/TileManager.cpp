@@ -1,6 +1,10 @@
 #include "Tiles/TileManager.h"
+
+#include "BarrelUtilityFunctionLibrary.h"
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 
 UDataTable* ATileManager::TileDataTable = nullptr;
 
@@ -12,7 +16,7 @@ ATileManager::ATileManager()
 	bReplicates = true;
 	bAlwaysRelevant = true;
 	
-	static ConstructorHelpers::FObjectFinder<UDataTable> DTRef(TEXT("/Game/BarrelContent/Tiles/Data/New/MainTileDefinitions.MainTileDefinitions"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> DTRef(TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions"));
 	ATileManager::TileDataTable = DTRef.Object;
 }
 
@@ -730,16 +734,8 @@ ATileChunk* ATileManager::SpawnChunk(FIntVector2 Position)
 		ATileChunk::ChunkSize.Y * Position.Y * TileSize.Y,
 		0.0f
 	);
-    
-	FActorSpawnParameters spawnParams = FActorSpawnParameters();
-	spawnParams.Owner = this;
 	
-	ATileChunk* newChunk = GetWorld()->SpawnActor<ATileChunk>(
-		ATileChunk::StaticClass(), 
-		newChunkLocation, 
-		FRotator(0.0f), 
-		spawnParams
-	);
+	ATileChunk* newChunk = static_cast<ATileChunk*>(CreateNewChunk(newChunkLocation));
     
 	newChunk->ChunkPosition = Position;
 	newChunk->RVTOutputs = ChunkRVTs;
@@ -748,6 +744,21 @@ ATileChunk* ATileManager::SpawnChunk(FIntVector2 Position)
 	Chunks.Add(newChunk);
     
 	return newChunk;
+}
+
+AActor* ATileManager::CreateNewChunk_Implementation(FVector chunkLocation)
+{
+	FActorSpawnParameters spawnParams = FActorSpawnParameters();
+	spawnParams.Owner = this;
+	
+	AActor* ret = GetWorld()->SpawnActor<AActor>(
+	ATileChunk::StaticClass(),
+	chunkLocation,
+	FRotator(0.0f),
+	spawnParams
+	);
+	
+	return ret;
 }
 
 FTileDefinition ATileManager::GetTileByID(FName ID)
@@ -958,6 +969,36 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
     return Results;
 }
 
+void ATileManager::SetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key, FString& Value)
+{
+	FSquareTile* squarePtr = GetSquareTilePtr(tilePosition);
+	
+	if (!squarePtr) return;
+	
+	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIdx];
+	object.runtimeData.SetValue(Key, Value);
+}
+
+FRuntimeDataQueryResult ATileManager::GetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key)
+{
+	FSquareTile* squarePtr = GetSquareTilePtr(tilePosition);
+	
+	if (!squarePtr) return FRuntimeDataQueryResult();
+	
+	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIdx];
+	return object.runtimeData.GetValue(Key);
+}
+
+bool ATileManager::RemoveObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key)
+{
+	FSquareTile* squarePtr = GetSquareTilePtr(tilePosition);
+	
+	if (!squarePtr) return false;
+	
+	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIdx];
+	return object.runtimeData.RemoveValue(Key);
+}
+
 FSquareTile* ATileManager::GetSquareTilePtr(FIntVector tilePos)
 {
 	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePos);
@@ -967,4 +1008,43 @@ FSquareTile* ATileManager::GetSquareTilePtr(FIntVector tilePos)
 	if (!chunkPtr) return nullptr;
 	bool found = false;
 	return chunkPtr->GetSquareTilePtr(tilePos, found);
+}
+
+void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int32 objectIdx)
+{
+	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePosition);
+	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(tileWorld);
+	ATileChunk* chunkPtr = GetChunkAt(chunkPos);
+	
+	if (!chunkPtr) return;
+	bool found;
+	FSquareTile* squarePtr = chunkPtr->GetSquareTilePtr(tilePosition, found);
+	
+	if (!found) return;
+	
+	ensureMsgf(objectIdx < squarePtr->GetObjectsOnSquare().Num(),
+	TEXT("Invalid objectIdx %d"), objectIdx);
+	
+	FTileObject& o = squarePtr->GetObjectsOnSquare()[objectIdx];
+	
+	FTileDefinition tileDef = ATileManager::GetTileByID(o.ID);
+	
+	FTileRenderKey renderKey = {tileDef.Mesh, tileDef.ParentMaterial};
+	UHierarchicalInstancedStaticMeshComponent** HISMPtr = chunkPtr->HISMMap.Find(renderKey);
+	
+	if (!HISMPtr) return;
+	
+	UHierarchicalInstancedStaticMeshComponent* HISM = *HISMPtr;
+	
+	//Apply runtime tint
+	FRuntimeDataQueryResult tintOverrideResult = o.runtimeData.GetValue(TEXT("tint_override"));
+	FLinearColor tintOverrideColor = FLinearColor::Black;
+	if (tintOverrideResult.valid)
+	{
+		tintOverrideColor = UBarrelUtilityFunctionLibrary::HexStringToLinearColor(tintOverrideResult.data);
+		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_R, tintOverrideColor.R);
+		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_G, tintOverrideColor.G);
+		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_B, tintOverrideColor.B);
+	}
+	
 }

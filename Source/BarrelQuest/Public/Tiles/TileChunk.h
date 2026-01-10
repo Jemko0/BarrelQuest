@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Tiles/TileLibrary.h"
 #include "TileChunk.generated.h"
 

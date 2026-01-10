@@ -1,6 +1,7 @@
 ﻿#include "Tiles/TileChunk.h"
 #include "Tiles/TileManager.h"
 #include "BarrelUtilityLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 ATileChunk::ATileChunk()
 {
@@ -455,8 +456,13 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tileDef.BaseMetallic;
 	instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tileDef.BaseRoughness;
 	instanceData[(int)ETileInstanceDataIndex::OBJ_DIRECTION] = (float)tileObject.Direction;
-	instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f; //should cut
-	instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f; //force cut
+	instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f;
+	instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f;
+	
+	instanceData[(int)ETileInstanceDataIndex::TINT_R] = tileDef.tint.R;
+	instanceData[(int)ETileInstanceDataIndex::TINT_G] = tileDef.tint.G;
+	instanceData[(int)ETileInstanceDataIndex::TINT_B] = tileDef.tint.B;
+	instanceData[(int)ETileInstanceDataIndex::HUE_SHIFT] = 0.0f;
 	
 	return instanceData;
 }

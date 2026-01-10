@@ -3,6 +3,50 @@
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
 
+void FTileRuntimeData::SetValue(FName Key, FString Value)
+{
+	if (int32* i = indexLookup.Find(Key))
+	{
+		runtimeData[*i]	= Value;
+	}
+	else
+	{
+		FString valueStr = FString::Printf(TEXT("%s=%s"), *Key.ToString(), *Value);
+		int32 newIndex = runtimeData.AddUnique(valueStr);
+		
+		indexLookup.Add(Key, newIndex);
+	}
+}
+
+bool FTileRuntimeData::RemoveValue(FName Key)
+{
+	if (int32* i = indexLookup.Find(Key))
+	{
+		indexLookup.Remove(Key);
+		runtimeData.RemoveAt(*i);
+	}
+	else
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key)
+{
+	if (int32* i = indexLookup.Find(Key))
+	{
+		FString data = runtimeData[*i];
+		return FRuntimeDataQueryResult(*i, data);
+	}
+	else
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("FRuntimeData::GetValue Key not found!"));
+		return FRuntimeDataQueryResult(); //return invalid
+	}
+}
+
 void FBuildingValue::CalculateBounds(ATileManager* mgr)
 {
 	BoundingBoxes.Empty();
@@ -65,68 +109,6 @@ bool FSquareTile::HasObjectOfDirection(ETileDirection direction) const
 		}
 	}
 	return false;
-}
-
-void UTileLibrary::SetRuntimeBoolProperty(FName prop, bool v, FTileRuntimeData& runtimeData)
-{
-	runtimeData.boolData[prop] = v;
-}
-
-void UTileLibrary::SetRuntimeFloatProperty(FName prop, float v, FTileRuntimeData& runtimeData)
-{
-	runtimeData.floatData[prop] = v;
-}
-
-void UTileLibrary::SetRuntimeIntProperty(FName prop, int32 v, FTileRuntimeData& runtimeData)
-{
-	runtimeData.intData[prop] = v;
-}
-
-///Performance heavy function, be cautious
-void UTileLibrary::SetRuntimeStringProperty(FName prop, FString v, FTileRuntimeData& runtimeData)
-{
-	runtimeData.stringData[prop] = v;
-}
-
-bool UTileLibrary::GetRuntimeBoolProperty(FName Key, FTileRuntimeData& runtimeData)
-{
-	bool* b = runtimeData.boolData.Find(Key);
-	if (!b)
-	{
-		return false;
-	}
-	
-	return *b;
-}
-
-float UTileLibrary::GetRuntimeFloatProperty(FName Key, FTileRuntimeData& runtimeData)
-{
-	float* f = runtimeData.floatData.Find(Key);
-	if (!f)
-	{
-		return -1.0f;
-	}
-	return *f;
-}
-
-int UTileLibrary::GetRuntimeIntProperty(FName Key, FTileRuntimeData& runtimeData)
-{
-	int* i = runtimeData.intData.Find(Key);
-	if (!i)
-	{
-		return -1;
-	}
-	return *i;
-}
-
-FString UTileLibrary::GetRuntimeStringProperty(FName Key, FTileRuntimeData& runtimeData)
-{
-	FString* s = runtimeData.stringData.Find(Key);
-	if (!s)
-	{
-		return FString(TEXT("nullKey"));
-	}
-	return *s;
 }
 
 void UTileLibrary::SetSquareWalkable(FSquareTile& sq, bool newWalkable)
