@@ -59,6 +59,7 @@ enum class ETileInstanceDataIndex : uint8
 	TINT_G,
 	TINT_B,
 	HUE_SHIFT,
+	
 	MAX
 };
 

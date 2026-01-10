@@ -73,4 +73,4 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 Content/BarrelContent/Audio/Music/CharacterEditor/Ocean-of-Sorrow.uasset
-/Lua/API
+/Lua/API/*

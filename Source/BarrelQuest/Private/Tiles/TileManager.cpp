@@ -177,7 +177,7 @@ void ATileManager::FindNewRoom(FVector worldPosition)
 		}
 		
 		currentFound = true;
-
+		
 		for (const FDirCheck &check : Checks)
 		{
 			FIntVector neighborCoord = current + check.Offset;
@@ -1048,5 +1048,4 @@ void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int
 		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_G, tintOverrideColor.G);
 		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_B, tintOverrideColor.B);
 	}
-	
 }
