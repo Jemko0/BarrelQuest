@@ -59,7 +59,7 @@ enum class ETileInstanceDataIndex : uint8
 	TINT_G,
 	TINT_B,
 	HUE_SHIFT,
-	
+	DARKENED,
 	MAX
 };
 
@@ -502,4 +502,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static bool IsSquareExitSquare(ATileManager* mgr, const FSquareTile& square, FIntVector squarePos, int currentRoomID);
+	
+	///Draws tile squares as debug boxes, will not work in non debug builds
+	UFUNCTION(BlueprintCallable)
+	static void DrawTileSquaresFromSet(const TSet<FIntVector>& squares);
+	
+	UFUNCTION(BlueprintCallable)
+	static void DrawTileSquaresFromArray(const TArray<FIntVector>& squares);
 };

@@ -458,13 +458,14 @@ const FSquareTile& ATileManager::GetSquareTileByTileIndex(FIntVector tileIndex, 
 	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(worldPos);
 	
 	ATileChunk* chunkPtr = GetChunkAt(chunkPos);
+	
 	if (!chunkPtr)
 	{
 		success = false;
 		return constFallbackSquareTile;
 	}
 	bool found = false;
-	const FSquareTile& square = chunkPtr->GetSquareTile(tileIndex, found);
+	const FSquareTile& square = chunkPtr->GetSquareTile(tileIndex, found); //fix old func call - martin 2017
 	
 	if (!found)
 	{
@@ -592,7 +593,7 @@ bool ATileManager::HasCeilingAt(FIntVector pos)
 
 bool ATileManager::HasCeilingAbove(FIntVector pos)
 {
-	// Check up to the max height of the chunk system (ATileChunk::ChunkSize.Z)
+	//check up to the max height of the chunk system
 	for (int z = pos.Z; z < ATileChunk::ChunkSize.Z * 4; ++z)
 	{
 		if (HasCeilingAt(FIntVector(pos.X, pos.Y, z)))
@@ -605,7 +606,7 @@ bool ATileManager::HasCeilingAbove(FIntVector pos)
 
 bool ATileManager::HasFloorBelow(FIntVector pos)
 {
-	// In this system, a floor at Z is represented by HasCeiling at Z-1
+	//a floor at Z is represented by HasCeiling at Z-1
 	for (int z = pos.Z; z >= 0; --z)
 	{
 		if (HasCeilingAt(FIntVector(pos.X, pos.Y, z - 1)))
@@ -687,14 +688,14 @@ bool ATileManager::RemoveObjectAtWorldByID(FVector worldPosition, FName ID)
 	{
 		if (squareObjects[i].ID == ID)
 		{
-			// Capture a COPY of the object data
-			// This way, when the array shifts, our 'TargetObj' is still valid
+			//capture a COPY of the object data
+			//this way, when the array shifts the 'TargetObj' is still valid
 			FTileObject TargetObj = squareObjects[i];
 
-			// Use the logic function to clean up HISM and the array
+			//use the logic function to clean up HISM and the array
 			chunkPtr->RemoveObject(tilePos, TargetObj);
           
-			return true; // Exit immediately once found and removed
+			return true; // exit immediately once found and removed
 		}
 	}
 	
@@ -959,8 +960,6 @@ TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, c
             if (bRightOfLeft && bLeftOfRight)
             {
                 // ADD THE ENTIRE VERTICAL PILLAR
-                // This is the "magic" fix for high cameras.
-                // It ensures that even if a wall is on Z=2 and the room is Z=1, it gets hidden.
                 for (int32 z = LowerZ; z <= UpperZ; ++z)
                 {
                     Results.Add(FIntVector(x, y, z));

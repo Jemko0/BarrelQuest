@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TileCuttingInterface.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
 #include "Tiles/TileManager.h"
@@ -10,9 +11,10 @@
 #include "ViewCone/ViewConeQueryInterface.h"
 #include "TileCuttingComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInsideChanged, bool, isInside);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BARRELQUEST_API UTileCuttingComponent : public UActorComponent, public IViewConeQueryInterface
+class BARRELQUEST_API UTileCuttingComponent : public UActorComponent, public IViewConeQueryInterface, public ITileCuttingInterface
 {
 	GENERATED_BODY()
 
@@ -47,6 +49,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
 	float tileBehindThreshold = -0.25f;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
+	bool useDirectTrace = true;
+	
 	FRoomValue LastRoom;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Runtime Properties")
@@ -58,6 +63,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Properties")
 	TEnumAsByte<ECollisionChannel> DirectTraceCollisionChannel;
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnInsideChanged OnInsideChanged;
+	
 	TSet<FIntVector> hitTilesLastFrame;
 	TSet<FIntVector> hiddenRoomTilesLastFrame;
 	TSet<FIntVector> hiddenRoomTilesThisFrame;
@@ -68,7 +76,14 @@ public:
 	TSet<FIntVector> tilesThatUndoShouldCut;
 	TSet<FIntVector> tilesThatShouldCut;
 	
+	TSet<FIntVector> tilesThatShouldDarken;
+	TSet<FIntVector> tilesThatShouldUndarken;
+	
 	TSet<FIntVector> importantVisibilityTiles;
+	TSet<FIntVector> customImportantVisibilityTiles;
+	
+	TSet<FIntVector> temp_lastRoomWithCeilings;
+	TSet<FIntVector> temp_roomWithCeilings;
 	
 	//temp
 	TSet<FIntVector> TilesBlockingFocus;
@@ -87,6 +102,7 @@ public:
 	void UpdateImportantVisibilityTiles();
 	void UpdateTileVisibility();
 	
+	void UpdateTileDarkening();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

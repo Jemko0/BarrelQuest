@@ -333,7 +333,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
            
             FIntVector neighborPos = Position;
         	ETileDirection oppDir = Object.Direction;
-
+        	
             if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
             else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
             else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
@@ -350,7 +350,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         	belowTile.SetInsideSquare(false);
         }
     }
-
+	
     TArray<FTileObject>& Objs = tile->GetObjectsOnSquare();
     for (int32 i = 0; i < Objs.Num(); i++)
     {
@@ -455,6 +455,7 @@ bool ATileChunk::HasSquare(FIntVector Position)
 	return Tile != nullptr;
 }
 
+
 TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare)
 {
 	TStaticArray<float, customDataFloats> instanceData;
@@ -473,6 +474,7 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::TINT_G] = tileDef.tint.G;
 	instanceData[(int)ETileInstanceDataIndex::TINT_B] = tileDef.tint.B;
 	instanceData[(int)ETileInstanceDataIndex::HUE_SHIFT] = 0.0f;
+	instanceData[(int)ETileInstanceDataIndex::DARKENED] = 0.0f;
 	
 	return instanceData;
 }

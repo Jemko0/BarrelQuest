@@ -30,6 +30,11 @@ void UTileCuttingComponent::Update()
     lastZ = currentZ;
 	currentZ = UTileLibrary::WorldToTilePosition(CurrentFocusPoint).Z;
 	zChanged = (currentZ != lastZ);
+
+	tilesThatShouldDarken.Empty();
+	tilesThatShouldUndarken.Empty();
+	
+	bool wasTargetInBuildingLastFrame = isTargetInBuilding;
 	
 	UpdateImportantVisibilityTiles();
 	CheckObstructingTiles();
@@ -37,8 +42,15 @@ void UTileCuttingComponent::Update()
 	{
 		RestoreLastRoom();
 	}
+	
+	if (wasTargetInBuildingLastFrame != isTargetInBuilding)
+	{
+		OnInsideChanged.Broadcast(isTargetInBuilding);
+	}
+	
 	ClearBuilding();
 	UpdateTileVisibility();
+	UpdateTileDarkening();
 }
 
 void UTileCuttingComponent::ClearBuilding()
@@ -56,6 +68,7 @@ void UTileCuttingComponent::RestoreLastRoom()
 	{
 		tilesThatUndoShouldCut.Add(tile);
 		tilesToUndoForceCut.Add(tile);
+		tilesThatShouldUndarken.Add(tile);
 	}
 	
 	for (auto& tile : hitTilesLastFrame)
@@ -75,13 +88,14 @@ bool UTileCuttingComponent::CheckBuilding()
 	LastRoom = CurrentRoom;
 	
 	// add ceilings to LastRoom
-	TSet<FIntVector> lastRoomWithCeilings = LastRoom.tiles;
+	temp_lastRoomWithCeilings.Empty();
+	temp_lastRoomWithCeilings = LastRoom.tiles;
 	for (auto& roomTile : LastRoom.tiles)
 	{
-		lastRoomWithCeilings.Add(roomTile + FIntVector(0, 0, 1));
+		temp_lastRoomWithCeilings.Add(roomTile + FIntVector(0, 0, 1));
 	}
 	
-	LastRoom.tiles = lastRoomWithCeilings;
+	LastRoom.tiles = temp_lastRoomWithCeilings;
 	
 	if (zChanged)
 	{
@@ -92,17 +106,18 @@ bool UTileCuttingComponent::CheckBuilding()
 	// now get the new room if z didnt change
 	CurrentRoomID = TileManager->GetRoomAt(worldPosition, CurrentRoom);
 	
-	TSet<FIntVector> roomWithCeilings = CurrentRoom.tiles;
+	temp_roomWithCeilings.Empty();
+	temp_roomWithCeilings = CurrentRoom.tiles;
 	for (auto& roomTile : CurrentRoom.tiles)
 	{
-		roomWithCeilings.Add(roomTile + FIntVector(0, 0, 1));
+		temp_roomWithCeilings.Add(roomTile + FIntVector(0, 0, 1));
 	}
 	
 	isTargetInBuilding = CurrentRoomID != -1;
 	
 	FIntVector targetTilePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 	
-	for (auto& roomTile : roomWithCeilings)
+	for (auto& roomTile : temp_roomWithCeilings)
 	{
 		if (isTargetInBuilding)
 		{
@@ -116,6 +131,7 @@ bool UTileCuttingComponent::CheckBuilding()
 				tilesToUndoForceCut.Add(roomTile);
 			}
 			tilesThatShouldCut.Add(roomTile);
+			tilesThatShouldUndarken.Add(roomTile);
 		}
 		else
 		{
@@ -143,33 +159,35 @@ void UTileCuttingComponent::CheckObstructingTiles()
     
 	FVector startWorld = CurrentFocusPoint;
 	FVector endWorld = ownerCamera->GetComponentLocation();
-	FHitResult lineTraceHit;
+	FHitResult directTargetTrace;
 	FCollisionQueryParams qParams;
 	qParams.AddIgnoredActor(GetOwner());
 	FCollisionResponseParams rParams;
 	
-	GetWorld()->LineTraceSingleByChannel(lineTraceHit, startWorld, endWorld, DirectTraceCollisionChannel, qParams, 
+	GetWorld()->LineTraceSingleByChannel(directTargetTrace, startWorld, endWorld, DirectTraceCollisionChannel, qParams, 
 		rParams);
 	
-	isTargetObstructed = lineTraceHit.bBlockingHit;
+	isTargetObstructed = directTargetTrace.bBlockingHit && useDirectTrace;
 	
 	FIntVector focusTile = UTileLibrary::WorldToTilePosition(startWorld);
 	FIntVector cameraTile = UTileLibrary::WorldToTilePosition(endWorld);
 	
 	TilesBlockingImportant.Empty();
-	
 	hitTilesThisFrame.Empty();
+	
 	//only mark tiles as obstructed if we are actually obstructed and z didnt change
+	
 	if (!zChanged && isTargetObstructed)
 	{
 		TilesBlockingImportant = ATileManager::GetObstructingAreaIndices(cameraTile, importantVisibilityTiles);
 		TilesBlockingImportant.Append(TileManager->ThickRaycast(focusTile, cameraTile, CameraOcclusionThickness));
 		
 		FVector cameraForward = ownerCamera->GetForwardVector().GetSafeNormal2D();
-		
+			
 		for (auto& tile : TilesBlockingImportant)
 		{
 			if (CurrentRoom.tiles.Contains(tile)) continue;
+			if (CurrentRoom.ceilings.Contains(tile)) continue;
 			
 			int roomID = TileManager->GetRoomIDAt(tile);
 			FRoomValue room = TileManager->GetRoomByID(roomID);
@@ -183,16 +201,19 @@ void UTileCuttingComponent::CheckObstructingTiles()
 			
 			hitTilesThisFrame.Add(tile);
 			hitTilesThisFrame.Append(room.tiles);
-			hitTilesThisFrame.Append(room.ceilings);
 		}
 	}
 	
-	TSet<FIntVector> newTilesToHide = hitTilesThisFrame.Difference(hitTilesLastFrame);
+	//TilesBlockingImportant.Append(ATileManager::GetObstructingAreaIndices(cameraTile, customImportantVisibilityTiles));
 	
+	TSet<FIntVector> newTilesToHide = hitTilesThisFrame.Difference(hitTilesLastFrame);
 	TSet<FIntVector> newTilesToShow = hitTilesLastFrame.Difference(hitTilesThisFrame);
 	
 	tilesToForceCut.Append(newTilesToHide);
 	tilesToUndoForceCut.Append(newTilesToShow);
+	
+	tilesThatShouldDarken.Append(newTilesToHide);
+	tilesThatShouldUndarken.Append(newTilesToShow);
 	
 	hitTilesLastFrame = hitTilesThisFrame;
 }
@@ -200,7 +221,9 @@ void UTileCuttingComponent::CheckObstructingTiles()
 void UTileCuttingComponent::UpdateImportantVisibilityTiles()
 {
 	importantVisibilityTiles.Empty();
+	customImportantVisibilityTiles.Empty();
 	importantVisibilityTiles.Append(CurrentRoom.tiles);
+	customImportantVisibilityTiles.Append(ITileCuttingInterface::Execute_GetCustomImportantTiles(GetOwner()));
 }
 
 void UTileCuttingComponent::UpdateTileVisibility()
@@ -233,6 +256,19 @@ void UTileCuttingComponent::UpdateTileVisibility()
 	for (auto& tile : tilesThatUndoShouldCut)
 	{
 		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::SHOULD_CUT, 0.0f);
+	}
+}
+
+void UTileCuttingComponent::UpdateTileDarkening()
+{
+	for (const auto& tile : tilesThatShouldDarken)
+	{
+		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 1.0f);
+	}
+	
+	for (const auto& tile : tilesThatShouldUndarken)
+	{
+		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 0.0f);
 	}
 }
 

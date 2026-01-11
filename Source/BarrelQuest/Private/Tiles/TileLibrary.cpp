@@ -2,6 +2,7 @@
 #include "Tiles/TileManager.h"
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void FTileRuntimeData::SetValue(FName Key, FString Value)
 {
@@ -299,6 +300,28 @@ bool UTileLibrary::IsSquareExitSquare(ATileManager* mgr, const FSquareTile& squa
 	}
 	
 	return false;
+}
+
+void UTileLibrary::DrawTileSquaresFromSet(const TSet<FIntVector>& squares)
+{
+	for (auto& square : squares)
+	{
+		FVector worldPos = TileToWorldPosition(square) + FVector(0, 0, GetTileSize().Z / 2);
+		UWorld* world = GEngine->GameViewport->GetWorld();
+		UKismetSystemLibrary::DrawDebugBox(world, worldPos, GetTileSize() / 2, FLinearColor::Green, FRotator::ZeroRotator, 
+			world->GetDeltaSeconds() * 1.05f, 2);
+	}
+}
+
+void UTileLibrary::DrawTileSquaresFromArray(const TArray<FIntVector>& squares)
+{
+	for (auto& square : squares)
+	{
+		FVector worldPos = TileToWorldPosition(square) + FVector(0, 0, GetTileSize().Z / 2);
+		UWorld* world = GEngine->GameViewport->GetWorld();
+		UKismetSystemLibrary::DrawDebugBox(world, worldPos, GetTileSize() / 2, FLinearColor::Green, FRotator::ZeroRotator, 
+			world->GetDeltaSeconds() * 1.05f, 2);
+	}
 }
 
 
