@@ -177,10 +177,15 @@ void UTileCuttingComponent::CheckObstructingTiles()
 	
 	//only mark tiles as obstructed if we are actually obstructed and z didnt change
 	
-	if (!zChanged && isTargetObstructed)
+	if (!zChanged)
 	{
-		TilesBlockingImportant = ATileManager::GetObstructingAreaIndices(cameraTile, importantVisibilityTiles);
-		TilesBlockingImportant.Append(TileManager->ThickRaycast(focusTile, cameraTile, CameraOcclusionThickness));
+		if (isTargetObstructed)
+		{
+			TilesBlockingImportant = ATileManager::GetObstructingAreaIndices(cameraTile, importantVisibilityTiles);
+			TilesBlockingImportant.Append(TileManager->ThickRaycast(focusTile, cameraTile, CameraOcclusionThickness));
+		}
+
+		TilesBlockingImportant.Append(ATileManager::GetObstructingAreaIndices(cameraTile, customImportantVisibilityTiles));
 		
 		FVector cameraForward = ownerCamera->GetForwardVector().GetSafeNormal2D();
 			
@@ -201,6 +206,7 @@ void UTileCuttingComponent::CheckObstructingTiles()
 			
 			hitTilesThisFrame.Add(tile);
 			hitTilesThisFrame.Append(room.tiles);
+			hitTilesThisFrame.Append(room.ceilings);
 		}
 	}
 	
@@ -222,6 +228,7 @@ void UTileCuttingComponent::UpdateImportantVisibilityTiles()
 {
 	importantVisibilityTiles.Empty();
 	customImportantVisibilityTiles.Empty();
+	
 	importantVisibilityTiles.Append(CurrentRoom.tiles);
 	customImportantVisibilityTiles.Append(ITileCuttingInterface::Execute_GetCustomImportantTiles(GetOwner()));
 }
