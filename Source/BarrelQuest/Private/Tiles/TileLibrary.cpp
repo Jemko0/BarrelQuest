@@ -41,11 +41,9 @@ FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key)
 		FString data = runtimeData[*i];
 		return FRuntimeDataQueryResult(*i, data);
 	}
-	else
-	{
-		UE_LOG(LogBarrelQuest, Warning, TEXT("FRuntimeData::GetValue Key not found!"));
-		return FRuntimeDataQueryResult(); //return invalid
-	}
+
+	UE_LOG(LogBarrelQuest, Warning, TEXT("FRuntimeData::GetValue Key not found!"));
+	return FRuntimeDataQueryResult(); //return invalid
 }
 
 void FBuildingValue::CalculateBounds(ATileManager* mgr)

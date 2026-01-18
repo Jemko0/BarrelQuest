@@ -99,7 +99,8 @@ void ATileChunk::BuildChunk()
                 Position.Z * TileSize.Z
             );
             FRotator Rotation = FRotator(0.f, static_cast<float>(ObjectDef.Direction) * 90.f, 0.f);
-            FTransform InstanceTransform(Rotation, InstanceLoc, FVector(1.f));
+        	FVector scale = FVector(1.0f, ObjectDef.Mirrored? -1.0f : 1.0f, 1.0f);
+            FTransform InstanceTransform(Rotation, InstanceLoc, scale);
 
             // Add instance
             int32 InstanceIndex = HISM->AddInstance(InstanceTransform, false);
@@ -162,7 +163,9 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
           Position.Z * TileSize.Z 
     );
     FRotator Rotation = FRotator(0.f, static_cast<float>(ObjectDef.Direction) * 90.f, 0.f);
-    FTransform InstanceTransform = FTransform(Rotation, InstanceLoc, FVector(1.0f));
+	
+	FVector scale = FVector(1.0f, ObjectDef.Mirrored? -1.0f : 1.0f, 1.0f);
+    FTransform InstanceTransform = FTransform(Rotation, InstanceLoc, scale);
 
     // Add Instance
     int32 NewIndex = HISM->AddInstance(InstanceTransform, false); // false = Don't mark dirty yet
@@ -475,6 +478,7 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::TINT_B] = tileDef.tint.B;
 	instanceData[(int)ETileInstanceDataIndex::HUE_SHIFT] = 0.0f;
 	instanceData[(int)ETileInstanceDataIndex::DARKENED] = 0.0f;
+	instanceData[(int)ETileInstanceDataIndex::MIRRORED] = tileObject.Mirrored ? 1.0f : 0.0f;
 	
 	return instanceData;
 }

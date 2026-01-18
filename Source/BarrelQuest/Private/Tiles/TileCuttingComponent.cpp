@@ -237,21 +237,18 @@ void UTileCuttingComponent::UpdateTileVisibility()
 {
 	FIntVector targetTilePosition = UTileLibrary::WorldToTilePosition(CurrentFocusPoint);
 	
+	FTileSearchFilter searchFilter = FTileSearchFilter();
+	searchFilter.IncludeCategory(ETileCategory::WALL);
+	searchFilter.IncludeCategory(ETileCategory::ROOF);
+	searchFilter.SetMinZLevel(lastZ);
+	
 	for (auto& tile : tilesToForceCut)
 	{
-		FTileSearchFilter searchFilter = FTileSearchFilter();
-		searchFilter.IncludeCategory(ETileCategory::WALL);
-		searchFilter.SetMinZLevel(lastZ);
-		
 		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::FORCE_CUT, 1.0f, searchFilter);
 	}
 	
 	for (auto& tile : tilesToUndoForceCut)
 	{
-		FTileSearchFilter searchFilter = FTileSearchFilter();
-		searchFilter.IncludeCategory(ETileCategory::WALL);
-		searchFilter.SetMinZLevel(lastZ);
-		
 		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::FORCE_CUT, 0.0f, searchFilter);
 	}
 	
@@ -268,14 +265,17 @@ void UTileCuttingComponent::UpdateTileVisibility()
 
 void UTileCuttingComponent::UpdateTileDarkening()
 {
+	FTileSearchFilter searchFilter = FTileSearchFilter();
+	searchFilter.SetMinZLevel(lastZ);
+	
 	for (const auto& tile : tilesThatShouldDarken)
 	{
-		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 1.0f);
+		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 1.0f, searchFilter);
 	}
 	
 	for (const auto& tile : tilesThatShouldUndarken)
 	{
-		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 0.0f);
+		TileManager->SetInstanceDataByTileIndex(tile, ETileInstanceDataIndex::DARKENED, 0.0f, searchFilter);
 	}
 }
 
