@@ -288,7 +288,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 	int32 newObjectIndex = tile.GetObjectsOnSquare().Add(Object);
 	
 	AddObjectInstance(Position, newObjectIndex, tile.GetObjectsOnSquare()[newObjectIndex]);
-	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex]);
+	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex], newObjectIndex);
     
 	ATileManager* mgr = GetOwningTileManager();
 	if (!mgr) return;
@@ -332,6 +332,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     if (!found) return;
 
     RemoveObjectInstance(Object);
+	//RemoveObjectFeatures(Position, ?);
 
     ATileManager* mgr = GetOwningTileManager();
     if (mgr)
@@ -368,6 +369,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     {
         if (Objs[i].RenderInstanceIndex == Object.RenderInstanceIndex && Objs[i].ID == Object.ID)
         {
+        	RemoveObjectFeatures(Position, i);
         	tile->RemoveObjectByIndex(i);
             
         	//fix the shifting indices
@@ -390,7 +392,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     }
 }
 
-void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object)
+void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int32 NewObjectIndex)
 {
 	FVector TileWorldOffset = UTileLibrary::TileToWorldPosition(Position);
 	UE_LOG(LogBarrelQuest, Warning, TEXT("Adding Object features at: %s"), *TileWorldOffset.ToString());
@@ -416,10 +418,55 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object)
 		
 		if (auto* FeatureComp = Cast<ITileFeatureInterface>(Component))
 		{
-			FeatureComp->SetOwningObject(Object);
+			FeatureComp->SetOwningTileIndex(Position, NewObjectIndex);
+			FeatureComp->SetTileManager(GetOwningTileManager());
 			FeatureComp->BindRuntimeData(Object.runtimeData);
 		}
+		
+		FStoredFeature stored = FStoredFeature();
+		
+		stored.ComponentPtr = Component;
+		stored.FeatureName = Feature.FeatureName;
+		stored.OwningSquare = Position;
+		stored.OwningObject = NewObjectIndex;
+		
+		StoreNewFeature(stored);
 	}
+}
+
+void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 NewObjectIndex)
+{
+	FStoredFeatureArray* arr = AttachedFeatures.Find(Position);
+	if (arr)
+	{
+		if (arr->features.IsEmpty()) return;
+		if (!arr->features.IsValidIndex(NewObjectIndex)) return;
+		
+		arr->features.RemoveAll([NewObjectIndex](FStoredFeature& Feature)
+		{
+			if (Feature.OwningObject == NewObjectIndex)
+			{
+				if (Feature.ComponentPtr && !Feature.ComponentPtr->IsBeingDestroyed())
+				{
+					Feature.ComponentPtr->DestroyComponent();
+				}
+				return true;
+			}
+			return false;
+		});
+	}
+	else
+	{
+		UE_LOG(LogBarrelQuest, Error, TEXT("Failed To remove object feature: arr was nullptr!"))
+	}
+}
+
+void ATileChunk::StoreNewFeature(const FStoredFeature& feature)
+{
+	FStoredFeatureArray* arr = AttachedFeatures.Find(feature.OwningSquare);
+	if (!arr) return;
+	
+	arr->features.Add(feature);
 }
 
 ///Returns a mutable array reference of the objects living on the positions square

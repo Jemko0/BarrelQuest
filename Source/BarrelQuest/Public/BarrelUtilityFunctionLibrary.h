@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FLinearColor HexStringToLinearColor(FString hexString);
 	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static FString LinearColorToHexString(const FLinearColor& color);
+	
 	UFUNCTION(BlueprintCallable)
 	static void GenerateAssetPathFile();
 

@@ -24,8 +24,9 @@ class BARRELQUEST_API ITileFeatureInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void BindRuntimeData(FTileRuntimeData& RuntimeData) = 0;
-	virtual void SetOwningObject(FTileObject& OwnerObject) = 0;
-	virtual FTileObject& GetOwningObject() = 0;
+	virtual void SetOwningTileIndex(const FIntVector& OwningTile, const int32 ObjectIdx) = 0;
+	virtual void SetTileManager(ATileManager* owner) = 0;
+	virtual const FIntVector& GetOwningTileIndex() = 0;
 	
 protected:
 	void BindKey(FTileRuntimeData& RuntimeData, FName Key, TFunction<void(const FString&)> Callback)

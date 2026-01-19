@@ -34,6 +34,19 @@ FLinearColor UBarrelUtilityFunctionLibrary::HexStringToLinearColor(FString hexSt
     return FLinearColor(R, G, B, A);
 }
 
+FString UBarrelUtilityFunctionLibrary::LinearColorToHexString(const FLinearColor& color)
+{
+    const FColor SRGBColor = color.ToFColor(true); // true = sRGB conversion
+
+    return FString::Printf(
+        TEXT("#%02X%02X%02X%02X"),
+        SRGBColor.R,
+        SRGBColor.G,
+        SRGBColor.B,
+        SRGBColor.A
+    );
+}
+
 void UBarrelUtilityFunctionLibrary::GenerateAssetPathFile()
 {
     FString filePath = GetLuaMetaOutputDirectory();

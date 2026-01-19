@@ -4,23 +4,53 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "BarrelUtilityLibrary.h"
+#include "Tiles/TileManager.h"
 #include "TileFeatureLibrary.generated.h"
 
 /**
  * 
  */
 
+/*
+ * General Macro for tile features, this belongs into the class body of a TileFeature header file.
+ * This Macro handles automatic ownership transfer and adds new member variables
+ * like:
+ *	OwningTileIndex (FIntVector)
+ *	OwningObjectIndex (int32)
+ *	OwningTileManager (ATileManager*)
+ */
 #define TF_GENERATED_BODY() \
 	protected: \
-	FTileObject& OwningObject; \
-	virtual void SetOwningObject(FTileObject& OwnerObject) \
+	FIntVector OwningTileIndex = FIntVector(-1, -1, -1); \
+	int32 OwningObjectIndex = -1; \
+	ATileManager* OwningTileManager = nullptr; \
+	virtual void SetOwningTileIndex(const FIntVector& OwningTile, const int32 ObjectIdx) \
 	{ \
-		OwningObject = OwnerObject;\
+		OwningTileIndex = OwningTile;\
+		OwningObjectIndex = ObjectIdx; \
+	} \
+	virtual void SetTileManager(ATileManager* owner) \
+	{\
+		OwningTileManager = owner;\
+	}\
+	\
+	virtual const FIntVector& GetOwningTileIndex() \
+	{ \
+		return OwningTileIndex;\
 	} \
 	virtual FTileObject& GetOwningObject() \
-	{ \
-		return OwningObject;\
-	} \
+	{\
+		FSquareTile* ptr = OwningTileManager->GetSquareTilePtr(OwningTileIndex);\
+		if (!ptr || !ptr->GetObjectsOnSquare().IsValidIndex(OwningObjectIndex))\
+		{\
+			\
+			UE_LOG(LogBarrelQuest, Error, TEXT("Invalid OwningObjectIndex %d for tile %s"), OwningObjectIndex, *OwningTileIndex.ToString());\
+			static FTileObject Dummy;\
+			return Dummy;\
+		}\
+		return ptr->GetObjectsOnSquare()[OwningObjectIndex];\
+	}
 
 UCLASS()
 class BARRELQUEST_API UTileFeatureLibrary : public UBlueprintFunctionLibrary

@@ -77,7 +77,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveObject(FIntVector Position, const FTileObject& Object);
 	
-	void AddObjectFeatures(FIntVector Position, FTileObject& Object);
+	void AddObjectFeatures(FIntVector Position, FTileObject& Object, int32 NewObjectIndex);
+	void RemoveObjectFeatures(FIntVector Position, int32 NewObjectIndex);
+	
+	void StoreNewFeature(const FStoredFeature& feature);
+
+	TMap<FIntVector, FStoredFeatureArray> AttachedFeatures;
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<FTileObject>& GetObjectsOnSquare(FIntVector Position, bool& success);

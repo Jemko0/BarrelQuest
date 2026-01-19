@@ -119,6 +119,27 @@ public:
 	FTransform RelativeTransform;
 };
 
+USTRUCT(BlueprintType)
+struct FStoredFeature
+{
+	GENERATED_BODY()
+	
+	FName FeatureName;
+	FIntVector OwningSquare;
+	int32 OwningObject;
+	USceneComponent* ComponentPtr = nullptr;
+	
+	FStoredFeature() = default;
+};
+
+USTRUCT(BlueprintType)
+struct FStoredFeatureArray
+{
+	GENERATED_BODY()
+	
+	TArray<FStoredFeature> features;
+};
+
 FORCEINLINE uint32 GetTypeHash(const FTileRenderKey& Key)
 {
 	return HashCombine(GetTypeHash(Key.Mesh), GetTypeHash(Key.Material));
