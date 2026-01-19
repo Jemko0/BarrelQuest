@@ -434,31 +434,34 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 	}
 }
 
-void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 NewObjectIndex)
+void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectIndex)
 {
 	FStoredFeatureArray* arr = AttachedFeatures.Find(Position);
-	if (arr)
+	if (!arr) return;
+
+	bool s;
+	FSquareTile* Square = GetSquareTilePtr(Position, s); 
+	if (!Square || !Square->GetObjectsOnSquare().IsValidIndex(TargetObjectIndex)) return;
+    
+	FTileObject& Obj = Square->GetObjectsOnSquare()[TargetObjectIndex];
+	
+	arr->features.RemoveAll([&](FStoredFeature& Feature)
 	{
-		if (arr->features.IsEmpty()) return;
-		if (!arr->features.IsValidIndex(NewObjectIndex)) return;
-		
-		arr->features.RemoveAll([NewObjectIndex](FStoredFeature& Feature)
+		if (Feature.OwningObject == TargetObjectIndex)
 		{
-			if (Feature.OwningObject == NewObjectIndex)
+			if (Feature.ComponentPtr && !Feature.ComponentPtr->IsBeingDestroyed())
 			{
-				if (Feature.ComponentPtr && !Feature.ComponentPtr->IsBeingDestroyed())
+				if (auto* Interface = Cast<ITileFeatureInterface>(Feature.ComponentPtr))
 				{
-					Feature.ComponentPtr->DestroyComponent();
+					Interface->UnbindFromData(Obj.runtimeData);
 				}
-				return true;
+                
+				Feature.ComponentPtr->DestroyComponent();
 			}
-			return false;
-		});
-	}
-	else
-	{
-		UE_LOG(LogBarrelQuest, Error, TEXT("Failed To remove object feature: arr was nullptr!"))
-	}
+			return true;
+		}
+		return false;
+	});
 }
 
 void ATileChunk::StoreNewFeature(const FStoredFeature& feature)

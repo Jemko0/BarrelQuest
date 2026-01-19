@@ -28,14 +28,26 @@ public:
 	virtual void SetTileManager(ATileManager* owner) = 0;
 	virtual const FIntVector& GetOwningTileIndex() = 0;
 	
+	TArray<FDelegateHandle> InternalHandles;
+	
 protected:
 	void BindKey(FTileRuntimeData& RuntimeData, FName Key, TFunction<void(const FString&)> Callback)
 	{
-		RuntimeData.OnChanged.AddLambda(
-			[Key, Callback](FName ChangedKey, const FString& Value)
-			{
-				if (ChangedKey == Key) Callback(Value);
-			}
+		FDelegateHandle Handle = RuntimeData.OnChanged.AddLambda(
+		   [Key, Callback](FName ChangedKey, const FString& Value)
+		   {
+			  if (ChangedKey == Key) Callback(Value);
+		   }
 		);
+		InternalHandles.Add(Handle);
+	}
+public:
+	virtual void UnbindFromData(FTileRuntimeData& RuntimeData)
+	{
+		for (FDelegateHandle& Handle : InternalHandles)
+		{
+			RuntimeData.OnChanged.Remove(Handle);
+		}
+		InternalHandles.Empty();
 	}
 };
