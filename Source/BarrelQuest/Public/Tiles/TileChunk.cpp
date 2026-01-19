@@ -466,7 +466,7 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
 
 void ATileChunk::StoreNewFeature(const FStoredFeature& feature)
 {
-	FStoredFeatureArray* arr = AttachedFeatures.Find(feature.OwningSquare);
+	FStoredFeatureArray* arr = AttachedFeatures.FindOrAdd(feature.OwningSquare);
 	if (!arr) return;
 	
 	arr->features.Add(feature);
