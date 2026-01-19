@@ -466,10 +466,9 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
 
 void ATileChunk::StoreNewFeature(const FStoredFeature& feature)
 {
-	FStoredFeatureArray* arr = AttachedFeatures.FindOrAdd(feature.OwningSquare);
-	if (!arr) return;
+	FStoredFeatureArray arr = AttachedFeatures.FindOrAdd(feature.OwningSquare);
 	
-	arr->features.Add(feature);
+	arr.features.Add(feature);
 }
 
 ///Returns a mutable array reference of the objects living on the positions square
