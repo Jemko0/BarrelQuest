@@ -445,19 +445,25 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
     
 	FTileObject& Obj = Square->GetObjectsOnSquare()[TargetObjectIndex];
 	
-	arr->features.RemoveAll([&](FStoredFeature& Feature)
+	arr->features.RemoveAll([TargetObjectIndex, &Obj](FStoredFeature& Feature)
 	{
 		if (Feature.OwningObject == TargetObjectIndex)
 		{
 			if (Feature.ComponentPtr && !Feature.ComponentPtr->IsBeingDestroyed())
 			{
+				Feature.ComponentPtr->Deactivate();
+                Feature.ComponentPtr->UnregisterComponent();
+
 				if (auto* Interface = Cast<ITileFeatureInterface>(Feature.ComponentPtr))
 				{
 					Interface->UnbindFromData(Obj.runtimeData);
 				}
                 
-				Feature.ComponentPtr->DestroyComponent();
+                Feature.ComponentPtr->DestroyComponent();
+                Feature.ComponentPtr = nullptr;
 			}
+			Feature.OwningObjectIndex = -1;
+            Feature.OwningTileIndex = FIntVector(-1, -1, -1);
 			return true;
 		}
 		return false;
