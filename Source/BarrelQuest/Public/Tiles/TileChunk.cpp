@@ -1,6 +1,9 @@
 ﻿#include "Tiles/TileChunk.h"
+
+#include "BarrelUtilityFunctionLibrary.h"
 #include "Tiles/TileManager.h"
 #include "BarrelUtilityLibrary.h"
+#include "Features/Interfaces/TileFeatureInterface.h"
 #include "Net/UnrealNetwork.h"
 
 ATileChunk::ATileChunk()
@@ -273,6 +276,11 @@ FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSq
 	return AddedTile;
 }
 
+void ATileChunk::SetSquare(FIntVector Position, const FSquareTile& squareTile)
+{
+	Tiles.Add(Position, squareTile);
+}
+
 ///Adds a new object at the positions square, adds data and instance visual. Use this to create new tiles
 void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 {
@@ -280,6 +288,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 	int32 newObjectIndex = tile.GetObjectsOnSquare().Add(Object);
 	
 	AddObjectInstance(Position, newObjectIndex, tile.GetObjectsOnSquare()[newObjectIndex]);
+	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex]);
     
 	ATileManager* mgr = GetOwningTileManager();
 	if (!mgr) return;
@@ -379,6 +388,38 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         	break;
         }
     }
+}
+
+void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object)
+{
+	FVector TileWorldOffset = UTileLibrary::TileToWorldPosition(Position);
+	UE_LOG(LogBarrelQuest, Warning, TEXT("Adding Object features at: %s"), *TileWorldOffset.ToString());
+	
+	for (const FTileObjectFeature& Feature : Object.Features)
+	{
+		if (!Feature.FeatureClass) continue;
+
+		USceneComponent* Component = NewObject<USceneComponent>(this, Feature.FeatureClass);
+
+		Component->AttachToComponent(
+			RootComponent,
+			FAttachmentTransformRules::KeepRelativeTransform
+		);
+		
+		FTransform FeatureTransform = Feature.RelativeTransform;
+		FeatureTransform.AddToTranslation(TileWorldOffset);
+
+		Component->SetRelativeTransform(FeatureTransform);
+		Component->RegisterComponent();
+		
+		UE_LOG(LogBarrelQuest, Warning, TEXT("component: %s"), *Component->GetName());
+		
+		if (auto* FeatureComp = Cast<ITileFeatureInterface>(Component))
+		{
+			FeatureComp->SetOwningObject(Object);
+			FeatureComp->BindRuntimeData(Object.runtimeData);
+		}
+	}
 }
 
 ///Returns a mutable array reference of the objects living on the positions square

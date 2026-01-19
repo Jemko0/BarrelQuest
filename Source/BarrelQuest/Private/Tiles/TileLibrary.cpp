@@ -6,17 +6,19 @@
 
 void FTileRuntimeData::SetValue(FName Key, FString Value)
 {
+	FString valueStr = FString::Printf(TEXT("%s=%s"), *Key.ToString(), *Value);
+	
 	if (int32* i = indexLookup.Find(Key))
 	{
-		runtimeData[*i]	= Value;
+		runtimeData[*i] = valueStr;
 	}
 	else
 	{
-		FString valueStr = FString::Printf(TEXT("%s=%s"), *Key.ToString(), *Value);
 		int32 newIndex = runtimeData.AddUnique(valueStr);
-		
 		indexLookup.Add(Key, newIndex);
 	}
+	
+	OnChanged.Broadcast(Key, Value);
 }
 
 bool FTileRuntimeData::RemoveValue(FName Key)
@@ -30,20 +32,27 @@ bool FTileRuntimeData::RemoveValue(FName Key)
 	{
 		return false;
 	}
-	
+	OnRemoved.Broadcast(Key);
 	return true;
 }
 
-FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key)
+FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key) const
 {
-	if (int32* i = indexLookup.Find(Key))
+	if (const int32* i = indexLookup.Find(Key))
 	{
-		FString data = runtimeData[*i];
+		const FString& data = runtimeData[*i];
+		
+		FString ParsedValue;
+		if (data.Split(TEXT("="), nullptr, &ParsedValue))
+		{
+			return FRuntimeDataQueryResult(*i, ParsedValue);
+		}
+		
 		return FRuntimeDataQueryResult(*i, data);
 	}
 
-	UE_LOG(LogBarrelQuest, Warning, TEXT("FRuntimeData::GetValue Key not found!"));
-	return FRuntimeDataQueryResult(); //return invalid
+	UE_LOG(LogBarrelQuest, Warning, TEXT("FTileRuntimeData::GetValue Key not found: %s"), *Key.ToString());
+	return FRuntimeDataQueryResult(); // invalid
 }
 
 void FBuildingValue::CalculateBounds(ATileManager* mgr)
@@ -322,4 +331,19 @@ void UTileLibrary::DrawTileSquaresFromArray(const TArray<FIntVector>& squares)
 	}
 }
 
+FTileRuntimeData& UTileLibrary::SetRuntimeDataValue(FTileRuntimeData& runtimeData, FName Key, FString Value)
+{
+	runtimeData.SetValue(Key, Value);
+	return runtimeData;
+}
 
+FTileRuntimeData UTileLibrary::ConvertMapRuntimeDataToTileRuntimeData(const TMap<FName, FString>& Map)
+{
+	FTileRuntimeData runtimeData;
+	for (auto& pair : Map)
+	{
+		runtimeData.SetValue(pair.Key, pair.Value);
+	}
+	
+	return runtimeData;
+}

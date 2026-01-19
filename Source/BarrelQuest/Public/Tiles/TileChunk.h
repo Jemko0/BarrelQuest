@@ -67,11 +67,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
 	FSquareTile& AddSquare(FIntVector Position, const FSquareTile& newSquare);
 	
+	///Directly sets a square, with objects, does not rebuild chunk automatically
+	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
+	void SetSquare(FIntVector Position, const FSquareTile& squareTile);
+	
 	UFUNCTION(BlueprintCallable)
 	void AddObject(FIntVector Position, const FTileObject& Object);
 	
 	UFUNCTION(BlueprintCallable)
 	void RemoveObject(FIntVector Position, const FTileObject& Object);
+	
+	void AddObjectFeatures(FIntVector Position, FTileObject& Object);
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<FTileObject>& GetObjectsOnSquare(FIntVector Position, bool& success);

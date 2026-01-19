@@ -59,7 +59,7 @@ enum class ETileTextureIndex : uint8
 	ROAD_LINES_CONTINUOUS_SINGLE_LEFT,
 	ROAD_LINES_CONTINUOUS_SINGLE,
 	ROAD_LINES_CONTINUOUS_DOUBLE,
-	
+
 };
 
 UENUM(BlueprintType)
@@ -99,6 +99,24 @@ public:
 	{
 		return Mesh == Other.Mesh && Material == Other.Material;
 	}
+};
+
+USTRUCT(BlueprintType)
+struct FTileObjectFeature
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<USceneComponent> FeatureClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName FeatureName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName AttachSocket;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTransform RelativeTransform;
 };
 
 FORCEINLINE uint32 GetTypeHash(const FTileRenderKey& Key)
@@ -157,6 +175,12 @@ public:
 	TEnumAsByte<ECollisionChannel> ObjectType = ECC_GameTraceChannel6;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, FString> DefaultRuntimeData;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FTileObjectFeature> DefaultFeatures;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FCraftingRecipeIngredient> CraftingRecipe;
 };
 
@@ -179,6 +203,9 @@ public:
 	bool valid;
 };
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRuntimeDataChanged, FName, const FString&);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnRuntimeDataRemoved, FName);
+
 USTRUCT(BlueprintType)
 struct FTileRuntimeData
 {
@@ -190,14 +217,17 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TArray<FString> runtimeData;
 	
+	FOnRuntimeDataChanged OnChanged;
+	FOnRuntimeDataRemoved OnRemoved;
+	
 	///Sets a runtime value, if key doesnt exist, it gets added
 	void SetValue(FName Key, FString Value);
 	
 	///Removes a runtime value, if key doesnt exist, returns false
 	bool RemoveValue(FName Key);
 	
-	///Gets a runtime value, if key doesnt exist, returns query result with valid == false
-	FRuntimeDataQueryResult GetValue(FName Key);
+	///Gets a runtime value, if key doesnt exist, returns query result with valid == false 
+	FRuntimeDataQueryResult GetValue(FName Key) const;
 };
 
 UENUM(BlueprintType)
@@ -306,6 +336,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, SaveGame)
 	FTileRuntimeData runtimeData;
+	
+	UPROPERTY(BlueprintReadWrite, SaveGame)
+	TArray<FTileObjectFeature> Features;
 	
 	UPROPERTY(BlueprintReadOnly)
 	int32 RenderInstanceIndex = -1;
@@ -532,4 +565,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static void DrawTileSquaresFromArray(const TArray<FIntVector>& squares);
+	
+	UFUNCTION(BlueprintCallable)
+	static FTileRuntimeData& SetRuntimeDataValue(UPARAM(ref) FTileRuntimeData& runtimeData, FName Key, FString Value);
+	
+	UFUNCTION(BlueprintCallable)
+	static FTileRuntimeData ConvertMapRuntimeDataToTileRuntimeData(const TMap<FName, FString>& Map);
 };

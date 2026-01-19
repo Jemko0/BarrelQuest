@@ -266,6 +266,8 @@ void UTileCuttingComponent::UpdateTileVisibility()
 void UTileCuttingComponent::UpdateTileDarkening()
 {
 	FTileSearchFilter searchFilter = FTileSearchFilter();
+	searchFilter.IncludeCategory(ETileCategory::WALL);  // Add this
+	searchFilter.IncludeCategory(ETileCategory::ROOF);  // Add this
 	searchFilter.SetMinZLevel(lastZ);
 	
 	for (const auto& tile : tilesThatShouldDarken)
