@@ -18,5 +18,8 @@ UTilePointLightFeatureComponent::UTilePointLightFeatureComponent()
 void UTilePointLightFeatureComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	GetOwningObject().runtimeData.SetValue("light_color", UBarrelUtilityFunctionLibrary::LinearColorToHexString(FLinearColor::MakeRandomColor()));
+	
+	if (!GetOwningObject()) return;
+	
+	GetOwningObject()->runtimeData.SetValue("light_color", UBarrelUtilityFunctionLibrary::LinearColorToHexString(FLinearColor::MakeRandomColor()));
 }

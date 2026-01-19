@@ -213,6 +213,12 @@ void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
     {
         // an instance was moved. We must update its owner.
         // who was at the end?
+    	if (!Lookup.IsValidIndex(LastIndex))
+    	{
+    		UE_LOG(LogBarrelQuest, Error, TEXT("ATileChunk::RemoveObjectInstance() >> LastIndex is invalid!"))
+    		return;
+    	}
+    	
         FObjectReference SwappedOwnerRef = Lookup[LastIndex];
         
         // update Lookup Table
@@ -401,7 +407,12 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 	{
 		if (!Feature.FeatureClass) continue;
 
-		USceneComponent* Component = NewObject<USceneComponent>(this, Feature.FeatureClass);
+		USceneComponent* Component = NewObject<USceneComponent>(
+		   this, 
+		   Feature.FeatureClass,
+		   NAME_None,
+		   RF_Transactional
+	   );
 
 		Component->AttachToComponent(
 			RootComponent,
@@ -418,9 +429,14 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 		
 		if (auto* FeatureComp = Cast<ITileFeatureInterface>(Component))
 		{
+			UE_LOG(LogBarrelQuest, Warning, TEXT("Feature Comp Valid"));
 			FeatureComp->SetOwningTileIndex(Position, NewObjectIndex);
 			FeatureComp->SetTileManager(GetOwningTileManager());
 			FeatureComp->BindRuntimeData(Object.runtimeData);
+		}
+		else
+		{
+			UE_LOG(LogBarrelQuest, Warning, TEXT("Feature Comp invalid"));
 		}
 		
 		FStoredFeature stored = FStoredFeature();
@@ -444,36 +460,36 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
 	if (!Square || !Square->GetObjectsOnSquare().IsValidIndex(TargetObjectIndex)) return;
     
 	FTileObject& Obj = Square->GetObjectsOnSquare()[TargetObjectIndex];
+	UE_LOG(LogBarrelQuest, Warning, TEXT("Removing features for object %d"), TargetObjectIndex);
+	UE_LOG(LogBarrelQuest, Warning, TEXT("arrnum: %d"), arr->features.Num());
 	
-	arr->features.RemoveAll([TargetObjectIndex, &Obj](FStoredFeature& Feature)
+	for (int32 i = arr->features.Num() - 1; i >= 0; i--)
 	{
-		if (Feature.OwningObject == TargetObjectIndex)
+		UE_LOG(LogBarrelQuest, Warning, TEXT("Idx: %d"), i);
+		auto& feature = arr->features[i];
+        
+		if (feature.OwningObject != TargetObjectIndex) continue;
+		if (!feature.ComponentPtr) continue;
+       
+		if (auto* Interface = Cast<ITileFeatureInterface>(feature.ComponentPtr))
 		{
-			if (Feature.ComponentPtr && !Feature.ComponentPtr->IsBeingDestroyed())
-			{
-				Feature.ComponentPtr->Deactivate();
-                Feature.ComponentPtr->UnregisterComponent();
-
-				if (auto* Interface = Cast<ITileFeatureInterface>(Feature.ComponentPtr))
-				{
-					Interface->UnbindFromData(Obj.runtimeData);
-				}
-                
-                Feature.ComponentPtr->DestroyComponent();
-                Feature.ComponentPtr = nullptr;
-			}
-			Feature.OwningObjectIndex = -1;
-            Feature.OwningTileIndex = FIntVector(-1, -1, -1);
-			return true;
+			UE_LOG(LogBarrelQuest, Warning, TEXT("valid interaface"));
+			Interface->UnbindFromData(Obj.runtimeData);
+			Interface->ResetOwners();
 		}
-		return false;
-	});
+		else
+		{
+			UE_LOG(LogBarrelQuest, Warning, TEXT("invalid interface"));
+		}
+        
+		feature.ComponentPtr->DestroyComponent();
+		arr->features.RemoveAt(i);
+	}
 }
 
 void ATileChunk::StoreNewFeature(const FStoredFeature& feature)
 {
-	FStoredFeatureArray arr = AttachedFeatures.FindOrAdd(feature.OwningSquare);
-	
+	FStoredFeatureArray& arr = AttachedFeatures.FindOrAdd(feature.OwningSquare);
 	arr.features.Add(feature);
 }
 

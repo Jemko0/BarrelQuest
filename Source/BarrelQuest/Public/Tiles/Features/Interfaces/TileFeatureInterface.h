@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BarrelUtilityLibrary.h"
 #include "Tiles/TileLibrary.h"
 #include "UObject/Interface.h"
 #include "TileFeatureInterface.generated.h"
@@ -26,6 +27,7 @@ public:
 	virtual void BindRuntimeData(FTileRuntimeData& RuntimeData) = 0;
 	virtual void SetOwningTileIndex(const FIntVector& OwningTile, const int32 ObjectIdx) = 0;
 	virtual void SetTileManager(ATileManager* owner) = 0;
+	virtual void ResetOwners() = 0;
 	virtual const FIntVector& GetOwningTileIndex() = 0;
 	
 	TArray<FDelegateHandle> InternalHandles;
@@ -33,17 +35,18 @@ public:
 protected:
 	void BindKey(FTileRuntimeData& RuntimeData, FName Key, TFunction<void(const FString&)> Callback)
 	{
-		FDelegateHandle Handle = RuntimeData.OnChanged.AddLambda(
-		   [Key, Callback](FName ChangedKey, const FString& Value)
+		FDelegateHandle Handle = RuntimeData.OnChanged.AddLambda([Key, Callback](FName ChangedKey, const FString& Value)
 		   {
 			  if (ChangedKey == Key) Callback(Value);
 		   }
 		);
 		InternalHandles.Add(Handle);
 	}
+	
 public:
 	virtual void UnbindFromData(FTileRuntimeData& RuntimeData)
 	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("Unbind From Data"));
 		for (FDelegateHandle& Handle : InternalHandles)
 		{
 			RuntimeData.OnChanged.Remove(Handle);

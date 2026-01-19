@@ -13,7 +13,6 @@ UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BARRELQUEST_API UTilePointLightFeatureComponent : public UPointLightComponent, public ITileFeatureInterface
 {
 	GENERATED_BODY()
-	
 	TF_GENERATED_BODY()
 
 public:
