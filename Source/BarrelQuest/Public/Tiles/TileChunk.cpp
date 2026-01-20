@@ -460,8 +460,8 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
 	if (!Square || !Square->GetObjectsOnSquare().IsValidIndex(TargetObjectIndex)) return;
     
 	FTileObject& Obj = Square->GetObjectsOnSquare()[TargetObjectIndex];
-	UE_LOG(LogBarrelQuest, Warning, TEXT("Removing features for object %d"), TargetObjectIndex);
-	UE_LOG(LogBarrelQuest, Warning, TEXT("arrnum: %d"), arr->features.Num());
+	
+	//UE_LOG(LogBarrelQuest, Warning, TEXT("Removing features for object %d"), TargetObjectIndex);
 	
 	for (int32 i = arr->features.Num() - 1; i >= 0; i--)
 	{
@@ -473,7 +473,6 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
        
 		if (auto* Interface = Cast<ITileFeatureInterface>(feature.ComponentPtr))
 		{
-			UE_LOG(LogBarrelQuest, Warning, TEXT("valid interaface"));
 			Interface->UnbindFromData(Obj.runtimeData);
 			Interface->ResetOwners();
 		}
