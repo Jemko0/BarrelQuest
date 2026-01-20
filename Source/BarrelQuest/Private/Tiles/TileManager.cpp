@@ -583,6 +583,58 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 	return true;
 }
 
+bool ATileManager::SetObjectInstanceData(FIntVector squareTilePosition, int32 targetObjectIndex,
+	ETileInstanceDataIndex propertyIndex, float newPropValue)
+{
+	FVector tileWorld = UTileLibrary::TileToWorldPosition(squareTilePosition);
+	FIntVector2 chunkPos = UTileLibrary::WorldToChunkPosition(tileWorld);
+	ATileChunk* chunkPtr = GetChunkAt(chunkPos);
+	
+	if (!chunkPtr)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("SetObjectInstanceData: ChunkPtr was null"))
+		return false;
+	}
+	
+	FIntVector tileLocalPos = UTileLibrary::WorldToLocalChunkTilePosition(tileWorld, chunkPtr);
+	
+	bool found = false;
+	TArray<FTileObject>& objects = chunkPtr->GetObjectsOnSquare(tileLocalPos, found);
+	
+	if (!found)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("SetObjectInstanceData: Tile %s was not found"), *tileLocalPos.ToString())
+		return false;
+	}
+	
+	FTileObject& Object = objects[targetObjectIndex];
+	
+	const FTileDefinition def = GetTileByID(Object.ID);
+	
+	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
+		
+	UHierarchicalInstancedStaticMeshComponent** HISMMapResult = chunkPtr->HISMMap.Find(renderKey);
+			
+	if (!HISMMapResult)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Didnt find HISM for: %s"), *Object.ID.ToString());
+		return false;
+	}
+		
+	UHierarchicalInstancedStaticMeshComponent* HISM = *HISMMapResult;
+		
+	float currentData = HISM->PerInstanceSMCustomData[Object.RenderInstanceIndex * ATileChunk::customDataFloats + (int)propertyIndex];
+		
+	if (currentData == newPropValue)
+	{
+		return false;
+	}
+	
+	const bool s = HISM->SetCustomDataValue(Object.RenderInstanceIndex, (int)propertyIndex, newPropValue, true);
+	
+	return s;
+}
+
 bool ATileManager::HasCeilingAt(FIntVector pos)
 {
 	bool found = false;
@@ -1023,8 +1075,7 @@ void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int
 	
 	if (!found) return;
 	
-	ensureMsgf(objectIdx < squarePtr->GetObjectsOnSquare().Num(),
-	TEXT("Invalid objectIdx %d"), objectIdx);
+	ensureMsgf(objectIdx < squarePtr->GetObjectsOnSquare().Num(), TEXT("Invalid objectIdx %d"), objectIdx);
 	
 	FTileObject& o = squarePtr->GetObjectsOnSquare()[objectIdx];
 	

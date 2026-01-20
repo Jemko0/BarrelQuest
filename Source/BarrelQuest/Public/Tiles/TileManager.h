@@ -85,9 +85,15 @@ public:
 	
 	///Sets the instance data property for all objects on a square, returns true if succeeded,
 	///can be filtered using FTileSearchFilter
+	///Do not use this for long lasting changes, (will not save!!)
 	UFUNCTION(BlueprintCallable)
 	bool SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInstanceDataIndex propertyIndex, float newPropValue, 
 		FTileSearchFilter searchFilter = FTileSearchFilter());
+	
+	///Sets the instance data property for a specific object on a square, returns true if succeeded
+	///Do not use this for long lasting changes, (will not save!!)
+	UFUNCTION(BlueprintCallable)
+	bool SetObjectInstanceData(FIntVector squareTilePosition, int32 targetObjectIndex, ETileInstanceDataIndex propertyIndex, float newPropValue);
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasCeilingAt(FIntVector pos);
@@ -143,7 +149,7 @@ public:
 	static TSet<FIntVector> GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea);
 	
 	UFUNCTION(BlueprintCallable)
-	void SetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key, FString& Value);
+	void SetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, UPARAM(ref) FName& Key, UPARAM(ref) FString& Value);
 	
 	UFUNCTION(BlueprintCallable)
 	FRuntimeDataQueryResult GetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key);
