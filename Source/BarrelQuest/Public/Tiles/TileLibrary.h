@@ -60,6 +60,7 @@ enum class ETileTextureIndex : uint8
 	ROAD_LINES_CONTINUOUS_SINGLE,
 	ROAD_LINES_CONTINUOUS_DOUBLE,
 
+	PROP_FENCE_SHORT
 };
 
 UENUM(BlueprintType)
