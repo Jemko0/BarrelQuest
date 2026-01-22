@@ -235,7 +235,7 @@ void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
         }
     }
 
-    // 3. Shrink Lookup
+    //shrink Lookup
     if (Lookup.Num() > 0)
     {
         Lookup.RemoveAt(LastIndex);
@@ -295,6 +295,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 	
 	AddObjectInstance(Position, newObjectIndex, tile.GetObjectsOnSquare()[newObjectIndex]);
 	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex], newObjectIndex);
+	BindRuntimeData(Position, newObjectIndex);
     
 	ATileManager* mgr = GetOwningTileManager();
 	if (!mgr) return;
@@ -606,4 +607,86 @@ UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTil
 	HISMReverseLookup.Add(key, TArray<FObjectReference>());
 	
 	return HISM;
+}
+
+void ATileChunk::StoreRuntimeListener(FRuntimeListenerObject& listener)
+{
+	TArray<FRuntimeListenerObject>& Listeners = perSquareHandles.FindOrAdd(listener.squarePosition);
+	Listeners.Add(listener);
+}
+
+void ATileChunk::BindRuntimeData(FIntVector squarePosition, int32 objectIndex)
+{
+	bool found = false;
+	FSquareTile* squarePtr =  GetSquareTilePtr(squarePosition, found);
+	if (!found)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to bind runtime data"));
+		return;
+	}
+	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIndex];
+	
+	FDelegateHandle newHandle =
+	object.runtimeData.OnChanged.AddLambda(
+		[this, squarePosition, objectIndex](FName Key, const FString& Value)
+		{
+			OnTileObjectDataChanged(squarePosition, objectIndex, Key, Value);
+		}
+	);
+	
+	FRuntimeListenerObject newListener = FRuntimeListenerObject();
+	newListener.squarePosition = squarePosition;
+	newListener.objectIndex = objectIndex;
+	newListener.listenerHandle = newHandle;
+	
+	StoreRuntimeListener(newListener);
+	
+	UE_LOG(LogBarrelQuest, Warning, TEXT("Bound runtime data"));
+}
+
+void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
+{
+	TArray<FRuntimeListenerObject>* Listeners = perSquareHandles.Find(Square);
+	if (!Listeners)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to unbind runtime data: no listeners"));
+		return;
+	}
+
+	bool found = false;
+	FSquareTile* SquarePtr = GetSquareTilePtr(Square, found);
+	if (!found)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to bind runtime data: no SquarePtr"));
+		return;
+	}
+
+	TArray<FTileObject>& Objects = SquarePtr->GetObjectsOnSquare();
+
+	for (int32 i = Listeners->Num() - 1; i >= 0; --i)
+	{
+		FRuntimeListenerObject& Listener = (*Listeners)[i];
+
+		if (Listener.objectIndex == ObjectIndex)
+		{
+			if (Objects.IsValidIndex(ObjectIndex))
+			{
+				Objects[ObjectIndex].runtimeData.OnChanged.Remove(Listener.listenerHandle);
+			}
+
+			Listeners->RemoveAtSwap(i);
+		}
+	}
+
+	if (Listeners->Num() == 0)
+	{
+		perSquareHandles.Remove(Square);
+	}
+	
+	UE_LOG(LogBarrelQuest, Warning, TEXT("successfully unbound runtime data"));
+}
+
+void ATileChunk::OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value)
+{
+	UE_LOG(LogBarrelQuest, Warning, TEXT("OnTileObjectDataChanged: objIdx: %i / key : %s / val: %s"), objectIndex, *Key.ToString(), *Value);
 }

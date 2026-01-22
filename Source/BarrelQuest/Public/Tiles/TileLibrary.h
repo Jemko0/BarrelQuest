@@ -226,6 +226,7 @@ public:
 };
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRuntimeDataChanged, FName, const FString&);
+DECLARE_MULTICAST_DELEGATE_FourParams(FOnObjectRuntimeDataChanged, FName, const FString&, FIntVector, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnRuntimeDataRemoved, FName);
 
 USTRUCT(BlueprintType)

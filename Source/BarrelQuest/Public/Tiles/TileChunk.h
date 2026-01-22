@@ -104,4 +104,23 @@ public:
 	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare);
 	
 	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
+	
+	struct FRuntimeListenerObject
+	{
+		FIntVector squarePosition;
+		int32 objectIndex;
+		FDelegateHandle listenerHandle;
+	};
+	
+	TMap<FIntVector, TArray<FRuntimeListenerObject>> perSquareHandles;
+	
+	void StoreRuntimeListener(FRuntimeListenerObject& listener);
+	
+	UFUNCTION(BlueprintCallable)
+	void BindRuntimeData(FIntVector squarePosition, int32 objectIndex);
+	
+	UFUNCTION(BlueprintCallable)
+	void UnbindRuntimeData(FIntVector squarePosition, int32 objectIndex);
+	
+	void OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value);
 };
