@@ -91,6 +91,7 @@ void ATileManager::ResetCurrentState()
 {
 	for (auto*& chunk : Chunks)
 	{
+		chunk->ResetChunkState();
 		chunk->Destroy();
 	}
 	Chunks.Empty();

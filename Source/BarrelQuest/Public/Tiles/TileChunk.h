@@ -26,7 +26,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*> HISMMap;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<FIntVector, FSquareTile> Tiles;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -64,8 +64,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FSquareTile& GetOrCreateSquareTile(FIntVector Position);
 	
+	UFUNCTION(BlueprintCallable)
+	void SetTiles(TMap<FIntVector, FSquareTile> newTiles);
+	
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
 	FSquareTile& AddSquare(FIntVector Position, const FSquareTile& newSquare);
+	
+	UFUNCTION(BlueprintCallable, Category="Tile Objects")
+	void SetObjectRuntimeData(FIntVector Position, int32 objectIndex, FName Key, const FString& Value);
 	
 	///Directly sets a square, with objects, does not rebuild chunk automatically
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
@@ -101,6 +107,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
 	
+	void ResetChunkState();
+	
 	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare);
 	
 	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
@@ -122,5 +130,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UnbindRuntimeData(FIntVector squarePosition, int32 objectIndex);
 	
+	TMap<FName, TFunction<void(FIntVector, int32, FName, FString)>> funcMap;
+	
+	void ApplyAllDataForObject(FIntVector position, int32 objectIndex, FTileObject& objectRef);
+	void InitializeFuncMap();
 	void OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value);
+	
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void OnObjectUnhandledDataChanged(FName Key, const FString& Value);
+	
+	UFUNCTION(BlueprintCallable)
+	void SetObjectInstanceData(FIntVector square, int32 objectIndex, ETileInstanceDataIndex propIndex, float propValue);
+	
+	//runtime data functions
+	void ApplyTintOverride(FIntVector square, int32 objectIndex, FName Key, const FString& Value);
 };

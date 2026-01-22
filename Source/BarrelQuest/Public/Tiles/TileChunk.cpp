@@ -9,6 +9,7 @@
 ATileChunk::ATileChunk()
 {
 	TileSize = UTileLibrary::GetTileSize();
+	InitializeFuncMap();
 }
 
 FIntVector ATileChunk::ChunkSize = FIntVector(96, 96, 7);
@@ -116,8 +117,11 @@ void ATileChunk::BuildChunk()
             }
             Lookup[InstanceIndex] = { Position, i };
         	
+        	
             TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef, Square);
             HISM->SetCustomData(InstanceIndex, InstanceData, true);
+        	
+        	ApplyAllDataForObject(TilePair.Key, i, ObjectDef);
         	
         	UE_LOG(LogBarrelQuest, Warning, TEXT("HISM %s has %d instances"), *Key.Mesh->GetName(), HISM->GetInstanceCount());
         }
@@ -268,18 +272,59 @@ FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 	return newTile;
 }
 
+void ATileChunk::SetTiles(TMap<FIntVector, FSquareTile> newTiles)
+{
+	Tiles.Empty();
+	
+	for (auto& newTile : newTiles)
+	{
+		AddSquare(newTile.Key, newTile.Value);
+	}
+}
+
 ///Adds a square, will automatically add the objects as well.
 FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSquare)
 {
 	FSquareTile& AddedTile = Tiles.Add(Position, newSquare);
 	
 	TArray<FTileObject>& Objects = AddedTile.GetObjectsOnSquare();
+	
 	for(int32 i = 0; i < Objects.Num(); i++)
 	{
 		AddObjectInstance(Position, i, Objects[i]);
+		AddObjectFeatures(Position, Objects[i], i);
+		BindRuntimeData(Position, i);
+		ApplyAllDataForObject(Position, i, Objects[i]);
 	}
 	
 	return AddedTile;
+}
+
+void ATileChunk::ApplyAllDataForObject(FIntVector position, int32 objectIndex, FTileObject& objectRef)
+{
+	for (auto& runtimeKey : objectRef.runtimeData.Keys())
+	{
+		FRuntimeDataQueryResult query = objectRef.runtimeData.GetValue(runtimeKey);
+		FString& runtimeValue = query.data;
+		
+		OnTileObjectDataChanged(position, objectIndex, runtimeKey, runtimeValue);
+	}
+}
+
+void ATileChunk::SetObjectRuntimeData(FIntVector Position, int32 objectIndex, FName Key, const FString& Value)
+{
+	bool found;
+	FSquareTile* squarePtr = GetSquareTilePtr(Position, found);
+	
+	if (!found)
+	{
+		UE_LOG(LogBarrelQuest, Error, TEXT("SetObjectRuntimeData: square not found"));
+		return;
+	}
+	
+	if (!squarePtr->GetObjectsOnSquare().IsValidIndex(objectIndex)) return;
+	
+	squarePtr->GetObjectsOnSquare()[objectIndex].runtimeData.SetValue(Key, Value);
 }
 
 void ATileChunk::SetSquare(FIntVector Position, const FSquareTile& squareTile)
@@ -339,7 +384,6 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     if (!found) return;
 
     RemoveObjectInstance(Object);
-	//RemoveObjectFeatures(Position, ?);
 
     ATileManager* mgr = GetOwningTileManager();
     if (mgr)
@@ -377,6 +421,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         if (Objs[i].RenderInstanceIndex == Object.RenderInstanceIndex && Objs[i].ID == Object.ID)
         {
         	RemoveObjectFeatures(Position, i);
+        	UnbindRuntimeData(Position, i);
         	tile->RemoveObjectByIndex(i);
             
         	//fix the shifting indices
@@ -570,6 +615,29 @@ bool ATileChunk::HasSquare(FIntVector Position)
 	return Tile != nullptr;
 }
 
+void ATileChunk::ResetChunkState()
+{
+	for (auto& pair : Tiles)
+	{
+		FSquareTile& square = pair.Value;
+		TArray<FTileObject>& objects = square.GetObjectsOnSquare();
+		for (int i = 0; i < objects.Num(); i++)
+		{
+			RemoveObjectFeatures(pair.Key, i);
+			UnbindRuntimeData(pair.Key, i);
+		}
+	}
+	
+	for (auto& pair : HISMMap)
+	{
+		pair.Value->ClearInstances();
+	}
+	
+	Tiles.Empty();
+	HISMMap.Empty();
+	HISMReverseLookup.Empty();
+}
+
 
 TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare)
 {
@@ -686,7 +754,72 @@ void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
 	UE_LOG(LogBarrelQuest, Warning, TEXT("successfully unbound runtime data"));
 }
 
+void ATileChunk::InitializeFuncMap()
+{
+	TWeakObjectPtr<ATileChunk> WeakThis(this);
+	
+	funcMap.Add("tint", [WeakThis](FIntVector square, int32 obj, FName Key, const FString& Value) 
+		{
+			if (WeakThis.IsValid())
+			{
+				WeakThis->ApplyTintOverride(square, obj, Key, Value);
+			}
+		});
+}
+
 void ATileChunk::OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value)
 {
-	UE_LOG(LogBarrelQuest, Warning, TEXT("OnTileObjectDataChanged: objIdx: %i / key : %s / val: %s"), objectIndex, *Key.ToString(), *Value);
+	//UE_LOG(LogBarrelQuest, Warning, TEXT("OnTileObjectDataChanged: objIdx: %i / key : %s / val: %s"), objectIndex, *Key.ToString(), *Value);
+	
+	auto* f = funcMap.Find(Key);
+	
+	if (f)
+	{
+		(*f)(squarePosition, objectIndex, Key, Value);
+		return;
+	}
+	
+	OnObjectUnhandledDataChanged(Key, Value);
+}
+
+void ATileChunk::SetObjectInstanceData(FIntVector square, int32 objectIndex, ETileInstanceDataIndex propIndex, float propValue)
+{
+	bool found;
+	FSquareTile* squarePtr = GetSquareTilePtr(square, found);
+	
+	if (!squarePtr)
+	{
+		return;
+	}
+	
+	FTileObject& Object = squarePtr->GetObjectsOnSquare()[objectIndex];
+	FTileDefinition def = GetOwningTileManager()->GetTileByID(Object.ID);
+	
+	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
+		
+	UHierarchicalInstancedStaticMeshComponent** HISMMapResult = HISMMap.Find(renderKey);
+			
+	if (!HISMMapResult)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Didnt find HISM for: %s"), *Object.ID.ToString());
+		return;
+	}
+		
+	UHierarchicalInstancedStaticMeshComponent* HISM = *HISMMapResult;
+		
+	float currentData = HISM->PerInstanceSMCustomData[Object.RenderInstanceIndex * ATileChunk::customDataFloats + (int)propIndex];
+	const bool s = HISM->SetCustomDataValue(Object.RenderInstanceIndex, (int)propIndex, propValue, true);
+}
+
+void ATileChunk::ApplyTintOverride(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value)
+{
+	FLinearColor instColor = UBarrelUtilityFunctionLibrary::HexStringToLinearColor(Value);
+	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_R, instColor.R);
+	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_G, instColor.G);
+	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_B, instColor.B);
+}
+
+void ATileChunk::OnObjectUnhandledDataChanged_Implementation(FName Key, const FString& Value)
+{
+	return;
 }

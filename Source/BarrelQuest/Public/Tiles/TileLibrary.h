@@ -234,10 +234,11 @@ struct FTileRuntimeData
 {
 	GENERATED_BODY()
 protected:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
 	TMap<FName, int32> indexLookup;
 	
 public:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
 	TArray<FString> runtimeData;
 	
 	FOnRuntimeDataChanged OnChanged;
@@ -248,6 +249,9 @@ public:
 	
 	///Removes a runtime value, if key doesnt exist, returns false
 	bool RemoveValue(FName Key);
+	
+	TArray<FName> Keys() const;
+	const TArray<FString>& Values() const;
 	
 	///Gets a runtime value, if key doesnt exist, returns query result with valid == false 
 	FRuntimeDataQueryResult GetValue(FName Key) const;
@@ -357,7 +361,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, SaveGame)
 	ETileDirection Direction;
 	
-	UPROPERTY(BlueprintReadWrite, SaveGame)
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, SaveGame)
 	FTileRuntimeData runtimeData;
 	
 	UPROPERTY(BlueprintReadWrite, SaveGame)
@@ -387,7 +391,7 @@ struct FSquareTile
 	
 protected:
 	///DONT USE THIS TO SET VALUES
-	UPROPERTY(EditAnywhere, SaveGame)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, SaveGame)
 	TArray<FTileObject> objects;
 	
 public:
@@ -594,4 +598,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static FTileRuntimeData ConvertMapRuntimeDataToTileRuntimeData(const TMap<FName, FString>& Map);
+	
+	UFUNCTION(BlueprintCallable)
+	static TArray<FString> ParseRuntimeData(UPARAM(ref) FTileRuntimeData& runtimeData);
 };

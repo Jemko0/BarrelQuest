@@ -36,6 +36,18 @@ bool FTileRuntimeData::RemoveValue(FName Key)
 	return true;
 }
 
+TArray<FName> FTileRuntimeData::Keys() const
+{
+	TArray<FName> keys;
+	indexLookup.GenerateKeyArray(keys);
+	return keys;
+}
+
+const TArray<FString>& FTileRuntimeData::Values() const
+{
+	return runtimeData;
+}
+
 FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key) const
 {
 	if (const int32* i = indexLookup.Find(Key))
@@ -346,4 +358,28 @@ FTileRuntimeData UTileLibrary::ConvertMapRuntimeDataToTileRuntimeData(const TMap
 	}
 	
 	return runtimeData;
+}
+
+TArray<FString> UTileLibrary::ParseRuntimeData(FTileRuntimeData& runtimeData)
+{
+	TArray<FString> strArray;
+	
+	TArray<FName> keys = runtimeData.Keys();
+	
+	if (keys.Num() < 1) return TArray<FString>();
+	
+	for (const FName key : keys)
+	{
+		FString keyStr = key.ToString();
+		FRuntimeDataQueryResult query = runtimeData.GetValue(key);
+		FString valueStr = query.data;
+		
+		FStringFormatNamedArguments args;
+		args.Add(keyStr, valueStr);
+		
+		FString formattedStr = FString::Printf(TEXT("%s=%s"), *keyStr, *valueStr);
+		strArray.Add(formattedStr);
+	}
+	
+	return strArray;
 }
