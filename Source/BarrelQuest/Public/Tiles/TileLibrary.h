@@ -17,12 +17,14 @@ enum class ETileCategory : uint8
 {
 	FLOOR,
 	DECAL,
+	HALF_WALL,
 	WALL,
 	DOORFRAME,
 	WINDOW,
 	STAIR,
 	PROP,
-	ROOF
+	ROOF,
+	ROOF_WALL,
 };
 
 UENUM(BlueprintType)
