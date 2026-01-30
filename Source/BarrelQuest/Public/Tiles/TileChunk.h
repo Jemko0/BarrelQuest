@@ -78,7 +78,7 @@ public:
 	void SetSquare(FIntVector Position, const FSquareTile& squareTile);
 	
 	UFUNCTION(BlueprintCallable)
-	void AddObject(FIntVector Position, const FTileObject& Object);
+	void AddObject(FIntVector Position, FTileObject& Object);
 	
 	UFUNCTION(BlueprintCallable)
 	void RemoveObject(FIntVector Position, const FTileObject& Object);

@@ -5,7 +5,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TemperatureInvoker.h"
 #include "TemperatureInterface.h"
 #include "TemperatureManager.generated.h"
 
@@ -51,6 +50,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateTemperatures(FVector ucenter, float temp);
+	
+	FName GenerateIDForInvoker(USceneComponent* refInvoker);
 
 	UFUNCTION(BlueprintCallable)
 	void FindNeighborsIterative(FVector startCenter, float invokerTemp);
@@ -61,10 +62,10 @@ public:
 	void SnapVectorToGrid(FVector &v, FVector grid);
 
 	UFUNCTION(BlueprintCallable)
-	void RegisterInvoker(UTemperatureInvoker* invoker);
+	void RegisterInvoker(USceneComponent* invoker);
 
 	UFUNCTION(BlueprintCallable)
-	void UnregisterInvoker(UTemperatureInvoker* invoker);
+	void UnregisterInvoker(FName key);
 
 	UFUNCTION(BlueprintCallable)
 	void SetOutsideTemperature(float outsideTemperature);
@@ -90,7 +91,7 @@ public:
 	TMap<FVector, float> temperatureMap;
 
 	UPROPERTY(EditAnywhere, Category = "Invokers")
-	TMap<UTemperatureInvoker*, bool> registeredInvokers;
+	TMap<FName, TScriptInterface<ITemperatureInterface>> registeredInvokers;
 
 	UPROPERTY(EditAnywhere, Category = "Debug")
 	bool drawDebug = true;

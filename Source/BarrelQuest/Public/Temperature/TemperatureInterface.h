@@ -26,4 +26,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Temperature")
 	float GetInsulationLevel() const;
 	//virtual float GetInsulationLevel_Implementation() const { return 0.0f; }
+	
+	virtual bool GetEmitState() const = 0;
+	virtual FVector GetOwnerLocation() const = 0;
+	virtual float GetTargetTemperature() const = 0;
 };

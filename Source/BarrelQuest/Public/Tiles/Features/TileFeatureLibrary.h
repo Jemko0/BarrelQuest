@@ -55,6 +55,14 @@
 		OwningTileIndex = FIntVector(-1, -1, -1);\
 		OwningObjectIndex = -1;\
 		OwningTileManager = nullptr;\
+	}\
+	virtual void InitializeFromObject(FTileObject& object)\
+	{\
+		for(const FName& key : object.runtimeData.Keys())\
+		{\
+			FRuntimeDataQueryResult q = object.runtimeData.GetValue(key);\
+			object.runtimeData.SetValue(key, q.data);\
+		}\
 	}
 
 UCLASS()

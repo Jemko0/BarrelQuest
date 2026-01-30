@@ -18,8 +18,18 @@ UTilePointLightFeatureComponent::UTilePointLightFeatureComponent()
 void UTilePointLightFeatureComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
 	if (!GetOwningObject()) return;
+}
+
+TArray<FRCMOption> UTilePointLightFeatureComponent::GetRCMOptions_Implementation(AActor* Actor, FVector Location)
+{
+	TArray<FRCMOption> rightClickOptions;
+	if (needsLightbulb)
+	{
+		rightClickOptions = TArray<FRCMOption>{
+			FRCMOption("Insert Light Bulb", "hi", "hi")
+		};
+	}
 	
-	GetOwningObject()->runtimeData.SetValue("light_color", UBarrelUtilityFunctionLibrary::LinearColorToHexString(FLinearColor::MakeRandomColor()));
+	return rightClickOptions;
 }

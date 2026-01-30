@@ -13,6 +13,10 @@ struct FRCMOption
 	GENERATED_BODY()
 	
 public:
+	FRCMOption() = default;
+	FRCMOption(const FText& name, const FName& color, const FString& invoke) : OptionName(name), UIColor(color), invokeID(invoke) {};
+	FRCMOption(const FString& name, const FString& color, const FString& invoke) : OptionName(FText::FromString(name)), UIColor(*color), invokeID(invoke) {};
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText OptionName;
 	

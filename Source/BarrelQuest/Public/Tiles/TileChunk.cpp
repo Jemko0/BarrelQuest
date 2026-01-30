@@ -333,7 +333,7 @@ void ATileChunk::SetSquare(FIntVector Position, const FSquareTile& squareTile)
 }
 
 ///Adds a new object at the positions square, adds data and instance visual. Use this to create new tiles
-void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
+void ATileChunk::AddObject(FIntVector Position, FTileObject& Object)
 {
 	FSquareTile& tile = GetOrCreateSquareTile(Position);
 	int32 newObjectIndex = tile.GetObjectsOnSquare().Add(Object);
@@ -341,6 +341,7 @@ void ATileChunk::AddObject(FIntVector Position, const FTileObject& Object)
 	AddObjectInstance(Position, newObjectIndex, tile.GetObjectsOnSquare()[newObjectIndex]);
 	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex], newObjectIndex);
 	BindRuntimeData(Position, newObjectIndex);
+	ApplyAllDataForObject(Position, newObjectIndex, Object);
     
 	ATileManager* mgr = GetOwningTileManager();
 	if (!mgr) return;
@@ -479,6 +480,7 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 			FeatureComp->SetOwningTileIndex(Position, NewObjectIndex);
 			FeatureComp->SetTileManager(GetOwningTileManager());
 			FeatureComp->BindRuntimeData(Object.runtimeData);
+			FeatureComp->InitializeFromObject(Object);
 		}
 		else
 		{
@@ -686,7 +688,7 @@ void ATileChunk::StoreRuntimeListener(FRuntimeListenerObject& listener)
 void ATileChunk::BindRuntimeData(FIntVector squarePosition, int32 objectIndex)
 {
 	bool found = false;
-	FSquareTile* squarePtr =  GetSquareTilePtr(squarePosition, found);
+	FSquareTile* squarePtr = GetSquareTilePtr(squarePosition, found);
 	if (!found)
 	{
 		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to bind runtime data"));

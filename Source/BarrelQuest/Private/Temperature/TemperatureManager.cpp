@@ -1,5 +1,8 @@
 
 #include "Temperature/TemperatureManager.h"
+
+#include <string>
+
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -20,23 +23,20 @@ void ATemperatureManager::BeginPlay()
 
 void ATemperatureManager::UpdateInvokers()
 {
-    TArray<UTemperatureInvoker*> out;
+    TArray<FName> out;
     registeredInvokers.GenerateKeyArray(out);
 
-    for (const UTemperatureInvoker* const& invoker : out)
+    for (FName& id : out)
     {
-        if (!invoker)
-        {
-            continue;
-        }
+        TScriptInterface<ITemperatureInterface>& invoker = *registeredInvokers.Find(id);
 
-        if (!invoker->emit)
+        if (!invoker->GetEmitState())
         {
-            UpdateTemperatures(invoker->GetOwner()->GetActorLocation(), ambientTemperature);
+            UpdateTemperatures(invoker->GetOwnerLocation(), ambientTemperature);
             continue;
         }
         
-        UpdateTemperatures(invoker->GetOwner()->GetActorLocation(), invoker->targetTemperature);
+        UpdateTemperatures(invoker->GetOwnerLocation(), invoker->GetTargetTemperature());
     }
 }
 
@@ -99,6 +99,13 @@ void ATemperatureManager::UpdateTemperatures(FVector ucenter, float temp)
 
         DrawHeatSources();
     }
+}
+
+FName ATemperatureManager::GenerateIDForInvoker(USceneComponent* refInvoker)
+{
+    static int32 count = 0;
+    count++;
+    return FName(FString::Printf(TEXT("%s_%d"), *refInvoker->GetName(), count));
 }
 
 void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invokerTemp)
@@ -198,14 +205,15 @@ void ATemperatureManager::FindNeighborsIterative(FVector startCenter, float invo
 
     // Get all active invoker positions for source tile protection
     TArray<FVector> invokerPositions;
-    TArray<UTemperatureInvoker*> activeInvokers;
+    TArray<FName> activeInvokers;
     registeredInvokers.GenerateKeyArray(activeInvokers);
 
-    for (const UTemperatureInvoker* invoker : activeInvokers)
+    for (const FName id : activeInvokers)
     {
-        if (invoker && invoker->emit)
+        TScriptInterface<ITemperatureInterface>& invoker = *registeredInvokers.Find(id);
+        if (invoker && invoker->GetEmitState())
         {
-            FVector invokerPos = invoker->GetOwner()->GetActorLocation();
+            FVector invokerPos = invoker->GetOwnerLocation();
             SnapVectorToGrid(invokerPos, FVector(200, 200, 400));
             invokerPositions.Add(invokerPos);
         }
@@ -378,14 +386,15 @@ void ATemperatureManager::SnapVectorToGrid(FVector& v, FVector grid)
         v.Z = FMath::RoundToFloat(v.Z / grid.Z) * grid.Z;
 }
 
-void ATemperatureManager::RegisterInvoker(UTemperatureInvoker* invoker)
+void ATemperatureManager::RegisterInvoker(USceneComponent* invoker)
 {
-    registeredInvokers.Add(invoker);
+    FName newID = GenerateIDForInvoker(invoker);
+    registeredInvokers.Add(newID, invoker);
 }
 
-void ATemperatureManager::UnregisterInvoker(UTemperatureInvoker* invoker)
+void ATemperatureManager::UnregisterInvoker(FName key)
 {
-    registeredInvokers.Remove(invoker);
+    registeredInvokers.Remove(key);
 }
 
 void ATemperatureManager::SetOutsideTemperature(float outsideTemperature)
@@ -568,25 +577,4 @@ void ATemperatureManager::DrawHeatFlowArrows(FVector tileCenter, float tileTemp)
 
 void ATemperatureManager::DrawHeatSources()
 {
-    TArray<UTemperatureInvoker*> invokers;
-    registeredInvokers.GenerateKeyArray(invokers);
-
-    for (const UTemperatureInvoker* invoker : invokers)
-    {
-        if (!invoker) continue;
-
-        FVector sourceLocation = invoker->GetOwner()->GetActorLocation();
-        float sourceTemp = invoker->targetTemperature;
-
-        // Draw source temperature text
-        FString sourceText = FString::Printf(TEXT("SOURCE\n%.1f�"), sourceTemp);
-        UKismetSystemLibrary::DrawDebugString(
-            GetWorld(),
-            sourceLocation + FVector(0, 0, 400),
-            sourceText,
-            nullptr,
-            FLinearColor::White,
-            0.033f
-        );
-    }
 }

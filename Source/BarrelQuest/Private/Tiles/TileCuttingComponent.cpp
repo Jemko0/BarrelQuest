@@ -74,6 +74,7 @@ void UTileCuttingComponent::RestoreLastRoom()
 	for (auto& tile : hitTilesLastFrame)
 	{
 		tilesToUndoForceCut.Add(tile);
+		tilesThatShouldUndarken.Add(tile);
 	}
 	
 	hitTilesLastFrame.Empty();
@@ -139,6 +140,7 @@ bool UTileCuttingComponent::CheckBuilding()
 			if (!hitTilesLastFrame.Contains(roomTile))
 			{
 				tilesToUndoForceCut.Add(roomTile);
+				tilesThatShouldUndarken.Add(roomTile);
 			}
 			
 			tilesThatUndoShouldCut.Add(roomTile);

@@ -16,7 +16,7 @@ class UTileFeatureInterface : public UInterface
 };
 
 /**
- * 
+ * @relatesalso TF_GENERATED_BODY() for implementation details
  */
 class BARRELQUEST_API ITileFeatureInterface
 {
@@ -24,10 +24,12 @@ class BARRELQUEST_API ITileFeatureInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	/// Binds runtime data to this tile feature.
 	virtual void BindRuntimeData(FTileRuntimeData& RuntimeData) = 0;
 	virtual void SetOwningTileIndex(const FIntVector& OwningTile, const int32 ObjectIdx) = 0;
 	virtual void SetTileManager(ATileManager* owner) = 0;
 	virtual void ResetOwners() = 0;
+	virtual void InitializeFromObject(FTileObject& object) = 0;
 	virtual const FIntVector& GetOwningTileIndex() = 0;
 	
 	TArray<FDelegateHandle> InternalHandles;
