@@ -223,7 +223,7 @@
 		},
 		{
 			"Name": "BlueprintColorPicker",
-			"Enabled": false,
+			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/Fab/product/1dde9537-7c5f-43cd-8e4c-7abfbbd9126a"
 		}
 	],
