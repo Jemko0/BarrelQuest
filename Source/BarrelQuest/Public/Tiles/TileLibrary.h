@@ -42,8 +42,10 @@ enum class ETileTextureIndex : uint8
 	CARPET,
 	MESH_FENCE,
 	WOOD_PLANKS_TINTABLE,
+	TILED_FLOOR,
 	
 	ROOF_RED,
+	ROOF_GRAY,
 	
 	//road lines
 	ROAD_LINES_THICK_TOP,
