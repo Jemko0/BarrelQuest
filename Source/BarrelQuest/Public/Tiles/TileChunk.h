@@ -4,6 +4,8 @@
 #include "Tiles/TileLibrary.h"
 #include "TileChunk.generated.h"
 
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChunkError, FString, msg);
+
 UCLASS()
 class BARRELQUEST_API ATileChunk : public AActor
 {
@@ -34,6 +36,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	FVector TileSize = FVector(0, 0, 0);
+	
+	/*UPROPERTY(BlueprintAssignable, BlueprintReadOnly, EditAnywhere)
+	FOnChunkError OnChunkError;*/
 	
 	static FIntVector ChunkSize;
 	
@@ -105,6 +110,9 @@ public:
 	void RemoveSquareAt(FIntVector Position);
 	
 	UFUNCTION(BlueprintCallable)
+	void ReportError(FString msg);
+	
+	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
 	
 	void ResetChunkState();
@@ -135,7 +143,6 @@ public:
 	void ApplyAllDataForObject(FIntVector position, int32 objectIndex, FTileObject& objectRef);
 	void InitializeFuncMap();
 	void OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value);
-	
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void OnObjectUnhandledDataChanged(FName Key, const FString& Value);

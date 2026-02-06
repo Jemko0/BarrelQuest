@@ -109,7 +109,7 @@ bool FSquareTile::HasObjectOfCategory(ETileCategory category, ATileManager* mgr)
 {
 	for (auto& object : objects)
 	{
-		const FTileDefinition& tileDef = mgr->GetTileByID(object.ID);
+		const FTileDefinition& tileDef = mgr->GetTileByID(mgr, object.ID);
 			
 		if (tileDef.Category == category)
 		{
@@ -281,7 +281,7 @@ bool UTileLibrary::IsSquareExitSquare(ATileManager* mgr, const FSquareTile& squa
 	auto& objects = square.GetReadOnlyObjects();
 	for (auto& object : objects)
 	{
-		const FTileDefinition& def = mgr->GetTileByID(object.ID);
+		const FTileDefinition& def = mgr->GetTileByID(mgr, object.ID);
 		if (def.Category == ETileCategory::DOORFRAME)
 		{
 			FIntVector neighborPos = squarePos + GetTileIndexOffsetFromDirection(object.Direction);
@@ -305,7 +305,7 @@ bool UTileLibrary::IsSquareExitSquare(ATileManager* mgr, const FSquareTile& squa
 			ETileDirection opposite = GetOppositeDirection(dir);
 			for (auto& nObject : neighborSquare.GetReadOnlyObjects())
 			{
-				const FTileDefinition& nDef = mgr->GetTileByID(nObject.ID);
+				const FTileDefinition& nDef = mgr->GetTileByID(mgr, nObject.ID);
 				if (nDef.Category == ETileCategory::DOORFRAME && nObject.Direction == opposite)
 				{
 					// Neighbor has a door pointing at us. Is it from a different room?

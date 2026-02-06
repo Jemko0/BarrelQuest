@@ -52,6 +52,8 @@ void ATileChunk::BuildChunk()
         UE_LOG(LogBarrelQuest, Warning, TEXT("TileManager was null!"));
         return;
     }
+	
+	int builtInstances = 0;
 
     // Clear existing HISM components
     for (auto& Pair : HISMMap)
@@ -75,7 +77,7 @@ void ATileChunk::BuildChunk()
         for (int32 i = 0; i < Objects.Num(); i++)
         {
             FTileObject& ObjectDef = Objects[i];
-            const FTileDefinition& TileDef = mgr->GetTileByID(ObjectDef.ID);
+            const FTileDefinition& TileDef = mgr->GetTileByID(this, ObjectDef.ID);
 
             // Skip logic-only objects (no mesh)
             if (!TileDef.Mesh)
@@ -122,8 +124,7 @@ void ATileChunk::BuildChunk()
             HISM->SetCustomData(InstanceIndex, InstanceData, true);
         	
         	ApplyAllDataForObject(TilePair.Key, i, ObjectDef);
-        	
-        	UE_LOG(LogBarrelQuest, Warning, TEXT("HISM %s has %d instances"), *Key.Mesh->GetName(), HISM->GetInstanceCount());
+        	builtInstances++;
         }
     }
 	
@@ -132,6 +133,9 @@ void ATileChunk::BuildChunk()
 		HISM.Value->BuildTreeIfOutdated(true, false);  // Rebuild the HISM tree
 		HISM.Value->MarkRenderStateDirty();
 	}
+	
+	UE_LOG(LogBarrelQuest, Warning, TEXT("Built Chunk: Tiles In Mem: %i"), Tiles.Num());
+	UE_LOG(LogBarrelQuest, Warning, TEXT("Built Chunk: Instances: %i"), builtInstances);
 }
 
 ///Adds an object instance, does NOT add object data! Only adds an instance to the corresponding HISM 
@@ -149,7 +153,7 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
 		return;
 	}
 
-    const FTileDefinition& TileDef = mgr->GetTileByID(ObjectDef.ID);
+    const FTileDefinition& TileDef = mgr->GetTileByID(this, ObjectDef.ID);
     if (!TileDef.Mesh) return; // Logic object only
 
     FTileRenderKey Key { TileDef.Mesh, TileDef.ParentMaterial };
@@ -200,7 +204,7 @@ void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
     ATileManager* mgr = GetOwningTileManager();
     if (!mgr) return;
 
-    const FTileDefinition& tile = mgr->GetTileByID(ObjectDef.ID);
+    const FTileDefinition& tile = mgr->GetTileByID(this, ObjectDef.ID);
     FTileRenderKey Key { tile.Mesh, tile.ParentMaterial };
 
     if (!HISMMap.Contains(Key)) return;
@@ -348,7 +352,7 @@ void ATileChunk::AddObject(FIntVector Position, FTileObject& Object)
 	
 	mgr->InvalidateRoomAt(Position);
 
-	ETileCategory cat = mgr->GetTileByID(Object.ID).Category;
+	ETileCategory cat = mgr->GetTileByID(this, Object.ID).Category;
     
 	if (UTileLibrary::CountsAsWall(cat))
 	{
@@ -390,7 +394,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     if (mgr)
     {
         mgr->InvalidateRoomAt(Position);
-        const FTileDefinition& TileDef = mgr->GetTileByID(Object.ID);
+        const FTileDefinition& TileDef = mgr->GetTileByID(this, Object.ID);
         
         if (UTileLibrary::CountsAsWall(TileDef.Category))
         {
@@ -428,7 +432,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         	//fix the shifting indices
         	for (int32 j = i; j < Objs.Num(); j++)
         	{
-        		const FTileDefinition& Def = mgr->GetTileByID(Objs[j].ID);
+        		const FTileDefinition& Def = mgr->GetTileByID(this, Objs[j].ID);
         		FTileRenderKey Key { Def.Mesh, Def.ParentMaterial };
             
         		if (HISMReverseLookup.Contains(Key))
@@ -610,6 +614,19 @@ void ATileChunk::RemoveSquareAt(FIntVector Position)
 	Tiles.Remove(Position);
 }
 
+void ATileChunk::ReportError(FString msg)
+{
+	FString Message = FString::Printf(TEXT("Chunk ERROR: %s"), *msg);
+	UE_LOG(LogBarrelQuestTileChunk, Error, TEXT("%s"), *Message);
+	
+	//OnChunkError.Broadcast(Message);
+	
+	ATileManager* mgr = GetOwningTileManager();
+	if (!mgr) return;
+	
+	mgr->AddError(this, Message);
+}
+
 //Returns true if a square exists at the tile position
 bool ATileChunk::HasSquare(FIntVector Position)
 {
@@ -645,12 +662,12 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 {
 	TStaticArray<float, customDataFloats> instanceData;
 	
-	instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tileDef.Albedo;
-	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tileDef.Metallic;
-	instanceData[(int)ETileInstanceDataIndex::NORMAL_TEX] = (float)tileDef.Normal;
-	instanceData[(int)ETileInstanceDataIndex::SPECULAR_TEX] = (float)tileDef.Specular;
-	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tileDef.BaseMetallic;
-	instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tileDef.BaseRoughness;
+	instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tileDef.TextureProperties.Albedo;
+	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tileDef.TextureProperties.Metallic;
+	instanceData[(int)ETileInstanceDataIndex::NORMAL_TEX] = (float)tileDef.TextureProperties.Normal;
+	instanceData[(int)ETileInstanceDataIndex::SPECULAR_TEX] = (float)tileDef.TextureProperties.Specular;
+	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = tileDef.TextureProperties.BaseMetallic;
+	instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS] = tileDef.TextureProperties.BaseRoughness;
 	instanceData[(int)ETileInstanceDataIndex::OBJ_DIRECTION] = (float)tileObject.Direction;
 	instanceData[(int)ETileInstanceDataIndex::SHOULD_CUT] = 0.0f;
 	instanceData[(int)ETileInstanceDataIndex::FORCE_CUT] = 0.0f;
@@ -661,6 +678,12 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::HUE_SHIFT] = 0.0f;
 	instanceData[(int)ETileInstanceDataIndex::DARKENED] = 0.0f;
 	instanceData[(int)ETileInstanceDataIndex::MIRRORED] = tileObject.Mirrored ? 1.0f : 0.0f;
+	
+	//interior walls
+	instanceData[(int)ETileInstanceDataIndex::INT_ALBEDO_TEX] = (float)tileDef.TextureProperties.InteriorAlbedo;
+	instanceData[(int)ETileInstanceDataIndex::INT_METALLIC_TEX] = (float)tileDef.TextureProperties.InteriorMetallic;
+	instanceData[(int)ETileInstanceDataIndex::INT_NORMAL_TEX] = (float)tileDef.TextureProperties.InteriorNormal;
+	instanceData[(int)ETileInstanceDataIndex::INT_SPECULAR_TEX] = (float)tileDef.TextureProperties.InteriorSpecular;
 	
 	return instanceData;
 }
@@ -795,7 +818,7 @@ void ATileChunk::SetObjectInstanceData(FIntVector square, int32 objectIndex, ETi
 	}
 	
 	FTileObject& Object = squarePtr->GetObjectsOnSquare()[objectIndex];
-	FTileDefinition def = GetOwningTileManager()->GetTileByID(Object.ID);
+	FTileDefinition def = GetOwningTileManager()->GetTileByID(this, Object.ID);
 	
 	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
 		

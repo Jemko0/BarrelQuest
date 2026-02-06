@@ -4,6 +4,8 @@
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 
 UDataTable* ATileManager::TileDataTable = nullptr;
@@ -98,6 +100,8 @@ void ATileManager::ResetCurrentState()
 	ChunkLookup.Empty();
 	RoomIDToTiles.Empty();
 	RoomTilesToID.Empty();
+	
+	FlushLogs();
 }
 
 void ATileManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -525,7 +529,7 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 			continue;
 		}
 		
-		const FTileDefinition def = GetTileByID(Object.ID);
+		const FTileDefinition def = GetTileByID(this, Object.ID);
 		
 		// apply filters
 		if (searchFilter.minZLevel != -1)
@@ -610,7 +614,7 @@ bool ATileManager::SetObjectInstanceData(FIntVector squareTilePosition, int32 ta
 	
 	FTileObject& Object = objects[targetObjectIndex];
 	
-	const FTileDefinition def = GetTileByID(Object.ID);
+	const FTileDefinition def = GetTileByID(this, Object.ID);
 	
 	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
 		
@@ -817,13 +821,23 @@ AActor* ATileManager::CreateNewChunk_Implementation(FVector chunkLocation)
 	return ret;
 }
 
-FTileDefinition ATileManager::GetTileByID(FName ID)
+FTileDefinition ATileManager::GetTileByID(UObject* WorldContextObject, FName ID)
 {
 	FTileDefinition* def = ATileManager::TileDataTable->FindRow<FTileDefinition>(ID, TEXT("Tile Manager"), true);
 	if (!def)
 	{
 		const wchar_t* w = *ID.ToString();
 		UE_LOG(LogBarrelQuest, Warning, TEXT("No Definition was found for %s"), w);
+		
+		if (WorldContextObject)
+		{
+			ATileManager* t = Cast<ATileManager>(UGameplayStatics::GetActorOfClass(WorldContextObject->GetWorld(), ATileManager::StaticClass()));
+			if (t)
+			{
+				t->AddError(WorldContextObject->GetWorld(), FString::Printf(TEXT("No Definition was found for %s"), *ID.ToString()));
+			}
+		}
+
 		return FTileDefinition();
 	}
 	return *def;
@@ -858,7 +872,7 @@ bool ATileManager::SquareHasObjectOfCategoryAndRotation(FVector worldPosition, E
 	
 	for (const FTileObject& o : objects)
 	{
-		FTileDefinition def = GetTileByID(o.ID);
+		FTileDefinition def = GetTileByID(this, o.ID);
 		if (def.Category == category && o.Direction == rotation)
 		{
 			return true;
@@ -1080,7 +1094,7 @@ void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int
 	
 	FTileObject& o = squarePtr->GetObjectsOnSquare()[objectIdx];
 	
-	FTileDefinition tileDef = ATileManager::GetTileByID(o.ID);
+	FTileDefinition tileDef = ATileManager::GetTileByID(this, o.ID);
 	
 	FTileRenderKey renderKey = {tileDef.Mesh, tileDef.ParentMaterial};
 	UHierarchicalInstancedStaticMeshComponent** HISMPtr = chunkPtr->HISMMap.Find(renderKey);
@@ -1099,4 +1113,18 @@ void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int
 		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_G, tintOverrideColor.G);
 		HISM->SetCustomDataValue(o.RenderInstanceIndex, (int)ETileInstanceDataIndex::TINT_B, tintOverrideColor.B);
 	}
+}
+
+void ATileManager::AddError(UObject* Source, FString Message)
+{
+	if (!Source) return;
+	
+	Logs.Add(FString::Printf(TEXT("%s : %s"), *Source->GetName(), *Message));
+	OnTileManagerLog.Broadcast(Message);
+}
+
+void ATileManager::FlushLogs()
+{
+	Logs.Empty();
+	OnTileManagerFlushLog.Broadcast();
 }

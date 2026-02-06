@@ -69,6 +69,7 @@ enum class ETileTextureIndex : uint8
 	PATTERN_WALL_LINE_STRIPES,
 
 	PROP_FENCE_SHORT,
+	PROP_FENCE_BROWN,
 };
 
 UENUM(BlueprintType)
@@ -89,6 +90,10 @@ enum class ETileInstanceDataIndex : uint8
 	HUE_SHIFT,
 	DARKENED,
 	MIRRORED,
+	INT_ALBEDO_TEX,
+	INT_METALLIC_TEX,
+	INT_NORMAL_TEX,
+	INT_SPECULAR_TEX,
 	MAX
 };
 
@@ -155,6 +160,43 @@ FORCEINLINE uint32 GetTypeHash(const FTileRenderKey& Key)
 }
 
 USTRUCT(BlueprintType)
+struct FTileTextureIndices : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex Albedo = ETileTextureIndex::DEBUG;
+		
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex Specular = ETileTextureIndex::DEBUG;
+		
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex Metallic = ETileTextureIndex::DEBUG;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex Normal = ETileTextureIndex::DEBUG;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex InteriorAlbedo = ETileTextureIndex::DEBUG;
+		
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex InteriorSpecular = ETileTextureIndex::DEBUG;
+		
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex InteriorMetallic = ETileTextureIndex::DEBUG;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ETileTextureIndex InteriorNormal = ETileTextureIndex::DEBUG;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float BaseRoughness = 1.0f;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float BaseMetallic = 1.0f;
+};
+
+USTRUCT(BlueprintType)
 struct FTileDefinition : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -170,22 +212,7 @@ public:
 	UStaticMesh* Mesh;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ETileTextureIndex Albedo = ETileTextureIndex::DEBUG;
-		
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ETileTextureIndex Specular = ETileTextureIndex::DEBUG;
-		
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ETileTextureIndex Metallic = ETileTextureIndex::DEBUG;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ETileTextureIndex Normal = ETileTextureIndex::DEBUG;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float BaseRoughness = 0.5f;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float BaseMetallic = 0.5f;
+	FTileTextureIndices TextureProperties = FTileTextureIndices();
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FLinearColor tint = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);

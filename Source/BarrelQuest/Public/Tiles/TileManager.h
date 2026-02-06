@@ -5,7 +5,11 @@
 #include "Tiles/TileLibrary.h"
 #include "TileManager.generated.h"
 
+
 class ATileChunk;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTileManagerLog, FString, msg);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTileManagerFlushLog);
 
 UCLASS()
 class BARRELQUEST_API ATileManager : public AActor
@@ -37,6 +41,12 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<TObjectPtr<URuntimeVirtualTexture>> ChunkRVTs;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, BlueprintAssignable)
+	FOnTileManagerLog OnTileManagerLog;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, BlueprintAssignable)
+	FOnTileManagerFlushLog OnTileManagerFlushLog;
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
@@ -130,8 +140,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATileChunk* SpawnChunk(FIntVector2 Position);
 	
-	UFUNCTION(BlueprintCallable)
-	static FTileDefinition GetTileByID(FName ID);
+	UFUNCTION(BlueprintCallable, meta=(WorldContext = "WorldContextObject"))
+	static FTileDefinition GetTileByID(UObject* WorldContextObject, FName ID);
 	
 	UFUNCTION(BlueprintCallable)
 	bool SquareHasObjectOfCategory(FVector worldPosition, ETileCategory category);
@@ -163,4 +173,12 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	AActor* CreateNewChunk(FVector chunkLocation);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FString> Logs;
+	
+	UFUNCTION(BlueprintCallable)
+	void AddError(UObject* Source, FString Message);
+	
+	void FlushLogs();
 };
