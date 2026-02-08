@@ -241,9 +241,11 @@ void UTileCuttingComponent::UpdateTileVisibility()
 	
 	FTileSearchFilter searchFilter = FTileSearchFilter();
 	searchFilter.IncludeCategory(ETileCategory::WALL);
+	searchFilter.IncludeCategory(ETileCategory::WINDOW);
 	searchFilter.IncludeCategory(ETileCategory::ROOF);
 	searchFilter.IncludeCategory(ETileCategory::HALF_WALL);
 	searchFilter.IncludeCategory(ETileCategory::ROOF_WALL);
+	searchFilter.IncludeCategory(ETileCategory::PROP);
 	searchFilter.SetMinZLevel(lastZ);
 	
 	for (auto& tile : tilesToForceCut)
@@ -271,6 +273,7 @@ void UTileCuttingComponent::UpdateTileDarkening()
 {
 	FTileSearchFilter searchFilter = FTileSearchFilter();
 	searchFilter.IncludeCategory(ETileCategory::WALL);
+	searchFilter.IncludeCategory(ETileCategory::WINDOW);
 	searchFilter.IncludeCategory(ETileCategory::ROOF);
 	searchFilter.IncludeCategory(ETileCategory::HALF_WALL);
 	searchFilter.IncludeCategory(ETileCategory::ROOF_WALL);

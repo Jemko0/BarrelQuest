@@ -152,4 +152,5 @@ public:
 	
 	//runtime data functions
 	void ApplyTintOverride(FIntVector square, int32 objectIndex, FName Key, const FString& Value);
+	void ApplyInteriorTintOverride(FIntVector square, int32 objectIndex, FName Key, const FString& Value);
 };

@@ -36,7 +36,7 @@ FLinearColor UBarrelUtilityFunctionLibrary::HexStringToLinearColor(FString hexSt
 
 FString UBarrelUtilityFunctionLibrary::LinearColorToHexString(const FLinearColor& color)
 {
-    const FColor SRGBColor = color.ToFColor(true); // true = sRGB conversion
+    const FColor SRGBColor = color.ToFColor(false); // true = sRGB conversion
 
     return FString::Printf(
         TEXT("#%02X%02X%02X%02X"),

@@ -232,7 +232,11 @@ FIntVector UTileLibrary::GetChunkSize()
 
 bool UTileLibrary::CountsAsWall(ETileCategory cat)
 {
-	return cat == ETileCategory::WALL || cat == ETileCategory::DOORFRAME;
+	return cat == ETileCategory::WALL || 
+		cat == ETileCategory::DOORFRAME || 
+			cat == ETileCategory::WINDOW ||
+				cat == ETileCategory::ROOF_WALL ||
+				cat == ETileCategory::ROOF;
 }
 
 ETileDirection UTileLibrary::GetOppositeDirection(const ETileDirection& inDir)

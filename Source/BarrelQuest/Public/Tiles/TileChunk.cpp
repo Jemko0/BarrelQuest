@@ -685,6 +685,10 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::INT_NORMAL_TEX] = (float)tileDef.TextureProperties.InteriorNormal;
 	instanceData[(int)ETileInstanceDataIndex::INT_SPECULAR_TEX] = (float)tileDef.TextureProperties.InteriorSpecular;
 	
+	instanceData[(int)ETileInstanceDataIndex::INT_TINT_R] = tileDef.InteriorTint.R;
+	instanceData[(int)ETileInstanceDataIndex::INT_TINT_G] = tileDef.InteriorTint.G;
+	instanceData[(int)ETileInstanceDataIndex::INT_TINT_B] = tileDef.InteriorTint.B;
+	
 	return instanceData;
 }
 
@@ -790,6 +794,14 @@ void ATileChunk::InitializeFuncMap()
 				WeakThis->ApplyTintOverride(square, obj, Key, Value);
 			}
 		});
+	
+	funcMap.Add("interior_tint", [WeakThis](FIntVector square, int32 obj, FName Key, const FString& Value) 
+	{
+		if (WeakThis.IsValid())
+		{
+			WeakThis->ApplyInteriorTintOverride(square, obj, Key, Value);
+		}
+	});
 }
 
 void ATileChunk::OnTileObjectDataChanged(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value)
@@ -836,12 +848,20 @@ void ATileChunk::SetObjectInstanceData(FIntVector square, int32 objectIndex, ETi
 	const bool s = HISM->SetCustomDataValue(Object.RenderInstanceIndex, (int)propIndex, propValue, true);
 }
 
-void ATileChunk::ApplyTintOverride(FIntVector squarePosition, int32 objectIndex, FName Key, const FString& Value)
+void ATileChunk::ApplyTintOverride(FIntVector square, int32 objectIndex, FName Key, const FString& Value)
 {
 	FLinearColor instColor = UBarrelUtilityFunctionLibrary::HexStringToLinearColor(Value);
-	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_R, instColor.R);
-	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_G, instColor.G);
-	SetObjectInstanceData(squarePosition, objectIndex, ETileInstanceDataIndex::TINT_B, instColor.B);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::TINT_R, instColor.R);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::TINT_G, instColor.G);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::TINT_B, instColor.B);
+}
+
+void ATileChunk::ApplyInteriorTintOverride(FIntVector square, int32 objectIndex, FName Key, const FString& Value)
+{
+	FLinearColor interiorInstColor = UBarrelUtilityFunctionLibrary::HexStringToLinearColor(Value);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::INT_TINT_R, interiorInstColor.R);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::INT_TINT_G, interiorInstColor.G);
+	SetObjectInstanceData(square, objectIndex, ETileInstanceDataIndex::INT_TINT_B, interiorInstColor.B);
 }
 
 void ATileChunk::OnObjectUnhandledDataChanged_Implementation(FName Key, const FString& Value)

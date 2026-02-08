@@ -94,6 +94,9 @@ enum class ETileInstanceDataIndex : uint8
 	INT_METALLIC_TEX,
 	INT_NORMAL_TEX,
 	INT_SPECULAR_TEX,
+	INT_TINT_R,
+	INT_TINT_G,
+	INT_TINT_B,
 	MAX
 };
 
@@ -216,6 +219,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FLinearColor tint = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FLinearColor InteriorTint = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	//skipping specular because UE docs recommend it to be unchanged.
 	
