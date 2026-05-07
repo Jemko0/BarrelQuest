@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "Net/TileNetworkLibrary.h"
 #include "Tiles/TileLibrary.h"
+#include "Types/TReplicatedMap.h"
 #include "TileChunk.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChunkError, FString, msg);
@@ -28,10 +30,18 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*> HISMMap;
 	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TMap<FIntVector, FSquareTile> Tiles;
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
+	TArray<FIntVector> TileKeys;
 	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
+	TArray<FSquareTile> TileValues;
+	
+	TReplicatedMap<FIntVector, FSquareTile> Tiles{TileKeys, TileValues};
+	
+	//UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	//TMap<FIntVector, FSquareTile> Tiles;
+	
+	UPROPERTY(Replicated, BlueprintReadOnly, EditAnywhere)
 	FIntVector2 ChunkPosition;
 	
 	UPROPERTY(BlueprintReadOnly)
@@ -42,18 +52,9 @@ public:
 	
 	static FIntVector ChunkSize;
 	
-	UPROPERTY(ReplicatedUsing=OnRep_ReplicatedTiles)
-	TArray<FTileEntry> ReplicatedTiles;
-	
 	///MUST be initialized please
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<TObjectPtr<URuntimeVirtualTexture>> RVTOutputs;
-	
-	// Called on clients when Tiles is updated
-	UFUNCTION()
-	void OnRep_ReplicatedTiles();
-	
-	void PrepareForReplication();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
@@ -70,7 +71,7 @@ public:
 	FSquareTile& GetOrCreateSquareTile(FIntVector Position);
 	
 	UFUNCTION(BlueprintCallable)
-	void SetTiles(TMap<FIntVector, FSquareTile> newTiles);
+	void SetTiles(TArray<FIntVector> tilePositions, TArray<FSquareTile> tileSquares);
 	
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
 	FSquareTile& AddSquare(FIntVector Position, const FSquareTile& newSquare);

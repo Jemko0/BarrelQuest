@@ -275,7 +275,7 @@ struct FTileRuntimeData
 {
 	GENERATED_BODY()
 protected:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame, NotReplicated)
 	TMap<FName, int32> indexLookup;
 	
 public:
@@ -296,6 +296,8 @@ public:
 	
 	///Gets a runtime value, if key doesnt exist, returns query result with valid == false 
 	FRuntimeDataQueryResult GetValue(FName Key) const;
+	
+	void BuildLookup();
 };
 
 UENUM(BlueprintType)
@@ -479,6 +481,14 @@ public:
 		return objects.Add(Object);
 	}
 	
+	void AddObjects(const TArray<FTileObject>& Objects)
+	{
+		for (const FTileObject& Object : Objects)
+		{
+			AddObject(Object);
+		}
+	}
+	
 	void RemoveObjectByIndex(const int i)
 	{
 		objects.RemoveAt(i);
@@ -531,22 +541,6 @@ public:
 	}
 };
 
-
-USTRUCT(BlueprintType)
-struct FTileEntry
-{
-	GENERATED_BODY()
-	
-public:
-	FTileEntry() : Tile(FIntVector(0, 0, 0))
-	{
-		Location = FIntVector(0, 0, 0);
-	}
-
-	FIntVector Location;
-	FSquareTile Tile;
-};
-
 USTRUCT(BlueprintType)
 struct FTileSearchFilter
 {
@@ -570,6 +564,18 @@ public:
 	{
 		minZLevel = Z;
 	}
+};
+
+USTRUCT(BlueprintType)
+struct FTileSyncPacket
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FIntVector Position;
+
+	UPROPERTY()
+	TArray<FTileObject> Objects;
 };
 
 UCLASS()

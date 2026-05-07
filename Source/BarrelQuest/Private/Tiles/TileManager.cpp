@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "Tiles/RightClickInterface.h"
+#include "Tiles/Net/Interfaces/TileNetworkInterface.h"
 
 UDataTable* ATileManager::TileDataTable = nullptr;
 
@@ -493,7 +495,30 @@ void ATileManager::OnRep_Chunks()
 	ChunkLookup.Empty();
 	for (auto Chunk : Chunks)
 	{
+		if (!Chunk || !IsValid(Chunk)) continue;
 		ChunkLookup.Add(Chunk->ChunkPosition, Chunk);
+	}
+
+	for (int32 i = PendingChunkObjects.Num() - 1; i >= 0; i--)
+	{
+		auto& [ChunkPos, SquarePos, Object] = PendingChunkObjects[i];
+		ATileChunk* Chunk = GetChunkAt(ChunkPos);
+		if (Chunk)
+		{
+			Chunk->AddObject(SquarePos, Object);
+			PendingChunkObjects.RemoveAt(i);
+		}
+	}
+
+	for (int32 i = PendingRemovals.Num() - 1; i >= 0; i--)
+	{
+		auto& [WorldPos, ID] = PendingRemovals[i];
+		ATileChunk* Chunk = GetChunkAtWorld(WorldPos);
+		if (Chunk)
+		{
+			RemoveObjectAtWorldByID(WorldPos, ID);
+			PendingRemovals.RemoveAt(i);
+		}
 	}
 }
 
@@ -698,7 +723,7 @@ FRoomValue ATileManager::GetRoomByID(int id)
 	return *roomPtr;
 }
 
-bool ATileManager::PlaceObjectAtWorld(FVector WorldPosition, FTileObject NewObject)
+void ATileManager::PlaceObjectAtWorld(FVector WorldPosition, FTileObject NewObject)
 {
 	FIntVector2 ChunkPosition = UTileLibrary::WorldToChunkPosition(WorldPosition);
 
@@ -710,15 +735,13 @@ bool ATileManager::PlaceObjectAtWorld(FVector WorldPosition, FTileObject NewObje
 		if (!ChunkPtr)
 		{
 			UE_LOG(LogBarrelQuest, Error, TEXT("PlaceObjectAtWorld: chunk was somehow null after spawning!"));
-			return false;
+			return;
 		}
 	}
 
 	FIntVector TilePositionInChunk = UTileLibrary::WorldToLocalChunkTilePosition(WorldPosition, ChunkPtr);
-
-	ChunkPtr->AddObject(TilePositionInChunk, NewObject);
-
-	return true;
+	MUL_ChunkAddObject(ChunkPosition, TilePositionInChunk, NewObject);
+	//ChunkPtr->AddObject(TilePositionInChunk, NewObject);
 }
 
 ///Removes the first object found on the square with the corresponding ID
@@ -811,7 +834,7 @@ AActor* ATileManager::CreateNewChunk_Implementation(FVector chunkLocation)
 	FActorSpawnParameters spawnParams = FActorSpawnParameters();
 	spawnParams.Owner = this;
 	
-	AActor* ret = GetWorld()->SpawnActor<AActor>(
+	ATileChunk* ret = GetWorld()->SpawnActor<ATileChunk>(
 	ATileChunk::StaticClass(),
 	chunkLocation,
 	FRotator(0.0f),
@@ -960,6 +983,46 @@ TArray<FIntVector> ATileManager::ThickRaycast(FIntVector start, FIntVector end, 
 	}
     
 	return allTiles.Array();
+}
+
+TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
+{
+	TArray<FRCMOption> options;
+	ATileChunk* c = GetChunkAtWorld(worldPosition);
+	
+	if (!c)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("TryGetRightClickOptions: No chunk found at worldPosition"));
+		return options;
+	}
+	
+	FIntVector squarePosition = UTileLibrary::WorldToTilePosition(worldPosition);
+	
+	FStoredFeatureArray* featuresOnSquarePtr = c->AttachedFeatures.Find(squarePosition);
+	
+	if (!featuresOnSquarePtr)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("TryGetRightClickOptions: No features on square"));
+		return options;
+	}
+	
+	TArray<FStoredFeature>& featuresArray = featuresOnSquarePtr->features;
+	
+	if (featuresArray.IsEmpty())
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("TryGetRightClickOptions: No features on square"));
+		return options;
+	}
+	
+	for (FStoredFeature& f : featuresArray)
+	{
+		if (IRightClickInterface* rightClickInterface = Cast<IRightClickInterface>(f.ComponentPtr))
+		{
+			options.Append(rightClickInterface->Execute_GetRCMOptions(f.ComponentPtr, c, worldPosition));	
+		}
+	}
+	
+	return options;
 }
 
 TSet<FIntVector> ATileManager::GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea)
@@ -1127,4 +1190,121 @@ void ATileManager::FlushLogs()
 {
 	Logs.Empty();
 	OnTileManagerFlushLog.Broadcast();
+}
+
+void ATileManager::SV_RequestChunkSync_Implementation(FIntVector2 ChunkPosition, APlayerController* PlayerController)
+{
+    ATileChunk* ChunkPtr = GetChunkAt(ChunkPosition);
+	
+	ITileNetworkInterface* TileNetworkInterface = Cast<ITileNetworkInterface>(PlayerController);
+	if (!TileNetworkInterface)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Controller Doesnt inherit from ITileNetworkInterface"));
+		return;
+	}
+	
+    if (!ChunkPtr) 
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SV_RequestChunkSync: Chunk at %s not found!"), *ChunkPosition.ToString());
+        return;
+    }
+    
+    TArray<FTileSyncPacket> DataBatch;
+    int32 ApproximateSize = 0;
+    int32 TotalObjectsSent = 0;
+    int32 BatchCount = 0;
+
+    UE_LOG(LogTemp, Log, TEXT("SV_RequestChunkSync: Starting sync for Chunk %s (Total Tiles: %d)"), *ChunkPosition.ToString(), ChunkPtr->Tiles.Num());
+
+    for (auto It : ChunkPtr->Tiles)
+    {
+       FSquareTile* SquarePtr = GetSquareTilePtr(It.Key);
+       if (!SquarePtr) continue;
+
+       TArray<FTileObject> ObjectsOnSquare = SquarePtr->GetObjectsOnSquare();
+       if (ObjectsOnSquare.Num() == 0) continue;
+
+       DataBatch.Add(FTileSyncPacket(It.Key, ObjectsOnSquare));
+       TotalObjectsSent += ObjectsOnSquare.Num();
+
+       // ROUGH CALCULATION: 
+       // 12 bytes (FIntVector) + (NumObjects * 200 bytes per FTileObject)
+       ApproximateSize += 12 + (ObjectsOnSquare.Num() * 200);
+       
+       if (ApproximateSize > 45000) // 45KB safety threshold
+       {
+          BatchCount++;
+          UE_LOG(LogTemp, Log, TEXT("SV_RequestChunkSync: Sending Batch %d for Chunk %s (~%d bytes, %d squares)"), 
+                 BatchCount, *ChunkPosition.ToString(), ApproximateSize, DataBatch.Num());
+
+          TileNetworkInterface->ReceiveChunkSyncBatch(ChunkPosition, DataBatch);
+          
+          DataBatch.Empty();
+          ApproximateSize = 0;
+       }
+    }
+
+    // Final sweep for any remaining data
+    if (DataBatch.Num() > 0)
+    {
+       BatchCount++;
+       UE_LOG(LogTemp, Log, TEXT("SV_RequestChunkSync: Sending Final Batch %d for Chunk %s (~%d bytes, %d squares)"), 
+              BatchCount, *ChunkPosition.ToString(), ApproximateSize, DataBatch.Num());
+              
+       TileNetworkInterface->ReceiveChunkSyncBatch(ChunkPosition, DataBatch);
+    }
+
+    UE_LOG(LogTemp, Log, TEXT("SV_RequestChunkSync: Sync Finished for %s. Total Batches: %d, Total Objects: %d"), 
+           *ChunkPosition.ToString(), BatchCount, TotalObjectsSent);
+
+	TileNetworkInterface->FinishSync(ChunkPosition);
+}
+
+void ATileManager::MUL_ChunkRemoveObjectByID_Implementation(FVector WorldPosition, FIntVector SquarePosition, FName ID)
+{
+	if (!HasAuthority())
+	{
+		ATileChunk* ChunkPtr = GetChunkAtWorld(WorldPosition);
+		if (!ChunkPtr)
+		{
+			PendingRemovals.Add(MakeTuple(WorldPosition, ID));
+			return;
+		}
+	}
+	
+	RemoveObjectAtWorldByID(WorldPosition, ID);
+}
+
+
+void ATileManager::SV_RemoveObjectAtWorldByID_Implementation(FVector WorldPosition, FName ID)
+{
+	FIntVector SquarePosition = UTileLibrary::WorldToTilePosition(WorldPosition);
+	MUL_ChunkRemoveObjectByID(WorldPosition, SquarePosition, ID);
+}
+
+void ATileManager::MUL_ChunkAddObject_Implementation(FIntVector2 ChunkPosition, FIntVector SquarePosition, FTileObject Object)
+{
+	Object.RenderInstanceIndex = -1;
+    
+	ATileChunk* ChunkPtr = GetChunkAt(ChunkPosition);
+	if (!ChunkPtr)
+	{
+		if (!HasAuthority()) // only clients should ever hit this
+		{
+			UE_LOG(LogBarrelQuest, Warning, TEXT("MUL_ChunkAddObject: Queuing for chunk %s"), *ChunkPosition.ToString());
+			PendingChunkObjects.Add(MakeTuple(ChunkPosition, SquarePosition, Object));
+		}
+		else
+		{
+			UE_LOG(LogBarrelQuest, Error, TEXT("MUL_ChunkAddObject: Server couldn't find its own chunk!"));
+		}
+		return;
+	}
+    
+	ChunkPtr->AddObject(SquarePosition, Object);
+};
+
+void ATileManager::SV_PlaceObjectAtWorld_Implementation(FVector Position, FTileObject newObject)
+{
+	PlaceObjectAtWorld(Position, newObject);
 }

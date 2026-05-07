@@ -10,37 +10,23 @@ ATileChunk::ATileChunk()
 {
 	TileSize = UTileLibrary::GetTileSize();
 	InitializeFuncMap();
+	
+	SetReplicateMovement(false);
+	bReplicates = true;
+	bAlwaysRelevant = true;
+	
+	/*USceneComponent* Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;*/
 }
 
 FIntVector ATileChunk::ChunkSize = FIntVector(96, 96, 7);
 
-void ATileChunk::OnRep_ReplicatedTiles()
-{
-	Tiles.Empty();
-	for (auto& entry : ReplicatedTiles)
-	{
-		Tiles.Add(entry.Location, entry.Tile);
-	}
-	
-	//BuildChunk();
-}
-
-void ATileChunk::PrepareForReplication()
-{
-	ReplicatedTiles.Empty();
-	for (auto& Pair : Tiles)
-	{
-		FTileEntry Entry = FTileEntry();
-		Entry.Location = Pair.Key;
-		Entry.Tile = Pair.Value;
-		ReplicatedTiles.Add(Entry);
-	}
-}
-
 void ATileChunk::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(ATileChunk, ReplicatedTiles);
+	DOREPLIFETIME(ATileChunk, ChunkPosition);
+	DOREPLIFETIME(ATileChunk, TileKeys);
+	DOREPLIFETIME(ATileChunk, TileValues);
 }
 
 ///Builds the chunk using the tile data and creates HISM + Instances
@@ -65,10 +51,23 @@ void ATileChunk::BuildChunk()
     }
     HISMMap.Empty();
     HISMReverseLookup.Empty();
-	UE_LOG(LogBarrelQuest, Warning, TEXT("BuildChunk called, Tiles count: %d"), Tiles.Num());
+	
+	bool isServer = false;
+	
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		UNetDriver* netDriver = world->GetNetDriver();
+		if (netDriver)
+		{
+			isServer = netDriver->IsServer();
+		}
+	}
+	
+	UE_LOG(LogBarrelQuest, Warning, TEXT("BuildChunk called on [%s], Tiles count: %d"), isServer? L"SERVER" : L"CLIENT", Tiles.Num());
 	
     // Iterate all tiles in this chunk
-    for (auto& TilePair : Tiles)
+    for (auto TilePair : Tiles)
     {
         const FIntVector& Position = TilePair.Key;
         FSquareTile& Square = TilePair.Value;
@@ -276,13 +275,16 @@ FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 	return newTile;
 }
 
-void ATileChunk::SetTiles(TMap<FIntVector, FSquareTile> newTiles)
+void ATileChunk::SetTiles(TArray<FIntVector> tilePositions, TArray<FSquareTile> tileSquares)
 {
 	Tiles.Empty();
 	
-	for (auto& newTile : newTiles)
+	for (int i = 0 ; i < tilePositions.Num(); i++)
 	{
-		AddSquare(newTile.Key, newTile.Value);
+		const FIntVector& Key = tilePositions[i];
+		FSquareTile& Square = tileSquares[i];
+		
+		AddSquare(Key, Square);
 	}
 }
 
@@ -636,7 +638,7 @@ bool ATileChunk::HasSquare(FIntVector Position)
 
 void ATileChunk::ResetChunkState()
 {
-	for (auto& pair : Tiles)
+	for (auto pair : Tiles)
 	{
 		FSquareTile& square = pair.Value;
 		TArray<FTileObject>& objects = square.GetObjectsOnSquare();

@@ -40,16 +40,16 @@
 		return OwningTileIndex;\
 	} \
 	virtual FTileObject* GetOwningObject() \
-	{\
-		FSquareTile* ptr = OwningTileManager->GetSquareTilePtr(OwningTileIndex);\
-		if (!ptr || !ptr->GetObjectsOnSquare().IsValidIndex(OwningObjectIndex))\
-		{\
-			\
-			UE_LOG(LogBarrelQuest, Error, TEXT("Invalid OwningObjectIndex %d for tile %s"), OwningObjectIndex, *OwningTileIndex.ToString());\
-			return nullptr;\
-		}\
-		return &ptr->GetObjectsOnSquare()[OwningObjectIndex];\
-	}\
+	{ \
+	if (!OwningTileManager) return nullptr; \
+	   FSquareTile* ptr = OwningTileManager->GetSquareTilePtr(OwningTileIndex); \
+	if (!ptr || !ptr->GetObjectsOnSquare().IsValidIndex(OwningObjectIndex)) \
+	{ \
+		UE_LOG(LogBarrelQuest, Error, TEXT("Invalid OwningObjectIndex %d for tile %s"), OwningObjectIndex, *OwningTileIndex.ToString()); \
+		return nullptr; \
+	} \
+	return &ptr->GetObjectsOnSquare()[OwningObjectIndex]; \
+	} \
 	virtual void ResetOwners()\
 	{\
 		OwningTileIndex = FIntVector(-1, -1, -1);\

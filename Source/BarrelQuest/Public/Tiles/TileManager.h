@@ -1,8 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RightClickLibrary.h"
 #include "GameFramework/Actor.h"
+#include "Net/TileNetworkLibrary.h"
 #include "Tiles/TileLibrary.h"
+#include "Types/TReplicatedMap.h"
 #include "TileManager.generated.h"
 
 
@@ -24,8 +27,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_Chunks)
 	TArray<ATileChunk*> Chunks;
+	
+	TArray<TTuple<FIntVector2, FIntVector, FTileObject>> PendingChunkObjects;
+	TArray<TTuple<FVector, FName>> PendingRemovals;
 	
 	static UDataTable* TileDataTable;
 	
@@ -123,7 +130,7 @@ public:
 	///Places a TileObject at the world position, if the square doesn't exist, it will create it.
 	/// If the chunk doesn't exist, it will create it. If it cant be placed, will return false
 	UFUNCTION(BlueprintCallable)
-	bool PlaceObjectAtWorld(FVector worldPosition, FTileObject newObject);
+	void PlaceObjectAtWorld(FVector worldPosition, FTileObject newObject);
 	
 	UFUNCTION(BlueprintCallable)
 	bool RemoveObjectAtWorldByID(FVector worldPosition, FName ID);
@@ -156,6 +163,9 @@ public:
 	TArray<FIntVector> ThickRaycast(FIntVector start, FIntVector end, int32 thickness);
 	
 	UFUNCTION(BlueprintCallable)
+	TArray<FRCMOption> TryGetRightClickOptions(FVector worldPosition);
+	
+	UFUNCTION(BlueprintCallable)
 	static TSet<FIntVector> GetObstructingAreaIndices(FIntVector CameraIdx, const TSet<FIntVector>& TargetArea);
 	
 	UFUNCTION(BlueprintCallable)
@@ -179,6 +189,21 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void AddError(UObject* Source, FString Message);
-	
 	void FlushLogs();
+	
+	//Networking codeeeeee
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SV_PlaceObjectAtWorld(FVector Position, FTileObject newObject);
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SV_RemoveObjectAtWorldByID(FVector WorldPosition, FName ID);
+	
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void MUL_ChunkAddObject(FIntVector2 ChunkPosition, FIntVector SquarePosition, FTileObject Object);
+	
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void MUL_ChunkRemoveObjectByID(FVector WorldPosition, FIntVector SquarePosition, FName ID);
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+    void SV_RequestChunkSync(FIntVector2 ChunkPosition, APlayerController* PlayerController);
 };

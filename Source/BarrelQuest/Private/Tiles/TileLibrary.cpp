@@ -67,6 +67,23 @@ FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key) const
 	return FRuntimeDataQueryResult(); // invalid
 }
 
+void FTileRuntimeData::BuildLookup()
+{
+	indexLookup.Empty();
+    
+	for (int32 i = 0; i < runtimeData.Num(); i++)
+	{
+		const FString& Data = runtimeData[i];
+		
+		FString KeyString, Value;
+		if (Data.Split(TEXT("="), &KeyString, &Value))
+		{
+			FName Key = FName(*KeyString);
+			indexLookup.Add(Key, i);
+		}
+	}
+}
+
 void FBuildingValue::CalculateBounds(ATileManager* mgr)
 {
 	BoundingBoxes.Empty();
