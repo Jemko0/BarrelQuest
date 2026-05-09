@@ -30,8 +30,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*> HISMMap;
 	
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, ReplicatedUsing=OnRep_TileKeys)
 	TArray<FIntVector> TileKeys;
+	
+	UFUNCTION()
+	void OnRep_TileKeys();
 	
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
 	TArray<FSquareTile> TileValues;

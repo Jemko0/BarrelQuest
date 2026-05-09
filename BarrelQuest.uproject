@@ -12,7 +12,8 @@
 				"Engine",
 				"LuaMachine",
 				"UnrealEd",
-				"InteractiveToolsFramework"
+				"InteractiveToolsFramework",
+				"CoreUObject"
 			]
 		}
 	],

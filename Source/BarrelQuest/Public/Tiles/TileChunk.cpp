@@ -19,6 +19,11 @@ ATileChunk::ATileChunk()
 	RootComponent = Root;*/
 }
 
+void ATileChunk::OnRep_TileKeys()
+{
+	Tiles.RebuildIndex();
+}
+
 FIntVector ATileChunk::ChunkSize = FIntVector(96, 96, 7);
 
 void ATileChunk::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
