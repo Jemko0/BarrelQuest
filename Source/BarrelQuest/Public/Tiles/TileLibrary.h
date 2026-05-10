@@ -70,6 +70,8 @@ enum class ETileTextureIndex : uint8
 
 	PROP_FENCE_SHORT,
 	PROP_FENCE_BROWN,
+	
+	CUSTOM = UINT8_MAX
 };
 
 UENUM(BlueprintType)

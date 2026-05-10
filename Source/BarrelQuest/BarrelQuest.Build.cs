@@ -7,21 +7,24 @@ public class BarrelQuest : ModuleRules
 	public BarrelQuest(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
+
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
-			"Core", 
-			"CoreUObject", 
-			"Engine", 
-			"InputCore", 
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
 			"ProceduralMeshComponent",
 			"Slate",
 			"SlateCore",
-			"ApplicationCore"
+			"ApplicationCore",
+			"HTTP",
+			"Json",
+			"JsonUtilities"
 		});
-		
+
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
+
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 
