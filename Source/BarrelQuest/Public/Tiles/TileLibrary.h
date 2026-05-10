@@ -165,6 +165,22 @@ FORCEINLINE uint32 GetTypeHash(const FTileRenderKey& Key)
 }
 
 USTRUCT(BlueprintType)
+struct FTileConstantTextures : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UTexture2D* ConstAlbedo;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UTexture2D* ConstNormal;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UTexture2D* ConstORM;
+};
+
+USTRUCT(BlueprintType)
 struct FTileTextureIndices : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -193,6 +209,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ETileTextureIndex InteriorNormal = ETileTextureIndex::DEBUG;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FTileConstantTextures ConstantTextures;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float BaseRoughness = 1.0f;

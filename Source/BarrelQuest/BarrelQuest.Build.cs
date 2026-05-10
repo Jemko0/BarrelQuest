@@ -20,10 +20,20 @@ public class BarrelQuest : ModuleRules
 			"ApplicationCore",
 			"HTTP",
 			"Json",
-			"JsonUtilities"
+			"JsonUtilities",
+			"MeshDescription",
+			"StaticMeshDescription",
+			"RenderCore",
+			"RHI",
+			"VorbisAudioDecoder",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
+		if (Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			PublicSystemLibraries.Add("winmm.lib");
+		}
 
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
