@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Crafting/CraftingLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "UserResources/TileTextureRegistry.h"
 #include "TileLibrary.generated.h"
 
 /**
@@ -99,6 +100,12 @@ enum class ETileInstanceDataIndex : uint8
 	INT_TINT_R,
 	INT_TINT_G,
 	INT_TINT_B,
+	
+	//user defs
+	USERDEF_ALBEDO,
+	USERDEF_NORMAL,
+	USERDEF_ORM,
+	
 	MAX
 };
 
@@ -171,13 +178,13 @@ struct FTileConstantTextures : public FTableRowBase
 	
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UTexture2D* ConstAlbedo;
+	FTileSavedTextureHandle ConstAlbedo;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UTexture2D* ConstNormal;
+	FTileSavedTextureHandle ConstNormal;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UTexture2D* ConstORM;
+	FTileSavedTextureHandle ConstORM;
 };
 
 USTRUCT(BlueprintType)
@@ -211,7 +218,7 @@ public:
 	ETileTextureIndex InteriorNormal = ETileTextureIndex::DEBUG;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTileConstantTextures ConstantTextures;
+	FTileConstantTextures ConstantTexHandles;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float BaseRoughness = 1.0f;

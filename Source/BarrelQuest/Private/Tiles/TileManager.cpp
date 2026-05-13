@@ -846,18 +846,35 @@ AActor* ATileManager::CreateNewChunk_Implementation(FVector chunkLocation)
 
 FTileDefinition ATileManager::GetTileByID(UObject* WorldContextObject, FName ID)
 {
-	FTileDefinition* def = ATileManager::TileDataTable->FindRow<FTileDefinition>(ID, TEXT("Tile Manager"), true);
+	ATileManager* managerInstance = nullptr;
+	if (WorldContextObject && WorldContextObject->GetWorld())
+	{
+		managerInstance = Cast<ATileManager>(UGameplayStatics::GetActorOfClass(WorldContextObject->GetWorld(), ATileManager::StaticClass()));
+	}
+	
+	FTileDefinition* def = ATileManager::TileDataTable
+		? ATileManager::TileDataTable->FindRow<FTileDefinition>(ID, TEXT("Tile Manager"), false)
+		: nullptr;
 	if (!def)
 	{
+		if (managerInstance)
+		{
+			def = managerInstance->UserDefinedTileDefinitions.Find(ID);
+			if (def)
+			{
+				return *def;
+			}
+		}
+		
+		
 		const wchar_t* w = *ID.ToString();
 		UE_LOG(LogBarrelQuest, Warning, TEXT("No Definition was found for %s"), w);
 		
 		if (WorldContextObject)
 		{
-			ATileManager* t = Cast<ATileManager>(UGameplayStatics::GetActorOfClass(WorldContextObject->GetWorld(), ATileManager::StaticClass()));
-			if (t)
+			if (managerInstance)
 			{
-				t->AddError(WorldContextObject->GetWorld(), FString::Printf(TEXT("No Definition was found for %s"), *ID.ToString()));
+				managerInstance->AddError(WorldContextObject->GetWorld(), FString::Printf(TEXT("No Definition was found for %s"), *ID.ToString()));
 			}
 		}
 

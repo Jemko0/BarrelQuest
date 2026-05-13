@@ -4,7 +4,34 @@
 #include "Tiles/TileManager.h"
 #include "BarrelUtilityLibrary.h"
 #include "Features/Interfaces/TileFeatureInterface.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Net/UnrealNetwork.h"
+
+namespace
+{
+	const TCHAR* TileTextureKindToStringForChunkLog(ETileRegisteredTextureKind Kind)
+	{
+		switch (Kind)
+		{
+		case ETileRegisteredTextureKind::CookedAsset:
+			return TEXT("CookedAsset");
+		case ETileRegisteredTextureKind::RuntimeTexture:
+			return TEXT("RuntimeTexture");
+		default:
+			return TEXT("None");
+		}
+	}
+
+	FString DescribeTileTextureHandleForLog(const FTileSavedTextureHandle& Handle)
+	{
+		return FString::Printf(
+			TEXT("Id='%s' Kind=%s AssetPath='%s' Url='%s'"),
+			*Handle.Id,
+			TileTextureKindToStringForChunkLog(Handle.Kind),
+			*Handle.AssetPath.ToString(),
+			*Handle.Url);
+	}
+}
 
 ATileChunk::ATileChunk()
 {
@@ -124,7 +151,19 @@ void ATileChunk::BuildChunk()
             Lookup[InstanceIndex] = { Position, i };
         	
         	
-            TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef, Square);
+        	UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
+            TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef, Square, TileTextureRegistry);
+        	UE_LOG(LogTemp, Display, TEXT("ATileChunk::BuildChunk: TileID='%s' Position=%s ObjectIndex=%d InstanceIndex=%d UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
+				*ObjectDef.ID.ToString(),
+				*Position.ToString(),
+				i,
+				InstanceIndex,
+				InstanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
+				InstanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
+				InstanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
+				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
+				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstNormal),
+				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstORM));
             HISM->SetCustomData(InstanceIndex, InstanceData, true);
         	
         	ApplyAllDataForObject(TilePair.Key, i, ObjectDef);
@@ -195,7 +234,21 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     Lookup[NewIndex] = { Position, ObjectIndex };
 	
     // Set Data
-    TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef, *square);
+	UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
+    TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef, *square, TileTextureRegistry);
+	UE_LOG(LogTemp, Display, TEXT("ATileChunk::AddObjectInstance: TileID='%s' Position=%s ObjectIndex=%d InstanceIndex=%d Mesh='%s' Material='%s' UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
+		*ObjectDef.ID.ToString(),
+		*Position.ToString(),
+		ObjectIndex,
+		NewIndex,
+		TileDef.Mesh ? *TileDef.Mesh->GetPathName() : TEXT("<null>"),
+		TileDef.ParentMaterial ? *TileDef.ParentMaterial->GetPathName() : TEXT("<null>"),
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
+		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
+		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstNormal),
+		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstORM));
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
@@ -665,9 +718,13 @@ void ATileChunk::ResetChunkState()
 }
 
 
-TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare)
+TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare, UTileTextureRegistry* TileTextureRegistry)
 {
 	TStaticArray<float, customDataFloats> instanceData;
+	for (int32 Index = 0; Index < customDataFloats; ++Index)
+	{
+		instanceData[Index] = 0.0f;
+	}
 	
 	instanceData[(int)ETileInstanceDataIndex::ALBEDO_TEX] = (float)tileDef.TextureProperties.Albedo;
 	instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC] = (float)tileDef.TextureProperties.Metallic;
@@ -695,6 +752,63 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::INT_TINT_R] = tileDef.InteriorTint.R;
 	instanceData[(int)ETileInstanceDataIndex::INT_TINT_G] = tileDef.InteriorTint.G;
 	instanceData[(int)ETileInstanceDataIndex::INT_TINT_B] = tileDef.InteriorTint.B;
+
+	instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO] = -1.0f;
+	instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL] = -1.0f;
+	instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM] = -1.0f;
+
+	UE_LOG(LogTemp, Display, TEXT("ATileChunk::GetCustomDataArray: Begin TileID='%s' TileName='%s' TileDirection=%d HasRegistry=%s DefaultTextureIndices=(Albedo=%d Normal=%d Metallic=%d Specular=%d) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
+		*tileObject.ID.ToString(),
+		*tileDef.Name,
+		(int)tileObject.Direction,
+		TileTextureRegistry ? TEXT("true") : TEXT("false"),
+		(int)tileDef.TextureProperties.Albedo,
+		(int)tileDef.TextureProperties.Normal,
+		(int)tileDef.TextureProperties.Metallic,
+		(int)tileDef.TextureProperties.Specular,
+		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
+		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstNormal),
+		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstORM));
+
+	if (TileTextureRegistry)
+	{
+		const int32 UserAlbedoSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo);
+		const int32 UserNormalSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstNormal);
+		const int32 UserORMSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstORM);
+
+		if (UserAlbedoSlot != INDEX_NONE)
+		{
+			instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO] = static_cast<float>(UserAlbedoSlot);
+		}
+
+		if (UserNormalSlot != INDEX_NONE)
+		{
+			instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL] = static_cast<float>(UserNormalSlot);
+		}
+
+		if (UserORMSlot != INDEX_NONE)
+		{
+			instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM] = static_cast<float>(UserORMSlot);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ATileChunk::GetCustomDataArray: TileTextureRegistry was null. User-defined texture slots remain -1 for TileID='%s'."), *tileObject.ID.ToString());
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("ATileChunk::GetCustomDataArray: End TileID='%s' UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Tint=(%f,%f,%f) InteriorTint=(%f,%f,%f) Base=(Metallic=%f Roughness=%f)"),
+		*tileObject.ID.ToString(),
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
+		instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
+		instanceData[(int)ETileInstanceDataIndex::TINT_R],
+		instanceData[(int)ETileInstanceDataIndex::TINT_G],
+		instanceData[(int)ETileInstanceDataIndex::TINT_B],
+		instanceData[(int)ETileInstanceDataIndex::INT_TINT_R],
+		instanceData[(int)ETileInstanceDataIndex::INT_TINT_G],
+		instanceData[(int)ETileInstanceDataIndex::INT_TINT_B],
+		instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC],
+		instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS]);
 	
 	return instanceData;
 }
@@ -703,7 +817,38 @@ UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTil
 {
 	UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
 	HISM->SetStaticMesh(tileDef.Mesh);
-	HISM->SetMaterial(0, tileDef.ParentMaterial);
+	
+	UMaterialInterface* MaterialToUse = tileDef.ParentMaterial;
+	if (tileDef.ParentMaterial)
+	{
+		UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(tileDef.ParentMaterial, this);
+		UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
+		UTexture2DArray* UserDefinedAtlas = TileTextureRegistry ? TileTextureRegistry->GetUserDefinedAtlas() : nullptr;
+
+		if (UserDefinedAtlas)
+		{
+			MID->SetTextureParameterValue(TEXT("UserDefinedAtlas"), UserDefinedAtlas);
+			UE_LOG(LogTemp, Display, TEXT("ATileChunk::LazyCreateHISM: Set MID UserDefinedAtlas='%s' for Mesh='%s' Material='%s'"),
+				*UserDefinedAtlas->GetPathName(),
+				tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"),
+				*tileDef.ParentMaterial->GetPathName());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ATileChunk::LazyCreateHISM: UserDefinedAtlas was null. User-defined texture slots can resolve, but material cannot sample atlas. Mesh='%s' Material='%s'"),
+				tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"),
+				*tileDef.ParentMaterial->GetPathName());
+		}
+
+		MaterialToUse = MID;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ATileChunk::LazyCreateHISM: ParentMaterial was null for Mesh='%s'"),
+			tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"));
+	}
+
+	HISM->SetMaterial(0, MaterialToUse);
 	HISM->SetNumCustomDataFloats(customDataFloats);
 	HISM->RuntimeVirtualTextures = RVTOutputs;
 	HISM->RegisterComponent();

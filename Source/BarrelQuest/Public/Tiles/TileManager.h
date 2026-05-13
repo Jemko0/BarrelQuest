@@ -55,6 +55,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, BlueprintAssignable)
 	FOnTileManagerFlushLog OnTileManagerFlushLog;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, FTileDefinition> UserDefinedTileDefinitions;
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	// Called every frame

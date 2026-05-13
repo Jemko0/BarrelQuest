@@ -121,7 +121,7 @@ public:
 	
 	void ResetChunkState();
 	
-	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare);
+	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare, UTileTextureRegistry* TileTextureRegistry = nullptr);
 	
 	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
 	
