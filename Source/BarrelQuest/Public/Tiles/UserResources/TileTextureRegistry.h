@@ -9,7 +9,7 @@
 #include "TileTextureRegistry.generated.h"
 
 UENUM(BlueprintType)
-enum class ETileRegisteredTextureKind : uint8
+enum class ERegisteredAssetType : uint8
 {
 	None,
 	CookedAsset,
@@ -17,7 +17,7 @@ enum class ETileRegisteredTextureKind : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FTileSavedTextureHandle
+struct FTileSavedAssetHandle
 {
 	GENERATED_BODY()
 
@@ -25,7 +25,7 @@ struct FTileSavedTextureHandle
 	FString Id;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-	ETileRegisteredTextureKind Kind = ETileRegisteredTextureKind::None;
+	ERegisteredAssetType Kind = ERegisteredAssetType::None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
 	FSoftObjectPath AssetPath;
@@ -40,7 +40,7 @@ struct FTileRegisteredTexture
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly)
-	ETileRegisteredTextureKind Kind = ETileRegisteredTextureKind::None;
+	ERegisteredAssetType Kind = ERegisteredAssetType::None;
 
 	UPROPERTY(BlueprintReadOnly)
 	TSoftObjectPtr<UTexture2D> CookedTexture;
@@ -50,7 +50,7 @@ struct FTileRegisteredTexture
 
 	bool IsValid() const
 	{
-		return Slot != INDEX_NONE && Kind != ETileRegisteredTextureKind::None;
+		return Slot != INDEX_NONE && Kind != ERegisteredAssetType::None;
 	}
 };
 
@@ -66,10 +66,10 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
-	int32 RegisterRuntimeTextureBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedTextureHandle Handle);
+	int32 RegisterRuntimeTextureBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedAssetHandle Handle);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
-	int32 RegisterCookedTextureWithHandle(TSoftObjectPtr<UTexture2D> Texture, FTileSavedTextureHandle Handle);
+	int32 RegisterCookedTextureWithHandle(TSoftObjectPtr<UTexture2D> Texture, FTileSavedAssetHandle Handle);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	bool ResolveTexture(int32 Slot);
@@ -81,10 +81,10 @@ public:
 	FTileRegisteredTexture GetTextureInfo(int32 Slot) const;
 	
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
-	bool ResolveFromHandle(FTileSavedTextureHandle handle);
+	bool ResolveFromHandle(FTileSavedAssetHandle handle);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
-	int32 ResolveSlotFromHandle(FTileSavedTextureHandle handle);
+	int32 ResolveSlotFromHandle(FTileSavedAssetHandle handle);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	UTexture2DArray* GetUserDefinedAtlas() const;

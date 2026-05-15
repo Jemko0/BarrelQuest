@@ -25,15 +25,18 @@ namespace
     }
 }
 
-UStaticMesh* UUGCAssetRegistry::GetOrLoadMesh(const TArray<uint8>& RawBytes, const FString& CacheKey)
+UStaticMesh* UUGCAssetRegistry::GetOrLoadMesh(const TArray<uint8>& RawBytes, const FString& CacheKey, float ImportScale)
 {
-	if (UStaticMesh** Found = MeshCache.Find(CacheKey))
+    const float SanitizedImportScale = ImportScale > 0.0f ? ImportScale : 100.0f;
+    const FString ScaledCacheKey = FString::Printf(TEXT("%s:scale=%.6g"), *CacheKey, SanitizedImportScale);
+
+	if (UStaticMesh** Found = MeshCache.Find(ScaledCacheKey))
 	{
 		return *Found; // already built, ignore bytes entirely
 	}
 
 	FParsedOBJMesh Parsed;
-	if (!ParseOBJ(RawBytes, Parsed))
+	if (!ParseOBJ(RawBytes, Parsed, SanitizedImportScale))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UGC: Failed to parse OBJ for key: %s"), *CacheKey);
 		return nullptr;
@@ -42,7 +45,7 @@ UStaticMesh* UUGCAssetRegistry::GetOrLoadMesh(const TArray<uint8>& RawBytes, con
 	UStaticMesh* Built = BuildStaticMesh(Parsed);
 	if (Built)
 	{
-		MeshCache.Add(CacheKey, Built);
+		MeshCache.Add(ScaledCacheKey, Built);
 	}
 	return Built;
 }
@@ -84,7 +87,7 @@ void UUGCAssetRegistry::PurgeMeshCache()
 	// GC will clean up the UStaticMesh objects since UPROPERTY refs are gone
 }
 
-bool UUGCAssetRegistry::ParseOBJ(const TArray<uint8>& RawBytes, FParsedOBJMesh& Out)
+bool UUGCAssetRegistry::ParseOBJ(const TArray<uint8>& RawBytes, FParsedOBJMesh& Out, float ImportScale)
 {
     if (RawBytes.Num() == 0)
     {
@@ -116,7 +119,7 @@ bool UUGCAssetRegistry::ParseOBJ(const TArray<uint8>& RawBytes, FParsedOBJMesh& 
                 FCString::Atof(*Tokens[1]),
                 FCString::Atof(*Tokens[3]),
                 FCString::Atof(*Tokens[2])
-            ));
+            ) * ImportScale);
         }
         else if (Tokens[0] == "vt" && Tokens.Num() >= 3)
         {

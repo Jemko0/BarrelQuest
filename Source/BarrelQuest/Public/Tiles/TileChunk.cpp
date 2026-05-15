@@ -9,20 +9,20 @@
 
 namespace
 {
-	const TCHAR* TileTextureKindToStringForChunkLog(ETileRegisteredTextureKind Kind)
+	const TCHAR* TileTextureKindToStringForChunkLog(ERegisteredAssetType Kind)
 	{
 		switch (Kind)
 		{
-		case ETileRegisteredTextureKind::CookedAsset:
+		case ERegisteredAssetType::CookedAsset:
 			return TEXT("CookedAsset");
-		case ETileRegisteredTextureKind::RuntimeTexture:
+		case ERegisteredAssetType::RuntimeTexture:
 			return TEXT("RuntimeTexture");
 		default:
 			return TEXT("None");
 		}
 	}
 
-	FString DescribeTileTextureHandleForLog(const FTileSavedTextureHandle& Handle)
+	FString DescribeTileTextureHandleForLog(const FTileSavedAssetHandle& Handle)
 	{
 		return FString::Printf(
 			TEXT("Id='%s' Kind=%s AssetPath='%s' Url='%s'"),

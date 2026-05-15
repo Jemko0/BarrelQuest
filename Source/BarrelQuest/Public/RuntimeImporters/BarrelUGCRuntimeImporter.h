@@ -42,8 +42,8 @@ class BARRELQUEST_API UUGCAssetRegistry : public UGameInstanceSubsystem
 
 public:
 	// Blueprint-callable entry point
-	UFUNCTION(BlueprintCallable, Category="UGC")
-	UStaticMesh* GetOrLoadMesh(const TArray<uint8>& RawBytes, const FString& CacheKey);
+	UFUNCTION(BlueprintCallable, Category="UGC", meta=(ClampMin="0.000001", UIMin="0.000001"))
+	UStaticMesh* GetOrLoadMesh(const TArray<uint8>& RawBytes, const FString& CacheKey, float ImportScale = 100.0f);
 
 	UFUNCTION(BlueprintCallable, Category="UGC")
 	USoundBase* GetOrLoadSound(const TArray<uint8>& RawBytes, const FString& CacheKey, EUGCAudioFormat Format = EUGCAudioFormat::Auto, bool bLooping = false);
@@ -65,7 +65,7 @@ private:
 	TMap<FString, FDecodedUGCAudio> DecodedSoundCache;
 
 	UStaticMesh* ParseAndBuild(const FString& Path);
-	bool ParseOBJ(const TArray<uint8>& RawBytes, FParsedOBJMesh& Out);
+	bool ParseOBJ(const TArray<uint8>& RawBytes, FParsedOBJMesh& Out, float ImportScale);
 	UStaticMesh* BuildStaticMesh(const FParsedOBJMesh& Parsed);
 
 	bool DecodeSound(const TArray<uint8>& RawBytes, EUGCAudioFormat Format, FDecodedUGCAudio& Out) const;

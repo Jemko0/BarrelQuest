@@ -4,13 +4,13 @@
 
 namespace
 {
-	const TCHAR* TileTextureKindToString(ETileRegisteredTextureKind Kind)
+	const TCHAR* TileTextureKindToString(ERegisteredAssetType Kind)
 	{
 		switch (Kind)
 		{
-		case ETileRegisteredTextureKind::CookedAsset:
+		case ERegisteredAssetType::CookedAsset:
 			return TEXT("CookedAsset");
-		case ETileRegisteredTextureKind::RuntimeTexture:
+		case ERegisteredAssetType::RuntimeTexture:
 			return TEXT("RuntimeTexture");
 		default:
 			return TEXT("None");
@@ -33,7 +33,7 @@ namespace
 			Texture->GetPackage() && Texture->GetPackage()->HasAnyPackageFlags(PKG_TransientFlags) ? TEXT("true") : TEXT("false"));
 	}
 
-	FString DescribeHandle(const FTileSavedTextureHandle& Handle)
+	FString DescribeHandle(const FTileSavedAssetHandle& Handle)
 	{
 		return FString::Printf(
 			TEXT("Id='%s' Kind=%s AssetPath='%s' Url='%s'"),
@@ -134,7 +134,7 @@ void UTileTextureRegistry::Initialize(FSubsystemCollectionBase& Collection)
 		UserDefinedAtlas ? *UserDefinedAtlas->GetPathName() : TEXT("<null>"));
 }
 
-bool UTileTextureRegistry::ResolveFromHandle(FTileSavedTextureHandle handle)
+bool UTileTextureRegistry::ResolveFromHandle(FTileSavedAssetHandle handle)
 {
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveFromHandle: Handle={%s}"), *DescribeHandle(handle));
 	const int32 Slot = ResolveSlotFromHandle(handle);
@@ -143,7 +143,7 @@ bool UTileTextureRegistry::ResolveFromHandle(FTileSavedTextureHandle handle)
 	return bResolved;
 }
 
-int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedTextureHandle handle)
+int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedAssetHandle handle)
 {
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: Begin Handle={%s} RegisteredSlots=%d HandleMappings=%d FreeSlots=%d PixelSlots=%d"),
 		*DescribeHandle(handle),
@@ -179,7 +179,7 @@ int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedTextureHandle handle
 
 	switch (handle.Kind)
 	{
-	case ETileRegisteredTextureKind::CookedAsset:
+	case ERegisteredAssetType::CookedAsset:
 		if (handle.AssetPath.IsValid())
 		{
 			UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: Registering cooked asset from AssetPath='%s'."), *handle.AssetPath.ToString());
@@ -198,7 +198,7 @@ int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedTextureHandle handle
 		}
 		break;
 
-	case ETileRegisteredTextureKind::RuntimeTexture:
+	case ERegisteredAssetType::RuntimeTexture:
 		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: Runtime texture is not registered yet. Register RawBytes with this handle first. Handle={%s}"), *DescribeHandle(handle));
 		break;
 
@@ -243,7 +243,7 @@ UTexture2DArray* UTileTextureRegistry::GetUserDefinedAtlas() const
 	return UserDefinedAtlas;
 }
 
-int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedTextureHandle Handle)
+int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedAssetHandle Handle)
 {
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle: Begin RawBytes=%d Handle={%s}"), RawBytes.Num(), *DescribeHandle(Handle));
 
@@ -305,7 +305,7 @@ int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<u
 	const int32 Slot = FreeSlots.Pop(EAllowShrinking::No);
 
 	FTileRegisteredTexture Entry;
-	Entry.Kind = ETileRegisteredTextureKind::RuntimeTexture;
+	Entry.Kind = ERegisteredAssetType::RuntimeTexture;
 	Entry.Slot = Slot;
 
 	SlotToTexture.Add(Slot, Entry);
@@ -328,7 +328,7 @@ int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<u
 	return Slot;
 }
 
-int32 UTileTextureRegistry::RegisterCookedTextureWithHandle(TSoftObjectPtr<UTexture2D> Texture, FTileSavedTextureHandle Handle)
+int32 UTileTextureRegistry::RegisterCookedTextureWithHandle(TSoftObjectPtr<UTexture2D> Texture, FTileSavedAssetHandle Handle)
 {
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterCookedTextureWithHandle: TexturePath='%s' Handle={%s}"), *Texture.ToSoftObjectPath().ToString(), *DescribeHandle(Handle));
 	const int32 Slot = RegisterCookedTextureInternal(Texture);
@@ -400,7 +400,7 @@ int32 UTileTextureRegistry::RegisterCookedTextureInternal(TSoftObjectPtr<UTextur
 	const int32 Slot = FreeSlots.Pop(EAllowShrinking::No);
 
 	FTileRegisteredTexture Entry;
-	Entry.Kind = ETileRegisteredTextureKind::CookedAsset;
+	Entry.Kind = ERegisteredAssetType::CookedAsset;
 	Entry.CookedTexture = Texture;
 	Entry.Slot = Slot;
 

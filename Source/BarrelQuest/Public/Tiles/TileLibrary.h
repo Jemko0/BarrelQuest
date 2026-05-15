@@ -178,13 +178,13 @@ struct FTileConstantTextures : public FTableRowBase
 	
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTileSavedTextureHandle ConstAlbedo;
+	FTileSavedAssetHandle ConstAlbedo;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTileSavedTextureHandle ConstNormal;
+	FTileSavedAssetHandle ConstNormal;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTileSavedTextureHandle ConstORM;
+	FTileSavedAssetHandle ConstORM;
 };
 
 USTRUCT(BlueprintType)
@@ -241,6 +241,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMesh* Mesh;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FTileSavedAssetHandle UserDefinedMesh = FTileSavedAssetHandle();
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FTileTextureIndices TextureProperties = FTileTextureIndices();
