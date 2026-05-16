@@ -46,7 +46,7 @@ struct FTileMapMemoryEstimate
 };
 
 UCLASS()
-class BARRELQUEST_API ATileManager : public AActor, public IInteractableInterface
+class BARRELQUEST_API ATileManager : public AActor //, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -70,13 +70,14 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<FIntVector2, ATileChunk*> ChunkLookup;
-	
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntVector, int> RoomTilesToID;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<int, FRoomValue> RoomIDToTiles;
 	
+protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<TObjectPtr<URuntimeVirtualTexture>> ChunkRVTs;
 	
@@ -88,13 +89,20 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FTileDefinition> UserDefinedTileDefinitions;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WorldName = FString(TEXT("Unnamed World"));
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 WorldVersion = 1;
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-public:	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex) override;
+	//virtual void InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex) override;
 	
 	const FSquareTile constFallbackSquareTile = FSquareTile(FIntVector(0,0,0));
 	FSquareTile fallbackSquareTile = FSquareTile(FIntVector(0,0,0));

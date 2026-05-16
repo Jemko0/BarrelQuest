@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "MapEditorBase/UserResources/UserResourceLibrary.h"
 #include "Interfaces/IHttpRequest.h"
 #include "UserResourceComponent.generated.h"
 
@@ -23,6 +22,28 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Type;
+};
+
+USTRUCT(BlueprintType)
+struct FInterpretedResourceData
+{
+	GENERATED_BODY();
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* TexturePtr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* MeshPtr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* AudioPtr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<uint8> RawBytes;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsMIDIBytes;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -66,6 +87,9 @@ public:
 	
 	void OnResourceRequestComplete(FHttpRequestPtr RequestPtr, FHttpResponsePtr ResponsePtr, bool success);
 	void OnFileDownloadComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool success, FString URL, FString Type);
+	
+	UFUNCTION(BlueprintCallable)
+	FInterpretedResourceData InterpretData(FString ResourceURL, FString ResourceType, TArray<uint8>& Buffer);
 
 protected:
 	// Called when the game starts

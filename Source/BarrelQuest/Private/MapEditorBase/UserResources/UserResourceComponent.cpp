@@ -2,8 +2,12 @@
 
 
 #include "MapEditorBase/UserResources/UserResourceComponent.h"
+
+#include "BarrelUtilityLibrary.h"
 #include "HTTPModule.h"
 #include "Interfaces/IHttpResponse.h"
+#include "Kismet/KismetRenderingLibrary.h"
+#include "RuntimeImporters/BarrelUGCRuntimeImporter.h"
 
 // Sets default values for this component's properties
 UUserResourceComponent::UUserResourceComponent()
@@ -110,6 +114,49 @@ void UUserResourceComponent::OnFileDownloadComplete(FHttpRequestPtr RequestPtr, 
 	InProgressDownloads.Remove(URL);
 
 	OnDownloadFinished.Broadcast(URL, Type, Cached.Bytes);
+}
+
+FInterpretedResourceData UUserResourceComponent::InterpretData(FString ResourceURL, FString ResourceType,
+	TArray<uint8>& Buffer)
+{
+	UUGCAssetRegistry* UGCAssetRegistry = GetWorld()->GetGameInstance()->GetSubsystem<UUGCAssetRegistry>();
+	FInterpretedResourceData result = FInterpretedResourceData();
+	
+	if (!UGCAssetRegistry)
+	{
+		UE_LOG(LogBarrelQuest, Warning, TEXT("UGCAssetRegistry was nullptr!"));
+		return result;
+	}
+	
+	if (ResourceType == TEXT("texture"))
+	{
+		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Texture, Buf size: %i"), Buffer.Num());
+		result.TexturePtr = UKismetRenderingLibrary::ImportBufferAsTexture2D(GetOwner(), Buffer);
+	}
+	else if (ResourceType == TEXT("mesh"))
+	{
+		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Mesh, Buf size: %i"), Buffer.Num());
+		result.MeshPtr = UGCAssetRegistry->GetOrLoadMesh(Buffer, ResourceURL, 100.0f);
+	}
+	else if (ResourceType == TEXT("audio"))
+	{
+		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Audio, Buf size: %i"), Buffer.Num());
+		result.AudioPtr = UGCAssetRegistry->GetOrLoadSound(Buffer, ResourceURL);
+	}
+	else if (ResourceType == TEXT("mid"))
+	{
+		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Midi File, Buf size: %i"), Buffer.Num());
+		result.RawBytes = Buffer;
+		result.IsMIDIBytes = true;
+	}
+	else
+	{
+		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Unknown Type File, Buf size: %i"), Buffer.Num());
+		result.RawBytes = Buffer;
+		result.IsMIDIBytes = false;
+	}
+	
+	return result;
 }
 
 // Called when the game starts

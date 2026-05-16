@@ -19,6 +19,7 @@ public class BarrelQuest : ModuleRules
 			"SlateCore",
 			"ApplicationCore",
 			"HTTP",
+			"HTTPRequestForBlueprints",
 			"Json",
 			"JsonUtilities",
 			"MeshDescription",

@@ -23,15 +23,17 @@ ATileManager::ATileManager()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	bAlwaysRelevant = true;
-	
-	static ConstructorHelpers::FObjectFinder<UDataTable> DTRef(TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions"));
-	ATileManager::TileDataTable = DTRef.Object;
 }
 
 // Called when the game starts or when spawned
 void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (!TileDataTable)
+	{
+		TileDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions"));
+	}
 }
 
 void ATileManager::AddRoomTile(FIntVector tilePosition, int roomID, bool isExit)
@@ -232,7 +234,7 @@ void ATileManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
+/*
 void ATileManager::InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex)
 {
 	ATileChunk* chunk = GetChunkAtWorld(UTileLibrary::TileToWorldPosition(TileIndex));
@@ -248,7 +250,7 @@ void ATileManager::InteractWithTileObject_Implementation(AActor* InteractionOwne
 		Execute_Interact(feature.ComponentPtr, InteractionOwner);
 	}
 }
-
+*/
 ATileChunk* ATileManager::GetChunkAt(FIntVector2 Position)
 {
 	return ChunkLookup.FindRef(Position);

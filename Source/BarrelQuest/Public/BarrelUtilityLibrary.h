@@ -6,6 +6,8 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogBarrelQuest, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogBarrelQuestTileManager, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogBarrelQuestTileChunk, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBarrelQuestLoad, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBarrelQuestSave, Log, All);
 
 UENUM(BlueprintType)
 enum class EClothingType : uint8

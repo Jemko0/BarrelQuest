@@ -11,6 +11,7 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"LuaMachine",
+				"HTTPRequestForBlueprints",
 				"UnrealEd",
 				"InteractiveToolsFramework",
 				"CoreUObject"
@@ -27,11 +28,6 @@
 			"Name": "FileSystemLibrary",
 			"Enabled": true,
 			"MarketplaceURL": "https://www.unrealengine.com/marketplace/en-US/product/c8061306eb9b4518ad9183e8a27bee04"
-		},
-		{
-			"Name": "HTTPRequestForBlueprints",
-			"Enabled": true,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/4a9830d1cea14a28bae31127f41a210b"
 		},
 		{
 			"Name": "ActorSequence",

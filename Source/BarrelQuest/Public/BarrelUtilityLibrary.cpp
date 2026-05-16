@@ -4,3 +4,5 @@
 DEFINE_LOG_CATEGORY(LogBarrelQuest);
 DEFINE_LOG_CATEGORY(LogBarrelQuestTileManager);
 DEFINE_LOG_CATEGORY(LogBarrelQuestTileChunk);
+DEFINE_LOG_CATEGORY(LogBarrelQuestLoad);
+DEFINE_LOG_CATEGORY(LogBarrelQuestSave);

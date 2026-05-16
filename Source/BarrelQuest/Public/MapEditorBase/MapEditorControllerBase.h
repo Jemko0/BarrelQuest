@@ -20,6 +20,10 @@ class BARRELQUEST_API AMapEditorControllerBase : public APlayerController, publi
 	FTimerDelegate TimerDelegate;
 	virtual void ReceiveChunkSyncBatch(FIntVector2 ChunkPosition, const TArray<FTileSyncPacket>& Data) override;
 	virtual void FinishSync(FIntVector2 ChunkPosition) override;
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName SelectedTileID;
 	
 	virtual void BeginPlay() override;
 	
