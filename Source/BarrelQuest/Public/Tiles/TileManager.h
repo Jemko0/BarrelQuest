@@ -3,7 +3,6 @@
 #include "CoreMinimal.h"
 #include "RightClickLibrary.h"
 #include "GameFramework/Actor.h"
-#include "Interactable/InteractableInterface.h"
 #include "Net/TileNetworkLibrary.h"
 #include "Tiles/TileLibrary.h"
 #include "Types/TReplicatedMap.h"
@@ -15,38 +14,8 @@ class ATileChunk;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTileManagerLog, FString, msg);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTileManagerFlushLog);
 
-USTRUCT(BlueprintType)
-struct FTileMapMemoryEstimate
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly)
-	int64 TotalBytes = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int64 ChunkBytes = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int64 UserAssetBytes = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int64 UserResourceBytes = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int32 ChunkCount = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int32 SquareCount = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int32 ObjectCount = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	int32 InstanceCount = 0;
-};
-
 UCLASS()
-class BARRELQUEST_API ATileManager : public AActor, public IInteractableInterface
+class BARRELQUEST_API ATileManager : public AActor
 {
 	GENERATED_BODY()
 	
@@ -94,8 +63,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex) override;
-	
 	const FSquareTile constFallbackSquareTile = FSquareTile(FIntVector(0,0,0));
 	FSquareTile fallbackSquareTile = FSquareTile(FIntVector(0,0,0));
 	
@@ -132,12 +99,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void ResetCurrentState();
-
-	UFUNCTION(BlueprintPure, Category="Memory")
-	FTileMapMemoryEstimate GetEstimatedMapMemoryUsage(bool bIncludeUserResources = true) const;
-
-	UFUNCTION(BlueprintPure, Category="Memory")
-	float GetEstimatedMapMemoryUsageMB(bool bIncludeUserResources = true) const;
 	
 	UFUNCTION()
 	void OnRep_Chunks();

@@ -36,26 +36,6 @@ bool UUserResourceComponent::IsCached(const FString& ResourceURL)
 	return ResourceCache.Contains(ResourceURL);
 }
 
-void UUserResourceComponent::ClearResourceCache()
-{
-	UE_LOG(LogTemp, Display, TEXT("UUserResourceComponent::ClearResourceCache: Clearing Entries=%d Bytes=%lld InProgress=%d"),
-		ResourceCache.Num(),
-		GetCachedResourceBytes(),
-		InProgressDownloads.Num());
-	ResourceCache.Empty();
-	InProgressDownloads.Empty();
-}
-
-int64 UUserResourceComponent::GetCachedResourceBytes() const
-{
-	int64 TotalBytes = 0;
-	for (const TPair<FString, FCachedResource>& Pair : ResourceCache)
-	{
-		TotalBytes += Pair.Value.Bytes.Num();
-	}
-	return TotalBytes;
-}
-
 void UUserResourceComponent::OnResourceRequestComplete(FHttpRequestPtr RequestPtr, FHttpResponsePtr ResponsePtr, bool bSuccess)
 {
 	if (!bSuccess || !ResponsePtr.IsValid() || ResponsePtr->GetResponseCode() != 200)

@@ -4,52 +4,18 @@
 #include "BarrelUtilityLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-namespace
-{
-	bool SplitRuntimeDataEntry(const FString& Entry, FName& OutKey, FString* OutValue = nullptr)
-	{
-		FString KeyString;
-		FString ValueString;
-		if (!Entry.Split(TEXT("="), &KeyString, &ValueString))
-		{
-			return false;
-		}
-
-		OutKey = FName(*KeyString);
-		if (OutValue)
-		{
-			*OutValue = MoveTemp(ValueString);
-		}
-		return true;
-	}
-
-	int32 FindRuntimeDataIndex(const TArray<FString>& RuntimeData, FName Key)
-	{
-		for (int32 Index = 0; Index < RuntimeData.Num(); ++Index)
-		{
-			FName EntryKey;
-			if (SplitRuntimeDataEntry(RuntimeData[Index], EntryKey) && EntryKey == Key)
-			{
-				return Index;
-			}
-		}
-
-		return INDEX_NONE;
-	}
-}
-
 void FTileRuntimeData::SetValue(FName Key, FString Value)
 {
 	FString valueStr = FString::Printf(TEXT("%s=%s"), *Key.ToString(), *Value);
 	
-	const int32 ExistingIndex = FindRuntimeDataIndex(runtimeData, Key);
-	if (ExistingIndex != INDEX_NONE)
+	if (int32* i = indexLookup.Find(Key))
 	{
-		runtimeData[ExistingIndex] = valueStr;
+		runtimeData[*i] = valueStr;
 	}
 	else
 	{
-		runtimeData.Add(valueStr);
+		int32 newIndex = runtimeData.AddUnique(valueStr);
+		indexLookup.Add(Key, newIndex);
 	}
 	
 	OnChanged.Broadcast(Key, Value);
@@ -57,10 +23,10 @@ void FTileRuntimeData::SetValue(FName Key, FString Value)
 
 bool FTileRuntimeData::RemoveValue(FName Key)
 {
-	const int32 ExistingIndex = FindRuntimeDataIndex(runtimeData, Key);
-	if (ExistingIndex != INDEX_NONE)
+	if (int32* i = indexLookup.Find(Key))
 	{
-		runtimeData.RemoveAt(ExistingIndex);
+		indexLookup.Remove(Key);
+		runtimeData.RemoveAt(*i);
 	}
 	else
 	{
@@ -73,15 +39,7 @@ bool FTileRuntimeData::RemoveValue(FName Key)
 TArray<FName> FTileRuntimeData::Keys() const
 {
 	TArray<FName> keys;
-	keys.Reserve(runtimeData.Num());
-	for (const FString& Entry : runtimeData)
-	{
-		FName Key;
-		if (SplitRuntimeDataEntry(Entry, Key))
-		{
-			keys.Add(Key);
-		}
-	}
+	indexLookup.GenerateKeyArray(keys);
 	return keys;
 }
 
@@ -92,18 +50,17 @@ const TArray<FString>& FTileRuntimeData::Values() const
 
 FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key) const
 {
-	const int32 ExistingIndex = FindRuntimeDataIndex(runtimeData, Key);
-	if (ExistingIndex != INDEX_NONE)
+	if (const int32* i = indexLookup.Find(Key))
 	{
-		const FString& data = runtimeData[ExistingIndex];
+		const FString& data = runtimeData[*i];
 		
 		FString ParsedValue;
 		if (data.Split(TEXT("="), nullptr, &ParsedValue))
 		{
-			return FRuntimeDataQueryResult(ExistingIndex, ParsedValue);
+			return FRuntimeDataQueryResult(*i, ParsedValue);
 		}
 		
-		return FRuntimeDataQueryResult(ExistingIndex, data);
+		return FRuntimeDataQueryResult(*i, data);
 	}
 
 	UE_LOG(LogBarrelQuest, Warning, TEXT("FTileRuntimeData::GetValue Key not found: %s"), *Key.ToString());
@@ -112,8 +69,19 @@ FRuntimeDataQueryResult FTileRuntimeData::GetValue(FName Key) const
 
 void FTileRuntimeData::BuildLookup()
 {
-	// Kept for backward compatibility with older load paths. Lookup is now linear
-	// over runtimeData to avoid a per-object TMap allocation.
+	indexLookup.Empty();
+    
+	for (int32 i = 0; i < runtimeData.Num(); i++)
+	{
+		const FString& Data = runtimeData[i];
+		
+		FString KeyString, Value;
+		if (Data.Split(TEXT("="), &KeyString, &Value))
+		{
+			FName Key = FName(*KeyString);
+			indexLookup.Add(Key, i);
+		}
+	}
 }
 
 void FBuildingValue::CalculateBounds(ATileManager* mgr)

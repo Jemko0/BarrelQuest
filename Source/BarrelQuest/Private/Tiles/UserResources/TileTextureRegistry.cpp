@@ -1,8 +1,6 @@
 #include "Tiles/UserResources/TileTextureRegistry.h"
 
 #include "ImageUtils.h"
-#include "Misc/Crc.h"
-#include "RuntimeImporters/BarrelUGCRuntimeImporter.h"
 
 namespace
 {
@@ -14,8 +12,6 @@ namespace
 			return TEXT("CookedAsset");
 		case ERegisteredAssetType::RuntimeTexture:
 			return TEXT("RuntimeTexture");
-		case ERegisteredAssetType::RuntimeMesh:
-			return TEXT("RuntimeMesh");
 		default:
 			return TEXT("None");
 		}
@@ -119,48 +115,23 @@ void UTileTextureRegistry::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-	PurgeRegisteredAssets();
-}
-
-void UTileTextureRegistry::PurgeRegisteredAssets()
-{
-	const int64 PreviousBytes = GetEstimatedRetainedBytes();
-
 	SlotToTexture.Empty();
 	CookedTextureToSlot.Empty();
 	HandleIdToSlot.Empty();
-	HandleIdToMesh.Empty();
-	CookedMeshToInfo.Empty();
 	SlotPixels.Empty();
 	FreeSlots.Empty();
-	UserDefinedAtlas = nullptr;
 
 	for (int32 Slot = MaxUserTextureSlots - 1; Slot >= 0; --Slot)
 	{
 		FreeSlots.Add(Slot);
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry: Purged registered assets. PreviousEstimatedBytes=%lld MaxSlots=%d FreeSlots=%d Atlas=%s"),
-		PreviousBytes,
+	CreateUserDefinedAtlas();
+
+	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry: Initialized. MaxSlots=%d FreeSlots=%d Atlas=%s"),
 		MaxUserTextureSlots,
 		FreeSlots.Num(),
 		UserDefinedAtlas ? *UserDefinedAtlas->GetPathName() : TEXT("<null>"));
-}
-
-int64 UTileTextureRegistry::GetEstimatedRetainedBytes() const
-{
-	int64 TotalBytes = 0;
-	for (const TPair<int32, TArray<uint8>>& Pair : SlotPixels)
-	{
-		TotalBytes += Pair.Value.Num();
-	}
-
-	if (UserDefinedAtlas)
-	{
-		TotalBytes += static_cast<int64>(UserTextureSize) * UserTextureSize * MaxUserTextureSlots * 4;
-	}
-
-	return TotalBytes;
 }
 
 bool UTileTextureRegistry::ResolveFromHandle(FTileSavedAssetHandle handle)
@@ -244,66 +215,6 @@ int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedAssetHandle handle)
 
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: End Slot=%d Handle={%s}"), Slot, *DescribeHandle(handle));
 	return Slot;
-}
-
-UStaticMesh* UTileTextureRegistry::ResolveMeshFromHandle(FTileSavedAssetHandle handle)
-{
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Begin Handle={%s} RegisteredMeshes=%d CookedMeshes=%d"),
-		*DescribeHandle(handle),
-		HandleIdToMesh.Num(),
-		CookedMeshToInfo.Num());
-
-	if (!handle.Id.IsEmpty())
-	{
-		if (FTileRegisteredMesh* ExistingMesh = HandleIdToMesh.Find(handle.Id))
-		{
-			if (ExistingMesh->RuntimeMesh)
-			{
-				UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Found runtime mesh by Id='%s' Mesh='%s'"),
-					*handle.Id,
-					*ExistingMesh->RuntimeMesh->GetPathName());
-				return ExistingMesh->RuntimeMesh;
-			}
-
-			UStaticMesh* LoadedCookedMesh = ExistingMesh->CookedMesh.Get();
-			if (!LoadedCookedMesh && !ExistingMesh->CookedMesh.IsNull())
-			{
-				LoadedCookedMesh = ExistingMesh->CookedMesh.LoadSynchronous();
-			}
-
-			if (LoadedCookedMesh)
-			{
-				ExistingMesh->RuntimeMesh = LoadedCookedMesh;
-				UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Loaded cooked mesh by Id='%s' Mesh='%s'"),
-					*handle.Id,
-					*LoadedCookedMesh->GetPathName());
-				return LoadedCookedMesh;
-			}
-		}
-	}
-
-	switch (handle.Kind)
-	{
-	case ERegisteredAssetType::CookedAsset:
-		if (handle.AssetPath.IsValid())
-		{
-			TSoftObjectPtr<UStaticMesh> MeshPtr(handle.AssetPath);
-			return RegisterCookedMeshWithHandle(MeshPtr, handle);
-		}
-
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: CookedAsset handle has invalid AssetPath. Handle={%s}"), *DescribeHandle(handle));
-		break;
-
-	case ERegisteredAssetType::RuntimeMesh:
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Runtime mesh is not registered yet. Register RawBytes with this handle first. Handle={%s}"), *DescribeHandle(handle));
-		break;
-
-	default:
-		UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Handle kind is not a mesh kind. Returning null."));
-		break;
-	}
-
-	return nullptr;
 }
 
 void UTileTextureRegistry::CreateUserDefinedAtlas()
@@ -433,135 +344,6 @@ int32 UTileTextureRegistry::RegisterCookedTextureWithHandle(TSoftObjectPtr<UText
 
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterCookedTextureWithHandle: End Slot=%d"), Slot);
 	return Slot;
-}
-
-UStaticMesh* UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedAssetHandle Handle, float ImportScale)
-{
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: Begin RawBytes=%d Handle={%s} ImportScale=%f"),
-		RawBytes.Num(),
-		*DescribeHandle(Handle),
-		ImportScale);
-
-	if (!Handle.Id.IsEmpty())
-	{
-		if (FTileRegisteredMesh* ExistingMesh = HandleIdToMesh.Find(Handle.Id))
-		{
-			if (ExistingMesh->RuntimeMesh)
-			{
-				return ExistingMesh->RuntimeMesh;
-			}
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: Handle.Id is empty. Tile defs cannot resolve this runtime mesh after reload."));
-	}
-
-	if (RawBytes.IsEmpty())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: RawBytes was empty. Handle={%s}"), *DescribeHandle(Handle));
-		return nullptr;
-	}
-
-	UUGCAssetRegistry* UGCRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UUGCAssetRegistry>() : nullptr;
-	if (!UGCRegistry)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: UUGCAssetRegistry subsystem was null. Handle={%s}"), *DescribeHandle(Handle));
-		return nullptr;
-	}
-
-	FString CacheKey = Handle.Id;
-	if (CacheKey.IsEmpty())
-	{
-		CacheKey = !Handle.Url.IsEmpty() ? Handle.Url : Handle.AssetPath.ToString();
-	}
-	if (CacheKey.IsEmpty())
-	{
-		CacheKey = FString::Printf(TEXT("runtime-mesh:%u:%d"), FCrc::MemCrc32(RawBytes.GetData(), RawBytes.Num()), RawBytes.Num());
-	}
-
-	UStaticMesh* Mesh = UGCRegistry->GetOrLoadMesh(RawBytes, CacheKey, ImportScale);
-	if (!Mesh)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: Failed to build mesh. Handle={%s}"), *DescribeHandle(Handle));
-		return nullptr;
-	}
-
-	FTileRegisteredMesh Entry;
-	Entry.Kind = ERegisteredAssetType::RuntimeMesh;
-	Entry.RuntimeMesh = Mesh;
-
-	if (!Handle.Id.IsEmpty())
-	{
-		HandleIdToMesh.Add(Handle.Id, Entry);
-	}
-
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle: End Mesh='%s' Handle={%s}"),
-		*Mesh->GetPathName(),
-		*DescribeHandle(Handle));
-
-	return Mesh;
-}
-
-UStaticMesh* UTileTextureRegistry::RegisterCookedMeshWithHandle(TSoftObjectPtr<UStaticMesh> Mesh, FTileSavedAssetHandle Handle)
-{
-	const FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterCookedMeshWithHandle: MeshPath='%s' Handle={%s}"), *MeshPath.ToString(), *DescribeHandle(Handle));
-
-	if (Mesh.IsNull())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterCookedMeshWithHandle: Mesh soft pointer was null. Handle={%s}"), *DescribeHandle(Handle));
-		return nullptr;
-	}
-
-	if (FTileRegisteredMesh* ExistingMesh = CookedMeshToInfo.Find(MeshPath))
-	{
-		UStaticMesh* LoadedExistingMesh = ExistingMesh->RuntimeMesh;
-		if (!LoadedExistingMesh)
-		{
-			LoadedExistingMesh = ExistingMesh->CookedMesh.Get();
-		}
-		if (!LoadedExistingMesh && !ExistingMesh->CookedMesh.IsNull())
-		{
-			LoadedExistingMesh = ExistingMesh->CookedMesh.LoadSynchronous();
-		}
-		ExistingMesh->RuntimeMesh = LoadedExistingMesh;
-		if (!Handle.Id.IsEmpty())
-		{
-			HandleIdToMesh.Add(Handle.Id, *ExistingMesh);
-		}
-		return LoadedExistingMesh;
-	}
-
-	UStaticMesh* LoadedMesh = Mesh.Get();
-	if (!LoadedMesh)
-	{
-		UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterCookedMeshWithHandle: Loading cooked mesh Path='%s'"), *MeshPath.ToString());
-		LoadedMesh = Mesh.LoadSynchronous();
-	}
-
-	if (!LoadedMesh)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RegisterCookedMeshWithHandle: Failed to load cooked mesh Path='%s'"), *MeshPath.ToString());
-		return nullptr;
-	}
-
-	FTileRegisteredMesh Entry;
-	Entry.Kind = ERegisteredAssetType::CookedAsset;
-	Entry.CookedMesh = Mesh;
-	Entry.RuntimeMesh = LoadedMesh;
-
-	CookedMeshToInfo.Add(MeshPath, Entry);
-	if (!Handle.Id.IsEmpty())
-	{
-		HandleIdToMesh.Add(Handle.Id, Entry);
-	}
-
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RegisterCookedMeshWithHandle: End Mesh='%s' Handle={%s}"),
-		*LoadedMesh->GetPathName(),
-		*DescribeHandle(Handle));
-
-	return LoadedMesh;
 }
 
 int32 UTileTextureRegistry::RegisterCookedTextureInternal(TSoftObjectPtr<UTexture2D> Texture)

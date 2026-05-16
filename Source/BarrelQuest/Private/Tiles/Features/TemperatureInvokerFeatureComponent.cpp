@@ -62,3 +62,4 @@ void UTemperatureInvokerFeatureComponent::GetLifetimeReplicatedProps(
 	DOREPLIFETIME(UTemperatureInvokerFeatureComponent, targetTemperature);
 	DOREPLIFETIME(UTemperatureInvokerFeatureComponent, emit);
 }
+

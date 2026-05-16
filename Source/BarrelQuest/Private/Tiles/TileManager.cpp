@@ -4,15 +4,11 @@
 #include "Tiles/TileChunk.h"
 #include "BarrelUtilityLibrary.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
-#include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "RuntimeImporters/BarrelUGCRuntimeImporter.h"
 #include "Tiles/RightClickInterface.h"
 #include "Tiles/Net/Interfaces/TileNetworkInterface.h"
-#include "Tiles/UserResources/TileTextureRegistry.h"
 
 UDataTable* ATileManager::TileDataTable = nullptr;
 
@@ -106,119 +102,8 @@ void ATileManager::ResetCurrentState()
 	ChunkLookup.Empty();
 	RoomIDToTiles.Empty();
 	RoomTilesToID.Empty();
-	UserDefinedTileDefinitions.Empty();
-
-	if (UGameInstance* GameInstance = GetGameInstance())
-	{
-		if (UTileTextureRegistry* TileTextureRegistry = GameInstance->GetSubsystem<UTileTextureRegistry>())
-		{
-			TileTextureRegistry->PurgeRegisteredAssets();
-		}
-
-		if (UUGCAssetRegistry* UGCRegistry = GameInstance->GetSubsystem<UUGCAssetRegistry>())
-		{
-			UGCRegistry->PurgeMeshCache();
-		}
-	}
-
-	if (UWorld* World = GetWorld())
-	{
-		for (TActorIterator<AActor> ActorIt(World); ActorIt; ++ActorIt)
-		{
-			TArray<UUserResourceComponent*> ResourceComponents;
-			ActorIt->GetComponents<UUserResourceComponent>(ResourceComponents);
-			for (UUserResourceComponent* ResourceComponent : ResourceComponents)
-			{
-				if (ResourceComponent)
-				{
-					ResourceComponent->ClearResourceCache();
-				}
-			}
-		}
-	}
 	
 	FlushLogs();
-}
-
-FTileMapMemoryEstimate ATileManager::GetEstimatedMapMemoryUsage(bool bIncludeUserResources) const
-{
-	FTileMapMemoryEstimate Estimate;
-	Estimate.ChunkCount = Chunks.Num();
-
-	Estimate.ChunkBytes += sizeof(*this);
-	Estimate.ChunkBytes += Chunks.GetAllocatedSize();
-	Estimate.ChunkBytes += PendingChunkObjects.GetAllocatedSize();
-	Estimate.ChunkBytes += PendingRemovals.GetAllocatedSize();
-	Estimate.ChunkBytes += ChunkLookup.GetAllocatedSize();
-	Estimate.ChunkBytes += RoomTilesToID.GetAllocatedSize();
-	Estimate.ChunkBytes += RoomIDToTiles.GetAllocatedSize();
-	Estimate.ChunkBytes += ChunkRVTs.GetAllocatedSize();
-	Estimate.ChunkBytes += UserDefinedTileDefinitions.GetAllocatedSize();
-	Estimate.ChunkBytes += Logs.GetAllocatedSize();
-	for (const FString& Log : Logs)
-	{
-		Estimate.ChunkBytes += Log.GetAllocatedSize();
-	}
-
-	for (const ATileChunk* Chunk : Chunks)
-	{
-		if (!Chunk)
-		{
-			continue;
-		}
-
-		Estimate.ChunkBytes += Chunk->GetEstimatedMemoryUsageBytes();
-		Estimate.SquareCount += Chunk->TileValues.Num();
-
-		for (const FSquareTile& Square : Chunk->TileValues)
-		{
-			Estimate.ObjectCount += Square.GetReadOnlyObjects().Num();
-		}
-
-		for (const TPair<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*>& Pair : Chunk->HISMMap)
-		{
-			if (Pair.Value)
-			{
-				Estimate.InstanceCount += Pair.Value->GetInstanceCount();
-			}
-		}
-	}
-
-	if (UWorld* World = GetWorld())
-	{
-		if (UGameInstance* GameInstance = World->GetGameInstance())
-		{
-			if (const UTileTextureRegistry* TileTextureRegistry = GameInstance->GetSubsystem<UTileTextureRegistry>())
-			{
-				Estimate.UserAssetBytes += TileTextureRegistry->GetEstimatedRetainedBytes();
-			}
-		}
-
-		if (bIncludeUserResources)
-		{
-			for (TActorIterator<AActor> ActorIt(World); ActorIt; ++ActorIt)
-			{
-				TArray<UUserResourceComponent*> ResourceComponents;
-				ActorIt->GetComponents<UUserResourceComponent>(ResourceComponents);
-				for (const UUserResourceComponent* ResourceComponent : ResourceComponents)
-				{
-					if (ResourceComponent)
-					{
-						Estimate.UserResourceBytes += ResourceComponent->GetCachedResourceBytes();
-					}
-				}
-			}
-		}
-	}
-
-	Estimate.TotalBytes = Estimate.ChunkBytes + Estimate.UserAssetBytes + Estimate.UserResourceBytes;
-	return Estimate;
-}
-
-float ATileManager::GetEstimatedMapMemoryUsageMB(bool bIncludeUserResources) const
-{
-	const FTileMapMemoryEstimate Estimate = GetEstimatedMapMemoryUsage(bIncludeUserResources);
-	return static_cast<float>(Estimate.TotalBytes) / (1024.0f * 1024.0f);
 }
 
 void ATileManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -231,22 +116,6 @@ void ATileManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 void ATileManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void ATileManager::InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex)
-{
-	ATileChunk* chunk = GetChunkAtWorld(UTileLibrary::TileToWorldPosition(TileIndex));
-	if (!chunk)
-	{
-		return;
-	}
-	
-	FStoredFeatureArray featureArray = chunk->FindAllFeaturesForObject(TileIndex, ObjectIndex);
-	
-	for (FStoredFeature feature : featureArray.features)
-	{
-		Execute_Interact(feature.ComponentPtr, InteractionOwner);
-	}
 }
 
 ATileChunk* ATileManager::GetChunkAt(FIntVector2 Position)
@@ -718,8 +587,7 @@ bool ATileManager::SetInstanceDataByTileIndex(FIntVector tilePosition, ETileInst
 		}
 
 		
-		UStaticMesh* ResolvedMesh = chunkPtr->ResolveMeshForTileDefinition(def);
-		const FTileRenderKey renderKey = FTileRenderKey(ResolvedMesh, def.ParentMaterial);
+		const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
 		
 		UHierarchicalInstancedStaticMeshComponent** HISMMapResult = chunkPtr->HISMMap.Find(renderKey);
 			
@@ -773,8 +641,7 @@ bool ATileManager::SetObjectInstanceData(FIntVector squareTilePosition, int32 ta
 	
 	const FTileDefinition def = GetTileByID(this, Object.ID);
 	
-	UStaticMesh* ResolvedMesh = chunkPtr->ResolveMeshForTileDefinition(def);
-	const FTileRenderKey renderKey = FTileRenderKey(ResolvedMesh, def.ParentMaterial);
+	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
 		
 	UHierarchicalInstancedStaticMeshComponent** HISMMapResult = chunkPtr->HISMMap.Find(renderKey);
 			
@@ -1138,9 +1005,9 @@ TArray<FIntVector> ATileManager::ThickRaycast(FIntVector start, FIntVector end, 
 TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
 {
 	TArray<FRCMOption> options;
-	ATileChunk* chunk = GetChunkAtWorld(worldPosition);
+	ATileChunk* c = GetChunkAtWorld(worldPosition);
 	
-	if (!chunk)
+	if (!c)
 	{
 		UE_LOG(LogBarrelQuest, Warning, TEXT("TryGetRightClickOptions: No chunk found at worldPosition"));
 		return options;
@@ -1148,7 +1015,7 @@ TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
 	
 	FIntVector squarePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 	
-	FStoredFeatureArray* featuresOnSquarePtr = chunk->AttachedFeatures.Find(squarePosition);
+	FStoredFeatureArray* featuresOnSquarePtr = c->AttachedFeatures.Find(squarePosition);
 	
 	if (!featuresOnSquarePtr)
 	{
@@ -1168,12 +1035,7 @@ TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
 	{
 		if (IRightClickInterface* rightClickInterface = Cast<IRightClickInterface>(f.ComponentPtr))
 		{
-			UE_LOG(LogBarrelQuest, Warning, TEXT("Getting Feature RCM Options"));
-			options.Append(rightClickInterface->Execute_GetRCMOptions(chunk, worldPosition));	
-		}
-		else
-		{
-			UE_LOG(LogBarrelQuest, Warning, TEXT("Component doesnt inherit from IRightClickInterface"));
+			options.Append(rightClickInterface->Execute_GetRCMOptions(f.ComponentPtr, c, worldPosition));	
 		}
 	}
 	
@@ -1263,13 +1125,6 @@ void ATileManager::SetObjectRuntimeProperty(FIntVector tilePosition, int32 objec
 	
 	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIdx];
 	object.runtimeData.SetValue(Key, Value);
-
-	FVector tileWorld = UTileLibrary::TileToWorldPosition(tilePosition);
-	if (ATileChunk* chunkPtr = GetChunkAt(UTileLibrary::WorldToChunkPosition(tileWorld)))
-	{
-		const FIntVector tileLocalPos = UTileLibrary::WorldToLocalChunkTilePosition(tileWorld, chunkPtr);
-		chunkPtr->OnTileObjectDataChanged(tileLocalPos, objectIdx, Key, Value);
-	}
 }
 
 FRuntimeDataQueryResult ATileManager::GetObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key)
@@ -1321,8 +1176,7 @@ void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int
 	
 	FTileDefinition tileDef = ATileManager::GetTileByID(this, o.ID);
 	
-	UStaticMesh* ResolvedMesh = chunkPtr->ResolveMeshForTileDefinition(tileDef);
-	FTileRenderKey renderKey = {ResolvedMesh, tileDef.ParentMaterial};
+	FTileRenderKey renderKey = {tileDef.Mesh, tileDef.ParentMaterial};
 	UHierarchicalInstancedStaticMeshComponent** HISMPtr = chunkPtr->HISMMap.Find(renderKey);
 	
 	if (!HISMPtr) return;

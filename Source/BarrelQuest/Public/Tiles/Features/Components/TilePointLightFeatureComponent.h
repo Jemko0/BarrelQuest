@@ -43,6 +43,5 @@ public:
 		});
 	}
 	
-	virtual TArray<FRCMOption> GetRCMOptions_Implementation(FVector Location) override;
-	virtual void SendRCMInvoke_Implementation(const FString& invokeID, TMap<FName, FRCMInvokeMessage>& payload) override;
+	virtual TArray<FRCMOption> GetRCMOptions_Implementation(AActor* Actor, FVector Location) override;
 };

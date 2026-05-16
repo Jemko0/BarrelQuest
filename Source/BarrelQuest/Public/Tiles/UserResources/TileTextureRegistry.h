@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/StaticMesh.h"
 #include "Engine/Texture2D.h"
 #include "Engine/Texture2DArray.h"
 #include "Subsystems/GameInstanceSubsystem.h"
@@ -14,8 +13,7 @@ enum class ERegisteredAssetType : uint8
 {
 	None,
 	CookedAsset,
-	RuntimeTexture,
-	RuntimeMesh
+	RuntimeTexture
 };
 
 USTRUCT(BlueprintType)
@@ -56,26 +54,6 @@ struct FTileRegisteredTexture
 	}
 };
 
-USTRUCT(BlueprintType)
-struct FTileRegisteredMesh
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly)
-	ERegisteredAssetType Kind = ERegisteredAssetType::None;
-
-	UPROPERTY(BlueprintReadOnly)
-	TSoftObjectPtr<UStaticMesh> CookedMesh;
-
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UStaticMesh> RuntimeMesh = nullptr;
-
-	bool IsValid() const
-	{
-		return Kind != ERegisteredAssetType::None && (CookedMesh.IsValid() || RuntimeMesh != nullptr);
-	}
-};
-
 UCLASS()
 class BARRELQUEST_API UTileTextureRegistry : public UGameInstanceSubsystem
 {
@@ -93,23 +71,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	int32 RegisterCookedTextureWithHandle(TSoftObjectPtr<UTexture2D> Texture, FTileSavedAssetHandle Handle);
 
-	UFUNCTION(BlueprintCallable, Category="Tile Meshes")
-	UStaticMesh* RegisterRuntimeMeshBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedAssetHandle Handle, float ImportScale = 100.0f);
-
-	UFUNCTION(BlueprintCallable, Category="Tile Meshes")
-	UStaticMesh* RegisterCookedMeshWithHandle(TSoftObjectPtr<UStaticMesh> Mesh, FTileSavedAssetHandle Handle);
-
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	bool ResolveTexture(int32 Slot);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	void ReleaseTextureSlot(int32 Slot);
-
-	UFUNCTION(BlueprintCallable, Category="Tile Assets")
-	void PurgeRegisteredAssets();
-
-	UFUNCTION(BlueprintPure, Category="Tile Assets")
-	int64 GetEstimatedRetainedBytes() const;
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	FTileRegisteredTexture GetTextureInfo(int32 Slot) const;
@@ -119,9 +85,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	int32 ResolveSlotFromHandle(FTileSavedAssetHandle handle);
-
-	UFUNCTION(BlueprintCallable, Category="Tile Meshes")
-	UStaticMesh* ResolveMeshFromHandle(FTileSavedAssetHandle handle);
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	UTexture2DArray* GetUserDefinedAtlas() const;
@@ -138,12 +101,6 @@ protected:
 
 	UPROPERTY()
 	TMap<FString, int32> HandleIdToSlot;
-
-	UPROPERTY()
-	TMap<FString, FTileRegisteredMesh> HandleIdToMesh;
-
-	UPROPERTY()
-	TMap<FSoftObjectPath, FTileRegisteredMesh> CookedMeshToInfo;
 
 	TArray<int32> FreeSlots;
 	TMap<int32, TArray<uint8>> SlotPixels;

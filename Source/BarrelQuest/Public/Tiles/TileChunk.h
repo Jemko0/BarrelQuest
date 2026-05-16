@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include "RightClickInterface.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
-#include "Interactable/InteractableInterface.h"
 #include "Net/TileNetworkLibrary.h"
 #include "Tiles/TileLibrary.h"
 #include "Types/TReplicatedMap.h"
@@ -11,7 +9,7 @@
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChunkError, FString, msg);
 
 UCLASS()
-class BARRELQUEST_API ATileChunk : public AActor, public IRightClickInterface, public IInteractableInterface
+class BARRELQUEST_API ATileChunk : public AActor
 {
 	GENERATED_BODY()
 	
@@ -24,13 +22,6 @@ public:
 		FIntVector TilePosition;
 		int32 ObjectArrayIndex; // Index in FSquareTile::objects
 	};
-	
-	/*RCM Interface*/
-	virtual TArray<FRCMOption> GetRCMOptions_Implementation(FVector Location) override;
-	virtual void SendRCMInvoke_Implementation(const FString& invokeID, TMap<FName, FRCMInvokeMessage>& payload) override;
-	
-	/*Interactable Interface*/
-	virtual TArray<FIntVector> GetTileInteractionPoints_Implementation(FVector FromWorld, float Range) override;
 	
 	static constexpr int customDataFloats = (int)ETileInstanceDataIndex::MAX;
 	
@@ -83,7 +74,7 @@ public:
 	FSquareTile& GetOrCreateSquareTile(FIntVector Position);
 	
 	UFUNCTION(BlueprintCallable)
-	void SetTiles(const TArray<FIntVector>& tilePositions, const TArray<FSquareTile>& tileSquares);
+	void SetTiles(TArray<FIntVector> tilePositions, TArray<FSquareTile> tileSquares);
 	
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
 	FSquareTile& AddSquare(FIntVector Position, const FSquareTile& newSquare);
@@ -128,17 +119,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasSquare(FIntVector Position);
 	
-	UFUNCTION(BlueprintCallable)
-	FStoredFeatureArray FindAllFeaturesForObject(FIntVector squareIdx, int32 objIdx);
-	
 	void ResetChunkState();
-
-	UFUNCTION(BlueprintPure, Category="Memory")
-	int64 GetEstimatedMemoryUsageBytes() const;
 	
 	static TStaticArray<float, customDataFloats> GetCustomDataArray(const FTileDefinition& tileDef, const FTileObject& tileObject, const FSquareTile& tileSquare, UTileTextureRegistry* TileTextureRegistry = nullptr);
-	
-	UStaticMesh* ResolveMeshForTileDefinition(const FTileDefinition& tileDef) const;
 	
 	UHierarchicalInstancedStaticMeshComponent* LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef);
 	
