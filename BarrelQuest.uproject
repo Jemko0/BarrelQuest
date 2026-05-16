@@ -186,7 +186,7 @@
 		},
 		{
 			"Name": "InterchangeEditor",
-			"Enabled": false,
+			"Enabled": true,
 			"SupportedTargetPlatforms": [
 				"Win64",
 				"Linux",
@@ -207,7 +207,7 @@
 		},
 		{
 			"Name": "Interchange",
-			"Enabled": false,
+			"Enabled": true,
 			"SupportedTargetPlatforms": [
 				"Win64",
 				"Linux",
@@ -216,7 +216,7 @@
 		},
 		{
 			"Name": "InterchangeAssets",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "WebBrowserWidget",

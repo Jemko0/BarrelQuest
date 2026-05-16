@@ -57,6 +57,12 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool IsCached(const FString& ResourceURL);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearResourceCache();
+
+	UFUNCTION(BlueprintPure)
+	int64 GetCachedResourceBytes() const;
 	
 	void OnResourceRequestComplete(FHttpRequestPtr RequestPtr, FHttpResponsePtr ResponsePtr, bool success);
 	void OnFileDownloadComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool success, FString URL, FString Type);

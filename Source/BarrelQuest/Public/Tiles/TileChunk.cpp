@@ -4,11 +4,18 @@
 #include "Tiles/TileManager.h"
 #include "BarrelUtilityLibrary.h"
 #include "Features/Interfaces/TileFeatureInterface.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Net/UnrealNetwork.h"
 
 namespace
 {
+	bool IsTileAssetHandleSet(const FTileSavedAssetHandle& Handle)
+	{
+		return Handle.Kind != ERegisteredAssetType::None || !Handle.Id.IsEmpty() || Handle.AssetPath.IsValid() || !Handle.Url.IsEmpty();
+	}
+
 	const TCHAR* TileTextureKindToStringForChunkLog(ERegisteredAssetType Kind)
 	{
 		switch (Kind)
@@ -17,6 +24,8 @@ namespace
 			return TEXT("CookedAsset");
 		case ERegisteredAssetType::RuntimeTexture:
 			return TEXT("RuntimeTexture");
+		case ERegisteredAssetType::RuntimeMesh:
+			return TEXT("RuntimeMesh");
 		default:
 			return TEXT("None");
 		}
@@ -44,6 +53,75 @@ ATileChunk::ATileChunk()
 	
 	/*USceneComponent* Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;*/
+}
+
+TArray<FRCMOption> ATileChunk::GetRCMOptions_Implementation(FVector Location)
+{
+	TArray<FRCMOption> RCMOptions;
+	
+	FIntVector squarePos = UTileLibrary::WorldToTilePosition(Location);
+	bool found;
+	FSquareTile* squarePtr = GetSquareTilePtr(squarePos, found);
+	
+	if (!squarePtr)
+	{
+		return RCMOptions;
+	}
+	
+	const TArray<FTileObject>& objectsOnSquare = squarePtr->GetReadOnlyObjects();
+	
+	for (const FTileObject& Object : objectsOnSquare)
+	{
+		FTileDefinition def = GetOwningTileManager()->GetTileByID(this, Object.ID);
+		RCMOptions.Append(def.DefaultRightClickOptions);
+	}
+	
+	return RCMOptions;
+}
+
+void ATileChunk::SendRCMInvoke_Implementation(const FString& invokeID, TMap<FName, FRCMInvokeMessage>& payload)
+{
+	UE_LOG(LogBarrelQuestTileChunk, Log, TEXT("chunk received message, invoke ID: %s"), *invokeID);
+	IRightClickInterface::SendRCMInvoke_Implementation(invokeID, payload);
+}
+
+TArray<FIntVector> ATileChunk::GetTileInteractionPoints_Implementation(FVector FromWorld, float Range)
+{
+	FIntVector Center = UTileLibrary::WorldToTilePosition(FromWorld);
+	TArray<FIntVector> Result;
+
+	int32 TileRange = FMath::FloorToInt(Range / 100.0f);
+
+	for (int32 X = -TileRange; X <= TileRange; X++)
+	{
+		for (int32 Y = -TileRange; Y <= TileRange; Y++)
+		{
+			if (FMath::Square(X) + FMath::Square(Y) > FMath::Square(TileRange))
+				continue;
+
+			FIntVector TileKey = FIntVector(Center.X + X, Center.Y + Y, Center.Z);
+
+			FStoredFeatureArray* Features = AttachedFeatures.Find(TileKey);
+			
+			if (!Features)
+				continue;
+
+			bool bHasInteractable = false;
+			for (FStoredFeature& Feature : Features->features)
+			{
+				if (Cast<IInteractableInterface>(Feature.ComponentPtr))
+				{
+					bHasInteractable = true;
+					break;
+				}
+			}
+
+			if (bHasInteractable)
+				Result.Add(TileKey);
+		}
+	}
+
+	return Result;
 }
 
 void ATileChunk::OnRep_TileKeys()
@@ -79,6 +157,7 @@ void ATileChunk::BuildChunk()
         if (Pair.Value)
         {
             Pair.Value->ClearInstances();
+			Pair.Value->DestroyComponent();
         }
     }
     HISMMap.Empty();
@@ -109,16 +188,17 @@ void ATileChunk::BuildChunk()
         {
             FTileObject& ObjectDef = Objects[i];
             const FTileDefinition& TileDef = mgr->GetTileByID(this, ObjectDef.ID);
+			UStaticMesh* ResolvedMesh = ResolveMeshForTileDefinition(TileDef);
 
             // Skip logic-only objects (no mesh)
-            if (!TileDef.Mesh)
+            if (!ResolvedMesh)
             {
                 ObjectDef.RenderInstanceIndex = -1;
                 continue;
             }
 
             // Build key for HISM map
-            FTileRenderKey Key { TileDef.Mesh, TileDef.ParentMaterial };
+            FTileRenderKey Key { ResolvedMesh, TileDef.ParentMaterial };
 
             // Lazily create HISM component
             if (!HISMMap.Contains(Key))
@@ -153,18 +233,7 @@ void ATileChunk::BuildChunk()
         	
         	UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
             TStaticArray<float, customDataFloats> InstanceData = GetCustomDataArray(TileDef, ObjectDef, Square, TileTextureRegistry);
-        	UE_LOG(LogTemp, Display, TEXT("ATileChunk::BuildChunk: TileID='%s' Position=%s ObjectIndex=%d InstanceIndex=%d UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
-				*ObjectDef.ID.ToString(),
-				*Position.ToString(),
-				i,
-				InstanceIndex,
-				InstanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
-				InstanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
-				InstanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
-				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
-				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstNormal),
-				*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstORM));
-            HISM->SetCustomData(InstanceIndex, InstanceData, true);
+            HISM->SetCustomData(InstanceIndex, InstanceData, false);
         	
         	ApplyAllDataForObject(TilePair.Key, i, ObjectDef);
         	builtInstances++;
@@ -197,9 +266,10 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
 	}
 
     const FTileDefinition& TileDef = mgr->GetTileByID(this, ObjectDef.ID);
-    if (!TileDef.Mesh) return; // Logic object only
+	UStaticMesh* ResolvedMesh = ResolveMeshForTileDefinition(TileDef);
+    if (!ResolvedMesh) return; // Logic object only
 
-    FTileRenderKey Key { TileDef.Mesh, TileDef.ParentMaterial };
+    FTileRenderKey Key { ResolvedMesh, TileDef.ParentMaterial };
     
     // Ensure Component Exists
     if (!HISMMap.Contains(Key))
@@ -236,19 +306,6 @@ void ATileChunk::AddObjectInstance(const FIntVector& Position, int32 ObjectIndex
     // Set Data
 	UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
     TStaticArray<float, customDataFloats> instanceData = GetCustomDataArray(TileDef, ObjectDef, *square, TileTextureRegistry);
-	UE_LOG(LogTemp, Display, TEXT("ATileChunk::AddObjectInstance: TileID='%s' Position=%s ObjectIndex=%d InstanceIndex=%d Mesh='%s' Material='%s' UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
-		*ObjectDef.ID.ToString(),
-		*Position.ToString(),
-		ObjectIndex,
-		NewIndex,
-		TileDef.Mesh ? *TileDef.Mesh->GetPathName() : TEXT("<null>"),
-		TileDef.ParentMaterial ? *TileDef.ParentMaterial->GetPathName() : TEXT("<null>"),
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
-		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
-		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstNormal),
-		*DescribeTileTextureHandleForLog(TileDef.TextureProperties.ConstantTexHandles.ConstORM));
     HISM->SetCustomData(NewIndex, instanceData, true); // true = Mark Dirty Now
 }
 
@@ -262,7 +319,8 @@ void ATileChunk::RemoveObjectInstance(const FTileObject& ObjectDef)
     if (!mgr) return;
 
     const FTileDefinition& tile = mgr->GetTileByID(this, ObjectDef.ID);
-    FTileRenderKey Key { tile.Mesh, tile.ParentMaterial };
+	UStaticMesh* ResolvedMesh = ResolveMeshForTileDefinition(tile);
+    FTileRenderKey Key { ResolvedMesh, tile.ParentMaterial };
 
     if (!HISMMap.Contains(Key)) return;
     
@@ -333,16 +391,34 @@ FSquareTile& ATileChunk::GetOrCreateSquareTile(FIntVector Position)
 	return newTile;
 }
 
-void ATileChunk::SetTiles(TArray<FIntVector> tilePositions, TArray<FSquareTile> tileSquares)
+void ATileChunk::SetTiles(const TArray<FIntVector>& tilePositions, const TArray<FSquareTile>& tileSquares)
 {
-	Tiles.Empty();
-	
-	for (int i = 0 ; i < tilePositions.Num(); i++)
+	if (tilePositions.Num() != tileSquares.Num())
 	{
-		const FIntVector& Key = tilePositions[i];
-		FSquareTile& Square = tileSquares[i];
-		
-		AddSquare(Key, Square);
+		UE_LOG(LogBarrelQuest, Error, TEXT("ATileChunk::SetTiles: Position/value count mismatch. Positions=%d Squares=%d"),
+			tilePositions.Num(),
+			tileSquares.Num());
+		return;
+	}
+
+	ResetChunkState();
+
+	TileKeys.Reserve(tilePositions.Num());
+	TileValues.Reserve(tileSquares.Num());
+	TileKeys.Append(tilePositions);
+	TileValues.Append(tileSquares);
+	Tiles.RebuildIndex();
+
+	BuildChunk();
+
+	for (auto TilePair : Tiles)
+	{
+		FSquareTile& Square = TilePair.Value;
+		TArray<FTileObject>& Objects = Square.GetObjectsOnSquare();
+		for (int32 ObjectIndex = 0; ObjectIndex < Objects.Num(); ++ObjectIndex)
+		{
+			AddObjectFeatures(TilePair.Key, Objects[ObjectIndex], ObjectIndex);
+		}
 	}
 }
 
@@ -357,7 +433,6 @@ FSquareTile& ATileChunk::AddSquare(FIntVector Position, const FSquareTile& newSq
 	{
 		AddObjectInstance(Position, i, Objects[i]);
 		AddObjectFeatures(Position, Objects[i], i);
-		BindRuntimeData(Position, i);
 		ApplyAllDataForObject(Position, i, Objects[i]);
 	}
 	
@@ -389,6 +464,7 @@ void ATileChunk::SetObjectRuntimeData(FIntVector Position, int32 objectIndex, FN
 	if (!squarePtr->GetObjectsOnSquare().IsValidIndex(objectIndex)) return;
 	
 	squarePtr->GetObjectsOnSquare()[objectIndex].runtimeData.SetValue(Key, Value);
+	OnTileObjectDataChanged(Position, objectIndex, Key, Value);
 }
 
 void ATileChunk::SetSquare(FIntVector Position, const FSquareTile& squareTile)
@@ -404,7 +480,6 @@ void ATileChunk::AddObject(FIntVector Position, FTileObject& Object)
 	
 	AddObjectInstance(Position, newObjectIndex, tile.GetObjectsOnSquare()[newObjectIndex]);
 	AddObjectFeatures(Position, tile.GetObjectsOnSquare()[newObjectIndex], newObjectIndex);
-	BindRuntimeData(Position, newObjectIndex);
 	ApplyAllDataForObject(Position, newObjectIndex, Object);
     
 	ATileManager* mgr = GetOwningTileManager();
@@ -493,7 +568,8 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         	for (int32 j = i; j < Objs.Num(); j++)
         	{
         		const FTileDefinition& Def = mgr->GetTileByID(this, Objs[j].ID);
-        		FTileRenderKey Key { Def.Mesh, Def.ParentMaterial };
+				UStaticMesh* ResolvedMesh = ResolveMeshForTileDefinition(Def);
+        		FTileRenderKey Key { ResolvedMesh, Def.ParentMaterial };
             
         		if (HISMReverseLookup.Contains(Key))
         		{
@@ -512,7 +588,6 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
 void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int32 NewObjectIndex)
 {
 	FVector TileWorldOffset = UTileLibrary::TileToWorldPosition(Position);
-	UE_LOG(LogBarrelQuest, Warning, TEXT("Adding Object features at: %s"), *TileWorldOffset.ToString());
 	
 	for (const FTileObjectFeature& Feature : Object.Features)
 	{
@@ -536,11 +611,8 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 		Component->SetRelativeTransform(FeatureTransform);
 		Component->RegisterComponent();
 		
-		UE_LOG(LogBarrelQuest, Warning, TEXT("component: %s"), *Component->GetName());
-		
 		if (auto* FeatureComp = Cast<ITileFeatureInterface>(Component))
 		{
-			UE_LOG(LogBarrelQuest, Warning, TEXT("Feature Comp Valid"));
 			FeatureComp->SetOwningTileIndex(Position, NewObjectIndex);
 			FeatureComp->SetTileManager(GetOwningTileManager());
 			FeatureComp->BindRuntimeData(Object.runtimeData);
@@ -548,7 +620,8 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 		}
 		else
 		{
-			UE_LOG(LogBarrelQuest, Warning, TEXT("Feature Comp invalid"));
+			UE_LOG(LogBarrelQuest, Warning, TEXT("ATileChunk::AddObjectFeatures: Feature component does not implement TileFeatureInterface. Component='%s'"),
+				*Component->GetName());
 		}
 		
 		FStoredFeature stored = FStoredFeature();
@@ -577,7 +650,6 @@ void ATileChunk::RemoveObjectFeatures(FIntVector Position, int32 TargetObjectInd
 	
 	for (int32 i = arr->features.Num() - 1; i >= 0; i--)
 	{
-		UE_LOG(LogBarrelQuest, Warning, TEXT("Idx: %d"), i);
 		auto& feature = arr->features[i];
         
 		if (feature.OwningObject != TargetObjectIndex) continue;
@@ -694,6 +766,29 @@ bool ATileChunk::HasSquare(FIntVector Position)
 	return Tile != nullptr;
 }
 
+FStoredFeatureArray ATileChunk::FindAllFeaturesForObject(FIntVector squareIdx, int32 objIdx)
+{
+	FStoredFeatureArray results;
+	FStoredFeatureArray* featureArray = AttachedFeatures.Find(squareIdx);
+	
+	if (!featureArray)
+	{
+		return FStoredFeatureArray();
+	}
+	
+	for (FStoredFeature feature : featureArray->features)
+	{
+		if (feature.OwningObject != objIdx)
+		{
+			continue;
+		}
+		
+		results.features.Add(feature);
+	}
+	
+	return results;
+}
+
 void ATileChunk::ResetChunkState()
 {
 	for (auto pair : Tiles)
@@ -709,12 +804,79 @@ void ATileChunk::ResetChunkState()
 	
 	for (auto& pair : HISMMap)
 	{
-		pair.Value->ClearInstances();
+		if (pair.Value)
+		{
+			pair.Value->ClearInstances();
+			pair.Value->DestroyComponent();
+		}
 	}
 	
 	Tiles.Empty();
 	HISMMap.Empty();
 	HISMReverseLookup.Empty();
+}
+
+int64 ATileChunk::GetEstimatedMemoryUsageBytes() const
+{
+	int64 TotalBytes = sizeof(*this);
+
+	TotalBytes += TileKeys.GetAllocatedSize();
+	TotalBytes += TileValues.GetAllocatedSize();
+	TotalBytes += Tiles.LookupIndex.GetAllocatedSize();
+	TotalBytes += HISMMap.GetAllocatedSize();
+	TotalBytes += HISMReverseLookup.GetAllocatedSize();
+	TotalBytes += AttachedFeatures.GetAllocatedSize();
+	TotalBytes += perSquareHandles.GetAllocatedSize();
+	TotalBytes += RVTOutputs.GetAllocatedSize();
+
+	for (const FSquareTile& Square : TileValues)
+	{
+		const TArray<FTileObject>& Objects = Square.GetReadOnlyObjects();
+		TotalBytes += Objects.GetAllocatedSize();
+
+		for (const FTileObject& Object : Objects)
+		{
+			TotalBytes += Object.Features.GetAllocatedSize();
+
+			const TArray<FString>& RuntimeValues = Object.runtimeData.Values();
+			TotalBytes += RuntimeValues.GetAllocatedSize();
+			for (const FString& RuntimeValue : RuntimeValues)
+			{
+				TotalBytes += RuntimeValue.GetAllocatedSize();
+			}
+		}
+	}
+
+	for (const TPair<FTileRenderKey, TArray<FObjectReference>>& Pair : HISMReverseLookup)
+	{
+		TotalBytes += Pair.Value.GetAllocatedSize();
+	}
+
+	for (const TPair<FIntVector, FStoredFeatureArray>& Pair : AttachedFeatures)
+	{
+		TotalBytes += Pair.Value.features.GetAllocatedSize();
+	}
+
+	for (const TPair<FIntVector, TArray<FRuntimeListenerObject>>& Pair : perSquareHandles)
+	{
+		TotalBytes += Pair.Value.GetAllocatedSize();
+	}
+
+	for (const TPair<FTileRenderKey, UHierarchicalInstancedStaticMeshComponent*>& Pair : HISMMap)
+	{
+		const UHierarchicalInstancedStaticMeshComponent* HISM = Pair.Value;
+		if (!HISM)
+		{
+			continue;
+		}
+
+		const int64 InstanceCount = HISM->GetInstanceCount();
+		TotalBytes += sizeof(UHierarchicalInstancedStaticMeshComponent);
+		TotalBytes += InstanceCount * sizeof(FTransform);
+		TotalBytes += InstanceCount * customDataFloats * sizeof(float);
+	}
+
+	return TotalBytes;
 }
 
 
@@ -757,24 +919,17 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 	instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL] = -1.0f;
 	instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM] = -1.0f;
 
-	UE_LOG(LogTemp, Display, TEXT("ATileChunk::GetCustomDataArray: Begin TileID='%s' TileName='%s' TileDirection=%d HasRegistry=%s DefaultTextureIndices=(Albedo=%d Normal=%d Metallic=%d Specular=%d) Handles={Albedo{%s} Normal{%s} ORM{%s}}"),
-		*tileObject.ID.ToString(),
-		*tileDef.Name,
-		(int)tileObject.Direction,
-		TileTextureRegistry ? TEXT("true") : TEXT("false"),
-		(int)tileDef.TextureProperties.Albedo,
-		(int)tileDef.TextureProperties.Normal,
-		(int)tileDef.TextureProperties.Metallic,
-		(int)tileDef.TextureProperties.Specular,
-		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo),
-		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstNormal),
-		*DescribeTileTextureHandleForLog(tileDef.TextureProperties.ConstantTexHandles.ConstORM));
-
 	if (TileTextureRegistry)
 	{
-		const int32 UserAlbedoSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo);
-		const int32 UserNormalSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstNormal);
-		const int32 UserORMSlot = TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstORM);
+		const int32 UserAlbedoSlot = IsTileAssetHandleSet(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo)
+			? TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstAlbedo)
+			: INDEX_NONE;
+		const int32 UserNormalSlot = IsTileAssetHandleSet(tileDef.TextureProperties.ConstantTexHandles.ConstNormal)
+			? TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstNormal)
+			: INDEX_NONE;
+		const int32 UserORMSlot = IsTileAssetHandleSet(tileDef.TextureProperties.ConstantTexHandles.ConstORM)
+			? TileTextureRegistry->ResolveSlotFromHandle(tileDef.TextureProperties.ConstantTexHandles.ConstORM)
+			: INDEX_NONE;
 
 		if (UserAlbedoSlot != INDEX_NONE)
 		{
@@ -796,27 +951,45 @@ TStaticArray<float, ATileChunk::customDataFloats> ATileChunk::GetCustomDataArray
 		UE_LOG(LogTemp, Warning, TEXT("ATileChunk::GetCustomDataArray: TileTextureRegistry was null. User-defined texture slots remain -1 for TileID='%s'."), *tileObject.ID.ToString());
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("ATileChunk::GetCustomDataArray: End TileID='%s' UserDefSlots=(Albedo=%f Normal=%f ORM=%f) Tint=(%f,%f,%f) InteriorTint=(%f,%f,%f) Base=(Metallic=%f Roughness=%f)"),
-		*tileObject.ID.ToString(),
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_ALBEDO],
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_NORMAL],
-		instanceData[(int)ETileInstanceDataIndex::USERDEF_ORM],
-		instanceData[(int)ETileInstanceDataIndex::TINT_R],
-		instanceData[(int)ETileInstanceDataIndex::TINT_G],
-		instanceData[(int)ETileInstanceDataIndex::TINT_B],
-		instanceData[(int)ETileInstanceDataIndex::INT_TINT_R],
-		instanceData[(int)ETileInstanceDataIndex::INT_TINT_G],
-		instanceData[(int)ETileInstanceDataIndex::INT_TINT_B],
-		instanceData[(int)ETileInstanceDataIndex::BASE_METALLIC],
-		instanceData[(int)ETileInstanceDataIndex::BASE_ROUGHNESS]);
-	
 	return instanceData;
+}
+
+UStaticMesh* ATileChunk::ResolveMeshForTileDefinition(const FTileDefinition& tileDef) const
+{
+	if (tileDef.Mesh)
+	{
+		return tileDef.Mesh;
+	}
+
+	if (tileDef.UserDefinedMesh.Kind == ERegisteredAssetType::None)
+	{
+		return nullptr;
+	}
+
+	UTileTextureRegistry* TileTextureRegistry = GetGameInstance() ? GetGameInstance()->GetSubsystem<UTileTextureRegistry>() : nullptr;
+	if (!TileTextureRegistry)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ATileChunk::ResolveMeshForTileDefinition: TileTextureRegistry was null. TileName='%s' Handle={%s}"),
+			*tileDef.Name,
+			*DescribeTileTextureHandleForLog(tileDef.UserDefinedMesh));
+		return nullptr;
+	}
+
+	UStaticMesh* ResolvedMesh = TileTextureRegistry->ResolveMeshFromHandle(tileDef.UserDefinedMesh);
+	UE_LOG(LogTemp, Display, TEXT("ATileChunk::ResolveMeshForTileDefinition: TileName='%s' Mesh='%s' Handle={%s}"),
+		*tileDef.Name,
+		ResolvedMesh ? *ResolvedMesh->GetPathName() : TEXT("<null>"),
+		*DescribeTileTextureHandleForLog(tileDef.UserDefinedMesh));
+	return ResolvedMesh;
 }
 
 UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTileRenderKey& key, const FTileDefinition& tileDef)
 {
 	UHierarchicalInstancedStaticMeshComponent* HISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
-	HISM->SetStaticMesh(tileDef.Mesh);
+	
+	UStaticMesh* mesh = key.Mesh ? key.Mesh : ResolveMeshForTileDefinition(tileDef);
+	
+	HISM->SetStaticMesh(mesh);
 	
 	UMaterialInterface* MaterialToUse = tileDef.ParentMaterial;
 	if (tileDef.ParentMaterial)
@@ -830,13 +1003,13 @@ UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTil
 			MID->SetTextureParameterValue(TEXT("UserDefinedAtlas"), UserDefinedAtlas);
 			UE_LOG(LogTemp, Display, TEXT("ATileChunk::LazyCreateHISM: Set MID UserDefinedAtlas='%s' for Mesh='%s' Material='%s'"),
 				*UserDefinedAtlas->GetPathName(),
-				tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"),
+				mesh ? *mesh->GetPathName() : TEXT("<null>"),
 				*tileDef.ParentMaterial->GetPathName());
 		}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("ATileChunk::LazyCreateHISM: UserDefinedAtlas was null. User-defined texture slots can resolve, but material cannot sample atlas. Mesh='%s' Material='%s'"),
-				tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"),
+				mesh ? *mesh->GetPathName() : TEXT("<null>"),
 				*tileDef.ParentMaterial->GetPathName());
 		}
 
@@ -845,7 +1018,7 @@ UHierarchicalInstancedStaticMeshComponent* ATileChunk::LazyCreateHISM(const FTil
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ATileChunk::LazyCreateHISM: ParentMaterial was null for Mesh='%s'"),
-			tileDef.Mesh ? *tileDef.Mesh->GetPathName() : TEXT("<null>"));
+			mesh ? *mesh->GetPathName() : TEXT("<null>"));
 	}
 
 	HISM->SetMaterial(0, MaterialToUse);
@@ -874,6 +1047,10 @@ void ATileChunk::BindRuntimeData(FIntVector squarePosition, int32 objectIndex)
 		return;
 	}
 	FTileObject& object = squarePtr->GetObjectsOnSquare()[objectIndex];
+	if (object.runtimeData.Values().IsEmpty())
+	{
+		return;
+	}
 	
 	FDelegateHandle newHandle =
 	object.runtimeData.OnChanged.AddLambda(
@@ -889,8 +1066,6 @@ void ATileChunk::BindRuntimeData(FIntVector squarePosition, int32 objectIndex)
 	newListener.listenerHandle = newHandle;
 	
 	StoreRuntimeListener(newListener);
-	
-	UE_LOG(LogBarrelQuest, Warning, TEXT("Bound runtime data"));
 }
 
 void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
@@ -898,7 +1073,6 @@ void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
 	TArray<FRuntimeListenerObject>* Listeners = perSquareHandles.Find(Square);
 	if (!Listeners)
 	{
-		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to unbind runtime data: no listeners"));
 		return;
 	}
 
@@ -906,7 +1080,6 @@ void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
 	FSquareTile* SquarePtr = GetSquareTilePtr(Square, found);
 	if (!found)
 	{
-		UE_LOG(LogBarrelQuest, Warning, TEXT("failed to bind runtime data: no SquarePtr"));
 		return;
 	}
 
@@ -932,7 +1105,6 @@ void ATileChunk::UnbindRuntimeData(FIntVector Square, int32 ObjectIndex)
 		perSquareHandles.Remove(Square);
 	}
 	
-	UE_LOG(LogBarrelQuest, Warning, TEXT("successfully unbound runtime data"));
 }
 
 void ATileChunk::InitializeFuncMap()
@@ -984,7 +1156,8 @@ void ATileChunk::SetObjectInstanceData(FIntVector square, int32 objectIndex, ETi
 	FTileObject& Object = squarePtr->GetObjectsOnSquare()[objectIndex];
 	FTileDefinition def = GetOwningTileManager()->GetTileByID(this, Object.ID);
 	
-	const FTileRenderKey renderKey = FTileRenderKey(def.Mesh, def.ParentMaterial);
+	UStaticMesh* ResolvedMesh = ResolveMeshForTileDefinition(def);
+	const FTileRenderKey renderKey = FTileRenderKey(ResolvedMesh, def.ParentMaterial);
 		
 	UHierarchicalInstancedStaticMeshComponent** HISMMapResult = HISMMap.Find(renderKey);
 			

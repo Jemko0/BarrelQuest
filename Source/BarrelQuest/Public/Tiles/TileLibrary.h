@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RightClickLibrary.h"
 #include "Crafting/CraftingLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UserResources/TileTextureRegistry.h"
@@ -269,6 +270,9 @@ public:
 	TEnumAsByte<ECollisionChannel> ObjectType = ECC_GameTraceChannel6;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FRCMOption> DefaultRightClickOptions;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FString> DefaultRuntimeData;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -305,10 +309,6 @@ USTRUCT(BlueprintType)
 struct FTileRuntimeData
 {
 	GENERATED_BODY()
-protected:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame, NotReplicated)
-	TMap<FName, int32> indexLookup;
-	
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
 	TArray<FString> runtimeData;

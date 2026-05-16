@@ -8,6 +8,23 @@
 #include "RightClickLibrary.generated.h"
 
 USTRUCT(BlueprintType)
+struct FRCMInvokeMessage
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FString> StringData;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<uint8> ByteData;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FVector> VectorData;
+};
+
+USTRUCT(BlueprintType)
 struct FRCMOption
 {
 	GENERATED_BODY()
@@ -25,4 +42,7 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString invokeID;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, FRCMInvokeMessage> Payload;
 };
