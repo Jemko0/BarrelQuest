@@ -13,6 +13,7 @@ struct TReplicatedMap
     void RebuildIndex()
     {
         LookupIndex.Empty();
+        LookupIndex.Reserve(Keys.Num());
         for (int32 i = 0; i < Keys.Num(); i++)
             LookupIndex.Add(Keys[i], i);
     }

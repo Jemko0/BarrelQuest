@@ -25,5 +25,8 @@ class BARRELQUEST_API IRightClickInterface
 public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	TArray<FRCMOption> GetRCMOptions(AActor* Actor, FVector Location);
+	TArray<FRCMOption> GetRCMOptions(FVector ClickWorldPosition);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SendRCMInvoke(const FString& invokeID, UPARAM(Ref) TMap<FName, FRCMInvokeMessage>& payload);
 };

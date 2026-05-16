@@ -18,13 +18,9 @@ UTilePointLightFeatureComponent::UTilePointLightFeatureComponent()
 void UTilePointLightFeatureComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	if (!GetOwningObject()) return;
-	
-	GetOwningObject()->runtimeData.SetValue("light_color", UBarrelUtilityFunctionLibrary::LinearColorToHexString(FLinearColor::MakeRandomColor()));
 }
 
-TArray<FRCMOption> UTilePointLightFeatureComponent::GetRCMOptions_Implementation(AActor* Actor, FVector Location)
+TArray<FRCMOption> UTilePointLightFeatureComponent::GetRCMOptions_Implementation(FVector Location)
 {
 	TArray<FRCMOption> rightClickOptions;
 	if (needsLightbulb)
@@ -35,4 +31,9 @@ TArray<FRCMOption> UTilePointLightFeatureComponent::GetRCMOptions_Implementation
 	}
 	
 	return rightClickOptions;
+}
+
+void UTilePointLightFeatureComponent::SendRCMInvoke_Implementation(const FString& invokeID, TMap<FName, FRCMInvokeMessage>& payload)
+{
+	return;
 }
