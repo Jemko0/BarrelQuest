@@ -16,7 +16,7 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 	}
 	
 	UMapEditorWorldSaveGame* sg = Cast<UMapEditorWorldSaveGame>(
-		UGameplayStatics::CreateSaveGameObject(TSubclassOf<UMapEditorWorldSaveGame>()));
+		UGameplayStatics::CreateSaveGameObject(StaticClass()));
 	
 	sg->WorldName = TileManager->WorldName;
 
@@ -33,7 +33,7 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 	
 	sg->Version = TileManager->WorldVersion + 1;
 	
-	UUserResourceComponent* UGCComponent = Cast<UUserResourceComponent>(TileManager->GetComponentByClass(TSubclassOf<UUserResourceComponent>()));
+	UUserResourceComponent* UGCComponent = Cast<UUserResourceComponent>(TileManager->GetComponentByClass(UUserResourceComponent::StaticClass()));
 	
 	if (UGCComponent)
 	{

@@ -89,7 +89,7 @@ public:
 	void OnFileDownloadComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool success, FString URL, FString Type);
 	
 	UFUNCTION(BlueprintCallable)
-	FInterpretedResourceData InterpretData(FString ResourceURL, FString ResourceType, TArray<uint8>& Buffer);
+	static FInterpretedResourceData InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType, UPARAM(ref) TArray<uint8>& Buffer);
 
 protected:
 	// Called when the game starts

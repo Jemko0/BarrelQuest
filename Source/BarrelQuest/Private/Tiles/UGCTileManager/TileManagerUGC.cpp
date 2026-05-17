@@ -60,6 +60,10 @@ void ATileManagerUGC::LFS_Stage_LoadDefaults(UMapEditorWorldSaveGame* SaveGame)
 	{
 		LFS_Stage_LoadUGC(SaveGame);
 	}
+	else
+	{
+		LFS_Stage_LoadTiles(SaveGame);
+	}
 	
 	UE_LOG(LogBarrelQuestLoad, Log, TEXT("Exiting Load Stage: LoadDefaults"));
 }
@@ -141,7 +145,7 @@ void ATileManagerUGC::ExitWorldLoading(bool success, FString msg)
 
 void ATileManagerUGC::HandleUGCDownloadFinished(FString ResourceURL, FString ResourceType, TArray<uint8> Bytes)
 {
-	FInterpretedResourceData Interpreted = UserResourceComponent->InterpretData(ResourceURL, ResourceType, Bytes);
+	FInterpretedResourceData Interpreted = UserResourceComponent->InterpretData(this, ResourceURL, ResourceType, Bytes);
 	
 	FTileSavedAssetHandle* HandlePtr = PendingRegistryHandles.Find(ResourceURL);
 	

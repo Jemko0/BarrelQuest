@@ -116,10 +116,10 @@ void UUserResourceComponent::OnFileDownloadComplete(FHttpRequestPtr RequestPtr, 
 	OnDownloadFinished.Broadcast(URL, Type, Cached.Bytes);
 }
 
-FInterpretedResourceData UUserResourceComponent::InterpretData(FString ResourceURL, FString ResourceType,
+FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType,
 	TArray<uint8>& Buffer)
 {
-	UUGCAssetRegistry* UGCAssetRegistry = GetWorld()->GetGameInstance()->GetSubsystem<UUGCAssetRegistry>();
+	UUGCAssetRegistry* UGCAssetRegistry = WorldContextObject->GetWorld()->GetGameInstance()->GetSubsystem<UUGCAssetRegistry>();
 	FInterpretedResourceData result = FInterpretedResourceData();
 	
 	if (!UGCAssetRegistry)
