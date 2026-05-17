@@ -7,6 +7,8 @@
 #include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Tiles/TileChunk.h"
 #include "Tiles/TileManager.h"
+#include "Tiles/UGCTileManager/TileManagerUGC.h"
+#include "Tiles/UGCTileManager/UGCApplierComponent.h"
 
 UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileManager* TileManager)
 {
@@ -34,11 +36,20 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 	sg->Version = TileManager->WorldVersion + 1;
 	
 	UUserResourceComponent* UGCComponent = Cast<UUserResourceComponent>(TileManager->GetComponentByClass(UUserResourceComponent::StaticClass()));
+	ATileManagerUGC* TileManagerUGC = Cast<ATileManagerUGC>(TileManager->GetComponentByClass(ATileManagerUGC::StaticClass()));
 	
 	if (UGCComponent)
 	{
 		sg->DownloadedResources = UGCComponent->ResourceCache;
 	}
+
+	if (TileManagerUGC)
+	{
+		sg->EnvironmentData = TileManagerUGC->WorldEnvironmentData;
+		sg->BGMData = TileManagerUGC->WorldBGMData;
+	}
+	
+	sg->UserDefinedTiles = TileManager->UserDefinedTileDefinitions;
 	
 	sg->MapEditorData = UTileSaveLoadLibrary::GetMapEditorSaveData(TileManager->GetWorld());
 	

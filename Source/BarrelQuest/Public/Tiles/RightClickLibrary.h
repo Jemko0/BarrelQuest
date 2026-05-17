@@ -21,7 +21,7 @@ public:
 	TArray<uint8> ByteData;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FVector> VectorData;
+	TArray<FIntVector> IntVectorData;
 };
 
 USTRUCT(BlueprintType)

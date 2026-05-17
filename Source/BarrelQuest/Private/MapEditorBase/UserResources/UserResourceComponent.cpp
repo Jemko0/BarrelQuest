@@ -22,11 +22,24 @@ UUserResourceComponent::UUserResourceComponent()
 
 void UUserResourceComponent::RequestResource(const FString& ResourceID)
 {
+	RequestResourceWithCallbacks(ResourceID, FOnResourceDownloadFinishedNative(), FOnResourceDownloadFailedNative());
+}
+
+void UUserResourceComponent::RequestResourceWithCallbacks(
+	const FString& ResourceID,
+	FOnResourceDownloadFinishedNative OnFinished,
+	FOnResourceDownloadFailedNative OnFailed)
+{
 	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
     
 	Request->SetURL("https://barrel-api.ratt.ing/userresources/get/" + ResourceID);
 	Request->SetVerb("GET");
-	Request->OnProcessRequestComplete().BindUObject(this, &UUserResourceComponent::OnResourceRequestComplete);
+	Request->OnProcessRequestComplete().BindUObject(
+		this,
+		&UUserResourceComponent::OnResourceRequestCompleteWithCallbacks,
+		OnFinished,
+		OnFailed,
+		true);
 	Request->ProcessRequest();
 }
 
@@ -62,9 +75,31 @@ int64 UUserResourceComponent::GetCachedResourceBytes() const
 
 void UUserResourceComponent::OnResourceRequestComplete(FHttpRequestPtr RequestPtr, FHttpResponsePtr ResponsePtr, bool bSuccess)
 {
+	OnResourceRequestCompleteWithCallbacks(
+		RequestPtr,
+		ResponsePtr,
+		bSuccess,
+		FOnResourceDownloadFinishedNative(),
+		FOnResourceDownloadFailedNative(),
+		true);
+}
+
+void UUserResourceComponent::OnResourceRequestCompleteWithCallbacks(
+	FHttpRequestPtr RequestPtr,
+	FHttpResponsePtr ResponsePtr,
+	bool bSuccess,
+	FOnResourceDownloadFinishedNative OnFinished,
+	FOnResourceDownloadFailedNative OnFailed,
+	bool bBroadcastComponentDelegates)
+{
 	if (!bSuccess || !ResponsePtr.IsValid() || ResponsePtr->GetResponseCode() != 200)
 	{
-		OnDownloadFailed.Broadcast("", "", ResponsePtr->GetContentAsString());
+		const FString Error = ResponsePtr.IsValid() ? ResponsePtr->GetContentAsString() : TEXT("Resource request failed");
+		if (bBroadcastComponentDelegates)
+		{
+			OnDownloadFailed.Broadcast("", "", Error);
+		}
+		OnFailed.ExecuteIfBound("", "", Error);
 		return;
 	}
 
@@ -72,38 +107,80 @@ void UUserResourceComponent::OnResourceRequestComplete(FHttpRequestPtr RequestPt
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponsePtr->GetContentAsString());
 	if (!FJsonSerializer::Deserialize(Reader, JsonObject) || !JsonObject.IsValid())
 	{
-		OnDownloadFailed.Broadcast("", "", "Failed to parse response");
+		if (bBroadcastComponentDelegates)
+		{
+			OnDownloadFailed.Broadcast("", "", TEXT("Failed to parse response"));
+		}
+		OnFailed.ExecuteIfBound("", "", TEXT("Failed to parse response"));
 		return;
 	}
 
-	TSharedPtr<FJsonObject> ResourceJson = JsonObject->GetObjectField("resource");
-	FString URL = ResourceJson->GetStringField("url");
-	FString Type = ResourceJson->GetStringField("type");
-	FString Name = ResourceJson->GetStringField("name");
+	TSharedPtr<FJsonObject> ResourceJson = JsonObject->GetObjectField(TEXT("resource"));
+	FString URL = ResourceJson->GetStringField(TEXT("url"));
+	FString Type = ResourceJson->GetStringField(TEXT("type"));
 
 	if (ResourceCache.Contains(URL))
 	{
-		OnDownloadFinished.Broadcast(URL, Type, ResourceCache[URL].Bytes);
+		if (bBroadcastComponentDelegates)
+		{
+			OnDownloadFinished.Broadcast(URL, Type, ResourceCache[URL].Bytes);
+		}
+		OnFinished.ExecuteIfBound(URL, Type, ResourceCache[URL].Bytes);
 		return;
 	}
 
 	InProgressDownloads.Add(URL);
-	OnDownloadStarted.Broadcast(URL, Type);
+	if (bBroadcastComponentDelegates)
+	{
+		OnDownloadStarted.Broadcast(URL, Type);
+	}
 
 	// now fetch the actual file
 	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> FileRequest = FHttpModule::Get().CreateRequest();
 	FileRequest->SetURL(URL);
 	FileRequest->SetVerb("GET");
-	FileRequest->OnProcessRequestComplete().BindUObject(this, &UUserResourceComponent::OnFileDownloadComplete, URL, Type);
+	FileRequest->OnProcessRequestComplete().BindUObject(
+		this,
+		&UUserResourceComponent::OnFileDownloadCompleteWithCallbacks,
+		URL,
+		Type,
+		OnFinished,
+		OnFailed,
+		bBroadcastComponentDelegates);
 	FileRequest->ProcessRequest();
 }
 
 void UUserResourceComponent::OnFileDownloadComplete(FHttpRequestPtr RequestPtr, FHttpResponsePtr ResponsePtr, bool bSuccess, FString URL, FString Type)
 {
+	OnFileDownloadCompleteWithCallbacks(
+		RequestPtr,
+		ResponsePtr,
+		bSuccess,
+		URL,
+		Type,
+		FOnResourceDownloadFinishedNative(),
+		FOnResourceDownloadFailedNative(),
+		true);
+}
+
+void UUserResourceComponent::OnFileDownloadCompleteWithCallbacks(
+	FHttpRequestPtr RequestPtr,
+	FHttpResponsePtr ResponsePtr,
+	bool bSuccess,
+	FString URL,
+	FString Type,
+	FOnResourceDownloadFinishedNative OnFinished,
+	FOnResourceDownloadFailedNative OnFailed,
+	bool bBroadcastComponentDelegates)
+{
 	if (!bSuccess || !ResponsePtr.IsValid() || ResponsePtr->GetResponseCode() != 200)
 	{
 		InProgressDownloads.Remove(URL);
-		OnDownloadFailed.Broadcast(URL, Type, "Failed to download file");
+		if (bBroadcastComponentDelegates)
+		{
+			OnDownloadFailed.Broadcast(URL, Type, TEXT("Failed to download file"));
+		}
+		OnFailed.ExecuteIfBound(URL, Type, TEXT("Failed to download file"));
 		return;
 	}
 
@@ -113,7 +190,11 @@ void UUserResourceComponent::OnFileDownloadComplete(FHttpRequestPtr RequestPtr, 
 	ResourceCache.Add(URL, Cached);
 	InProgressDownloads.Remove(URL);
 
-	OnDownloadFinished.Broadcast(URL, Type, Cached.Bytes);
+	if (bBroadcastComponentDelegates)
+	{
+		OnDownloadFinished.Broadcast(URL, Type, Cached.Bytes);
+	}
+	OnFinished.ExecuteIfBound(URL, Type, Cached.Bytes);
 }
 
 FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType,
@@ -131,7 +212,7 @@ FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldCon
 	if (ResourceType == TEXT("texture"))
 	{
 		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Texture, Buf size: %i"), Buffer.Num());
-		result.TexturePtr = UKismetRenderingLibrary::ImportBufferAsTexture2D(GetOwner(), Buffer);
+		result.TexturePtr = UKismetRenderingLibrary::ImportBufferAsTexture2D(WorldContextObject, Buffer);
 	}
 	else if (ResourceType == TEXT("mesh"))
 	{
@@ -141,7 +222,7 @@ FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldCon
 	else if (ResourceType == TEXT("audio"))
 	{
 		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Audio, Buf size: %i"), Buffer.Num());
-		result.AudioPtr = UGCAssetRegistry->GetOrLoadSound(Buffer, ResourceURL);
+		result.AudioPtr = UGCAssetRegistry->GetOrLoadSound(Buffer, ResourceURL, EUGCAudioFormat::Auto, true);
 	}
 	else if (ResourceType == TEXT("mid"))
 	{
@@ -175,5 +256,53 @@ void UUserResourceComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+URequestResourceAsyncAction* URequestResourceAsyncAction::RequestResource_Async(
+	UUserResourceComponent* ResourceComponent,
+	const FString& ResourceID)
+{
+	URequestResourceAsyncAction* Action = NewObject<URequestResourceAsyncAction>();
+	Action->ResourceComponent = ResourceComponent;
+	Action->ResourceID = ResourceID;
+
+	if (ResourceComponent)
+	{
+		Action->RegisterWithGameInstance(ResourceComponent);
+	}
+
+	return Action;
+}
+
+void URequestResourceAsyncAction::Activate()
+{
+	if (!ResourceComponent)
+	{
+		HandleFailure("", "", TEXT("Invalid user resource component"));
+		return;
+	}
+
+	ResourceComponent->RequestResourceWithCallbacks(
+		ResourceID,
+		FOnResourceDownloadFinishedNative::CreateUObject(this, &URequestResourceAsyncAction::HandleSuccess),
+		FOnResourceDownloadFailedNative::CreateUObject(this, &URequestResourceAsyncAction::HandleFailure));
+}
+
+void URequestResourceAsyncAction::HandleSuccess(
+	const FString& ResourceURL,
+	const FString& ResourceType,
+	const TArray<uint8>& Bytes)
+{
+	OnSuccess.Broadcast(ResourceURL, ResourceType, Bytes);
+	SetReadyToDestroy();
+}
+
+void URequestResourceAsyncAction::HandleFailure(
+	const FString& ResourceURL,
+	const FString& ResourceType,
+	const FString& Error)
+{
+	OnFailure.Broadcast(ResourceURL, ResourceType, Error);
+	SetReadyToDestroy();
 }
 

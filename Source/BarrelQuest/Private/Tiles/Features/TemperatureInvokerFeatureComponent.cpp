@@ -44,7 +44,7 @@ void UTemperatureInvokerFeatureComponent::BeginPlay()
 
 FVector UTemperatureInvokerFeatureComponent::GetOwnerLocation() const
 {
-	return UTileLibrary::TileToWorldPosition(OwningTileIndex);
+	return UTileLibrary::TileToWorldPosition(OwnerState.OwningTileIndex);
 }
 
 // Called every frame

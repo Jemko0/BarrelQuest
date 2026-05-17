@@ -87,10 +87,10 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, BlueprintAssignable)
 	FOnTileManagerFlushLog OnTileManagerFlushLog;
 	
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FTileDefinition> UserDefinedTileDefinitions;
-
-public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString WorldName = FString(TEXT("Unnamed World"));
 	

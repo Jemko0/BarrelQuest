@@ -22,10 +22,8 @@ namespace
 		{
 		case ERegisteredAssetType::CookedAsset:
 			return TEXT("CookedAsset");
-		case ERegisteredAssetType::RuntimeTexture:
-			return TEXT("RuntimeTexture");
-		case ERegisteredAssetType::RuntimeMesh:
-			return TEXT("RuntimeMesh");
+		case ERegisteredAssetType::RuntimeAsset:
+			return TEXT("RuntimeAsset");
 		default:
 			return TEXT("None");
 		}
@@ -82,6 +80,33 @@ TArray<FRCMOption> ATileChunk::GetRCMOptions_Implementation(FVector Location)
 void ATileChunk::SendRCMInvoke_Implementation(const FString& invokeID, TMap<FName, FRCMInvokeMessage>& payload)
 {
 	UE_LOG(LogBarrelQuestTileChunk, Log, TEXT("chunk received message, invoke ID: %s"), *invokeID);
+	
+	if (FRCMInvokeMessage* msg = payload.Find(TEXT("target_features")))
+	{
+		TArray<FIntVector>& squares = msg->IntVectorData;
+		TArray<FString>& featureNames = msg->StringData;
+		
+		for (const FIntVector& square : squares)
+		{
+			FStoredFeatureArray* featureArray = AttachedFeatures.Find(square);
+			if (!featureArray)
+			{
+				continue;
+			}
+			
+			for (const FStoredFeature& feature : featureArray->features)
+			{
+				if (featureNames.Contains(feature.FeatureName.ToString())
+					&& feature.ComponentPtr 
+					&& feature.ComponentPtr->GetClass()->ImplementsInterface(URightClickInterface::StaticClass()
+						))
+				{
+					Execute_SendRCMInvoke(feature.ComponentPtr, invokeID, payload);
+				}
+			}
+		}
+	}
+	
 	IRightClickInterface::SendRCMInvoke_Implementation(invokeID, payload);
 }
 
@@ -617,6 +642,7 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 			FeatureComp->SetTileManager(GetOwningTileManager());
 			FeatureComp->BindRuntimeData(Object.runtimeData);
 			FeatureComp->InitializeFromObject(Object);
+			FeatureComp->SetFeatureName(Feature.FeatureName);
 		}
 		else
 		{

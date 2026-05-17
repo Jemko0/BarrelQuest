@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "BarrelUtilityLibrary.h"
 #include "Tiles/TileLibrary.h"
+#include "Tiles/Features/TileFeatureLibrary.h"
 #include "UObject/Interface.h"
 #include "TileFeatureInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(meta=(CannotImplementInterfaceInBlueprint))
 class UTileFeatureInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -30,7 +31,11 @@ public:
 	virtual void SetTileManager(ATileManager* owner) = 0;
 	virtual void ResetOwners() = 0;
 	virtual void InitializeFromObject(FTileObject& object) = 0;
+	virtual void SetFeatureName(const FName& name) = 0;
 	virtual const FIntVector& GetOwningTileIndex() = 0;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual FTileFeatureOwnerState GetOwnerState() = 0;
 	
 	TArray<FDelegateHandle> InternalHandles;
 	

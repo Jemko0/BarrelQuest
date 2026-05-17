@@ -22,39 +22,37 @@
  */
 #define TF_GENERATED_BODY() \
 	protected: \
-	FIntVector OwningTileIndex = FIntVector(-1, -1, -1); \
-	int32 OwningObjectIndex = -1; \
-	ATileManager* OwningTileManager = nullptr; \
+	FTileFeatureOwnerState OwnerState;\
 	virtual void SetOwningTileIndex(const FIntVector& OwningTile, const int32 ObjectIdx) \
 	{ \
-		OwningTileIndex = OwningTile;\
-		OwningObjectIndex = ObjectIdx; \
+		OwnerState.OwningTileIndex = OwningTile;\
+		OwnerState.OwningObjectIndex = ObjectIdx; \
 	} \
 	virtual void SetTileManager(ATileManager* owner) \
 	{\
-		OwningTileManager = owner;\
+		OwnerState.OwningTileManager = owner;\
 	}\
 	\
 	virtual const FIntVector& GetOwningTileIndex() \
 	{ \
-		return OwningTileIndex;\
+		return OwnerState.OwningTileIndex;\
 	} \
 	virtual FTileObject* GetOwningObject() \
 	{ \
-	if (!OwningTileManager) return nullptr; \
-	   FSquareTile* ptr = OwningTileManager->GetSquareTilePtr(OwningTileIndex); \
-	if (!ptr || !ptr->GetObjectsOnSquare().IsValidIndex(OwningObjectIndex)) \
+	if (!OwnerState.OwningTileManager) return nullptr; \
+	   FSquareTile* ptr = OwnerState.OwningTileManager->GetSquareTilePtr(OwnerState.OwningTileIndex); \
+	if (!ptr || !ptr->GetObjectsOnSquare().IsValidIndex(OwnerState.OwningObjectIndex)) \
 	{ \
-		UE_LOG(LogBarrelQuest, Error, TEXT("Invalid OwningObjectIndex %d for tile %s"), OwningObjectIndex, *OwningTileIndex.ToString()); \
+		UE_LOG(LogBarrelQuest, Error, TEXT("Invalid OwningObjectIndex %d for tile %s"), OwnerState.OwningObjectIndex, *OwnerState.OwningTileIndex.ToString()); \
 		return nullptr; \
 	} \
-	return &ptr->GetObjectsOnSquare()[OwningObjectIndex]; \
+	return &ptr->GetObjectsOnSquare()[OwnerState.OwningObjectIndex]; \
 	} \
 	virtual void ResetOwners()\
 	{\
-		OwningTileIndex = FIntVector(-1, -1, -1);\
-		OwningObjectIndex = -1;\
-		OwningTileManager = nullptr;\
+		OwnerState.OwningTileIndex = FIntVector(-1, -1, -1);\
+		OwnerState.OwningObjectIndex = -1;\
+		OwnerState.OwningTileManager = nullptr;\
 	}\
 	virtual void InitializeFromObject(FTileObject& object)\
 	{\
@@ -63,7 +61,33 @@
 			FRuntimeDataQueryResult q = object.runtimeData.GetValue(key);\
 			object.runtimeData.SetValue(key, q.data);\
 		}\
-	}
+	}\
+	virtual FTileFeatureOwnerState GetOwnerState()\
+	{\
+		return OwnerState;\
+	}\
+	virtual void SetFeatureName(const FName& name)\
+	{\
+		OwnerState.FeatureName = name;\
+	}\
+
+USTRUCT(BlueprintType)
+struct FTileFeatureOwnerState
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintReadOnly)
+	FIntVector OwningTileIndex = FIntVector(-1, -1, -1); 
+	
+	UPROPERTY(BlueprintReadOnly)
+	int32 OwningObjectIndex = -1; 
+	
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<ATileManager> OwningTileManager = nullptr;
+	
+	UPROPERTY(BlueprintReadOnly)
+	FName FeatureName; 
+};
 
 UCLASS()
 class BARRELQUEST_API UTileFeatureLibrary : public UBlueprintFunctionLibrary

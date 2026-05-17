@@ -12,10 +12,8 @@ namespace
 		{
 		case ERegisteredAssetType::CookedAsset:
 			return TEXT("CookedAsset");
-		case ERegisteredAssetType::RuntimeTexture:
+		case ERegisteredAssetType::RuntimeAsset:
 			return TEXT("RuntimeTexture");
-		case ERegisteredAssetType::RuntimeMesh:
-			return TEXT("RuntimeMesh");
 		default:
 			return TEXT("None");
 		}
@@ -227,8 +225,8 @@ int32 UTileTextureRegistry::ResolveSlotFromHandle(FTileSavedAssetHandle handle)
 		}
 		break;
 
-	case ERegisteredAssetType::RuntimeTexture:
-		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: Runtime texture is not registered yet. Register RawBytes with this handle first. Handle={%s}"), *DescribeHandle(handle));
+	case ERegisteredAssetType::RuntimeAsset:
+		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveSlotFromHandle: Runtime asset is not registered yet. Register RawBytes with this handle first. Handle={%s}"), *DescribeHandle(handle));
 		break;
 
 	default:
@@ -294,7 +292,7 @@ UStaticMesh* UTileTextureRegistry::ResolveMeshFromHandle(FTileSavedAssetHandle h
 		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: CookedAsset handle has invalid AssetPath. Handle={%s}"), *DescribeHandle(handle));
 		break;
 
-	case ERegisteredAssetType::RuntimeMesh:
+	case ERegisteredAssetType::RuntimeAsset:
 		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ResolveMeshFromHandle: Runtime mesh is not registered yet. Register RawBytes with this handle first. Handle={%s}"), *DescribeHandle(handle));
 		break;
 
@@ -394,7 +392,7 @@ int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<u
 	const int32 Slot = FreeSlots.Pop(EAllowShrinking::No);
 
 	FTileRegisteredTexture Entry;
-	Entry.Kind = ERegisteredAssetType::RuntimeTexture;
+	Entry.Kind = ERegisteredAssetType::RuntimeAsset;
 	Entry.Slot = Slot;
 
 	SlotToTexture.Add(Slot, Entry);
@@ -488,7 +486,7 @@ UStaticMesh* UTileTextureRegistry::RegisterRuntimeMeshBytesWithHandle(const TArr
 	}
 
 	FTileRegisteredMesh Entry;
-	Entry.Kind = ERegisteredAssetType::RuntimeMesh;
+	Entry.Kind = ERegisteredAssetType::RuntimeAsset;
 	Entry.RuntimeMesh = Mesh;
 
 	if (!Handle.Id.IsEmpty())

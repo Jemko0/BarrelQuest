@@ -1147,6 +1147,8 @@ TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
 		UE_LOG(LogBarrelQuest, Warning, TEXT("TryGetRightClickOptions: No chunk found at worldPosition"));
 		return options;
 	}
+
+	options.Append(IRightClickInterface::Execute_GetRCMOptions(chunk, worldPosition));
 	
 	FIntVector squarePosition = UTileLibrary::WorldToTilePosition(worldPosition);
 	
@@ -1168,10 +1170,10 @@ TArray<FRCMOption> ATileManager::TryGetRightClickOptions(FVector worldPosition)
 	
 	for (FStoredFeature& f : featuresArray)
 	{
-		if (IRightClickInterface* rightClickInterface = Cast<IRightClickInterface>(f.ComponentPtr))
+		if (f.ComponentPtr && f.ComponentPtr->GetClass()->ImplementsInterface(URightClickInterface::StaticClass()))
 		{
 			UE_LOG(LogBarrelQuest, Warning, TEXT("Getting Feature RCM Options"));
-			options.Append(rightClickInterface->Execute_GetRCMOptions(chunk, worldPosition));	
+			options.Append(IRightClickInterface::Execute_GetRCMOptions(f.ComponentPtr, worldPosition));	
 		}
 		else
 		{

@@ -14,8 +14,7 @@ enum class ERegisteredAssetType : uint8
 {
 	None,
 	CookedAsset,
-	RuntimeTexture,
-	RuntimeMesh
+	RuntimeAsset
 };
 
 USTRUCT(BlueprintType)

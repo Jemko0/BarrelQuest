@@ -21,7 +21,7 @@ ATileManagerUGC::ATileManagerUGC()
 void ATileManagerUGC::BeginPlay()
 {
 	Super::BeginPlay();
-	TileTextureRegistry = GetGameInstance()->GetSubsystem<UTileTextureRegistry>();
+	TileTextureRegistry = GetOrCacheTileTextureRegistry();
 	
 	UserResourceComponent->OnDownloadFinished.AddDynamic(this, &ATileManagerUGC::HandleUGCDownloadFinished);
 	UserResourceComponent->OnDownloadStarted.AddDynamic(this, &ATileManagerUGC::HandleUGCDownloadStarted);
@@ -146,12 +146,20 @@ void ATileManagerUGC::ExitWorldLoading(bool success, FString msg)
 void ATileManagerUGC::HandleUGCDownloadFinished(FString ResourceURL, FString ResourceType, TArray<uint8> Bytes)
 {
 	FInterpretedResourceData Interpreted = UserResourceComponent->InterpretData(this, ResourceURL, ResourceType, Bytes);
+	UTileTextureRegistry* Registry = GetOrCacheTileTextureRegistry();
+	if (!Registry)
+	{
+		UE_LOG(LogBarrelQuestLoad, Warning, TEXT("HandleUGCDownloadFinished: TileTextureRegistry was null. ResourceURL='%s' ResourceType='%s'"),
+			*ResourceURL,
+			*ResourceType);
+		return;
+	}
 	
 	FTileSavedAssetHandle* HandlePtr = PendingRegistryHandles.Find(ResourceURL);
 	
 	if (!HandlePtr)
 	{
-		UE_LOG(LogBarrelQuestLoad, Error, TEXT("UGC Handle not found, skipping for: %s"), *ResourceURL);
+		UE_LOG(LogBarrelQuestLoad, Warning, TEXT("UGC Handle not found, skipping for: %s"), *ResourceURL);
 		return;
 	}
 
@@ -161,15 +169,18 @@ void ATileManagerUGC::HandleUGCDownloadFinished(FString ResourceURL, FString Res
 		UE_LOG(LogBarrelQuest, Warning, TEXT("Unknown UGC Type Passed into User Defined Tile Definition Registry"))
 		break;
 		
-		case ERegisteredAssetType::RuntimeMesh:
-			TileTextureRegistry->RegisterRuntimeMeshBytesWithHandle(Bytes, *HandlePtr, 100.0f);
+		case ERegisteredAssetType::RuntimeAsset:
+		if (ResourceType == TEXT("mesh"))
+		{
+			Registry->RegisterRuntimeMeshBytesWithHandle(Bytes, *HandlePtr, 100.0f);
 			PendingRegistryHandles.Remove(HandlePtr->Url);
-			break;
-		
-		case ERegisteredAssetType::RuntimeTexture:
-			TileTextureRegistry->RegisterRuntimeTextureBytesWithHandle(Bytes, *HandlePtr);
+		} else if (ResourceType == TEXT("texture"))
+		{
+			Registry->RegisterRuntimeTextureBytesWithHandle(Bytes, *HandlePtr);
 			PendingRegistryHandles.Remove(HandlePtr->Url);
-			break;
+		}
+			
+		break;
 	}
 	
 	if (PendingRegistryHandles.IsEmpty())
@@ -197,6 +208,14 @@ void ATileManagerUGC::HandleUGCDownloadStarted(FString ResourceURL, FString Reso
 
 void ATileManagerUGC::RegisterTileDefinitionUGCItems(const FTileDefinition& TileDefinition)
 {
+	UTileTextureRegistry* Registry = GetOrCacheTileTextureRegistry();
+	if (!Registry)
+	{
+		UE_LOG(LogBarrelQuestLoad, Warning, TEXT("RegisterTileDefinitionUGCItems: TileTextureRegistry was null. TileName='%s'"),
+			*TileDefinition.Name);
+		return;
+	}
+
 	TArray<FTileSavedAssetHandle> HandlesToProcess;
 	
 	HandlesToProcess.Add(TileDefinition.UserDefinedMesh);
@@ -232,31 +251,23 @@ void ATileManagerUGC::RegisterTileDefinitionUGCItems(const FTileDefinition& Tile
 					
 					if (UTexture2D* Texture = Cast<UTexture2D>(Object))
 					{
-						TileTextureRegistry->RegisterCookedTextureWithHandle(Texture, Handle);
+						Registry->RegisterCookedTextureWithHandle(Texture, Handle);
 						break;
 					}
 					
 					if (UStaticMesh* Mesh = Cast<UStaticMesh>(Object))
 					{
-						TileTextureRegistry->RegisterCookedMeshWithHandle(Mesh, Handle);
+						Registry->RegisterCookedMeshWithHandle(Mesh, Handle);
 						break;
 					}
 					break;
 			}
 			
-			case ERegisteredAssetType::RuntimeTexture:
+			case ERegisteredAssetType::RuntimeAsset:
 			{
 				PendingRegistryHandles.Add(Handle.Url, Handle);
 				UserResourceComponent->RequestResource(Handle.Id);
-				UE_LOG(LogBarrelQuestLoad, Verbose, TEXT("Requesting Runtime Texture for id: %s"), *Handle.Id);
-				break;
-			}
-			
-			case ERegisteredAssetType::RuntimeMesh:
-			{
-				PendingRegistryHandles.Add(Handle.Url, Handle);
-				UserResourceComponent->RequestResource(Handle.Id);
-				UE_LOG(LogBarrelQuestLoad, Verbose, TEXT("Requesting Runtime Mesh for id: %s"), *Handle.Id);
+				UE_LOG(LogBarrelQuestLoad, Verbose, TEXT("Requesting Runtime asset for id: %s"), *Handle.Id);
 				break;
 			}
 		}
@@ -267,6 +278,7 @@ void ATileManagerUGC::CreateUserDefinedTile(const FName& ID, const FTileDefiniti
 {
 	UE_LOG(LogBarrelQuestTileManager, Display, TEXT("Registering User Defined Tile: %s"), *ID.ToString());
 	
+	RegisterTileDefinitionUGCItems(Definition);
 	UserDefinedTileDefinitions.Add(ID, Definition);
 }
 
@@ -277,10 +289,27 @@ void ATileManagerUGC::ClearEverything()
 	WorldName = FString("Unnamed World");
 	WorldVersion = 1;
 	UserDefinedTileDefinitions.Empty();
-	TileTextureRegistry->PurgeRegisteredAssets();
+	if (UTileTextureRegistry* Registry = GetOrCacheTileTextureRegistry())
+	{
+		Registry->PurgeRegisteredAssets();
+	}
+	else
+	{
+		UE_LOG(LogBarrelQuestTileManager, Warning, TEXT("ClearEverything: TileTextureRegistry was null; skipping registered asset purge."));
+	}
 	CurrentLoadPendingSave = nullptr;
 	UserResourceComponent->ClearResourceCache();
 	ResetCurrentState();
 	
 	UE_LOG(LogBarrelQuestTileManager, Warning, TEXT("Cleared Everything on UGC Tile Manager: %s"), *this->GetName());
+}
+
+UTileTextureRegistry* ATileManagerUGC::GetOrCacheTileTextureRegistry()
+{
+	if (!TileTextureRegistry && GetGameInstance())
+	{
+		TileTextureRegistry = GetGameInstance()->GetSubsystem<UTileTextureRegistry>();
+	}
+
+	return TileTextureRegistry;
 }

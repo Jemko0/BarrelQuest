@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "TileLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "StateStream/SkyAtmosphereStateStream.h"
 #include "TileSaveLoadLibrary.generated.h"
 
 USTRUCT(BlueprintType)
@@ -20,6 +21,91 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	FRotator CameraRotation;
+};
+
+USTRUCT(BlueprintType)
+struct FWorldAtmosphereState
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	ESkyAtmosphereTransformMode TransformMode = ESkyAtmosphereTransformMode(0);
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float BottomRadius = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FColor GroundAlbedo = FColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float AtmosphereHeight = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float MultiScatteringFactor = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float TraceSampleCountScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float RayleighScatteringScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor RayleighScattering = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float RayleighExponentialDistribution = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float MieScatteringScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor MieScattering = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float MieAbsorptionScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor MieAbsorption = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float MieAnisotropy = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float MieExponentialDistribution = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float OtherAbsorptionScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor OtherAbsorption = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float OtherTentDistributionTipAltitude = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float OtherTentDistributionTipValue = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float OtherTentDistributionWidth = 1.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor SkyLuminanceFactor = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	FLinearColor SkyAndAerialPerspectiveLuminanceFactor = FLinearColor::White;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float AerialPespectiveViewDistanceScale = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float HeightFogContribution = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float TransmittanceMinLightElevationAngle = 0.0f;
+	
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
+	float AerialPerspectiveStartDepth = 0.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -95,6 +181,12 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	FLinearColor SkyLightColor = FLinearColor(1.0f, 1.0f, 1.0f);
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	bool OverrideAtmosphere = false;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	FWorldAtmosphereState AtmosphereState;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	float DayTime = 12.0f;

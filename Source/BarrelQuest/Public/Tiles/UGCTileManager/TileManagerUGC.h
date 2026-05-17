@@ -76,5 +76,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void ClearEverything();
+
+private:
+	UTileTextureRegistry* GetOrCacheTileTextureRegistry();
 };
 
