@@ -3,6 +3,7 @@
 
 #include "Tiles/SavingLoading/MapEditorWorldSaveGame.h"
 
+#include "BarrelUtilityLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Tiles/TileChunk.h"
@@ -36,7 +37,7 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 	sg->Version = TileManager->WorldVersion + 1;
 	
 	UUserResourceComponent* UGCComponent = Cast<UUserResourceComponent>(TileManager->GetComponentByClass(UUserResourceComponent::StaticClass()));
-	ATileManagerUGC* TileManagerUGC = Cast<ATileManagerUGC>(TileManager->GetComponentByClass(ATileManagerUGC::StaticClass()));
+	ATileManagerUGC* TileManagerUGC = Cast<ATileManagerUGC>(UGameplayStatics::GetActorOfClass(TileManager, ATileManagerUGC::StaticClass()));
 	
 	if (UGCComponent)
 	{
@@ -45,6 +46,7 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 
 	if (TileManagerUGC)
 	{
+		UE_LOG(LogBarrelQuestTileManager, Warning, TEXT("GET UGCTM CONTENT"))
 		sg->EnvironmentData = TileManagerUGC->WorldEnvironmentData;
 		sg->BGMData = TileManagerUGC->WorldBGMData;
 	}
