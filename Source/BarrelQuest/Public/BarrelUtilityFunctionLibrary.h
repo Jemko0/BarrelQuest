@@ -40,15 +40,24 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static void GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings);
-	
-	static FString GenerateDelegateTypeDefinition(FMulticastDelegateProperty* DelegateProperty);
 
 	UFUNCTION(BlueprintCallable)
 	static void GenerateBaseMetaFiles(bool suppressWarnings);
-	
+
 	UFUNCTION(BlueprintCallable)
 	static UClass* GetClassFromBlueprintPackage(FString PackagePath);
-	
+
+	UFUNCTION(BlueprintCallable)
+	static void GenerateStructWrapper(
+	const FString& StructName,
+	const TArray<FLuaStructField>& Fields,
+	const TMap<FString, FString>& FieldMappings,
+	const TMap<FString, FString>& FieldTypes,
+	const FString& OutputDir);
+
+#if WITH_EDITOR
+	static FString GenerateDelegateTypeDefinition(FMulticastDelegateProperty* DelegateProperty);
+
 	static FString GetLuaTypeFromProperty(FProperty* Property);
 	static bool IsValidLuaIdentifier(const FString& Name);
 	static FString SanitizeLuaIdentifier(const FString& Name);
@@ -58,12 +67,5 @@ public:
 
 	static void GenerateLuaMetaFileFromStruct(UStruct* InStruct, bool suppressWarnings);
 	static void CollectReferencedTypes(UClass* InClass, TSet<UStruct*>& OutStructs, TSet<UClass*>& OutClasses);
-	
-	UFUNCTION(BlueprintCallable)
-	static void GenerateStructWrapper(
-	const FString& StructName,
-	const TArray<FLuaStructField>& Fields,
-	const TMap<FString, FString>& FieldMappings,
-	const TMap<FString, FString>& FieldTypes,
-	const FString& OutputDir);
+#endif
 };

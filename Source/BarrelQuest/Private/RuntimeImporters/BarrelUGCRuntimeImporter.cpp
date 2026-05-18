@@ -194,12 +194,6 @@ UStaticMesh* UUGCAssetRegistry::BuildStaticMesh(const FParsedOBJMesh& Parsed)
     UStaticMesh* StaticMesh = NewObject<UStaticMesh>(this);
     StaticMesh->SetFlags(RF_Transient);
 
-    FStaticMeshSourceModel& SrcModel = StaticMesh->AddSourceModel();
-    SrcModel.BuildSettings.bRecomputeNormals    = !Parsed.bHasNormals;
-    SrcModel.BuildSettings.bRecomputeTangents   = true;
-    SrcModel.BuildSettings.bGenerateLightmapUVs = false;
-    SrcModel.BuildSettings.bBuildReversedIndexBuffer = false;
-
     FMeshDescription MeshDesc;
     FStaticMeshAttributes Attributes(MeshDesc);
     Attributes.Register();
@@ -257,19 +251,23 @@ UStaticMesh* UUGCAssetRegistry::BuildStaticMesh(const FParsedOBJMesh& Parsed)
         }
     }
 
-    StaticMesh->CreateMeshDescription(0, MoveTemp(MeshDesc));
-    StaticMesh->CommitMeshDescription(0);
-
     StaticMesh->GetStaticMaterials().Add(
         FStaticMaterial(UMaterial::GetDefaultMaterial(MD_Surface)));
 
     UStaticMesh::FBuildMeshDescriptionsParams BuildParams;
+    BuildParams.bMarkPackageDirty = false;
     BuildParams.bFastBuild = true;
     BuildParams.bAllowCpuAccess = true;
+    BuildParams.bCommitMeshDescription = false;
 
-    // MeshDesc was moved so we need the committed one
-    const FMeshDescription* CommittedDesc = StaticMesh->GetMeshDescription(0);
-    StaticMesh->BuildFromMeshDescriptions({ CommittedDesc }, BuildParams);
+    TArray<const FMeshDescription*> MeshDescriptions;
+    MeshDescriptions.Add(&MeshDesc);
+    if (!StaticMesh->BuildFromMeshDescriptions(MeshDescriptions, BuildParams))
+    {
+        UE_LOG(LogBarrelQuest, Warning, TEXT("UGC: Failed to build runtime OBJ static mesh."));
+        return nullptr;
+    }
+
     StaticMesh->CalculateExtendedBounds();
 
     UE_LOG(LogBarrelQuest, Log, TEXT("UGC: Built runtime OBJ mesh with %d vertices and %d triangles"),

@@ -9,8 +9,10 @@ public class BarrelQuestTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
+		bOverrideBuildEnvironment = true;
+		CppStandard = CppStandardVersion.Cpp20;
 
-		ExtraModuleNames.AddRange( new string[] { "BarrelQuest" } );
+		ExtraModuleNames.AddRange(new string[] { "BarrelQuest" });
 		DefaultWarningLevel = WarningLevel.Warning;
 		bWarningsAsErrors = false;
 	}

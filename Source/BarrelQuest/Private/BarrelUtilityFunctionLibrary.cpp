@@ -47,10 +47,10 @@ FString UBarrelUtilityFunctionLibrary::LinearColorToHexString(const FLinearColor
     );
 }
 
+#if WITH_EDITOR
 void UBarrelUtilityFunctionLibrary::GenerateAssetPathFile()
 {
     FString filePath = GetLuaMetaOutputDirectory();
-    
 }
 
 FString UBarrelUtilityFunctionLibrary::GetLuaMetaOutputDirectory()
@@ -1191,3 +1191,34 @@ UClass* UBarrelUtilityFunctionLibrary::GetClassFromBlueprintPackage(FString Pack
 {
     return ConstructorHelpersInternal::FindOrLoadClass(PackagePath, UObject::StaticClass());;
 }
+#else
+void UBarrelUtilityFunctionLibrary::GenerateAssetPathFile()
+{
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFileFromClass(UClass* InClass, bool suppressWarnings)
+{
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateLuaMetaFilesRecursive(UClass* InClass, bool suppressWarnings)
+{
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateBaseMetaFiles(bool suppressWarnings)
+{
+}
+
+UClass* UBarrelUtilityFunctionLibrary::GetClassFromBlueprintPackage(FString PackagePath)
+{
+    return nullptr;
+}
+
+void UBarrelUtilityFunctionLibrary::GenerateStructWrapper(
+    const FString& StructName,
+    const TArray<FLuaStructField>& Fields,
+    const TMap<FString, FString>& FieldMappings,
+    const TMap<FString, FString>& FieldTypes,
+    const FString& OutputDir)
+{
+}
+#endif

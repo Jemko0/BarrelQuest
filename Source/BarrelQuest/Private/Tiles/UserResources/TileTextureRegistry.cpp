@@ -313,10 +313,30 @@ void UTileTextureRegistry::CreateUserDefinedAtlas()
 		return;
 	}
 
-	UserDefinedAtlas->Source.Init(UserTextureSize, UserTextureSize, MaxUserTextureSlots, 1, TSF_BGRA8);
+	UserDefinedAtlas->Filter = TF_Bilinear;
+	UserDefinedAtlas->AddressX = TA_Clamp;
+	UserDefinedAtlas->AddressY = TA_Clamp;
+	UserDefinedAtlas->SRGB = true;
+
+	// Initialize platform data for runtime use
+	FTexturePlatformData* PlatformData = new FTexturePlatformData();
+	PlatformData->SizeX = UserTextureSize;
+	PlatformData->SizeY = UserTextureSize;
+	PlatformData->SetNumSlices(MaxUserTextureSlots);
+	PlatformData->PixelFormat = PF_B8G8R8A8;
+
+	// Add a mip level
+	FTexture2DMipMap* Mip = new FTexture2DMipMap(UserTextureSize, UserTextureSize, MaxUserTextureSlots);
+	Mip->BulkData.Lock(LOCK_READ_WRITE);
+	uint8* MipData = (uint8*)Mip->BulkData.Realloc(UserTextureSize * UserTextureSize * MaxUserTextureSlots * 4);
+	FMemory::Memzero(MipData, UserTextureSize * UserTextureSize * MaxUserTextureSlots * 4);
+	Mip->BulkData.Unlock();
+	PlatformData->Mips.Add(Mip);
+
+	UserDefinedAtlas->SetPlatformData(PlatformData);
 	UserDefinedAtlas->UpdateResource();
 
-	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::CreateUserDefinedAtlas: Created Atlas=%s Size=%dx%d Slices=%d Mips=1 Format=TSF_BGRA8"),
+	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::CreateUserDefinedAtlas: Created Atlas=%s Size=%dx%d Slices=%d"),
 		*UserDefinedAtlas->GetPathName(),
 		UserTextureSize,
 		UserTextureSize,
@@ -776,7 +796,15 @@ bool UTileTextureRegistry::RebuildAtlasFromSlotPixels()
 		FMemory::Memcpy(AtlasBytes.GetData() + Slot * SliceBytes, Pixels.GetData(), SliceBytes);
 	}
 
-	UserDefinedAtlas->Source.Init(UserTextureSize, UserTextureSize, MaxUserTextureSlots, 1, TSF_BGRA8, AtlasBytes.GetData());
+	FTexturePlatformData* PlatformData = UserDefinedAtlas->GetPlatformData();
+	if (PlatformData && PlatformData->Mips.Num() > 0)
+	{
+		FTexture2DMipMap& Mip = PlatformData->Mips[0];
+		Mip.BulkData.Lock(LOCK_READ_WRITE);
+		uint8* MipData = (uint8*)Mip.BulkData.Realloc(AtlasBytes.Num());
+		FMemory::Memcpy(MipData, AtlasBytes.GetData(), AtlasBytes.Num());
+		Mip.BulkData.Unlock();
+	}
 	UserDefinedAtlas->UpdateResource();
 
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RebuildAtlasFromSlotPixels: Rebuilt Atlas=%s Size=%dx%d Slices=%d ActivePixelSlots=%d TotalBytes=%d SliceBytes=%d"),

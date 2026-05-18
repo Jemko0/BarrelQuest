@@ -12,7 +12,6 @@
 				"Engine",
 				"LuaMachine",
 				"HTTPRequestForBlueprints",
-				"UnrealEd",
 				"InteractiveToolsFramework",
 				"CoreUObject"
 			]
@@ -231,6 +230,7 @@
 	"TargetPlatforms": [
 		"LinuxNoEditor",
 		"LinuxAArch64NoEditor",
-		"WindowsNoEditor"
+		"WindowsNoEditor",
+		"Windows"
 	]
 }
