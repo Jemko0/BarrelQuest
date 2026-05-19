@@ -558,7 +558,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         
         if (UTileLibrary::CountsAsWall(TileDef.Category))
         {
-            tile->SetWall(Object.Direction, !tile->HasWall(Object.Direction));
+            tile->SetWall(Object.Direction, false);
         	
            
             FIntVector neighborPos = Position;
@@ -570,7 +570,7 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
             else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
         	
             FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
-		    NeighborTile.SetWall(oppDir, !NeighborTile.HasWall(oppDir));
+		    NeighborTile.SetWall(oppDir, false);
         }
         else if (TileDef.Category == ETileCategory::FLOOR)
         {
