@@ -46,7 +46,7 @@ struct FTileMapMemoryEstimate
 };
 
 UCLASS()
-class BARRELQUEST_API ATileManager : public AActor //, public IInteractableInterface
+class BARRELQUEST_API ATileManager : public AActor, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -70,6 +70,7 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<FIntVector2, ATileChunk*> ChunkLookup;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntVector, int> RoomTilesToID;
@@ -102,7 +103,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	//virtual void InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex) override;
+	virtual void InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex) override;
 	
 	const FSquareTile constFallbackSquareTile = FSquareTile(FIntVector(0,0,0));
 	FSquareTile fallbackSquareTile = FSquareTile(FIntVector(0,0,0));
@@ -228,6 +229,9 @@ public:
 	bool RemoveObjectRuntimeProperty(FIntVector tilePosition, int32 objectIdx, FName& Key);
 	
 	FSquareTile* GetSquareTilePtr(FIntVector tilePos);
+	
+	UFUNCTION(BlueprintCallable)
+	bool HasWallAtSquareInDirection(FIntVector squarePosition, ETileDirection direction);
 	
 	void ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int32 objectIdx);
 	

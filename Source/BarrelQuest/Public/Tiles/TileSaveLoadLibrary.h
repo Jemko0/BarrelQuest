@@ -171,6 +171,9 @@ public:
 	FVector2D BackgroundTextureSize;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	FLinearColor BackgroundTextureTint = FLinearColor::White;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	float SunLightIntensity = 10.0f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)

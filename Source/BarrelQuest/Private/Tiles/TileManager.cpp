@@ -234,23 +234,39 @@ void ATileManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-/*
-void ATileManager::InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex, int32 ObjectIndex)
+
+void ATileManager::InteractWithTileObject_Implementation(AActor* InteractionOwner, FIntVector TileIndex,
+	int32 ObjectIndex)
 {
-	ATileChunk* chunk = GetChunkAtWorld(UTileLibrary::TileToWorldPosition(TileIndex));
+	FVector World = UTileLibrary::TileToWorldPosition(TileIndex);
+	ATileChunk* chunk = GetChunkAtWorld(World);
+	
 	if (!chunk)
 	{
 		return;
 	}
 	
-	FStoredFeatureArray featureArray = chunk->FindAllFeaturesForObject(TileIndex, ObjectIndex);
+	FStoredFeatureArray* featureArray = chunk->AttachedFeatures.Find(TileIndex);
 	
-	for (FStoredFeature feature : featureArray.features)
+	if (!featureArray)
 	{
-		Execute_Interact(feature.ComponentPtr, InteractionOwner);
+		return;
+	}
+	
+	TArray<FStoredFeature>& features = featureArray->features;
+	
+	for (FStoredFeature& f: features)
+	{
+		if (f.ComponentPtr && f.ComponentPtr->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
+		{
+			if (IInteractableInterface::Execute_CanInteract(f.ComponentPtr))
+			{
+				IInteractableInterface::Execute_Interact(f.ComponentPtr, InteractionOwner);
+			}
+		}
 	}
 }
-*/
+
 ATileChunk* ATileManager::GetChunkAt(FIntVector2 Position)
 {
 	return ChunkLookup.FindRef(Position);
@@ -1305,6 +1321,29 @@ FSquareTile* ATileManager::GetSquareTilePtr(FIntVector tilePos)
 	if (!chunkPtr) return nullptr;
 	bool found = false;
 	return chunkPtr->GetSquareTilePtr(tilePos, found);
+}
+
+bool ATileManager::HasWallAtSquareInDirection(FIntVector squarePosition, ETileDirection direction)
+{
+	FSquareTile* squarePtr = GetSquareTilePtr(squarePosition);
+	
+	if (!squarePtr) return false;
+	
+	const TArray<FTileObject>& objects = squarePtr->GetReadOnlyObjects();
+	
+	for (const FTileObject& object : objects)
+	{
+		FTileDefinition def = GetTileByID(this, object.ID);
+		if (object.Direction == direction)
+		{
+			if (UTileLibrary::CountsAsWall(def.Category))
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
 void ATileManager::ConvertRuntimeDataToInstanceData(FIntVector tilePosition, int32 objectIdx)

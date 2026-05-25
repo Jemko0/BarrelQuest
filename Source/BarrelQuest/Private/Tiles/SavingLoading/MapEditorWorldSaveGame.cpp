@@ -36,6 +36,8 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 	
 	sg->Version = TileManager->WorldVersion + 1;
 	
+	
+	
 	UUserResourceComponent* UGCComponent = Cast<UUserResourceComponent>(TileManager->GetComponentByClass(UUserResourceComponent::StaticClass()));
 	ATileManagerUGC* TileManagerUGC = Cast<ATileManagerUGC>(UGameplayStatics::GetActorOfClass(TileManager, ATileManagerUGC::StaticClass()));
 	
@@ -49,6 +51,8 @@ UMapEditorWorldSaveGame* UMapEditorWorldSaveGame::CreateFromTileManager(ATileMan
 		UE_LOG(LogBarrelQuestTileManager, Warning, TEXT("GET UGCTM CONTENT"))
 		sg->EnvironmentData = TileManagerUGC->WorldEnvironmentData;
 		sg->BGMData = TileManagerUGC->WorldBGMData;
+		sg->AvailableTransitionTargetNames = TileManagerUGC->AvailableTransitionTargetNames;
+		sg->OutgoingConnections = TileManagerUGC->WorldOutgoingConnections;
 	}
 	
 	sg->UserDefinedTiles = TileManager->UserDefinedTileDefinitions;

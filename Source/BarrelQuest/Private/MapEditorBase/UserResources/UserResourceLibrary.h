@@ -89,4 +89,14 @@ class BARRELQUEST_API UUserResourceLibrary : public UBlueprintFunctionLibrary
 		const TMap<FString, FString>& Headers,
 		FOnHttpRequestComplete OnComplete,
 		FOnHttpUploadProgress OnProgress);
+
+	UFUNCTION(BlueprintCallable, Category = "HTTP", meta = (DisplayName = "Upload File From Path With Form Data"))
+	static void UploadFileFromPathWithFormData(
+		const FString& URL,
+		const FString& FilePath,
+		const TMap<FString, FString>& Headers,
+		const TMap<FString, FString>& MultipartFormData,
+		const FString& FileFieldName,
+		FOnHttpRequestComplete OnComplete,
+		FOnHttpUploadProgress OnProgress);
 };

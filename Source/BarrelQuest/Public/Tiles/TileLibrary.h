@@ -502,6 +502,7 @@ public:
 		}
 	}
 
+	/*Will check the bitmask, will not check actual tile data!*/
 	bool HasWall(ETileDirection direction) const
 	{
 		return (wallMask & (1 << (uint8)direction)) != 0;
@@ -679,4 +680,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static TArray<FString> ParseRuntimeData(UPARAM(ref) FTileRuntimeData& runtimeData);
+	
+	UFUNCTION(BlueprintCallable)
+	static void RotateObjectsInSquare(UPARAM(ref) FSquareTile& squareRef, ETileDirection rotation);
 };

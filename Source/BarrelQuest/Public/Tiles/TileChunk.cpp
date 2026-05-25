@@ -4,6 +4,7 @@
 #include "Tiles/TileManager.h"
 #include "BarrelUtilityLibrary.h"
 #include "Features/Interfaces/TileFeatureInterface.h"
+#include "Features/Interfaces/TileFeatureSerializationInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
@@ -136,8 +137,11 @@ TArray<FIntVector> ATileChunk::GetTileInteractionPoints_Implementation(FVector F
 			{
 				if (Cast<IInteractableInterface>(Feature.ComponentPtr))
 				{
-					bHasInteractable = true;
-					break;
+					if (IInteractableInterface::Execute_CanInteract(Feature.ComponentPtr))
+					{
+						bHasInteractable = true;
+						break;
+					}
 				}
 			}
 
@@ -551,35 +555,6 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
     RemoveObjectInstance(Object);
 
     ATileManager* mgr = GetOwningTileManager();
-    if (mgr)
-    {
-        mgr->InvalidateRoomAt(Position);
-        const FTileDefinition& TileDef = mgr->GetTileByID(this, Object.ID);
-        
-        if (UTileLibrary::CountsAsWall(TileDef.Category))
-        {
-            tile->SetWall(Object.Direction, false);
-        	
-           
-            FIntVector neighborPos = Position;
-        	ETileDirection oppDir = Object.Direction;
-        	
-            if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
-            else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
-            else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
-            else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
-        	
-            FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
-		    NeighborTile.SetWall(oppDir, false);
-        }
-        else if (TileDef.Category == ETileCategory::FLOOR)
-        {
-            FIntVector belowPos = Position - FIntVector(0, 0, 1);
-            FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
-		    belowTile.SetHasCeiling(false);
-        	belowTile.SetInsideSquare(false);
-        }
-    }
 	
     TArray<FTileObject>& Objs = tile->GetObjectsOnSquare();
     for (int32 i = 0; i < Objs.Num(); i++)
@@ -609,6 +584,36 @@ void ATileChunk::RemoveObject(FIntVector Position, const FTileObject& Object)
         	break;
         }
     }
+	
+	if (mgr)
+	{
+		mgr->InvalidateRoomAt(Position);
+		const FTileDefinition& TileDef = mgr->GetTileByID(this, Object.ID);
+        
+		if (UTileLibrary::CountsAsWall(TileDef.Category))
+		{
+			bool stillHasWall = mgr->HasWallAtSquareInDirection(Position, Object.Direction);
+			tile->SetWall(Object.Direction, stillHasWall);
+			
+			FIntVector neighborPos = Position;
+			ETileDirection oppDir = Object.Direction;
+        	
+			if (Object.Direction == ETileDirection::NORTH) { neighborPos.X += 1; oppDir = ETileDirection::SOUTH; }
+			else if (Object.Direction == ETileDirection::SOUTH) { neighborPos.X -= 1; oppDir = ETileDirection::NORTH; }
+			else if (Object.Direction == ETileDirection::EAST)  { neighborPos.Y += 1; oppDir = ETileDirection::WEST;  }
+			else if (Object.Direction == ETileDirection::WEST)  { neighborPos.Y -= 1; oppDir = ETileDirection::EAST;  }
+        	
+			FSquareTile& NeighborTile = GetOrCreateSquareTile(neighborPos);
+			NeighborTile.SetWall(oppDir, stillHasWall);
+		}
+		else if (TileDef.Category == ETileCategory::FLOOR)
+		{
+			FIntVector belowPos = Position - FIntVector(0, 0, 1);
+			FSquareTile& belowTile = GetOrCreateSquareTile(belowPos);
+			belowTile.SetHasCeiling(false);
+			belowTile.SetInsideSquare(false);
+		}
+	}
 }
 
 void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int32 NewObjectIndex)
@@ -649,6 +654,16 @@ void ATileChunk::AddObjectFeatures(FIntVector Position, FTileObject& Object, int
 		{
 			UE_LOG(LogBarrelQuest, Warning, TEXT("ATileChunk::AddObjectFeatures: Feature component does not implement TileFeatureInterface. Component='%s'"),
 				*Component->GetName());
+		}
+		
+		if (Component->GetClass()->ImplementsInterface(UTileFeatureSerializationInterface::StaticClass()))
+		{
+			UTileFeatureLibrary::DeserializeFeatureRuntimeData(Component, Feature.FeatureName, Object.runtimeData);
+			ITileFeatureSerializationInterface::Execute_DeserializeRuntimeData(Component, Object.runtimeData);
+		}
+		else
+		{
+			UTileFeatureLibrary::DeserializeFeatureRuntimeData(Component, Feature.FeatureName, Object.runtimeData);
 		}
 		
 		FStoredFeature stored = FStoredFeature();

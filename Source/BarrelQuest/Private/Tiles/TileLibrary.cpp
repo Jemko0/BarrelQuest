@@ -436,3 +436,13 @@ TArray<FString> UTileLibrary::ParseRuntimeData(FTileRuntimeData& runtimeData)
 	
 	return strArray;
 }
+
+void UTileLibrary::RotateObjectsInSquare(FSquareTile& squareRef, ETileDirection rotation)
+{
+	TArray<FTileObject>& objects = squareRef.GetObjectsOnSquare();
+	
+	for (FTileObject& obj : objects)
+	{
+		obj.Direction = (ETileDirection)(((int)obj.Direction + (int)rotation) % 4);
+	}
+}

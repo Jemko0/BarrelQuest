@@ -1,8 +1,12 @@
 #include "Tiles/UserResources/TileTextureRegistry.h"
 
+#include "CanvasItem.h"
+#include "CanvasTypes.h"
+#include "Engine/TextureRenderTarget2D.h"
 #include "ImageUtils.h"
 #include "Misc/Crc.h"
 #include "RuntimeImporters/BarrelUGCRuntimeImporter.h"
+#include "TextureResource.h"
 
 namespace
 {
@@ -45,6 +49,80 @@ namespace
 			*Handle.Url);
 	}
 
+	bool RenderTextureToBGRA8(UTexture2D* Texture, TArray<uint8>& OutPixels, int32& OutWidth, int32& OutHeight)
+	{
+		if (!Texture)
+		{
+			return false;
+		}
+
+		OutWidth = Texture->GetSizeX();
+		OutHeight = Texture->GetSizeY();
+		const int32 ExpectedPixels = OutWidth * OutHeight;
+		if (ExpectedPixels <= 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RenderTextureToBGRA8: Invalid texture size. Texture=%s"), *DescribeTexture(Texture));
+			return false;
+		}
+
+		UTextureRenderTarget2D* RenderTarget = NewObject<UTextureRenderTarget2D>(GetTransientPackage());
+		if (!RenderTarget)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RenderTextureToBGRA8: Failed to create render target. Texture=%s"), *DescribeTexture(Texture));
+			return false;
+		}
+
+		RenderTarget->ClearColor = FLinearColor::Transparent;
+		RenderTarget->RenderTargetFormat = RTF_RGBA8;
+		RenderTarget->bAutoGenerateMips = false;
+		RenderTarget->SRGB = Texture->SRGB;
+		RenderTarget->InitAutoFormat(OutWidth, OutHeight);
+		RenderTarget->UpdateResourceImmediate(true);
+
+		FTextureRenderTargetResource* RenderTargetResource = RenderTarget->GameThread_GetRenderTargetResource();
+		if (!RenderTargetResource)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RenderTextureToBGRA8: Missing render target resource. Texture=%s"), *DescribeTexture(Texture));
+			return false;
+		}
+
+		FCanvas Canvas(RenderTargetResource, nullptr, FGameTime::GetTimeSinceAppStart(), GMaxRHIFeatureLevel);
+		FCanvasTileItem TileItem(FVector2D::ZeroVector, Texture->GetResource(), FVector2D(OutWidth, OutHeight), FLinearColor::White);
+		TileItem.BlendMode = SE_BLEND_Opaque;
+		Canvas.DrawItem(TileItem);
+		Canvas.Flush_GameThread();
+
+		TArray<FColor> RenderedPixels;
+		FReadSurfaceDataFlags ReadFlags(RCM_UNorm, CubeFace_MAX);
+		ReadFlags.SetLinearToGamma(false);
+		if (!RenderTargetResource->ReadPixels(RenderedPixels, ReadFlags) || RenderedPixels.Num() != ExpectedPixels)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::RenderTextureToBGRA8: ReadPixels failed or returned bad count. Got=%d Expected=%d Texture=%s"),
+				RenderedPixels.Num(),
+				ExpectedPixels,
+				*DescribeTexture(Texture));
+			return false;
+		}
+
+		OutPixels.SetNumUninitialized(ExpectedPixels * 4);
+		for (int32 PixelIndex = 0; PixelIndex < RenderedPixels.Num(); ++PixelIndex)
+		{
+			const FColor& Pixel = RenderedPixels[PixelIndex];
+			const int32 ByteIndex = PixelIndex * 4;
+			OutPixels[ByteIndex + 0] = Pixel.B;
+			OutPixels[ByteIndex + 1] = Pixel.G;
+			OutPixels[ByteIndex + 2] = Pixel.R;
+			OutPixels[ByteIndex + 3] = Pixel.A;
+		}
+
+		UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::RenderTextureToBGRA8: Rendered Texture=%s Size=%dx%d OutBytes=%d"),
+			*DescribeTexture(Texture),
+			OutWidth,
+			OutHeight,
+			OutPixels.Num());
+		return true;
+	}
+
 	bool ExtractBGRA8Pixels(UTexture2D* Texture, TArray<uint8>& OutPixels, int32& OutWidth, int32& OutHeight)
 	{
 		if (!Texture || !Texture->GetPlatformData() || Texture->GetPlatformData()->Mips.Num() == 0)
@@ -64,11 +142,10 @@ namespace
 
 		if (PlatformData->PixelFormat != PF_B8G8R8A8)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ExtractBGRA8Pixels: Unsupported pixel format %d for Texture=%s. Expected PF_B8G8R8A8=%d."),
+			UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ExtractBGRA8Pixels: Pixel format %d is not CPU-copyable BGRA8 for Texture=%s. Falling back to render-target conversion."),
 				static_cast<int32>(PlatformData->PixelFormat),
-				*DescribeTexture(Texture),
-				static_cast<int32>(PF_B8G8R8A8));
-			return false;
+				*DescribeTexture(Texture));
+			return RenderTextureToBGRA8(Texture, OutPixels, OutWidth, OutHeight);
 		}
 
 		FTexture2DMipMap& Mip = PlatformData->Mips[0];

@@ -6,6 +6,7 @@
 #include "GameFramework/SaveGame.h"
 #include "MapEditorBase/UserResources/UserResourceComponent.h"
 #include "Tiles/TileSaveLoadLibrary.h"
+#include "Tiles/TileUGCLibrary.h"
 #include "MapEditorWorldSaveGame.generated.h"
 
 /**
@@ -53,6 +54,12 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	FMapEditorSaveData MapEditorData;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	TArray<FName> AvailableTransitionTargetNames;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	TMap<int64, FDreamWorldConnection> OutgoingConnections;
 	
 	UFUNCTION(BlueprintCallable)
 	static UMapEditorWorldSaveGame* CreateFromTileManager(ATileManager* TileManager);

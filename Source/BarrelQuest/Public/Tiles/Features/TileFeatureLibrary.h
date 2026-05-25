@@ -93,4 +93,17 @@ UCLASS()
 class BARRELQUEST_API UTileFeatureLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Category="Tile Features|Serialization")
+	static void SerializeFeatureRuntimeData(
+		UObject* FeatureObject,
+		FName FeatureNamespace,
+		UPARAM(ref) FTileRuntimeData& RuntimeData);
+
+	UFUNCTION(BlueprintCallable, Category="Tile Features|Serialization")
+	static void DeserializeFeatureRuntimeData(
+		UObject* FeatureObject,
+		FName FeatureNamespace,
+		const FTileRuntimeData& RuntimeData);
 };
