@@ -2,7 +2,8 @@
 
 
 #include "MapEditorBase/MapEditorControllerBase.h"
-
+#include "InputKeyEventArgs.h"
+#include "InputCoreTypes.h"
 #include "Kismet/GameplayStatics.h"
 #include "Tiles/TileChunk.h"
 #include "Tiles/TileManager.h"
@@ -49,4 +50,26 @@ void AMapEditorControllerBase::TryGetMgr()
 	TimerDelegate.BindUObject(this, &AMapEditorControllerBase::TryGetMgr);
 	
 	FTimerHandle handle = GetWorld()->GetTimerManager().SetTimerForNextTick(TimerDelegate);
+}
+
+bool AMapEditorControllerBase::InputKey(const FInputKeyEventArgs& Params)
+{
+	const bool bHandledBySuper = Super::InputKey(Params);
+
+	if (ActiveTool && Params.Event != IE_Axis)
+	{
+		return ActiveTool->DispatchActionInput(Params.Key, Params.Event, PlayerInput) || bHandledBySuper;
+	}
+
+	return bHandledBySuper;
+}
+
+void AMapEditorControllerBase::PostProcessInput(const float DeltaTime, const bool bGamePaused)
+{
+	Super::PostProcessInput(DeltaTime, bGamePaused);
+
+	if (ActiveTool)
+	{
+		ActiveTool->DispatchAxisInputs(PlayerInput);
+	}
 }

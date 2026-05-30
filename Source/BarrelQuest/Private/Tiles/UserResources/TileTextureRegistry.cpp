@@ -3,8 +3,11 @@
 #include "CanvasItem.h"
 #include "CanvasTypes.h"
 #include "Engine/TextureRenderTarget2D.h"
+#include "HAL/FileManager.h"
 #include "ImageUtils.h"
 #include "Misc/Crc.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 #include "RuntimeImporters/BarrelUGCRuntimeImporter.h"
 #include "TextureResource.h"
 
@@ -425,6 +428,99 @@ UTexture2DArray* UTileTextureRegistry::GetUserDefinedAtlas() const
 	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::GetUserDefinedAtlas: Atlas=%s"),
 		UserDefinedAtlas ? *UserDefinedAtlas->GetPathName() : TEXT("<null>"));
 	return UserDefinedAtlas;
+}
+
+FString UTileTextureRegistry::ExportUserDefinedTileAtlas()
+{
+	int32 Columns = 1;
+	while (Columns * Columns < MaxUserTextureSlots)
+	{
+		Columns *= 2;
+	}
+
+	const int32 Rows = FMath::DivideAndRoundUp(MaxUserTextureSlots, Columns);
+	const int32 SheetWidth = Columns * UserTextureSize;
+	const int32 SheetHeight = Rows * UserTextureSize;
+	const int32 ExpectedSlotBytes = UserTextureSize * UserTextureSize * 4;
+
+	if (SheetWidth <= 0 || SheetHeight <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ExportUserDefinedTileAtlas: Invalid sheet size. Columns=%d Rows=%d TileSize=%d"), Columns, Rows, UserTextureSize);
+		return FString();
+	}
+
+	TArray<FColor> SheetPixels;
+	SheetPixels.SetNumZeroed(SheetWidth * SheetHeight);
+
+	for (int32 Slot = 0; Slot < MaxUserTextureSlots; ++Slot)
+	{
+		const TArray<uint8>* SlotPixelBytes = SlotPixels.Find(Slot);
+		if (!SlotPixelBytes)
+		{
+			continue;
+		}
+
+		if (SlotPixelBytes->Num() != ExpectedSlotBytes)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ExportUserDefinedTileAtlas: Skipping slot with unexpected byte count. Slot=%d Bytes=%d Expected=%d"),
+				Slot,
+				SlotPixelBytes->Num(),
+				ExpectedSlotBytes);
+			continue;
+		}
+
+		const int32 SlotColumn = Slot % Columns;
+		const int32 SlotRow = Slot / Columns;
+		const int32 DestBaseX = SlotColumn * UserTextureSize;
+		const int32 DestBaseY = SlotRow * UserTextureSize;
+
+		for (int32 Y = 0; Y < UserTextureSize; ++Y)
+		{
+			for (int32 X = 0; X < UserTextureSize; ++X)
+			{
+				const int32 SourceIndex = (Y * UserTextureSize + X) * 4;
+				const int32 DestIndex = (DestBaseY + Y) * SheetWidth + DestBaseX + X;
+				SheetPixels[DestIndex] = FColor(
+					(*SlotPixelBytes)[SourceIndex + 2],
+					(*SlotPixelBytes)[SourceIndex + 1],
+					(*SlotPixelBytes)[SourceIndex + 0],
+					(*SlotPixelBytes)[SourceIndex + 3]);
+			}
+		}
+	}
+
+	TArray64<uint8> CompressedPng;
+	FImageUtils::PNGCompressImageArray(SheetWidth, SheetHeight, TArrayView64<const FColor>(SheetPixels.GetData(), SheetPixels.Num()), CompressedPng);
+	if (CompressedPng.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ExportUserDefinedTileAtlas: PNG compression produced no data. Sheet=%dx%d"), SheetWidth, SheetHeight);
+		return FString();
+	}
+
+	const FString OutputDirectory = FPaths::ProjectSavedDir() / TEXT("Debug") / TEXT("TileAtlases");
+	IFileManager::Get().MakeDirectory(*OutputDirectory, true);
+
+	const FString OutputPath = OutputDirectory / FString::Printf(
+		TEXT("UserDefinedTileAtlas_%s_%dx%d_%dslots.png"),
+		*FDateTime::Now().ToString(TEXT("%Y%m%d_%H%M%S")),
+		SheetWidth,
+		SheetHeight,
+		MaxUserTextureSlots);
+
+	if (!FFileHelper::SaveArrayToFile(CompressedPng, *OutputPath))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UTileTextureRegistry::ExportUserDefinedTileAtlas: Failed to write file. Path='%s' Bytes=%lld"), *OutputPath, CompressedPng.Num());
+		return FString();
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("UTileTextureRegistry::ExportUserDefinedTileAtlas: Wrote atlas contact sheet. Path='%s' Sheet=%dx%d Slots=%d RegisteredSlots=%d"),
+		*OutputPath,
+		SheetWidth,
+		SheetHeight,
+		MaxUserTextureSlots,
+		SlotPixels.Num());
+
+	return OutputPath;
 }
 
 int32 UTileTextureRegistry::RegisterRuntimeTextureBytesWithHandle(const TArray<uint8>& RawBytes, FTileSavedAssetHandle Handle)

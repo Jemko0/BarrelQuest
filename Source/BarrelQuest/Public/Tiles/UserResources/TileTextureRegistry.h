@@ -81,8 +81,8 @@ class BARRELQUEST_API UTileTextureRegistry : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
-	static constexpr int32 MaxUserTextureSlots = 32;
-	static constexpr int32 UserTextureSize = 1024;
+	static constexpr int32 MaxUserTextureSlots = 128;
+	static constexpr int32 UserTextureSize = 256;
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -124,6 +124,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Tile Textures")
 	UTexture2DArray* GetUserDefinedAtlas() const;
+
+	UFUNCTION(BlueprintCallable, Category="Tile Textures|Debug")
+	FString ExportUserDefinedTileAtlas();
 
 protected:
 	UPROPERTY()
