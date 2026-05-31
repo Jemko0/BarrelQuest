@@ -453,7 +453,10 @@ struct FSquareTile
 {
 	GENERATED_BODY()
 	
-	FSquareTile() = default;
+	FSquareTile()
+	{
+		globalPosition = FIntVector::ZeroValue;
+	}
 	
 	FSquareTile(FIntVector globalPos)
 	{

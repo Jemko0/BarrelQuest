@@ -94,6 +94,12 @@ public:
 	///Directly sets a square, with objects, does not rebuild chunk automatically
 	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
 	void SetSquare(FIntVector Position, const FSquareTile& squareTile);
+
+	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
+	void ReplaceSquare(FIntVector Position, const FSquareTile& squareTile);
+
+	UFUNCTION(BlueprintCallable, Category="Chunk Manipulation")
+	void ClearSquareForRestore(FIntVector Position);
 	
 	UFUNCTION(BlueprintCallable)
 	void AddObject(FIntVector Position, FTileObject& Object);

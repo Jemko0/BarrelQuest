@@ -5,8 +5,14 @@
 #include "InputKeyEventArgs.h"
 #include "InputCoreTypes.h"
 #include "Kismet/GameplayStatics.h"
+#include "MapEditorBase/MapEditorActionStackContainerComponent.h"
 #include "Tiles/TileChunk.h"
 #include "Tiles/TileManager.h"
+
+AMapEditorControllerBase::AMapEditorControllerBase()
+{
+	ActionStack = CreateDefaultSubobject<UMapEditorActionStackContainerComponent>(TEXT("ActionStack"));
+}
 
 void AMapEditorControllerBase::ReceiveChunkSyncBatch(FIntVector2 ChunkPosition, const TArray<FTileSyncPacket>& Data)
 {

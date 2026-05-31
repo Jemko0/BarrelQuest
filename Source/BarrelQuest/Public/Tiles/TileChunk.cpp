@@ -501,6 +501,32 @@ void ATileChunk::SetSquare(FIntVector Position, const FSquareTile& squareTile)
 	Tiles.Add(Position, squareTile);
 }
 
+void ATileChunk::ReplaceSquare(FIntVector Position, const FSquareTile& squareTile)
+{
+	ClearSquareForRestore(Position);
+	AddSquare(Position, squareTile);
+}
+
+void ATileChunk::ClearSquareForRestore(FIntVector Position)
+{
+	bool bFound = false;
+	FSquareTile* Square = GetSquareTilePtr(Position, bFound);
+	if (!bFound || !Square)
+	{
+		return;
+	}
+
+	TArray<FTileObject>& Objects = Square->GetObjectsOnSquare();
+	for (int32 Index = Objects.Num() - 1; Index >= 0; --Index)
+	{
+		RemoveObjectInstance(Objects[Index]);
+		RemoveObjectFeatures(Position, Index);
+		UnbindRuntimeData(Position, Index);
+	}
+
+	Tiles.Remove(Position);
+}
+
 ///Adds a new object at the positions square, adds data and instance visual. Use this to create new tiles
 void ATileChunk::AddObject(FIntVector Position, FTileObject& Object)
 {

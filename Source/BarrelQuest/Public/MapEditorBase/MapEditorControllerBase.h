@@ -10,6 +10,7 @@
 #include "MapEditorControllerBase.generated.h"
 
 struct FInputKeyEventArgs;
+class UMapEditorActionStackContainerComponent;
 
 /**
  * 
@@ -25,8 +26,13 @@ class BARRELQUEST_API AMapEditorControllerBase : public APlayerController, publi
 	virtual void FinishSync(FIntVector2 ChunkPosition) override;
 
 public:
+	AMapEditorControllerBase();
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName SelectedTileID;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Map Editor|Action Stack")
+	TObjectPtr<UMapEditorActionStackContainerComponent> ActionStack;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Category = "Map Editor|Tool")
 	UMapEditorTool* ActiveTool;
