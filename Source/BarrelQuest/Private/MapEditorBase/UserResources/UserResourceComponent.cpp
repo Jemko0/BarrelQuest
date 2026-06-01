@@ -198,7 +198,7 @@ void UUserResourceComponent::OnFileDownloadCompleteWithCallbacks(
 }
 
 FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType,
-	TArray<uint8>& Buffer)
+	TArray<uint8>& Buffer, bool loopAudio)
 {
 	UUGCAssetRegistry* UGCAssetRegistry = WorldContextObject->GetWorld()->GetGameInstance()->GetSubsystem<UUGCAssetRegistry>();
 	FInterpretedResourceData result = FInterpretedResourceData();
@@ -222,7 +222,7 @@ FInterpretedResourceData UUserResourceComponent::InterpretData(UObject* WorldCon
 	else if (ResourceType == TEXT("audio"))
 	{
 		UE_LOG(LogBarrelQuest, Display, TEXT("Importing UGC Audio, Buf size: %i"), Buffer.Num());
-		result.AudioPtr = UGCAssetRegistry->GetOrLoadSound(Buffer, ResourceURL, EUGCAudioFormat::Auto, true);
+		result.AudioPtr = UGCAssetRegistry->GetOrLoadSound(Buffer, ResourceURL, EUGCAudioFormat::Auto, loopAudio);
 	}
 	else if (ResourceType == TEXT("mid"))
 	{

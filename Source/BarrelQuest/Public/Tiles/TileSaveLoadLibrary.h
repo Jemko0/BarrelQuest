@@ -146,10 +146,45 @@ public:
 	FBasicResourceHandle AudioResource;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	FBasicResourceHandle IntroAudioResource;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	uint8 BGMFlags = 0x0;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	float AudioVolume = 1.0f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	float AudioPlaybackSpeedMultiplier = 1.0f;
+	
+	static constexpr uint8 FLAG_USEINTRO = 1 << 0;
+	static constexpr uint8 FLAG_USELOOP = 1 << 1;
+	
+	void SetUseIntro(bool useIntro)
+	{
+		if (useIntro)
+			BGMFlags |= FLAG_USEINTRO;
+		else
+			BGMFlags &= ~FLAG_USEINTRO;
+	}
+	
+	void SetUseLoop(bool useLoop)
+	{
+		if (useLoop)
+			BGMFlags |= FLAG_USELOOP;
+		else
+			BGMFlags &= ~FLAG_USELOOP;
+	}
+	
+	bool IsUsingIntro() const
+	{
+		return (BGMFlags & FLAG_USEINTRO) != 0;
+	}
+	
+	bool IsUsingLoop() const
+	{
+		return (BGMFlags & FLAG_USELOOP) != 0;
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -212,4 +247,16 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static FMapEditorSaveData GetMapEditorSaveData(UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable)
+	static void SetBGMUseLoopFlag(UPARAM(ref) FWorldBGMData& bgmDataRef, bool useLoop);
+	
+	UFUNCTION(BlueprintCallable)
+	static void SetBGMUseIntroFlag(UPARAM(ref) FWorldBGMData& bgmDataRef, bool useIntro);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static bool DoesBGMUseIntro(const FWorldBGMData& bgmDataRef);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static bool DoesBGMUseLoop(const FWorldBGMData& bgmDataRef);
 };

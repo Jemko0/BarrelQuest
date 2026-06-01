@@ -106,6 +106,7 @@ public:
 		FOnResourceDownloadFinishedNative OnFinished,
 		FOnResourceDownloadFailedNative OnFailed,
 		bool bBroadcastComponentDelegates);
+	
 	void OnFileDownloadCompleteWithCallbacks(
 		FHttpRequestPtr Request,
 		FHttpResponsePtr Response,
@@ -117,7 +118,7 @@ public:
 		bool bBroadcastComponentDelegates);
 	
 	UFUNCTION(BlueprintCallable)
-	static FInterpretedResourceData InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType, UPARAM(ref) TArray<uint8>& Buffer);
+	static FInterpretedResourceData InterpretData(UObject* WorldContextObject, FString ResourceURL, FString ResourceType, UPARAM(ref) TArray<uint8>& Buffer, bool loopAudio = true);
 
 protected:
 	// Called when the game starts

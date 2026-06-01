@@ -53,3 +53,23 @@ FMapEditorSaveData UTileSaveLoadLibrary::GetMapEditorSaveData(UObject* WorldCont
 	UE_LOG(LogBarrelQuest, Warning, TEXT("GetMapEditorSaveData: UNFINISHED STUB CALLED"));
 	return FMapEditorSaveData();
 }
+
+void UTileSaveLoadLibrary::SetBGMUseLoopFlag(FWorldBGMData& bgmDataRef, bool useLoop)
+{
+	bgmDataRef.SetUseLoop(useLoop);
+}
+
+void UTileSaveLoadLibrary::SetBGMUseIntroFlag(FWorldBGMData& bgmDataRef, bool useIntro)
+{
+	bgmDataRef.SetUseIntro(useIntro);
+}
+
+bool UTileSaveLoadLibrary::DoesBGMUseIntro(const FWorldBGMData& bgmDataRef)
+{
+	return bgmDataRef.IsUsingIntro();
+}
+
+bool UTileSaveLoadLibrary::DoesBGMUseLoop(const FWorldBGMData& bgmDataRef)
+{
+	return bgmDataRef.IsUsingLoop();
+}

@@ -952,6 +952,9 @@ bool ATileManager::RemoveSquareAtWorld(FVector worldPosition)
 	}
 	
 	ATileChunk* chunkPtr = GetChunkAtWorld(worldPosition);
+	
+	if (!chunkPtr) return false;
+	
 	FIntVector tilePos = UTileLibrary::WorldToTilePosition(worldPosition);
 	
 	chunkPtr->RemoveSquareAt(tilePos);

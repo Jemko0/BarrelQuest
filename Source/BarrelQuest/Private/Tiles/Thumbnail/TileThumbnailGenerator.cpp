@@ -20,6 +20,9 @@
 
 namespace
 {
+	const TCHAR* DefaultTileDataTablePath = TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions");
+	const TCHAR* DefaultThumbnailMaterialPath = TEXT("/Game/BarrelContent/Materials/Shaders/ObscureMaterialBase.ObscureMaterialBase");
+
 	bool IsThumbnailTileAssetHandleSet(const FTileSavedAssetHandle& Handle)
 	{
 		return Handle.Kind != ERegisteredAssetType::None || !Handle.Id.IsEmpty() || Handle.AssetPath.IsValid() || !Handle.Url.IsEmpty();
@@ -58,24 +61,6 @@ ATileThumbnailGenerator::ATileThumbnailGenerator()
 	SceneCaptureComponent->ShowFlags.SkyLighting = false;
 	SceneCaptureComponent->SetRelativeRotation(FRotator(-25.0f, 45.0f, 0.0f));
 	SceneCaptureComponent->ShowOnlyComponent(InstanceMeshComponent);
-
-	static ConstructorHelpers::FObjectFinder<UDataTable> DefaultTileDataTable(TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions"));
-	if (DefaultTileDataTable.Succeeded())
-	{
-		TileDataTable = DefaultTileDataTable.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UTextureRenderTarget2D> DefaultRenderTarget(TEXT("/Game/BarrelContent/Materials/RT/ThumbnailRT.ThumbnailRT"));
-	if (DefaultRenderTarget.Succeeded())
-	{
-		RenderTarget = DefaultRenderTarget.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> DefaultMaterial(TEXT("/Game/BarrelContent/Materials/Shaders/ObscureMaterialBase.ObscureMaterialBase"));
-	if (DefaultMaterial.Succeeded())
-	{
-		DefaultThumbnailMaterial = DefaultMaterial.Object;
-	}
 }
 
 void ATileThumbnailGenerator::BeginPlay()
@@ -97,10 +82,7 @@ void ATileThumbnailGenerator::GenerateTileThumbnails(bool bRegenerateExisting)
 {
 	SetActorTickEnabled(true);
 
-	if (!TileDataTable)
-	{
-		TileDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/BarrelContent/Tiles/Data/New/CompositeTileDefinitions.CompositeTileDefinitions"));
-	}
+	LoadDefaultThumbnailAssets();
 
 	EnsureRenderTarget();
 
@@ -409,6 +391,7 @@ void ATileThumbnailGenerator::SetupNextTile()
 			Mesh ? TEXT("valid") : TEXT("null"),
 			SourceMaterial ? TEXT("valid") : TEXT("null"));
 		GenerationPhase = EGenerationPhase::Setup;
+		ScheduleNextGenerationStep();
 		return;
 	}
 
@@ -547,6 +530,19 @@ void ATileThumbnailGenerator::FinishGeneration()
 	ActiveMID = nullptr;
 	OnTileThumbnailGenerationFinished.Broadcast(GeneratedThumbnailCount, RegisteredThumbnailCount);
 	UE_LOG(LogTemp, Display, TEXT("ATileThumbnailGenerator: Finished generating tile thumbnails."));
+}
+
+void ATileThumbnailGenerator::LoadDefaultThumbnailAssets()
+{
+	if (!TileDataTable)
+	{
+		TileDataTable = LoadObject<UDataTable>(nullptr, DefaultTileDataTablePath);
+	}
+
+	if (!DefaultThumbnailMaterial)
+	{
+		DefaultThumbnailMaterial = LoadObject<UMaterialInterface>(nullptr, DefaultThumbnailMaterialPath);
+	}
 }
 
 UStaticMesh* ATileThumbnailGenerator::ResolveMeshForDefinition(const FTileDefinition& TileDefinition) const

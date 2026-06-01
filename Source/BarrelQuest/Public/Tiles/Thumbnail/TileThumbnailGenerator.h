@@ -140,6 +140,7 @@ private:
 	void CaptureActiveTile();
 	void ExportActiveTile();
 	void FinishGeneration();
+	void LoadDefaultThumbnailAssets();
 
 	UStaticMesh* ResolveMeshForDefinition(const FTileDefinition& TileDefinition) const;
 	UMaterialInterface* ResolveMaterialForDefinition(const FTileDefinition& TileDefinition) const;
